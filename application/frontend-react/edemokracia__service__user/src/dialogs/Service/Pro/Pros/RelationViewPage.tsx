@@ -9,19 +9,22 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceProPro_View_EditDialogActions } from '~/containers/Service/Pro/Pro_View_Edit/ServiceProPro_View_EditDialogContainer';
+import type {
+  ServiceProPro_View_EditDialogActions,
+  ServiceProPro_View_EditDialogProps,
+} from '~/containers/Service/Pro/Pro_View_Edit/ServiceProPro_View_EditDialogContainer';
 import { useServiceProConsRelationViewPage } from '~/dialogs/Service/Pro/Cons/RelationViewPage';
 import { useServiceProCreatedByRelationViewPage } from '~/dialogs/Service/Pro/CreatedBy/RelationViewPage';
 import { useServiceProPro_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateConArgument/Input/Form';
 import { useServiceProPro_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Pro/Pro_View_Edit/CreateProArgument/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceProVotesRelationTablePage } from '~/routes';
 import type {
   ServiceCon,
@@ -39,8 +42,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceProServiceImpl } from '~/services/data-axios/ServiceProServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceProServiceForProsImpl } from '~/services/data-axios/ServiceProServiceForProsImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceProPro_View_EditDialogActionsExtended = ServiceProPro_View_EditDialogActions & {
@@ -53,18 +56,51 @@ export type ServiceProPro_View_EditDialogActionsExtended = ServiceProPro_View_Ed
   ) => Promise<void>;
 };
 
-export const SERVICE_PRO_PROS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceProPro_View_EditActionsHook';
+export const SERVICE_PRO_PROS_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_PRO_PROS_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceProPro_View_EditActionsHook = (
   ownerData: any,
   data: ServiceProStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServicePro, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceProPro_View_EditDialogActionsExtended;
 
-export const useServiceProProsRelationViewPage = (): ((ownerData: any) => Promise<DialogResult<ServiceProStored>>) => {
+export interface ServiceProPro_View_EditViewModel extends ServiceProPro_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServicePro>;
+  isDraft?: boolean;
+}
+
+const ServiceProPro_View_EditViewModelContext = createContext<ServiceProPro_View_EditViewModel>({} as any);
+export const useServiceProPro_View_EditViewModel = () => {
+  const context = useContext(ServiceProPro_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceProPro_View_EditViewModel must be used within a(n) ServiceProPro_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
+
+export const useServiceProProsRelationViewPage = (): ((
+  ownerData: any,
+  templateDataOverride?: Partial<ServicePro>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServicePro) => Promise<void>,
+) => Promise<DialogResult<ServiceProStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServicePro>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServicePro) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -80,16 +116,19 @@ export const useServiceProProsRelationViewPage = (): ((ownerData: any) => Promis
         children: (
           <ServiceProProsRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -114,17 +153,20 @@ const ServiceProPro_View_EditDialogContainer = lazy(
 export interface ServiceProProsRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServicePro>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServicePro) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceProStored) => Promise<void>;
+  onSubmit: (result?: ServiceProStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationFeatureView
 // Name: service::Pro::pros::RelationViewPage
 export default function ServiceProProsRelationViewPage(props: ServiceProProsRelationViewPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceProServiceImpl = useMemo(() => new ServiceProServiceImpl(judoAxiosProvider), []);
+  const serviceProServiceForProsImpl = useMemo(() => new ServiceProServiceForProsImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -132,6 +174,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -167,10 +210,24 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceProQueryCustomizer = {
-    _mask:
-      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+  const getPageQueryCustomizer: () => ServiceProQueryCustomizer = () => ({
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,description,downVotes,title,upVotes,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},createdBy{representation}}',
+  });
+
+  // Private actions
+  const submit = async () => {
+    await updateAction();
   };
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+
+  // Validation
+  const validate: (data: ServicePro) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceProPro_View_EditActionsHook>(
@@ -181,6 +238,8 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
@@ -190,19 +249,14 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
   const openServiceProCreatedByRelationViewPage = useServiceProCreatedByRelationViewPage();
   const openServiceProProsRelationViewPage = useServiceProProsRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.Pro.Pro_View_Edit', { defaultValue: 'Pro View / Edit' });
-
-  // Private actions
-  const submit = async () => {
-    await updateAction();
-  };
-
   // Action section
-  const createConArgumentAction = async () => {
+  const getPageTitle = (data: ServicePro): string => {
+    return t('service.Pro.Pro_View_Edit', { defaultValue: 'Pro View / Edit' });
+  };
+  const createConArgumentAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceProPro_View_EditCreateConArgumentInputForm(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const consBulkDeleteAction = async (
@@ -226,7 +280,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -265,10 +319,10 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
           )
         : true;
       if (confirmed) {
-        await serviceProServiceImpl.deleteCons(target);
+        await serviceProServiceForProsImpl.deleteCons(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+          refreshAction(getPageQueryCustomizer());
         }
       }
     } catch (error) {
@@ -277,16 +331,19 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       }
     }
   };
-  const consOpenPageAction = async (target?: ServiceConStored) => {
-    await openServiceProConsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const consOpenPageAction = async (target: ServiceCon | ServiceConStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceConStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceProConsRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
-  const createProArgumentAction = async () => {
+  const createProArgumentAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceProPro_View_EditCreateProArgumentInputForm(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const prosBulkDeleteAction = async (
@@ -310,7 +367,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -349,10 +406,10 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
           )
         : true;
       if (confirmed) {
-        await serviceProServiceImpl.deletePros(target);
+        await serviceProServiceForProsImpl.deletePros(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+          refreshAction(getPageQueryCustomizer());
         }
       }
     } catch (error) {
@@ -361,22 +418,28 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       }
     }
   };
-  const prosOpenPageAction = async (target?: ServiceProStored) => {
-    await openServiceProProsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const prosOpenPageAction = async (target: ServicePro | ServiceProStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceProStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceProProsRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
-  const createdByOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceProCreatedByRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const createdByOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceProCreatedByRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const voteDownForProAction = async () => {
     try {
       setIsLoading(true);
-      await serviceProServiceImpl.voteDown(data);
+      await serviceProServiceForProsImpl.voteDown(data);
       if (customActions?.postVoteDownForProAction) {
         await customActions.postVoteDownForProAction(onClose);
       } else {
@@ -384,7 +447,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -396,7 +459,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
   const voteUpForProAction = async () => {
     try {
       setIsLoading(true);
-      await serviceProServiceImpl.voteUp(data);
+      await serviceProServiceForProsImpl.voteUp(data);
       if (customActions?.postVoteUpForProAction) {
         await customActions.postVoteUpForProAction(onClose);
       } else {
@@ -404,7 +467,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -413,17 +476,22 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       setIsLoading(false);
     }
   };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceProVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
+  const votesOpenPageAction = async (target: ServiceSimpleVote | ServiceSimpleVoteStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceSimpleVoteStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceProVotesRelationTablePage(((target as ServiceSimpleVoteStored) || data).__signedIdentifier),
+      );
+      onClose();
+    }
   };
   const backAction = async () => {
     onClose();
   };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
   const deleteAction = async () => {
     try {
@@ -435,7 +503,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await serviceProServiceImpl.delete(data);
+        await serviceProServiceForProsImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
         onClose();
       }
@@ -447,8 +515,9 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceProServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceProServiceForProsImpl.refresh(ownerData, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -462,6 +531,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -471,11 +541,11 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceProServiceImpl.update(payloadDiff.current);
+      const res = await serviceProServiceForProsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServicePro, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
+        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
       }
     } catch (error) {
@@ -486,6 +556,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
   };
 
   const actions: ServiceProPro_View_EditDialogActions = {
+    getPageTitle,
     createConArgumentAction,
     consBulkDeleteAction,
     consFilterAction,
@@ -508,21 +579,43 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceProPro_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationFeatureView"
-      data-page-name="service::Pro::pros::RelationViewPage"
-    >
+    <ServiceProPro_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationFeatureView"
+          data-page-name="service::Pro::pros::RelationViewPage"
+        />
         <ServiceProPro_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -534,8 +627,9 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceProPro_View_EditViewModelContext.Provider>
   );
 }

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   dateTimeColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -71,13 +71,25 @@ export interface ServiceUserManagerUserManager_View_EditUsersComponentActionDefi
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   usersRefreshAction?: (queryCustomizer: ServiceServiceUserQueryCustomizer) => Promise<ServiceServiceUserStored[]>;
-  usersOpenPageAction?: (row: ServiceServiceUserStored) => Promise<void>;
+  getUsersMask?: () => string;
+  usersOpenPageAction?: (row: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
+  usersAdditionalToolbarButtons?: (
+    data: ServiceServiceUserStored[],
+    isLoading: boolean,
+    selectedRows: ServiceServiceUserStored[],
+    clearSelections: () => void,
+    ownerData: ServiceUserManagerStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceUserManagerUserManager_View_EditUsersComponentProps {
   uniqueId: string;
   actions: ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceUserManagerStored;
   editMode: boolean;
@@ -89,7 +101,17 @@ export interface ServiceUserManagerUserManager_View_EditUsersComponentProps {
 export function ServiceUserManagerUserManager_View_EditUsersComponent(
   props: ServiceUserManagerUserManager_View_EditUsersComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -99,7 +121,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceServiceUserStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'representation', sort: null }]);
@@ -107,14 +129,15 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceServiceUserQueryCustomizer>({
-    _mask: '{representation,userName,firstName,lastName,phone,email,isAdmin,created}',
+    _mask: '{created,email,firstName,isAdmin,lastName,phone,representation,userName}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -132,12 +155,14 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const [firstItem, setFirstItem] = useState<ServiceServiceUserStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceServiceUserStored[]>([]);
 
   const representationColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'representation',
-    headerName: t('service.UserManager.UserManager_View_Edit.representation', {
+    headerName: t('service.UserManager.UserManager_View_Edit.users.representation', {
       defaultValue: 'Representation',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -149,7 +174,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const userNameColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'userName',
-    headerName: t('service.UserManager.UserManager_View_Edit.userName', { defaultValue: 'UserName' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.userName', { defaultValue: 'UserName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -159,7 +184,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const firstNameColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'firstName',
-    headerName: t('service.UserManager.UserManager_View_Edit.firstName', { defaultValue: 'FirstName' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.firstName', { defaultValue: 'FirstName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -169,7 +194,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const lastNameColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'lastName',
-    headerName: t('service.UserManager.UserManager_View_Edit.lastName', { defaultValue: 'LastName' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.lastName', { defaultValue: 'LastName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -179,7 +204,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const phoneColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'phone',
-    headerName: t('service.UserManager.UserManager_View_Edit.phone', { defaultValue: 'Phone' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.phone', { defaultValue: 'Phone' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -189,7 +214,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const emailColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'email',
-    headerName: t('service.UserManager.UserManager_View_Edit.email', { defaultValue: 'Email' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.email', { defaultValue: 'Email' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -199,7 +224,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const isAdminColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'isAdmin',
-    headerName: t('service.UserManager.UserManager_View_Edit.isAdmin', { defaultValue: 'IsAdmin' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.isAdmin', { defaultValue: 'IsAdmin' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -218,7 +243,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const createdColumn: GridColDef<ServiceServiceUserStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.UserManager.UserManager_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.UserManager.UserManager_View_Edit.users.created', { defaultValue: 'Created' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -255,7 +280,70 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceServiceUserStored>[] = [];
+  const rowActions: TableRowAction<ServiceServiceUserStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_X0EKgFvPEe6jm_SkPSYEYw)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceServiceUserStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceServiceUserStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.usersAdditionalToolbarButtons
+    ? actions.usersAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceServiceUserQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -333,7 +421,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -363,7 +451,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -374,7 +462,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -384,21 +472,26 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.usersRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getUsersMask ? actions.getUsersMask() : queryCustomizer._mask,
+        };
+        const res = await actions.usersRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -409,20 +502,21 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
     <div id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable" data-table-name="users">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -433,23 +527,19 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_X0EKgFvPEe6jm_SkPSYEYw)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.usersOpenPageAction
-            ? async (params: GridRowParams<ServiceServiceUserStored>) => await actions.usersOpenPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceServiceUserStored>) =>
+                await actions.usersOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -459,7 +549,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -491,23 +581,30 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.usersRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getUsersMask ? actions.getUsersMask() : queryCustomizer._mask,
+                    };
+                    await actions.usersRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.UserManager.UserManager_View_Edit.users.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

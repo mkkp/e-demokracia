@@ -9,14 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions,
+  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps,
+} from '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   IssueScope,
   ServiceDashboard,
@@ -30,29 +34,52 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceDashboardServiceForOwnedVoteDefinitionsImpl } from '~/services/data-axios/ServiceDashboardServiceForOwnedVoteDefinitionsImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended =
   ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions & {};
 
 export const SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_SELECTOR_VOTES_VOTES_TAB_BAR_MY_VOTES_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook';
+  'SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_SELECTOR_VOTES_VOTES_TAB_BAR_MY_VOTES_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook = (
   ownerData: any,
   data: ServiceVoteDefinitionStored[],
   editMode: boolean,
   selectionDiff: ServiceVoteDefinitionStored[],
+  submit: () => Promise<void>,
 ) => ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended;
+
+export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel
+  extends ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  isDraft?: boolean;
+}
+
+const ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext =
+  createContext<ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel>({} as any);
+export const useServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel = () => {
+  const context = useContext(ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel must be used within a(n) ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVotesGroupOwnedVoteDefinitionsTableAddSelectorPage =
   (): ((
     ownerData: any,
     alreadySelected: ServiceVoteDefinitionStored[],
+    isDraft?: boolean,
   ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>) => {
     const [createDialog, closeDialog] = useDialog();
 
-    return (ownerData: any, alreadySelected: ServiceVoteDefinitionStored[]) =>
+    return (ownerData: any, alreadySelected: ServiceVoteDefinitionStored[], isDraft?: boolean) =>
       new Promise((resolve) => {
         createDialog({
           fullWidth: true,
@@ -69,16 +96,17 @@ export const useServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVot
             <ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVotesGroupOwnedVoteDefinitionsTableAddSelectorPage
               ownerData={ownerData}
               alreadySelected={alreadySelected}
+              isDraft={isDraft}
               onClose={async () => {
                 await closeDialog();
                 resolve({
                   result: 'close',
                 });
               }}
-              onSubmit={async (result) => {
+              onSubmit={async (result, isDraft) => {
                 await closeDialog();
                 resolve({
-                  result: 'submit',
+                  result: isDraft ? 'submit-draft' : 'submit',
                   data: result,
                 });
               }}
@@ -97,9 +125,13 @@ const ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer = lazy
 
 export interface ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVotesGroupOwnedVoteDefinitionsTableAddSelectorPageProps {
   ownerData: any;
+
   alreadySelected: ServiceVoteDefinitionStored[];
+
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceVoteDefinition) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceVoteDefinitionStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceVoteDefinitionStored[], isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorPageDefinition
@@ -107,7 +139,7 @@ export interface ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVo
 export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVotesGroupOwnedVoteDefinitionsTableAddSelectorPage(
   props: ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVotesGroupOwnedVoteDefinitionsTableAddSelectorPageProps,
 ) {
-  const { ownerData, alreadySelected, onClose, onSubmit } = props;
+  const { ownerData, alreadySelected, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceDashboardServiceForOwnedVoteDefinitionsImpl = useMemo(
@@ -121,6 +153,7 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -132,25 +165,29 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
   const [data, setData] = useState<ServiceVoteDefinitionStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceVoteDefinitionStored[]>([]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // Validation
+  const validate: (data: ServiceVoteDefinition) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } =
     useTrackService<ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook>(
       `(${OBJECTCLASS}=${SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_SELECTOR_VOTES_VOTES_TAB_BAR_MY_VOTES_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
     );
   const customActions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff);
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('service.VoteDefinition.VoteDefinition_Table.AddSelector', {
-    defaultValue: 'VoteDefinition Table',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.VoteDefinition.VoteDefinition_Table.AddSelector', { defaultValue: 'VoteDefinition Table' });
+  };
   const addAction = async (selected: ServiceVoteDefinitionStored[]) => {
     onSubmit(selected);
   };
@@ -173,7 +210,7 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
   ): Promise<ServiceVoteDefinitionStored[]> => {
     try {
       return serviceDashboardServiceForOwnedVoteDefinitionsImpl.getRangeForOwnedVoteDefinitions(
-        ownerData,
+        cleanUpPayload(ownerData),
         queryCustomizer,
       );
     } catch (error) {
@@ -183,6 +220,7 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions = {
+    getPageTitle,
     addAction,
     backAction,
     filterAction,
@@ -190,18 +228,36 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    alreadySelected,
+    selectionDiff,
+    setSelectionDiff,
+    isDraft,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorPageDefinition"
-      data-page-name="service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::myVotesGroup::ownedVoteDefinitions::TableAddSelectorPage"
-    >
+    <ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorPageDefinition"
+          data-page-name="service::Dashboard::Dashboard_View_Edit::Selector::votes::votesTabBar::myVotesGroup::ownedVoteDefinitions::TableAddSelectorPage"
+        />
         <ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -209,8 +265,9 @@ export default function ServiceDashboardDashboard_View_EditSelectorVotesVotesTab
           selectionDiff={selectionDiff}
           setSelectionDiff={setSelectionDiff}
           alreadySelected={alreadySelected}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext.Provider>
   );
 }

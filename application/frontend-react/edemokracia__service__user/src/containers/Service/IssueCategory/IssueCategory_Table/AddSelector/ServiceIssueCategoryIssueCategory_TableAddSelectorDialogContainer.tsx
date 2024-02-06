@@ -40,7 +40,6 @@ export interface ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions
 
 export interface ServiceIssueCategoryIssueCategory_TableAddSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions;
   isLoading: boolean;
@@ -49,6 +48,7 @@ export interface ServiceIssueCategoryIssueCategory_TableAddSelectorDialogProps {
   alreadySelected: ServiceIssueCategoryStored[];
   selectionDiff: ServiceIssueCategoryStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceIssueCategoryStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::IssueCategory::IssueCategory_Table::AddSelector
@@ -61,7 +61,6 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelectorDialog
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -70,12 +69,13 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelectorDialog
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -95,9 +95,11 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelectorDialog
           <ServiceIssueCategoryIssueCategory_TableAddSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

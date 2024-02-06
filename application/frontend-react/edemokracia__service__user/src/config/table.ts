@@ -15,6 +15,8 @@ export const baseColumnConfig: Partial<GridColDef<any>> = {
   filterable: false,
 };
 
+export const basePageSizeOptions = [5, 10, 25, 50];
+
 export const baseTableConfig: Partial<DataGridProps<any>> = {
   autoHeight: true,
   sortingOrder: ['asc', 'desc', null],
@@ -29,3 +31,8 @@ export const serverTableConfig: Partial<DataGridProps<any>> = {
   sortingMode: 'server',
   paginationMode: 'server',
 };
+
+// Measures used for table column width calculations
+export const characterMultiplier = 10;
+export const iconAndDropdownIconExtra = 80;
+export const onlyDropdownWidth = 100;

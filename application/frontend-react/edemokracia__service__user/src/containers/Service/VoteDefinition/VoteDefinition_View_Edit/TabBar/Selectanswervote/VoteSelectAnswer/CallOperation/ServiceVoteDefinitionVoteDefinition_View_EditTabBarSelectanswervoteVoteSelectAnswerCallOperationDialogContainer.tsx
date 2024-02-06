@@ -40,7 +40,6 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswer
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions;
   isLoading: boolean;
@@ -49,6 +48,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswer
 
   selectionDiff: SelectAnswerVoteSelectionStored[];
   setSelectionDiff: Dispatch<SetStateAction<SelectAnswerVoteSelectionStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::VoteDefinition::VoteDefinition_View_Edit::tabBar::selectanswervote::voteSelectAnswer::CallOperation
@@ -59,13 +59,13 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter, selectionDiff, setSelectionDiff } =
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, selectionDiff, setSelectionDiff, isDraft } =
     props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -85,8 +85,10 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
           <ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperation
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

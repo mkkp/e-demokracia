@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,16 +33,21 @@ import type { ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCompo
 import { ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponent } from './components/ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponent';
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_TableContainerHook';
+  'SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_TableContainerHook =
   () => ServiceVoteDefinitionVoteDefinition_TableActionDefinitions;
 
 export interface ServiceVoteDefinitionVoteDefinition_TableActionDefinitions
-  extends ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentActionDefinitions {}
+  extends ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceVoteDefinitionVoteDefinition_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceVoteDefinitionVoteDefinition_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTablePageContainer
@@ -51,7 +56,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Table(
   props: ServiceVoteDefinitionVoteDefinition_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -68,10 +73,10 @@ export default function ServiceVoteDefinitionVoteDefinition_Table(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="VoteDefinition_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableVisualElement" data-name="VoteDefinition_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable"
@@ -84,6 +89,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Table(
                     uniqueId={'User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

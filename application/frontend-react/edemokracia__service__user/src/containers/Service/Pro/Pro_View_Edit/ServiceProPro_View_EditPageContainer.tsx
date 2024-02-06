@@ -31,7 +31,6 @@ export interface ServiceProPro_View_EditPageActions extends ServiceProPro_View_E
 }
 
 export interface ServiceProPro_View_EditPageProps {
-  title: string;
   actions: ServiceProPro_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -52,7 +51,6 @@ export default function ServiceProPro_View_EditPage(props: ServiceProPro_View_Ed
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -66,13 +64,14 @@ export default function ServiceProPro_View_EditPage(props: ServiceProPro_View_Ed
     submit,
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
-    _mask:
-      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,description,downVotes,title,upVotes,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},createdBy{representation}}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -160,8 +159,8 @@ export default function ServiceProPro_View_EditPage(props: ServiceProPro_View_Ed
           <ServiceProPro_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

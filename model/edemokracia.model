@@ -2850,7 +2850,7 @@
       <output xmi:id="_AXxP4niyEe6cB8og8p0UuQ" lower="1" upper="1" target="_YoAHsFu1Ee6Lb6PYNSnQSA" name="output" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="true" rangeType="ANY"/>
       <inherited xmi:id="_AXxP43iyEe6cB8og8p0UuQ"/>
     </operations>
-    <operations xmi:id="_W0eTYHjnEe6cB8og8p0UuQ" name="createProArgument" customImplementation="false" body="var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;if (this.status == edemokracia::IssueStatus#ACTIVE) {&#xA;&#x9;return;&#xA;}&#xA;&#xA;this.pros += new edemokracia::Pro(createdBy = user, title = this.title, description = input.description);&#xA;" stateful="true" operationType="INSTANCE" binding="" initializer="false">
+    <operations xmi:id="_W0eTYHjnEe6cB8og8p0UuQ" name="createProArgument" customImplementation="false" body="var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;if (this.status == edemokracia::IssueStatus#ACTIVE) {&#xA;&#x9;return;&#xA;}&#xA;&#xA;this.pros += new edemokracia::Pro(createdBy = user, title = input.title, description = input.description);&#xA;" stateful="true" operationType="INSTANCE" binding="" initializer="false">
       <input xmi:id="_W0eTYXjnEe6cB8og8p0UuQ" lower="1" upper="1" target="_GaaTIHW5Ee2LTNnGda5kaw" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_W0eTYnjnEe6cB8og8p0UuQ"/>
     </operations>

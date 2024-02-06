@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
@@ -63,6 +63,7 @@ export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActio
   bulkRemoveAction?: (selectedRows: ServiceSimpleVoteStored[]) => Promise<DialogResult<ServiceSimpleVoteStored[]>>;
   clearAction?: () => Promise<void>;
   openFormAction?: () => Promise<void>;
+  exportAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
     id: string,
@@ -71,15 +72,24 @@ export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActio
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   refreshAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<ServiceSimpleVoteStored[]>;
+  getMask?: () => string;
   deleteAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
-  openPageAction?: (row: ServiceSimpleVoteStored) => Promise<void>;
+  openPageAction?: (row: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
+  AdditionalToolbarButtons?: (
+    data: ServiceSimpleVoteStored[],
+    isLoading: boolean,
+    selectedRows: ServiceSimpleVoteStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentProps {
   uniqueId: string;
   actions: ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
 }
 
@@ -88,7 +98,7 @@ export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentProps
 export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   props: ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError } = props;
+  const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const filterModelKey = `User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -98,7 +108,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceSimpleVoteStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
@@ -106,14 +116,15 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceSimpleVoteQueryCustomizer>({
     _mask: '{created,type}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -130,6 +141,8 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   const [lastItem, setLastItem] = useState<ServiceSimpleVoteStored>();
   const [firstItem, setFirstItem] = useState<ServiceSimpleVoteStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
   const selectedRows = useRef<ServiceSimpleVoteStored[]>([]);
 
@@ -167,41 +180,99 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.SimpleVoteType.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceSimpleVoteStored>[]>(() => [createdColumn, typeColumn], [l10nLocale]);
 
-  const rowActions: TableRowAction<ServiceSimpleVoteStored>[] = [
-    {
-      id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.SimpleVote.SimpleVote_Table.Remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceSimpleVoteStored) => isLoading,
-      action: actions.removeAction
-        ? async (rowData) => {
-            await actions.removeAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.SimpleVote.SimpleVote_Table.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceSimpleVoteStored) => !row.__deleteable || isLoading,
-      action: actions.deleteAction
-        ? async (rowData) => {
-            await actions.deleteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceSimpleVoteStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
+        label: t('service.SimpleVote.SimpleVote_Table.Remove', { defaultValue: 'Remove' }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceSimpleVoteStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeAction
+          ? async (rowData) => {
+              await actions.removeAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
+        label: t('service.SimpleVote.SimpleVote_Table.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceSimpleVoteStored) => getSelectedRows().length > 0 || !row.__deleteable || isLoading,
+        action: actions.deleteAction
+          ? async (rowData) => {
+              await actions.deleteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_p8pkkWksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceSimpleVoteStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceSimpleVoteStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceSimpleVoteQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -236,7 +307,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -266,7 +337,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -277,7 +348,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -287,21 +358,26 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+        };
+        const res = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -312,20 +388,21 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
     <div id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="SimpleVote_Table">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -335,28 +412,21 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_p8pkkWksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.openPageAction
-            ? async (params: GridRowParams<ServiceSimpleVoteStored>) => await actions.openPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceSimpleVoteStored>) => await actions.openPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -366,7 +436,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -398,11 +468,32 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.refreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.SimpleVote.SimpleVote_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                </Button>
+              ) : null}
+              {actions.exportAction && true ? (
+                <Button
+                  id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableExportButton"
+                  startIcon={<MdiIcon path="file-export-outline" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.exportAction!(processedQueryCustomizer);
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.SimpleVote.SimpleVote_Table.Export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
               {actions.openFormAction && true ? (
@@ -411,6 +502,10 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openFormAction!();
                   }}
                   disabled={isLoading}
@@ -424,6 +519,10 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -437,6 +536,10 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openSetSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -450,7 +553,12 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.clearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={isLoading}
                 >
@@ -463,9 +571,13 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -479,9 +591,13 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -489,16 +605,19 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                   {t('service.SimpleVote.SimpleVote_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

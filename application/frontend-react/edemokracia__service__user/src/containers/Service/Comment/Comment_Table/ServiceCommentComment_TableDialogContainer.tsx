@@ -31,12 +31,13 @@ export interface ServiceCommentComment_TableDialogActions extends ServiceComment
 
 export interface ServiceCommentComment_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCommentComment_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::Comment::Comment_Table
@@ -45,12 +46,12 @@ export default function ServiceCommentComment_TableDialog(props: ServiceCommentC
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -67,7 +68,12 @@ export default function ServiceCommentComment_TableDialog(props: ServiceCommentC
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceCommentComment_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCommentComment_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

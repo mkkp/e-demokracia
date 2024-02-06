@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   numericColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
@@ -66,18 +66,30 @@ export interface ServiceConCon_FormConsComponentActionDefinitions {
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   consRefreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored[]>;
+  getConsMask?: () => string;
   consCreateConArgumentAction?: (row: ServiceConStored) => Promise<void>;
   consCreateProArgumentAction?: (row: ServiceConStored) => Promise<void>;
   consDeleteAction?: (row: ServiceConStored, silentMode?: boolean) => Promise<void>;
-  consOpenPageAction?: (row: ServiceConStored) => Promise<void>;
+  consOpenPageAction?: (row: ServiceConStored, isDraft?: boolean) => Promise<void>;
   consVoteDownForConAction?: (row: ServiceConStored) => Promise<void>;
   consVoteUpForConAction?: (row: ServiceConStored) => Promise<void>;
+  consAdditionalToolbarButtons?: (
+    data: ServiceConStored[],
+    isLoading: boolean,
+    selectedRows: ServiceConStored[],
+    clearSelections: () => void,
+    ownerData: ServiceConStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceConCon_FormConsComponentProps {
   uniqueId: string;
   actions: ServiceConCon_FormConsComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceConStored;
   editMode: boolean;
@@ -87,7 +99,17 @@ export interface ServiceConCon_FormConsComponentProps {
 // XMIID: User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable
 // Name: cons
 export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsComponentProps) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -96,7 +118,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceConStored>[]>(ownerData?.cons || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'createdByName', sort: null }]);
@@ -104,14 +126,15 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceConQueryCustomizer>({
-    _mask: '{createdByName,created,description,title,upVotes,downVotes}',
+    _mask: '{created,createdByName,description,downVotes,title,upVotes}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -124,12 +147,14 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceConStored[]>([]);
 
   const createdByNameColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'createdByName',
-    headerName: t('service.Con.Con_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
+    headerName: t('service.Con.Con_Form.cons.createdByName', { defaultValue: 'CreatedByName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -139,7 +164,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const createdColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.Con.Con_Form.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.Con.Con_Form.cons.created', { defaultValue: 'Created' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -164,7 +189,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const descriptionColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'description',
-    headerName: t('service.Con.Con_Form.description', { defaultValue: 'Description' }) as string,
+    headerName: t('service.Con.Con_Form.cons.description', { defaultValue: 'Description' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -174,7 +199,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const titleColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.Con.Con_Form.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.Con.Con_Form.cons.title', { defaultValue: 'Title' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -184,7 +209,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const upVotesColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'upVotes',
-    headerName: t('service.Con.Con_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
+    headerName: t('service.Con.Con_Form.cons.upVotes', { defaultValue: 'UpVotes' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -197,7 +222,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
   const downVotesColumn: GridColDef<ServiceConStored> = {
     ...baseColumnConfig,
     field: 'downVotes',
-    headerName: t('service.Con.Con_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
+    headerName: t('service.Con.Con_Form.cons.downVotes', { defaultValue: 'DownVotes' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -213,63 +238,134 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceConStored>[] = [
-    {
-      id: 'User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Con.Con_Form.cons.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceConStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.consDeleteAction
-        ? async (rowData) => {
-            await actions.consDeleteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.consCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.consCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con_Form.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteDownForConAction
-        ? async (rowData) => {
-            await actions.consVoteDownForConAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Con.Con_Form.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceConStored) => editMode || isLoading,
-      action: actions.consVoteUpForConAction
-        ? async (rowData) => {
-            await actions.consVoteUpForConAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceConStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
+        label: t('service.Con.Con_Form.cons.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
+        action: actions.consDeleteAction
+          ? async (rowData) => {
+              await actions.consDeleteAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Con.Con_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
+        icon: <MdiIcon path="chat-minus" />,
+        disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.consCreateConArgumentAction
+          ? async (rowData) => {
+              await actions.consCreateConArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Con.Con_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
+        icon: <MdiIcon path="chat-plus" />,
+        disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.consCreateProArgumentAction
+          ? async (rowData) => {
+              await actions.consCreateProArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Con.Con_Form.voteDown', { defaultValue: 'voteDown' }) as string,
+        icon: <MdiIcon path="thumb-down" />,
+        disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.consVoteDownForConAction
+          ? async (rowData) => {
+              await actions.consVoteDownForConAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Con.Con_Form.voteUp', { defaultValue: 'voteUp' }) as string,
+        icon: <MdiIcon path="thumb-up" />,
+        disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.consVoteUpForConAction
+          ? async (rowData) => {
+              await actions.consVoteUpForConAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_FkTZYIezEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceConStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceConStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.consAdditionalToolbarButtons
+    ? actions.consAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceConQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -334,7 +430,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -367,26 +463,28 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceConStored>(filters, ownerData?.cons ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.cons, filters]);
 
   return (
     <div id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable" data-table-name="cons">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -397,28 +495,21 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_FkTZYIezEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.consOpenPageAction
-            ? async (params: GridRowParams<ServiceConStored>) => await actions.consOpenPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceConStored>) => await actions.consOpenPageAction!(params.row, true)
             : undefined
         }
         sortModel={sortModel}
@@ -456,7 +547,11 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.consRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getConsMask ? actions.getConsMask() : queryCustomizer._mask,
+                    };
+                    await actions.consRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -469,9 +564,13 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getConsMask ? actions.getConsMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.consBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -479,6 +578,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
                   {t('service.Con.Con_Form.cons.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

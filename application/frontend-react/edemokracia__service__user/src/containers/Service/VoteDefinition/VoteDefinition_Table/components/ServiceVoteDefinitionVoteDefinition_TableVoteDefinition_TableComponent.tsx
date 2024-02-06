@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,7 +43,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -72,6 +72,7 @@ export interface ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCo
   ) => Promise<DialogResult<ServiceVoteDefinitionStored[]>>;
   clearAction?: () => Promise<void>;
   openFormAction?: () => Promise<void>;
+  exportAction?: (queryCustomizer: ServiceVoteDefinitionQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
     id: string,
@@ -80,19 +81,28 @@ export interface ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCo
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   refreshAction?: (queryCustomizer: ServiceVoteDefinitionQueryCustomizer) => Promise<ServiceVoteDefinitionStored[]>;
+  getMask?: () => string;
   deleteAction?: (row: ServiceVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
-  openPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  openPageAction?: (row: ServiceVoteDefinitionStored, isDraft?: boolean) => Promise<void>;
   voteRatingAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   voteSelectAnswerAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   voteYesNoAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   voteYesNoAbstainAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  AdditionalToolbarButtons?: (
+    data: ServiceVoteDefinitionStored[],
+    isLoading: boolean,
+    selectedRows: ServiceVoteDefinitionStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentProps {
   uniqueId: string;
   actions: ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
 }
 
@@ -101,7 +111,7 @@ export interface ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCo
 export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponent(
   props: ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError } = props;
+  const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const filterModelKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -111,22 +121,23 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceVoteDefinitionStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'voteType', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceVoteDefinitionQueryCustomizer>({
-    _mask: '{voteType,title,numberOfVotes,created,status,closeAt,description}',
+    _mask: '{closeAt,created,description,numberOfVotes,status,title,voteType}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -144,6 +155,8 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
   const [firstItem, setFirstItem] = useState<ServiceVoteDefinitionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceVoteDefinitionStored[]>([]);
 
   const voteTypeColumn: GridColDef<ServiceVoteDefinitionStored> = {
@@ -155,13 +168,11 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteType.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const titleColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
@@ -222,13 +233,11 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const closeAtColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
@@ -279,78 +288,141 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t('service.VoteDefinition.VoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceVoteDefinitionStored) => isLoading,
-      action: actions.removeAction
-        ? async (rowData) => {
-            await actions.removeAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t('service.VoteDefinition.VoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.deleteAction
-        ? async (rowData) => {
-            await actions.deleteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.VoteDefinition.VoteDefinition_Table.voteRating', { defaultValue: 'voteRating' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.isRatingType || isLoading,
-      action: actions.voteRatingAction
-        ? async (rowData) => {
-            await actions.voteRatingAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.VoteDefinition.VoteDefinition_Table.voteSelectAnswer', {
-        defaultValue: 'voteSelectAnswer',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.isSelectAnswerType || isLoading,
-      action: actions.voteSelectAnswerAction
-        ? async (rowData) => {
-            await actions.voteSelectAnswerAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.VoteDefinition.VoteDefinition_Table.voteYesNoAbstain', {
-        defaultValue: 'voteYesNoAbstain',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.isYesNoAbstainType || isLoading,
-      action: actions.voteYesNoAbstainAction
-        ? async (rowData) => {
-            await actions.voteYesNoAbstainAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.VoteDefinition.VoteDefinition_Table.voteYesNo', { defaultValue: 'voteYesNo' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => !row.isYesNoType || isLoading,
-      action: actions.voteYesNoAction
-        ? async (rowData) => {
-            await actions.voteYesNoAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
+        label: t('service.VoteDefinition.VoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeAction
+          ? async (rowData) => {
+              await actions.removeAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
+        label: t('service.VoteDefinition.VoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceVoteDefinitionStored) => getSelectedRows().length > 0 || !row.__deleteable || isLoading,
+        action: actions.deleteAction
+          ? async (rowData) => {
+              await actions.deleteAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.VoteDefinition.VoteDefinition_Table.voteRating', { defaultValue: 'voteRating' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) => getSelectedRows().length > 0 || !row.isRatingType || isLoading,
+        action: actions.voteRatingAction
+          ? async (rowData) => {
+              await actions.voteRatingAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.VoteDefinition.VoteDefinition_Table.voteSelectAnswer', {
+          defaultValue: 'voteSelectAnswer',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || !row.isSelectAnswerType || isLoading,
+        action: actions.voteSelectAnswerAction
+          ? async (rowData) => {
+              await actions.voteSelectAnswerAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.VoteDefinition.VoteDefinition_Table.voteYesNoAbstain', {
+          defaultValue: 'voteYesNoAbstain',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || !row.isYesNoAbstainType || isLoading,
+        action: actions.voteYesNoAbstainAction
+          ? async (rowData) => {
+              await actions.voteYesNoAbstainAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.VoteDefinition.VoteDefinition_Table.voteYesNo', { defaultValue: 'voteYesNo' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) => getSelectedRows().length > 0 || !row.isYesNoType || isLoading,
+        action: actions.voteYesNoAction
+          ? async (rowData) => {
+              await actions.voteYesNoAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_-f-eY34XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceVoteDefinitionStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceVoteDefinitionStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceVoteDefinitionQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -423,7 +495,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -453,7 +525,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -464,7 +536,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -474,21 +546,26 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+        };
+        const res = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -499,20 +576,21 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
     <div id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable" data-table-name="VoteDefinition_Table">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -522,28 +600,22 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_-f-eY34XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.openPageAction
-            ? async (params: GridRowParams<ServiceVoteDefinitionStored>) => await actions.openPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceVoteDefinitionStored>) =>
+                await actions.openPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -553,7 +625,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -585,11 +657,32 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.refreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.VoteDefinition.VoteDefinition_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                </Button>
+              ) : null}
+              {actions.exportAction && true ? (
+                <Button
+                  id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableExportButton"
+                  startIcon={<MdiIcon path="file-export-outline" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.exportAction!(processedQueryCustomizer);
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.VoteDefinition.VoteDefinition_Table.Export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
               {actions.openFormAction && true ? (
@@ -598,6 +691,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openFormAction!();
                   }}
                   disabled={isLoading}
@@ -611,6 +708,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -624,6 +725,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openSetSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -637,7 +742,12 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.clearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={isLoading}
                 >
@@ -650,9 +760,13 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -666,9 +780,13 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -676,16 +794,19 @@ export function ServiceVoteDefinitionVoteDefinition_TableVoteDefinition_TableCom
                   {t('service.VoteDefinition.VoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

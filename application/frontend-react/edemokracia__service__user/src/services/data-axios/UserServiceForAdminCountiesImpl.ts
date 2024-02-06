@@ -93,6 +93,17 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
   }
 
   /**
+   * From: relation.validateCreate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateCreate(target: ServiceCounty): Promise<ServiceCounty> {
+    const path = '/service/User/adminCounties/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target);
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -111,6 +122,21 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
    */
   async update(target: Partial<ServiceCountyStored>): Promise<ServiceCountyStored> {
     const path = '/service/County/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(target: Partial<ServiceCountyStored>): Promise<ServiceCountyStored> {
+    const path = '/service/County/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
@@ -152,6 +178,17 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
     return response.data;
   }
 
+  async validateCreateCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCity> {
+    const path = '/service/County/~update/cities/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   async deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void> {
     const path = '/service/City/~delete';
     await this.axios.post(this.getPathForActor(path), undefined, {
@@ -166,6 +203,20 @@ export class UserServiceForAdminCountiesImpl extends JudoAxiosService implements
     target: Partial<ServiceCityStored>,
   ): Promise<ServiceCityStored> {
     const path = '/service/County/~update/cities/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateCities(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored> {
+    const path = '/service/County/~update/cities/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,

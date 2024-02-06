@@ -8,10 +8,13 @@
 
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
+import { usePrincipal } from '~/auth';
 import { CustomBreadcrumb } from '~/components/CustomBreadcrumb';
 import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
@@ -24,6 +27,8 @@ export const Layout = () => {
   const theme = useTheme();
   const matchDownXL = useMediaQuery(theme.breakpoints.down('xl'));
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const { t } = useTranslation();
+  const { principal } = usePrincipal();
 
   const { container, miniDrawer, menuOrientation, onChangeMiniDrawer } = useConfig();
 
@@ -36,7 +41,9 @@ export const Layout = () => {
   //   }
   // }, [matchDownXL]);
 
-  return (
+  const principalLoaded = () => principal && principal.__signedIdentifier;
+
+  return principalLoaded() ? (
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Header />
       {!isHorizontal ? <Drawer /> : <HorizontalBar />}
@@ -59,5 +66,18 @@ export const Layout = () => {
         </Container>
       </Box>
     </Box>
+  ) : (
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      sx={{ minHeight: '100vh' }}
+    >
+      <Grid item xs={3}>
+        {t('judo.security.loading-principal', { defaultValue: 'Loading principal data...' })}
+      </Grid>
+    </Grid>
   );
 };

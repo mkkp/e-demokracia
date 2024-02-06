@@ -37,6 +37,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.usermanage
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser.class)
 public class CreateUserCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser {
 
+    @Override
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUser apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createuserinput.CreateUserInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.usermanager.CreateUserExchangeFunctionsComponent");
     }

@@ -37,7 +37,6 @@ export interface ServiceSimpleVoteSimpleVote_View_EditDialogActions
 
 export interface ServiceSimpleVoteSimpleVote_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSimpleVoteSimpleVote_View_EditDialogActions;
   isLoading: boolean;
@@ -51,6 +50,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditDialogProps {
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::SimpleVote::SimpleVote_View_Edit
@@ -63,7 +63,6 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -76,15 +75,16 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceSimpleVoteQueryCustomizer = {
-    _mask: '{created,type}',
+    _mask: actions.getMask ? actions.getMask!() : '{created,type}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -104,8 +104,8 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
           <ServiceSimpleVoteSimpleVote_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -113,6 +113,7 @@ export default function ServiceSimpleVoteSimpleVote_View_EditDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

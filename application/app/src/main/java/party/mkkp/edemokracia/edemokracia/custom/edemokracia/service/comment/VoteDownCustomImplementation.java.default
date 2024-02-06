@@ -33,6 +33,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.comment;
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.comment.VoteDown.class)
 public class VoteDownCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.comment.VoteDown {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.comment.Comment _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.comment.VoteDownExchangeFunctionsComponent");
     }

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   numericColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/services/data-api';
@@ -66,18 +66,30 @@ export interface ServiceProPro_FormProsComponentActionDefinitions {
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   prosRefreshAction?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored[]>;
+  getProsMask?: () => string;
   prosCreateConArgumentAction?: (row: ServiceProStored) => Promise<void>;
   prosCreateProArgumentAction?: (row: ServiceProStored) => Promise<void>;
   prosDeleteAction?: (row: ServiceProStored, silentMode?: boolean) => Promise<void>;
-  prosOpenPageAction?: (row: ServiceProStored) => Promise<void>;
+  prosOpenPageAction?: (row: ServiceProStored, isDraft?: boolean) => Promise<void>;
   prosVoteDownForProAction?: (row: ServiceProStored) => Promise<void>;
   prosVoteUpForProAction?: (row: ServiceProStored) => Promise<void>;
+  prosAdditionalToolbarButtons?: (
+    data: ServiceProStored[],
+    isLoading: boolean,
+    selectedRows: ServiceProStored[],
+    clearSelections: () => void,
+    ownerData: ServiceProStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceProPro_FormProsComponentProps {
   uniqueId: string;
   actions: ServiceProPro_FormProsComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceProStored;
   editMode: boolean;
@@ -87,7 +99,17 @@ export interface ServiceProPro_FormProsComponentProps {
 // XMIID: User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable
 // Name: pros
 export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsComponentProps) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -96,7 +118,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceProStored>[]>(ownerData?.pros || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'createdByName', sort: null }]);
@@ -104,14 +126,15 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceProQueryCustomizer>({
-    _mask: '{createdByName,created,description,title,upVotes,downVotes}',
+    _mask: '{created,createdByName,description,downVotes,title,upVotes}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -124,12 +147,14 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceProStored[]>([]);
 
   const createdByNameColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'createdByName',
-    headerName: t('service.Pro.Pro_Form.createdByName', { defaultValue: 'CreatedByName' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.createdByName', { defaultValue: 'CreatedByName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -139,7 +164,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const createdColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.Pro.Pro_Form.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.created', { defaultValue: 'Created' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -164,7 +189,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const descriptionColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'description',
-    headerName: t('service.Pro.Pro_Form.description', { defaultValue: 'Description' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.description', { defaultValue: 'Description' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -174,7 +199,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const titleColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.Pro.Pro_Form.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.title', { defaultValue: 'Title' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -184,7 +209,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const upVotesColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'upVotes',
-    headerName: t('service.Pro.Pro_Form.upVotes', { defaultValue: 'UpVotes' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.upVotes', { defaultValue: 'UpVotes' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -197,7 +222,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
   const downVotesColumn: GridColDef<ServiceProStored> = {
     ...baseColumnConfig,
     field: 'downVotes',
-    headerName: t('service.Pro.Pro_Form.downVotes', { defaultValue: 'DownVotes' }) as string,
+    headerName: t('service.Pro.Pro_Form.pros.downVotes', { defaultValue: 'DownVotes' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -213,63 +238,134 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceProStored>[] = [
-    {
-      id: 'User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Pro.Pro_Form.pros.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceProStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.prosDeleteAction
-        ? async (rowData) => {
-            await actions.prosDeleteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.prosCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.prosCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosVoteDownForProAction
-        ? async (rowData) => {
-            await actions.prosVoteDownForProAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceProStored) => editMode || isLoading,
-      action: actions.prosVoteUpForProAction
-        ? async (rowData) => {
-            await actions.prosVoteUpForProAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceProStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
+        label: t('service.Pro.Pro_Form.pros.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceProStored) => getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
+        action: actions.prosDeleteAction
+          ? async (rowData) => {
+              await actions.prosDeleteAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_KRUbO3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Pro.Pro_Form.createConArgument', { defaultValue: 'createConArgument' }) as string,
+        icon: <MdiIcon path="chat-minus" />,
+        disabled: (row: ServiceProStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.prosCreateConArgumentAction
+          ? async (rowData) => {
+              await actions.prosCreateConArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Pro.Pro_Form.createProArgument', { defaultValue: 'createProArgument' }) as string,
+        icon: <MdiIcon path="chat-plus" />,
+        disabled: (row: ServiceProStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.prosCreateProArgumentAction
+          ? async (rowData) => {
+              await actions.prosCreateProArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_ikQTwIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Pro.Pro_Form.voteDown', { defaultValue: 'voteDown' }) as string,
+        icon: <MdiIcon path="thumb-down" />,
+        disabled: (row: ServiceProStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.prosVoteDownForProAction
+          ? async (rowData) => {
+              await actions.prosVoteDownForProAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_ikPssIrjEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Pro.Pro_Form.voteUp', { defaultValue: 'voteUp' }) as string,
+        icon: <MdiIcon path="thumb-up" />,
+        disabled: (row: ServiceProStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.prosVoteUpForProAction
+          ? async (rowData) => {
+              await actions.prosVoteUpForProAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceProStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceProStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.prosAdditionalToolbarButtons
+    ? actions.prosAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceProQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -334,7 +430,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -367,26 +463,28 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceProStored>(filters, ownerData?.pros ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.pros, filters]);
 
   return (
     <div id="User/(esm/_eKTe8IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable" data-table-name="pros">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -397,28 +495,21 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.prosOpenPageAction
-            ? async (params: GridRowParams<ServiceProStored>) => await actions.prosOpenPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceProStored>) => await actions.prosOpenPageAction!(params.row, true)
             : undefined
         }
         sortModel={sortModel}
@@ -456,7 +547,11 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.prosRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getProsMask ? actions.getProsMask() : queryCustomizer._mask,
+                    };
+                    await actions.prosRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -469,9 +564,13 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getProsMask ? actions.getProsMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.prosBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -479,6 +578,7 @@ export function ServiceProPro_FormProsComponent(props: ServiceProPro_FormProsCom
                   {t('service.Pro.Pro_Form.pros.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

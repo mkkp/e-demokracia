@@ -40,7 +40,6 @@ export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActio
 
 export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions;
   isLoading: boolean;
@@ -49,6 +48,7 @@ export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps
   alreadySelected: ServiceVoteDefinitionStored[];
   selectionDiff: ServiceVoteDefinitionStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceVoteDefinitionStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::VoteDefinition::VoteDefinition_Table::AddSelector
@@ -61,7 +61,6 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelectorDial
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -70,12 +69,13 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelectorDial
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -95,9 +95,11 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelectorDial
           <ServiceVoteDefinitionVoteDefinition_TableAddSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

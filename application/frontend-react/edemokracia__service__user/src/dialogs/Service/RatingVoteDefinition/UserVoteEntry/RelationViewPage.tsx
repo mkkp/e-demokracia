@@ -8,16 +8,19 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions } from '~/containers/Service/RatingVoteEntry/RatingVoteEntry_View_Edit/ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer';
+import type {
+  ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions,
+  ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogProps,
+} from '~/containers/Service/RatingVoteEntry/RatingVoteEntry_View_Edit/ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer';
 import { useServiceRatingVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/RatingVoteEntry/Owner/RelationViewPage';
 import { useServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerLinkSetSelectorPage } from '~/dialogs/Service/RatingVoteEntry/RatingVoteEntry_View_Edit/Owner/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceRatingVoteDefinition,
   ServiceRatingVoteDefinitionStored,
@@ -30,8 +33,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceRatingVoteEntryServiceImpl } from '~/services/data-axios/ServiceRatingVoteEntryServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl } from '~/services/data-axios/ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended =
@@ -44,20 +47,52 @@ export type ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended
   };
 
 export const SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook';
+  'SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook = (
   ownerData: any,
   data: ServiceRatingVoteEntryStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended;
+
+export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModel
+  extends ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceRatingVoteEntry>;
+  isDraft?: boolean;
+}
+
+const ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModelContext =
+  createContext<ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModel>({} as any);
+export const useServiceRatingVoteEntryRatingVoteEntry_View_EditViewModel = () => {
+  const context = useContext(ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceRatingVoteEntryRatingVoteEntry_View_EditViewModel must be used within a(n) ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceRatingVoteEntry>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceRatingVoteEntry) => Promise<void>,
 ) => Promise<DialogResult<ServiceRatingVoteEntryStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceRatingVoteEntry>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceRatingVoteEntry) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -73,16 +108,19 @@ export const useServiceRatingVoteDefinitionUserVoteEntryRelationViewPage = (): (
         children: (
           <ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -113,8 +151,11 @@ const ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer = lazy(
 export interface ServiceRatingVoteDefinitionUserVoteEntryRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceRatingVoteEntry>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceRatingVoteEntry) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceRatingVoteEntryStored) => Promise<void>;
+  onSubmit: (result?: ServiceRatingVoteEntryStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_3FFXoFslEe6Mx9dH3yj5gQ)/RelationFeatureView
@@ -122,10 +163,13 @@ export interface ServiceRatingVoteDefinitionUserVoteEntryRelationViewPageProps {
 export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage(
   props: ServiceRatingVoteDefinitionUserVoteEntryRelationViewPageProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceRatingVoteEntryServiceImpl = useMemo(() => new ServiceRatingVoteEntryServiceImpl(judoAxiosProvider), []);
+  const serviceRatingVoteDefinitionServiceForUserVoteEntryImpl = useMemo(
+    () => new ServiceRatingVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -133,6 +177,7 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -175,31 +220,37 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceRatingVoteEntryQueryCustomizer = {
-    _mask: '{created,value}',
+  const getPageQueryCustomizer: () => ServiceRatingVoteEntryQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{created,value}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
+
+  // Validation
+  const validate: (data: ServiceRatingVoteEntry) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceRatingVoteEntryRatingVoteEntry_View_EditActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_RATING_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
   const openServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerLinkSetSelectorPage =
     useServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerLinkSetSelectorPage();
   const openServiceRatingVoteEntryOwnerRelationViewPage = useServiceRatingVoteEntryOwnerRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.RatingVoteEntry.RatingVoteEntry_View_Edit', {
-    defaultValue: 'RatingVoteEntry View / Edit',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceRatingVoteEntry): string => {
+    return t('service.RatingVoteEntry.RatingVoteEntry_View_Edit', { defaultValue: 'RatingVoteEntry View / Edit' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -209,8 +260,12 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceRatingVoteEntryServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceRatingVoteDefinitionServiceForUserVoteEntryImpl.refresh(
+        ownerData,
+        getPageQueryCustomizer(),
+      );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -224,6 +279,7 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -234,7 +290,10 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceRatingVoteEntryServiceImpl.getRangeForOwner(data, queryCustomizer);
+      return serviceRatingVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -254,17 +313,21 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     }
     return undefined;
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUser | ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceRatingVoteEntryOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownerOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceRatingVoteEntryOwnerRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
 
   const actions: ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     ownerAutocompleteRangeAction,
@@ -274,21 +337,43 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_3FFXoFslEe6Mx9dH3yj5gQ)/RelationFeatureView"
-      data-page-name="service::RatingVoteDefinition::userVoteEntry::RelationViewPage"
-    >
+    <ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_3FFXoFslEe6Mx9dH3yj5gQ)/RelationFeatureView"
+          data-page-name="service::RatingVoteDefinition::userVoteEntry::RelationViewPage"
+        />
         <ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -300,8 +385,9 @@ export default function ServiceRatingVoteDefinitionUserVoteEntryRelationViewPage
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceRatingVoteEntryRatingVoteEntry_View_EditViewModelContext.Provider>
   );
 }

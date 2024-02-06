@@ -28,6 +28,14 @@ export interface ServiceIssueServiceForAttachments {
   ): Promise<ServiceIssueAttachmentStored>;
   getTemplate(): Promise<ServiceIssueAttachment>;
   create(owner: JudoIdentifiable<ServiceIssue>, target: ServiceIssueAttachment): Promise<ServiceIssueAttachmentStored>;
+  validateCreate(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: ServiceIssueAttachment,
+  ): Promise<ServiceIssueAttachment>;
   delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
   update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceIssueAttachmentStored>,
+  ): Promise<ServiceIssueAttachmentStored>;
 }

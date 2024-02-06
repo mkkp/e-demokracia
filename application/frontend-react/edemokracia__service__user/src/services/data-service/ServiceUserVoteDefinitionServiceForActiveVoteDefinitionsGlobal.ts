@@ -47,9 +47,17 @@ export interface ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobal 
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<ServiceVoteDefinitionStored>;
   update(target: Partial<ServiceVoteDefinitionStored>): Promise<ServiceVoteDefinitionStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceUserVoteDefinition>,
+    target: Partial<ServiceVoteDefinitionStored>,
+  ): Promise<ServiceVoteDefinitionStored>;
   getIssue(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<ServiceIssueStored>;
+  validateUpdateIssue(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: Partial<ServiceIssueStored>,
   ): Promise<ServiceIssueStored>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;

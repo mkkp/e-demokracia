@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceCounty,
@@ -67,14 +67,26 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   activityCountiesRefreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
+  getActivityCountiesMask?: () => string;
   activityCountiesRemoveAction?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
-  activityCountiesOpenPageAction?: (row: ServiceCountyStored) => Promise<void>;
+  activityCountiesOpenPageAction?: (row: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
+  activityCountiesAdditionalToolbarButtons?: (
+    data: ServiceCountyStored[],
+    isLoading: boolean,
+    selectedRows: ServiceCountyStored[],
+    clearSelections: () => void,
+    ownerData: ServiceUserProfileStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponentProps {
   uniqueId: string;
   actions: ServiceUserProfileUserProfile_View_EditActivityCountiesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceUserProfileStored;
   editMode: boolean;
@@ -86,7 +98,17 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
 export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent(
   props: ServiceUserProfileUserProfile_View_EditActivityCountiesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -94,7 +116,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceCountyStored>[]>(ownerData?.activityCounties || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'representation', sort: null }]);
@@ -102,14 +124,15 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceCountyQueryCustomizer>({
     _mask: '{representation}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -122,12 +145,16 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceCountyStored[]>([]);
 
   const representationColumn: GridColDef<ServiceCountyStored> = {
     ...baseColumnConfig,
     field: 'representation',
-    headerName: t('service.UserProfile.UserProfile_View_Edit.representation', { defaultValue: 'County' }) as string,
+    headerName: t('service.UserProfile.UserProfile_View_Edit.activityCounties.representation', {
+      defaultValue: 'County',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -137,22 +164,93 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
 
   const columns = useMemo<GridColDef<ServiceCountyStored>[]>(() => [representationColumn], []);
 
-  const rowActions: TableRowAction<ServiceCountyStored>[] = [
-    {
-      id: 'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceCountyStored) => !isFormUpdateable() || isLoading,
-      action: actions.activityCountiesRemoveAction
-        ? async (rowData) => {
-            await actions.activityCountiesRemoveAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceCountyStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
+        label: t(
+          'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Remove',
+          { defaultValue: 'Remove' },
+        ) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceCountyStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
+        action: actions.activityCountiesRemoveAction
+          ? async (rowData) => {
+              await actions.activityCountiesRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_gu_zQFvREe6jm_SkPSYEYw)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceCountyStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceCountyStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.activityCountiesAdditionalToolbarButtons
+    ? actions.activityCountiesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceCountyQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -182,7 +280,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -215,19 +313,21 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceCountyStored>(filters, ownerData?.activityCounties ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.activityCounties, filters]);
 
   return (
@@ -237,7 +337,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -248,29 +348,22 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_gu_zQFvREe6jm_SkPSYEYw)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activityCountiesOpenPageAction
             ? async (params: GridRowParams<ServiceCountyStored>) =>
-                await actions.activityCountiesOpenPageAction!(params.row)
+                await actions.activityCountiesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -311,7 +404,13 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.activityCountiesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCountiesMask
+                        ? actions.getActivityCountiesMask()
+                        : queryCustomizer._mask,
+                    };
+                    await actions.activityCountiesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -327,6 +426,12 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCountiesMask
+                        ? actions.getActivityCountiesMask()
+                        : queryCustomizer._mask,
+                    };
                     await actions.activityCountiesOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
@@ -343,11 +448,17 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCountiesMask
+                        ? actions.getActivityCountiesMask()
+                        : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.activityCountiesBulkRemoveAction!(
                       selectedRows.current,
                     );
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -358,6 +469,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

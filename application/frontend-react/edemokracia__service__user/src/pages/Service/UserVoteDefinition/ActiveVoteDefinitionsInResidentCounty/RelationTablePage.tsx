@@ -9,18 +9,23 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceVoteDefinitionVoteDefinition_TablePageActions } from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
+import type {
+  ServiceVoteDefinitionVoteDefinition_TablePageActions,
+  ServiceVoteDefinitionVoteDefinition_TablePageProps,
+} from '~/containers/Service/VoteDefinition/VoteDefinition_Table/ServiceVoteDefinitionVoteDefinition_TablePageContainer';
 import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage } from '~/routes';
 import type {
   IssueScope,
@@ -36,7 +41,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentCountyImpl } from '~/services/data-axios/ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentCountyImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
@@ -45,11 +50,30 @@ export type ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended =
   };
 
 export const SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_RELATION_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_TableActionsHook';
+  'SERVICE_USER_VOTE_DEFINITION_ACTIVE_VOTE_DEFINITIONS_IN_RESIDENT_COUNTY_RELATION_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_TableActionsHook = (
   data: ServiceVoteDefinitionStored[],
   editMode: boolean,
 ) => ServiceVoteDefinitionVoteDefinition_TablePageActionsExtended;
+
+export interface ServiceVoteDefinitionVoteDefinition_TableViewModel
+  extends ServiceVoteDefinitionVoteDefinition_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceVoteDefinitionVoteDefinition_TableViewModelContext =
+  createContext<ServiceVoteDefinitionVoteDefinition_TableViewModel>({} as any);
+export const useServiceVoteDefinitionVoteDefinition_TableViewModel = () => {
+  const context = useContext(ServiceVoteDefinitionVoteDefinition_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceVoteDefinitionVoteDefinition_TableViewModel must be used within a(n) ServiceVoteDefinitionVoteDefinition_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceVoteDefinitionVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -76,6 +100,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -84,6 +109,12 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceVoteDefinitionStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceVoteDefinitionVoteDefinition_TableActionsHook>(
@@ -104,13 +135,10 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm =
     useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm();
 
-  // Calculated section
-  const title: string = t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.VoteDefinition.VoteDefinition_Table', { defaultValue: 'VoteDefinition Table' });
+  };
   const backAction = async () => {
     navigateBack();
   };
@@ -137,19 +165,29 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
       );
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage(target!.__signedIdentifier),
-    );
+  const openPageAction = async (target: ServiceVoteDefinition | ServiceVoteDefinitionStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage(
+          (target as ServiceVoteDefinitionStored)!.__signedIdentifier,
+        ),
+      );
+    }
   };
-  const voteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const voteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit') {
@@ -164,14 +202,24 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
     if (result === 'submit') {
     }
   };
-  const voteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+  const voteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const voteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const voteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit') {
@@ -180,6 +228,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
   };
 
   const actions: ServiceVoteDefinitionVoteDefinition_TablePageActions = {
+    getPageTitle,
     backAction,
     filterAction,
     refreshAction,
@@ -191,17 +240,28 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceVoteDefinitionVoteDefinition_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_yd4FQF5BEe6vsex_cZNQbQ)/RelationFeatureTable"
-      data-page-name="service::UserVoteDefinition::activeVoteDefinitionsInResidentCounty::RelationTablePage"
-    >
+    <ServiceVoteDefinitionVoteDefinition_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_yd4FQF5BEe6vsex_cZNQbQ)/RelationFeatureTable"
+          data-page-name="service::UserVoteDefinition::activeVoteDefinitionsInResidentCounty::RelationTablePage"
+        />
         <PageContainerTransition>
           <ServiceVoteDefinitionVoteDefinition_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -209,6 +269,6 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInResident
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceVoteDefinitionVoteDefinition_TableViewModelContext.Provider>
   );
 }

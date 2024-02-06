@@ -115,7 +115,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: RatingVoteInput,
   ): Promise<void> {
-    const path = '/service/VoteEntry/voteRating';
+    const path = '/service/VoteDefinition/voteRating';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -139,7 +139,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
   ): Promise<void> {
-    const path = '/service/VoteEntry/voteSelectAnswer';
+    const path = '/service/VoteDefinition/voteSelectAnswer';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -179,7 +179,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoVoteInput,
   ): Promise<void> {
-    const path = '/service/VoteEntry/voteYesNo';
+    const path = '/service/VoteDefinition/voteYesNo';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
@@ -203,7 +203,7 @@ export class UserServiceForAdminVoteEntriesImpl extends JudoAxiosService impleme
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
   ): Promise<void> {
-    const path = '/service/VoteEntry/voteYesNoAbstain';
+    const path = '/service/VoteDefinition/voteYesNoAbstain';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier!,

@@ -98,6 +98,24 @@ export class ServiceUserManagerServiceForUsersImpl
     return response.data;
   }
 
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(
+    owner: JudoIdentifiable<ServiceUserManager>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored> {
+    const path = '/service/ServiceUser/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   async listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -141,6 +159,20 @@ export class ServiceUserManagerServiceForUsersImpl
     target: Partial<ServiceCityStored>,
   ): Promise<ServiceCityStored> {
     const path = '/service/ServiceUser/~update/activityCities/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateActivityCities(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored> {
+    const path = '/service/ServiceUser/~update/activityCities/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,
@@ -250,6 +282,20 @@ export class ServiceUserManagerServiceForUsersImpl
     return response.data;
   }
 
+  async validateUpdateActivityCounties(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored> {
+    const path = '/service/ServiceUser/~update/activityCounties/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   /**
    * From: targetRelation.isSetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
@@ -341,6 +387,20 @@ export class ServiceUserManagerServiceForUsersImpl
     target: Partial<ServiceDistrictStored>,
   ): Promise<ServiceDistrictStored> {
     const path = '/service/ServiceUser/~update/activityDistricts/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateActivityDistricts(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored> {
+    const path = '/service/ServiceUser/~update/activityDistricts/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,
@@ -450,6 +510,20 @@ export class ServiceUserManagerServiceForUsersImpl
     return response.data;
   }
 
+  async validateUpdateResidentCity(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored> {
+    const path = '/service/ServiceUser/~update/residentCity/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   /**
    * From: targetRelation.isSetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
@@ -522,6 +596,20 @@ export class ServiceUserManagerServiceForUsersImpl
     target: Partial<ServiceCountyStored>,
   ): Promise<ServiceCountyStored> {
     const path = '/service/ServiceUser/~update/residentCounty/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateResidentCounty(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored> {
+    const path = '/service/ServiceUser/~update/residentCounty/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,
@@ -612,6 +700,20 @@ export class ServiceUserManagerServiceForUsersImpl
     return response.data;
   }
 
+  async validateUpdateResidentDistrict(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored> {
+    const path = '/service/ServiceUser/~update/residentDistrict/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   /**
    * From: targetRelation.isSetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
@@ -667,6 +769,20 @@ export class ServiceUserManagerServiceForUsersImpl
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner,
       queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateVotes(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceSimpleVoteStored>,
+  ): Promise<ServiceSimpleVoteStored> {
+    const path = '/service/ServiceUser/~update/votes/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
     });
 
     return response.data;

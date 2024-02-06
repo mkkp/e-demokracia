@@ -20,7 +20,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
  * 	return;
  * }
  * 
- * this.pros += new edemokracia::Pro(createdBy = user, title = this.title, description = input.description);
+ * this.pros += new edemokracia::Pro(createdBy = user, title = input.title, description = input.description);
  * 
  * 
  * Usage:
@@ -32,6 +32,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateProArgument.class)
 public class CreateProArgumentCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.CreateProArgument {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createargumentinput.CreateArgumentInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.issue.CreateProArgumentExchangeFunctionsComponent");
     }

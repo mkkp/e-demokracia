@@ -31,12 +31,13 @@ export interface ServiceProParentProParent_TableDialogActions extends ServicePro
 
 export interface ServiceProParentProParent_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceProParentProParent_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::ProParent::ProParent_Table
@@ -45,12 +46,12 @@ export default function ServiceProParentProParent_TableDialog(props: ServiceProP
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_Mga8EFV5Ee6uPON95HTfyQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -67,7 +68,12 @@ export default function ServiceProParentProParent_TableDialog(props: ServiceProP
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceProParentProParent_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceProParentProParent_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

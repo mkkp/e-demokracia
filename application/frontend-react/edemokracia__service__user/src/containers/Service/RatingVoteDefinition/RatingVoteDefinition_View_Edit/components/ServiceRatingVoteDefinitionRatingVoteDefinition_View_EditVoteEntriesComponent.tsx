@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   numericColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -73,13 +73,25 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEn
   voteEntriesRefreshAction?: (
     queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
   ) => Promise<ServiceRatingVoteEntryStored[]>;
-  voteEntriesOpenPageAction?: (row: ServiceRatingVoteEntryStored) => Promise<void>;
+  getVoteEntriesMask?: () => string;
+  voteEntriesOpenPageAction?: (row: ServiceRatingVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  voteEntriesAdditionalToolbarButtons?: (
+    data: ServiceRatingVoteEntryStored[],
+    isLoading: boolean,
+    selectedRows: ServiceRatingVoteEntryStored[],
+    clearSelections: () => void,
+    ownerData: ServiceRatingVoteDefinitionStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentProps {
   uniqueId: string;
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceRatingVoteDefinitionStored;
   editMode: boolean;
@@ -91,7 +103,17 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEn
 export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent(
   props: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -101,7 +123,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceRatingVoteEntryStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
@@ -109,14 +131,15 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceRatingVoteEntryQueryCustomizer>({
     _mask: '{created,createdBy,value}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -134,12 +157,14 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   const [firstItem, setFirstItem] = useState<ServiceRatingVoteEntryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceRatingVoteEntryStored[]>([]);
 
   const createdColumn: GridColDef<ServiceRatingVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.created', {
+    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.voteEntries.created', {
       defaultValue: 'Created',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -166,7 +191,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   const createdByColumn: GridColDef<ServiceRatingVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'createdBy',
-    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.createdBy', {
+    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.voteEntries.createdBy', {
       defaultValue: 'CreatedBy',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -178,7 +203,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   const valueColumn: GridColDef<ServiceRatingVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'value',
-    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.value', {
+    headerName: t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.voteEntries.value', {
       defaultValue: 'Value',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -196,7 +221,71 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceRatingVoteEntryStored>[] = [];
+  const rowActions: TableRowAction<ServiceRatingVoteEntryStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_tgVq8FslEe6Mx9dH3yj5gQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceRatingVoteEntryStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceRatingVoteEntryStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.voteEntriesAdditionalToolbarButtons
+    ? actions.voteEntriesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceRatingVoteEntryQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -243,7 +332,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -273,7 +362,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -284,7 +373,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -294,21 +383,26 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
+        };
+        const res = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -319,13 +413,14 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -335,7 +430,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -346,24 +441,19 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_tgVq8FslEe6Mx9dH3yj5gQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.voteEntriesOpenPageAction
             ? async (params: GridRowParams<ServiceRatingVoteEntryStored>) =>
-                await actions.voteEntriesOpenPageAction!(params.row)
+                await actions.voteEntriesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -373,7 +463,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -407,7 +497,11 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
+                    };
+                    await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -416,16 +510,19 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

@@ -41,7 +41,6 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperationDialogActions;
   isLoading: boolean;
@@ -50,6 +49,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 
   selectionDiff: SelectAnswerVoteSelectionStored[];
   setSelectionDiff: Dispatch<SetStateAction<SelectAnswerVoteSelectionStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::userVoteEntryGroup::TakeVote::vote::CallOperation
@@ -60,13 +60,13 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter, selectionDiff, setSelectionDiff } =
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, selectionDiff, setSelectionDiff, isDraft } =
     props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputCallOperationSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -86,8 +86,10 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteCallOperation
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

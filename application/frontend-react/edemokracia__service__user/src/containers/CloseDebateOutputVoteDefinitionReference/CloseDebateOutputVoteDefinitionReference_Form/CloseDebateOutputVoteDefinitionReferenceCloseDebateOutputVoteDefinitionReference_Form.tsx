@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -31,6 +31,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   CloseDebateOutputVoteDefinitionReference,
@@ -39,7 +40,7 @@ import {
 } from '~/services/data-api';
 
 export const CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormContainerHook';
+  'CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_FORM_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormContainerHook = (
   data: CloseDebateOutputVoteDefinitionReferenceStored,
   editMode: boolean,
@@ -47,6 +48,7 @@ export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinit
 ) => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions;
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions {
+  getPageTitle?: (data: CloseDebateOutputVoteDefinitionReference) => string;
   isContextRequired?: (
     data: CloseDebateOutputVoteDefinitionReference | CloseDebateOutputVoteDefinitionReferenceStored,
     editMode?: boolean,
@@ -60,10 +62,10 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions;
 
   data: CloseDebateOutputVoteDefinitionReferenceStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void;
@@ -71,6 +73,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_YoAHuVu1Ee6Lb6PYNSnQSA)/TransferObjectFormPageContainer
@@ -81,9 +84,10 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -113,22 +117,37 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   const containerActions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CloseDebateOutputVoteDefinitionReference_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_YoAHuVu1Ee6Lb6PYNSnQSA)/TransferObjectFormVisualElement"
+          data-name="CloseDebateOutputVoteDefinitionReference_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="debate::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="debate::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
@@ -145,9 +164,10 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="debate" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
+                      data-name="debate"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -160,12 +180,12 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isContextRequired ? actions.isContextRequired(data, editMode) : false}
               name="context"
               id="User/(esm/_f6jpUFv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={
                 t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.context', {
                   defaultValue: 'Context',
@@ -193,7 +213,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

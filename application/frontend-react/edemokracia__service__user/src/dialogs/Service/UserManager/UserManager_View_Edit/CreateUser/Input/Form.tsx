@@ -8,14 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCreateUserInputCreateUserInput_FormDialogActions } from '~/containers/Service/CreateUserInput/CreateUserInput_Form/ServiceCreateUserInputCreateUserInput_FormDialogContainer';
+import type {
+  ServiceCreateUserInputCreateUserInput_FormDialogActions,
+  ServiceCreateUserInputCreateUserInput_FormDialogProps,
+} from '~/containers/Service/CreateUserInput/CreateUserInput_Form/ServiceCreateUserInputCreateUserInput_FormDialogContainer';
 import { useServiceUserManagerUserManager_View_EditCreateUserOutputView } from '~/dialogs/Service/UserManager/UserManager_View_Edit/CreateUser/Output/View';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCreateUserInput,
   ServiceCreateUserInputQueryCustomizer,
@@ -26,7 +30,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceImpl } from '~/services/data-axios/ServiceUserManagerServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended =
@@ -41,23 +45,61 @@ export type ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended =
       data: ServiceCreateUserInput,
       storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: ServiceCreateUserInput,
+      res: ServiceCreateUserInputStored,
+      onSubmit: (result?: ServiceCreateUserInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCreateUserInputCreateUserInput_FormActionsHook';
+  'SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK';
 export type ServiceCreateUserInputCreateUserInput_FormActionsHook = (
   ownerData: any,
   data: ServiceCreateUserInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended;
+
+export interface ServiceCreateUserInputCreateUserInput_FormViewModel
+  extends ServiceCreateUserInputCreateUserInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceCreateUserInput>;
+  isDraft?: boolean;
+}
+
+const ServiceCreateUserInputCreateUserInput_FormViewModelContext =
+  createContext<ServiceCreateUserInputCreateUserInput_FormViewModel>({} as any);
+export const useServiceCreateUserInputCreateUserInput_FormViewModel = () => {
+  const context = useContext(ServiceCreateUserInputCreateUserInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceCreateUserInputCreateUserInput_FormViewModel must be used within a(n) ServiceCreateUserInputCreateUserInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceCreateUserInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceCreateUserInput) => Promise<void>,
 ) => Promise<DialogResult<ServiceServiceUserStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceCreateUserInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceCreateUserInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -73,16 +115,19 @@ export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = ():
         children: (
           <ServiceUserManagerUserManager_View_EditCreateUserInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -109,8 +154,11 @@ const ServiceCreateUserInputCreateUserInput_FormDialogContainer = lazy(
 export interface ServiceUserManagerUserManager_View_EditCreateUserInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceCreateUserInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceCreateUserInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition
@@ -118,7 +166,7 @@ export interface ServiceUserManagerUserManager_View_EditCreateUserInputFormProps
 export default function ServiceUserManagerUserManager_View_EditCreateUserInputForm(
   props: ServiceUserManagerUserManager_View_EditCreateUserInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceUserManagerServiceImpl = useMemo(() => new ServiceUserManagerServiceImpl(judoAxiosProvider), []);
@@ -129,6 +177,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -171,33 +220,37 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createUserForUserManagerAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceCreateUserInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCreateUserInputCreateUserInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CREATE_USER_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceCreateUserInputCreateUserInput_FormDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, submit);
 
   // Dialog hooks
   const openServiceUserManagerUserManager_View_EditCreateUserOutputView =
     useServiceUserManagerUserManager_View_EditCreateUserOutputView();
 
-  // Calculated section
-  const title: string = t('service.CreateUserInput.CreateUserInput_Form', { defaultValue: 'CreateUserInput Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createUserForUserManagerAction();
-  };
-
   // Action section
+  const getPageTitle = (data: ServiceCreateUserInput): string => {
+    return t('service.CreateUserInput.CreateUserInput_Form', { defaultValue: 'CreateUserInput Form' });
+  };
   const backAction = async () => {
     onClose();
   };
   const createUserForUserManagerAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserManagerServiceImpl.createUser(payloadDiff.current);
+      const result = await serviceUserManagerServiceImpl.createUser(cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateUserForUserManagerAction) {
         await customActions.postCreateUserForUserManagerAction(result, onSubmit, onClose);
       } else {
@@ -205,7 +258,8 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (result) {
-          onSubmit(result);
+          onClose();
+          await openServiceUserManagerUserManager_View_EditCreateUserOutputView(result);
         } else {
           onSubmit();
         }
@@ -227,6 +281,12 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceCreateUserInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -237,10 +297,33 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   };
 
   const actions: ServiceCreateUserInputCreateUserInput_FormDialogActions = {
+    getPageTitle,
     backAction,
     createUserForUserManagerAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceCreateUserInputCreateUserInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -249,15 +332,15 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   }, []);
 
   return (
-    <div
-      id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::UserManager::UserManager_View_Edit::createUser::Input::Form"
-    >
+    <ServiceCreateUserInputCreateUserInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::UserManager::UserManager_View_Edit::createUser::Input::Form"
+        />
         <ServiceCreateUserInputCreateUserInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -269,8 +352,9 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceCreateUserInputCreateUserInput_FormViewModelContext.Provider>
   );
 }

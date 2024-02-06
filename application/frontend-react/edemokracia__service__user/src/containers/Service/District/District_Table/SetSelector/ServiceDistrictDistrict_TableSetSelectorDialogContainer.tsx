@@ -33,7 +33,6 @@ export interface ServiceDistrictDistrict_TableSetSelectorDialogActions
 
 export interface ServiceDistrictDistrict_TableSetSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceDistrictDistrict_TableSetSelectorDialogActions;
   isLoading: boolean;
@@ -42,6 +41,7 @@ export interface ServiceDistrictDistrict_TableSetSelectorDialogProps {
   alreadySelected: ServiceDistrictStored[];
   selectionDiff: ServiceDistrictStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceDistrictStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::District::District_Table::SetSelector
@@ -54,7 +54,6 @@ export default function ServiceDistrictDistrict_TableSetSelectorDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -63,12 +62,13 @@ export default function ServiceDistrictDistrict_TableSetSelectorDialog(
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -88,9 +88,11 @@ export default function ServiceDistrictDistrict_TableSetSelectorDialog(
           <ServiceDistrictDistrict_TableSetSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

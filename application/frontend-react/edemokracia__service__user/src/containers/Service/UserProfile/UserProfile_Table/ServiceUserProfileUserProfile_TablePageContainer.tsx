@@ -33,7 +33,6 @@ export interface ServiceUserProfileUserProfile_TablePageActions
 }
 
 export interface ServiceUserProfileUserProfile_TablePageProps {
-  title: string;
   actions: ServiceUserProfileUserProfile_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -46,11 +45,11 @@ export default function ServiceUserProfileUserProfile_TablePage(props: ServiceUs
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -71,7 +70,11 @@ export default function ServiceUserProfileUserProfile_TablePage(props: ServiceUs
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceUserProfileUserProfile_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceUserProfileUserProfile_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+          />
         </Box>
       </Suspense>
     </>

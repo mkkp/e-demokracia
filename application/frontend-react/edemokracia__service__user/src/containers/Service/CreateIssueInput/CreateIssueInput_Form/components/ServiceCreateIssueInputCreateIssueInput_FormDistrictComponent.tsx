@@ -42,6 +42,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_TXklMdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -49,7 +50,8 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentPr
 export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -71,6 +73,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormDistrictComponent(
       disabled={actions?.isDistrictDisabled ? actions.isDistrictDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(district) => {
         storeDiff('district', district);

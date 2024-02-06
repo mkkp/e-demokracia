@@ -14,8 +14,8 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <judo-meta-esm-version>1.2.0.20231220_172300_03232454_develop</judo-meta-esm-version>
-        <judo-esm-fullstack-project-template-version>1.0.0.20231221_042417_6bd98073_develop</judo-esm-fullstack-project-template-version>
+        <judo-meta-esm-version>1.2.0.20240131_150826_b8265984_develop</judo-meta-esm-version>
+        <judo-esm-fullstack-project-template-version>1.0.0.20240201_042342_e363f195_develop</judo-esm-fullstack-project-template-version>
         <judo-version-updater-maven-plugin-version>1.0.0.20231027_121339_45b7ebd2_develop</judo-version-updater-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -196,6 +196,7 @@
                                     <uris>
                                         <uri>mvn:hu.blackbelt.judo.template:judo-esm-fullstack-project-template-common:${judo-esm-fullstack-project-template-version}</uri>
                                         <uri>mvn:hu.blackbelt.judo.template:judo-esm-fullstack-project-template-root:${judo-esm-fullstack-project-template-version}</uri>
+                                        <uri>${maven.multiModuleProjectDirectory}/generator-overrides</uri>
                                     </uris>
                                     <type>fullstack-project</type>
                                     <esm>
@@ -266,6 +267,7 @@
                                     <uris>
                                         <uri>mvn:hu.blackbelt.judo.template:judo-esm-fullstack-project-template-common:${judo-esm-fullstack-project-template-version}</uri>
                                         <uri>mvn:hu.blackbelt.judo.template:judo-esm-fullstack-project-template-application:${judo-esm-fullstack-project-template-version}</uri>
+                                        <uri>${maven.multiModuleProjectDirectory}/application/generator-overrides</uri>
                                     </uris>
                                     <type>fullstack-project</type>
                                     <esm>

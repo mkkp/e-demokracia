@@ -9,14 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceServiceUserServiceUser_TableSetSelectorDialogActions } from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceServiceUserServiceUser_TableSetSelectorDialogActions,
+  ServiceServiceUserServiceUser_TableSetSelectorDialogProps,
+} from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueCategory,
   ServiceIssueCategoryStored,
@@ -27,28 +31,51 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceForOwnerImpl } from '~/services/data-axios/ServiceIssueCategoryServiceForOwnerImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
   ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceServiceUserServiceUser_TableSetSelectorActionsHook';
+  'SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
 export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceServiceUserStored[],
   editMode: boolean,
   selectionDiff: ServiceServiceUserStored[],
+  submit: () => Promise<void>,
 ) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
+
+export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
+  extends ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  isDraft?: boolean;
+}
+
+const ServiceServiceUserServiceUser_TableSetSelectorViewModelContext =
+  createContext<ServiceServiceUserServiceUser_TableSetSelectorViewModel>({} as any);
+export const useServiceServiceUserServiceUser_TableSetSelectorViewModel = () => {
+  const context = useContext(ServiceServiceUserServiceUser_TableSetSelectorViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceServiceUserServiceUser_TableSetSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_TableSetSelectorViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage = (): ((
   ownerData: any,
   alreadySelected: ServiceServiceUserStored[],
+  isDraft?: boolean,
 ) => Promise<DialogResult<ServiceServiceUserStored[]>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any, alreadySelected: ServiceServiceUserStored[]) =>
+  return (ownerData: any, alreadySelected: ServiceServiceUserStored[], isDraft?: boolean) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -65,16 +92,17 @@ export const useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorP
           <ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -93,9 +121,13 @@ const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
 
 export interface ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPageProps {
   ownerData: any;
+
   alreadySelected: ServiceServiceUserStored[];
+
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceServiceUser) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored[], isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition
@@ -103,7 +135,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelector
 export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage(
   props: ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPageProps,
 ) {
-  const { ownerData, alreadySelected, onClose, onSubmit } = props;
+  const { ownerData, alreadySelected, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceIssueCategoryServiceForOwnerImpl = useMemo(
@@ -117,6 +149,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -128,22 +161,28 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   const [data, setData] = useState<ServiceServiceUserStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceServiceUserStored[]>([]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // Validation
+  const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff);
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -165,7 +204,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceIssueCategoryServiceForOwnerImpl.getRangeForOwner(ownerData, queryCustomizer);
+      return serviceIssueCategoryServiceForOwnerImpl.getRangeForOwner(cleanUpPayload(ownerData), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -173,6 +212,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   };
 
   const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
+    getPageTitle,
     backAction,
     setAction,
     filterAction,
@@ -180,18 +220,36 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceServiceUserServiceUser_TableSetSelectorViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    alreadySelected,
+    selectionDiff,
+    setSelectionDiff,
+    isDraft,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
-      data-page-name="service::IssueCategory::IssueCategory_View_Edit::owner::LinkSetSelectorPage"
-    >
+    <ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+          data-page-name="service::IssueCategory::IssueCategory_View_Edit::owner::LinkSetSelectorPage"
+        />
         <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -199,8 +257,9 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
           selectionDiff={selectionDiff}
           setSelectionDiff={setSelectionDiff}
           alreadySelected={alreadySelected}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider>
   );
 }

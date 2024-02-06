@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+      
+    <ns0:changeSet xmlns:ns0="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-indexes-from-T_EDEMOKRACIA_USER-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-indexes">
+            
+        <ns1:dropIndex xmlns:ns1="http://www.liquibase.org/xml/ns/dbchangelog" indexName="IDX_2aaaf3fd87da95818e6ef7de7d88226a" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns2:dropIndex xmlns:ns2="http://www.liquibase.org/xml/ns/dbchangelog" indexName="IDX_a0dff5213fcd279dd66572c10ed6a251" tableName="T_EDEMOKRACIA_USER"/>
+          
+    </ns0:changeSet>
+      
+    <ns3:changeSet xmlns:ns3="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-indexes-from-T_EDEMOKRACIA_CITY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-indexes">
+            
+        <ns4:dropIndex xmlns:ns4="http://www.liquibase.org/xml/ns/dbchangelog" indexName="IDX_f2cbfbd23af3838ae230d0154eedab82" tableName="T_EDEMOKRACIA_CITY"/>
+          
+    </ns3:changeSet>
+      
+    <ns5:changeSet xmlns:ns5="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-indexes-from-T_EDEMOKRACIA_COUNTY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-indexes">
+            
+        <ns6:dropIndex xmlns:ns6="http://www.liquibase.org/xml/ns/dbchangelog" indexName="IDX_469afcfd733a08065149d077229e6d27" tableName="T_EDEMOKRACIA_COUNTY"/>
+          
+    </ns5:changeSet>
+      
+    <ns7:changeSet xmlns:ns7="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_USER-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns8:dropNotNullConstraint xmlns:ns8="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_USER"/>
+          
+    </ns7:changeSet>
+      
+    <ns9:changeSet xmlns:ns9="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_CITY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns10:dropNotNullConstraint xmlns:ns10="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_CITY"/>
+          
+    </ns9:changeSet>
+      
+    <ns11:changeSet xmlns:ns11="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_COMMENT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns12:dropNotNullConstraint xmlns:ns12="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_COMMENT"/>
+          
+    </ns11:changeSet>
+      
+    <ns13:changeSet xmlns:ns13="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_CON-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns14:dropNotNullConstraint xmlns:ns14="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_CON"/>
+          
+    </ns13:changeSet>
+      
+    <ns15:changeSet xmlns:ns15="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_COUNTY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns16:dropNotNullConstraint xmlns:ns16="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_COUNTY"/>
+          
+    </ns15:changeSet>
+      
+    <ns17:changeSet xmlns:ns17="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_DISTRICT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns18:dropNotNullConstraint xmlns:ns18="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_DISTRICT"/>
+          
+    </ns17:changeSet>
+      
+    <ns19:changeSet xmlns:ns19="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_ISSUE-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns20:dropNotNullConstraint xmlns:ns20="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUE"/>
+          
+    </ns19:changeSet>
+      
+    <ns21:changeSet xmlns:ns21="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_ISSUETYPE-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns22:dropNotNullConstraint xmlns:ns22="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+          
+    </ns21:changeSet>
+      
+    <ns23:changeSet xmlns:ns23="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_PRO-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns24:dropNotNullConstraint xmlns:ns24="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_PRO"/>
+          
+    </ns23:changeSet>
+      
+    <ns25:changeSet xmlns:ns25="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_VOTEDEFINITION-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns26:dropNotNullConstraint xmlns:ns26="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+          
+    </ns25:changeSet>
+      
+    <ns27:changeSet xmlns:ns27="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_VOTEENTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns28:dropNotNullConstraint xmlns:ns28="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+          
+    </ns27:changeSet>
+      
+    <ns29:changeSet xmlns:ns29="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_RATINGVOTEENTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns30:dropNotNullConstraint xmlns:ns30="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+          
+    </ns29:changeSet>
+      
+    <ns31:changeSet xmlns:ns31="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_SELCTNSWRVOTNTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns32:dropNotNullConstraint xmlns:ns32="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+          
+    </ns31:changeSet>
+      
+    <ns33:changeSet xmlns:ns33="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_YESNOBSTINVTNTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns34:dropNotNullConstraint xmlns:ns34="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+          
+    </ns33:changeSet>
+      
+    <ns35:changeSet xmlns:ns35="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_YESNOVOTEENTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns36:dropNotNullConstraint xmlns:ns36="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+          
+    </ns35:changeSet>
+      
+    <ns37:changeSet xmlns:ns37="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_RATINGVTDFINITIN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns38:dropNotNullConstraint xmlns:ns38="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+          
+    </ns37:changeSet>
+      
+    <ns39:changeSet xmlns:ns39="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_SELCTNSWRVTDFNTN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns40:dropNotNullConstraint xmlns:ns40="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+          
+    </ns39:changeSet>
+      
+    <ns41:changeSet xmlns:ns41="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_SIMPLEVOTE-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns42:dropNotNullConstraint xmlns:ns42="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+          
+    </ns41:changeSet>
+      
+    <ns43:changeSet xmlns:ns43="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_YESNBSTINVTDFNTN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns44:dropNotNullConstraint xmlns:ns44="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+          
+    </ns43:changeSet>
+      
+    <ns45:changeSet xmlns:ns45="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_YESNOVOTDFINITIN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns46:dropNotNullConstraint xmlns:ns46="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+          
+    </ns45:changeSet>
+      
+    <ns47:changeSet xmlns:ns47="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_ISSUECATEGORY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns48:dropNotNullConstraint xmlns:ns48="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+          
+    </ns47:changeSet>
+      
+    <ns49:changeSet xmlns:ns49="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_SELCTNSWRVTSLCTN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns50:dropNotNullConstraint xmlns:ns50="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+          
+    </ns49:changeSet>
+      
+    <ns51:changeSet xmlns:ns51="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-not-null-constraints-from-T_EDEMOKRACIA_ISSUEATTACHMENT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-not-null-constraints">
+            
+        <ns52:dropNotNullConstraint xmlns:ns52="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+          
+    </ns51:changeSet>
+      
+    <ns53:changeSet xmlns:ns53="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_USER-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns54:dropForeignKeyConstraint xmlns:ns54="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER" constraintName="FK_EDEMOKRACIA_USER_RESIDENTCOUNTY"/>
+            
+        <ns55:dropForeignKeyConstraint xmlns:ns55="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER" constraintName="FK_EDEMOKRACIA_USER_RESIDENTCITY"/>
+            
+        <ns56:dropForeignKeyConstraint xmlns:ns56="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER" constraintName="FK_EDEMOKRACIA_USER_RESIDENTDISTRICT"/>
+          
+    </ns53:changeSet>
+      
+    <ns57:changeSet xmlns:ns57="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_CITY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns58:dropForeignKeyConstraint xmlns:ns58="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_CITY" constraintName="FK_INV_EDEMOKRACIA_COUNTY_CITIES"/>
+          
+    </ns57:changeSet>
+      
+    <ns59:changeSet xmlns:ns59="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_COMMENT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns60:dropForeignKeyConstraint xmlns:ns60="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_COMMENT" constraintName="FK_EDEMOKRACIA_COMMENT_CREATEDBY"/>
+            
+        <ns61:dropForeignKeyConstraint xmlns:ns61="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_COMMENT" constraintName="FK_INV_EDEMOKRACIA_CON_COMMENTS"/>
+            
+        <ns62:dropForeignKeyConstraint xmlns:ns62="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_COMMENT" constraintName="FK_INV_EDEMOKRACIA_ISSUE_COMMENTS"/>
+            
+        <ns63:dropForeignKeyConstraint xmlns:ns63="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_COMMENT" constraintName="FK_INV_EDEMOKRACIA_PRO_COMMENTS"/>
+          
+    </ns59:changeSet>
+      
+    <ns64:changeSet xmlns:ns64="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_CON-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns65:dropForeignKeyConstraint xmlns:ns65="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_CON" constraintName="FK_EDEMOKRACIA_CON_CREATEDBY"/>
+            
+        <ns66:dropForeignKeyConstraint xmlns:ns66="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_CON" constraintName="FK_INV_EDEMOKRACIA_CON_CONS"/>
+            
+        <ns67:dropForeignKeyConstraint xmlns:ns67="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_CON" constraintName="FK_INV_EDEMOKRACIA_ISSUE_CONS"/>
+            
+        <ns68:dropForeignKeyConstraint xmlns:ns68="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_CON" constraintName="FK_INV_EDEMOKRACIA_PRO_CONS"/>
+          
+    </ns64:changeSet>
+      
+    <ns69:changeSet xmlns:ns69="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_DISTRICT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns70:dropForeignKeyConstraint xmlns:ns70="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_DISTRICT" constraintName="FK_INV_EDEMOKRACIA_CITY_DISTRICTS"/>
+          
+    </ns69:changeSet>
+      
+    <ns71:changeSet xmlns:ns71="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_ISSUE-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns72:dropForeignKeyConstraint xmlns:ns72="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_CITY"/>
+            
+        <ns73:dropForeignKeyConstraint xmlns:ns73="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_COUNTY"/>
+            
+        <ns74:dropForeignKeyConstraint xmlns:ns74="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_DISTRICT"/>
+            
+        <ns75:dropForeignKeyConstraint xmlns:ns75="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_ISSUETYPE"/>
+            
+        <ns76:dropForeignKeyConstraint xmlns:ns76="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_OWNER"/>
+            
+        <ns77:dropForeignKeyConstraint xmlns:ns77="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE" constraintName="FK_EDEMOKRACIA_ISSUE_CREATEDBY"/>
+          
+    </ns71:changeSet>
+      
+    <ns78:changeSet xmlns:ns78="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_PRO-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns79:dropForeignKeyConstraint xmlns:ns79="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_PRO" constraintName="FK_EDEMOKRACIA_PRO_CREATEDBY"/>
+            
+        <ns80:dropForeignKeyConstraint xmlns:ns80="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_PRO" constraintName="FK_INV_EDEMOKRACIA_CON_PROS"/>
+            
+        <ns81:dropForeignKeyConstraint xmlns:ns81="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_PRO" constraintName="FK_INV_EDEMOKRACIA_ISSUE_PROS"/>
+            
+        <ns82:dropForeignKeyConstraint xmlns:ns82="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_PRO" constraintName="FK_INV_EDEMOKRACIA_PRO_PROS"/>
+          
+    </ns78:changeSet>
+      
+    <ns83:changeSet xmlns:ns83="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_VOTEDEFINITION-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns84:dropForeignKeyConstraint xmlns:ns84="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_VOTEDEFINITION" constraintName="FK_EDEMOKRACIA_VOTEDEFINITION_OWNER"/>
+            
+        <ns85:dropForeignKeyConstraint xmlns:ns85="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_VOTEDEFINITION" constraintName="FK_EDEMOKRACIA_VOTEDEFINITION_CREATEDBY"/>
+            
+        <ns86:dropForeignKeyConstraint xmlns:ns86="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_VOTEDEFINITION" constraintName="FK_INV_EDEMOKRACIA_ISSUE_DEBATEVOTE"/>
+          
+    </ns83:changeSet>
+      
+    <ns87:changeSet xmlns:ns87="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_VOTEENTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns88:dropForeignKeyConstraint xmlns:ns88="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_VOTEENTRY" constraintName="FK_EDEMOKRACIA_VOTEENTRY_VOTEDEFINITION"/>
+            
+        <ns89:dropForeignKeyConstraint xmlns:ns89="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_VOTEENTRY" constraintName="FK_EDEMOKRACIA_VOTEENTRY_USER"/>
+          
+    </ns87:changeSet>
+      
+    <ns90:changeSet xmlns:ns90="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_SELCTNSWRVOTNTRY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns91:dropForeignKeyConstraint xmlns:ns91="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY" constraintName="FK_EDEMOKRACIA_SELCTNSWRVOTNTRY_VALUE"/>
+          
+    </ns90:changeSet>
+      
+    <ns92:changeSet xmlns:ns92="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_SIMPLEVOTE-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns93:dropForeignKeyConstraint xmlns:ns93="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SIMPLEVOTE" constraintName="FK_EDEMOKRACIA_SIMPLEVOTE_USER"/>
+            
+        <ns94:dropForeignKeyConstraint xmlns:ns94="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SIMPLEVOTE" constraintName="FK_INV_EDEMOKRACIA_COMMENT_VOTES"/>
+            
+        <ns95:dropForeignKeyConstraint xmlns:ns95="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SIMPLEVOTE" constraintName="FK_INV_EDEMOKRACIA_CON_VOTES"/>
+            
+        <ns96:dropForeignKeyConstraint xmlns:ns96="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SIMPLEVOTE" constraintName="FK_INV_EDEMOKRACIA_PRO_VOTES"/>
+          
+    </ns92:changeSet>
+      
+    <ns97:changeSet xmlns:ns97="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_ISSUECATEGORY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns98:dropForeignKeyConstraint xmlns:ns98="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUECATEGORY" constraintName="FK_EDEMOKRACIA_ISSUECATEGORY_OWNER"/>
+            
+        <ns99:dropForeignKeyConstraint xmlns:ns99="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUECATEGORY" constraintName="FK_INV_EDEMOKRACIA_ISSUECATEGORY_SUBCATEGORIES"/>
+          
+    </ns97:changeSet>
+      
+    <ns100:changeSet xmlns:ns100="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_SELCTNSWRVTSLCTN-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns101:dropForeignKeyConstraint xmlns:ns101="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN" constraintName="FK_INV_EDEMOKRACIA_SELCTNSWRVTDFNTN_VOTESELECTIONS"/>
+          
+    </ns100:changeSet>
+      
+    <ns102:changeSet xmlns:ns102="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_ISSUEATTACHMENT-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns103:dropForeignKeyConstraint xmlns:ns103="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUEATTACHMENT" constraintName="FK_INV_EDEMOKRACIA_ISSUE_ATTACHMENTS"/>
+          
+    </ns102:changeSet>
+      
+    <ns104:changeSet xmlns:ns104="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns105:dropForeignKeyConstraint xmlns:ns105="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY" constraintName="FK_EDEMOKRACIA_USER_FAVORITEISSUES"/>
+            
+        <ns106:dropForeignKeyConstraint xmlns:ns106="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY" constraintName="FK_EDEMOKRACIA_ISSUE_USERSFAVORITEDBY"/>
+          
+    </ns104:changeSet>
+      
+    <ns107:changeSet xmlns:ns107="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns108:dropForeignKeyConstraint xmlns:ns108="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY" constraintName="FK_EDEMOKRACIA_USER_FAVRITVTDFINITNS"/>
+            
+        <ns109:dropForeignKeyConstraint xmlns:ns109="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY" constraintName="FK_EDEMOKRACIA_VOTEDEFINITION_USERSFAVORITEDBY"/>
+          
+    </ns107:changeSet>
+      
+    <ns110:changeSet xmlns:ns110="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns111:dropForeignKeyConstraint xmlns:ns111="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYCOUNTIES1"/>
+            
+        <ns112:dropForeignKeyConstraint xmlns:ns112="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYCOUNTIES2"/>
+          
+    </ns110:changeSet>
+      
+    <ns113:changeSet xmlns:ns113="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_USER_ACTIVITYCITIES-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns114:dropForeignKeyConstraint xmlns:ns114="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYCITIES1"/>
+            
+        <ns115:dropForeignKeyConstraint xmlns:ns115="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYCITIES2"/>
+          
+    </ns113:changeSet>
+      
+    <ns116:changeSet xmlns:ns116="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns117:dropForeignKeyConstraint xmlns:ns117="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYDISTRCTS1"/>
+            
+        <ns118:dropForeignKeyConstraint xmlns:ns118="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS" constraintName="FK_EDEMOKRACIA_USER_ACTIVITYDISTRCTS2"/>
+          
+    </ns116:changeSet>
+      
+    <ns119:changeSet xmlns:ns119="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-foreign-keys-from-T_EDEMOKRACIA_ISSUE_CATEGORIES-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-foreign-keys">
+            
+        <ns120:dropForeignKeyConstraint xmlns:ns120="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE_CATEGORIES" constraintName="FK_EDEMOKRACIA_ISSUE_CATEGORIES1"/>
+            
+        <ns121:dropForeignKeyConstraint xmlns:ns121="http://www.liquibase.org/xml/ns/dbchangelog" baseTableName="T_EDEMOKRACIA_ISSUE_CATEGORIES" constraintName="FK_EDEMOKRACIA_ISSUE_CATEGORIES2"/>
+          
+    </ns119:changeSet>
+    
+</databaseChangeLog>

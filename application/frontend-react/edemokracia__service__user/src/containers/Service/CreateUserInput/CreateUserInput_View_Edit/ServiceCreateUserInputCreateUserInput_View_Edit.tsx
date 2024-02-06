@@ -23,7 +23,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -42,7 +42,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCreateUserInputCreateUserInput_View_EditContainerHook';
+  'SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceCreateUserInputCreateUserInput_View_EditContainerHook = (
   data: ServiceCreateUserInputStored,
   editMode: boolean,
@@ -50,6 +50,7 @@ export type ServiceCreateUserInputCreateUserInput_View_EditContainerHook = (
 ) => ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions;
 
 export interface ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions {
+  getPageTitle?: (data: ServiceCreateUserInput) => string;
   isEmailRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
   isEmailDisabled?: (
     data: ServiceCreateUserInput | ServiceCreateUserInputStored,
@@ -83,14 +84,15 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditActionDefinition
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions;
 
   data: ServiceCreateUserInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;
@@ -98,6 +100,7 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditProps {
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewPageContainer
@@ -108,9 +111,10 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -143,21 +147,21 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CreateUserInput_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_eNgxcI1eEe2J66C5CrhpQw)/TransferObjectViewVisualElement"
+          data-name="CreateUserInput_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : true}
               name="userName"
               id="User/(esm/_kCeGwI1rEe29qs15q2b6yw)/StringTypeTextInput"
-              autoFocus
               label={
                 t('service.CreateUserInput.CreateUserInput_View_Edit.userName', { defaultValue: 'UserName' }) as string
               }
@@ -183,12 +187,12 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isEmailRequired ? actions.isEmailRequired(data, editMode) : true}
               name="email"
@@ -216,12 +220,12 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <FormControl error={!!validation.get('hasAdminAccess')}>
               <FormGroup>
                 <FormControlLabel
@@ -257,7 +261,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isFirstNameRequired ? actions.isFirstNameRequired(data, editMode) : true}
               name="firstName"
@@ -291,12 +295,12 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isLastNameRequired ? actions.isLastNameRequired(data, editMode) : true}
               name="lastName"
@@ -326,7 +330,7 @@ export default function ServiceCreateUserInputCreateUserInput_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

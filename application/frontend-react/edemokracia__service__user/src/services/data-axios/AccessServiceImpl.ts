@@ -7,9 +7,26 @@
 // Template file: data-axios/accessServiceImpl.ts.hbs
 
 import type { AxiosResponse } from 'axios';
-import type { ServiceServicePrincipalUserStored } from '../data-api';
+import {
+  ServiceCountyStored,
+  ServiceDashboardStored,
+  ServiceIssueCategoryStored,
+  ServiceIssueStored,
+  ServiceIssueTypeStored,
+  ServiceRatingVoteDefinitionStored,
+  ServiceSelectAnswerVoteDefinitionStored,
+  ServiceServicePrincipalUserStored,
+  ServiceUserIssuesStored,
+  ServiceUserManagerStored,
+  ServiceUserProfileStored,
+  ServiceUserVoteDefinitionStored,
+  ServiceVoteDefinitionStored,
+  ServiceVoteEntryStored,
+  ServiceYesNoAbstainVoteDefinitionStored,
+  ServiceYesNoVoteDefinitionStored,
+} from '../data-api';
 import type { JudoDownloadFile, JudoMetaData, JudoToken } from '../data-api/common';
-import { AccessService } from '../data-service';
+import type { AccessService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
 export class AccessServiceImpl extends JudoAxiosService implements AccessService {
@@ -72,5 +89,275 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
       },
     });
     return response;
+  }
+  /**
+   * @return {Promise<ServiceIssueCategoryStored | undefined>}
+   */
+  async findInstanceOfAdminCategories(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceIssueCategoryStored | undefined> {
+    try {
+      const path = '/service/User/adminCategories/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceCountyStored | undefined>}
+   */
+  async findInstanceOfAdminCounties(identifier: string, mask?: string): Promise<ServiceCountyStored | undefined> {
+    try {
+      const path = '/service/User/adminCounties/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceIssueTypeStored | undefined>}
+   */
+  async findInstanceOfAdminIssueTypes(identifier: string, mask?: string): Promise<ServiceIssueTypeStored | undefined> {
+    try {
+      const path = '/service/User/adminIssueTypes/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceIssueStored | undefined>}
+   */
+  async findInstanceOfAdminIssues(identifier: string, mask?: string): Promise<ServiceIssueStored | undefined> {
+    try {
+      const path = '/service/User/adminIssues/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceVoteDefinitionStored | undefined>}
+   */
+  async findInstanceOfAdminVoteDefinitions(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceVoteDefinitionStored | undefined> {
+    try {
+      const path = '/service/User/adminVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceVoteEntryStored | undefined>}
+   */
+  async findInstanceOfAdminVoteEntries(identifier: string, mask?: string): Promise<ServiceVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/adminVoteEntries/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceIssueStored | undefined>}
+   */
+  async findInstanceOfIssues(identifier: string, mask?: string): Promise<ServiceIssueStored | undefined> {
+    try {
+      const path = '/service/User/issues/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceRatingVoteDefinitionStored | undefined>}
+   */
+  async findInstanceOfRatingVoteDefinitions(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceRatingVoteDefinitionStored | undefined> {
+    try {
+      const path = '/service/User/ratingVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceSelectAnswerVoteDefinitionStored | undefined>}
+   */
+  async findInstanceOfSelectAnswerVoteDefinitions(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceSelectAnswerVoteDefinitionStored | undefined> {
+    try {
+      const path = '/service/User/selectAnswerVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceVoteEntryStored | undefined>}
+   */
+  async findInstanceOfVoteEntries(identifier: string, mask?: string): Promise<ServiceVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/voteEntries/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceYesNoAbstainVoteDefinitionStored | undefined>}
+   */
+  async findInstanceOfYesNoAbstainVoteDefinitions(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceYesNoAbstainVoteDefinitionStored | undefined> {
+    try {
+      const path = '/service/User/yesNoAbstainVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceYesNoVoteDefinitionStored | undefined>}
+   */
+  async findInstanceOfYesNoVoteDefinitions(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceYesNoVoteDefinitionStored | undefined> {
+    try {
+      const path = '/service/User/yesNoVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
   }
 }

@@ -76,6 +76,21 @@ export class UserServiceForAdminUserManagerImpl extends JudoAxiosService impleme
     return response.data;
   }
 
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored> {
+    const path = '/service/UserManager/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   async listUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -95,6 +110,20 @@ export class UserServiceForAdminUserManagerImpl extends JudoAxiosService impleme
     target: Partial<ServiceServiceUserStored>,
   ): Promise<ServiceServiceUserStored> {
     const path = '/service/UserManager/~update/users/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateUsers(
+    owner: JudoIdentifiable<ServiceUserManager>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored> {
+    const path = '/service/UserManager/~update/users/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,

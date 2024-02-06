@@ -28,7 +28,6 @@ export interface ServiceConParentConParent_TablePageActions extends ServiceConPa
 }
 
 export interface ServiceConParentConParent_TablePageProps {
-  title: string;
   actions: ServiceConParentConParent_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -41,11 +40,11 @@ export default function ServiceConParentConParent_TablePage(props: ServiceConPar
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -66,7 +65,7 @@ export default function ServiceConParentConParent_TablePage(props: ServiceConPar
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceConParentConParent_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceConParentConParent_Table actions={actions} refreshCounter={refreshCounter} isLoading={isLoading} />
         </Box>
       </Suspense>
     </>

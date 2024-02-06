@@ -29,12 +29,13 @@ export interface ServiceConCon_TableDialogActions extends ServiceConCon_TableAct
 
 export interface ServiceConCon_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceConCon_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::Con::Con_Table
@@ -43,12 +44,12 @@ export default function ServiceConCon_TableDialog(props: ServiceConCon_TableDial
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_qAs-IGksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -65,7 +66,12 @@ export default function ServiceConCon_TableDialog(props: ServiceConCon_TableDial
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceConCon_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceConCon_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

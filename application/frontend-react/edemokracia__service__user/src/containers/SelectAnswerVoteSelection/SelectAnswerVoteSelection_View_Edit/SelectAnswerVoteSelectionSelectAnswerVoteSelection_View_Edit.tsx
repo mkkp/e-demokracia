@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -36,7 +36,7 @@ import {
 } from '~/services/data-api';
 
 export const SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContainerHook';
+  'SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContainerHook = (
   data: SelectAnswerVoteSelectionStored,
   editMode: boolean,
@@ -44,6 +44,7 @@ export type SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditContaine
 ) => SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions;
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions {
+  getPageTitle?: (data: SelectAnswerVoteSelection) => string;
   isDescriptionRequired?: (
     data: SelectAnswerVoteSelection | SelectAnswerVoteSelectionStored,
     editMode?: boolean,
@@ -59,14 +60,15 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditAct
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions;
 
   data: SelectAnswerVoteSelectionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof SelectAnswerVoteSelection, value: any) => void;
@@ -74,6 +76,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditPro
   validation: Map<keyof SelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof SelectAnswerVoteSelection, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_XwnW4G6bEe2wNaja8kBvcQ)/TransferObjectViewPageContainer
@@ -84,9 +87,10 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -119,9 +123,10 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="SelectAnswerVoteSelection_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_XwnW4G6bEe2wNaja8kBvcQ)/TransferObjectViewVisualElement"
+          data-name="SelectAnswerVoteSelection_View_Edit"
           container
           direction="column"
           alignItems="stretch"
@@ -133,7 +138,6 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_JckucFv5Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-              autoFocus
               label={
                 t('SelectAnswerVoteSelection.SelectAnswerVoteSelection_View_Edit.title', {
                   defaultValue: 'Title',
@@ -161,7 +165,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
@@ -202,7 +206,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

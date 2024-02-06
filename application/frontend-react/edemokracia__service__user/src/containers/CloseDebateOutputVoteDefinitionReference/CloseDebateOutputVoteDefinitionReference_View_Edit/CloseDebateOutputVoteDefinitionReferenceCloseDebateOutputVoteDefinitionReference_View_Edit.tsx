@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -36,7 +36,7 @@ import {
 } from '~/services/data-api';
 
 export const CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditContainerHook';
+  'CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditContainerHook = (
   data: CloseDebateOutputVoteDefinitionReferenceStored,
   editMode: boolean,
@@ -44,6 +44,7 @@ export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinit
 ) => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions;
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions {
+  getPageTitle?: (data: CloseDebateOutputVoteDefinitionReference) => string;
   isContextRequired?: (
     data: CloseDebateOutputVoteDefinitionReference | CloseDebateOutputVoteDefinitionReferenceStored,
     editMode?: boolean,
@@ -53,14 +54,15 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionDefinitions;
 
   data: CloseDebateOutputVoteDefinitionReferenceStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void;
@@ -68,6 +70,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewPageContainer
@@ -78,9 +81,10 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -113,21 +117,21 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CloseDebateOutputVoteDefinitionReference_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewVisualElement"
+          data-name="CloseDebateOutputVoteDefinitionReference_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isContextRequired ? actions.isContextRequired(data, editMode) : false}
               name="context"
               id="User/(esm/_f6ew0Fv3Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-              autoFocus
               label={
                 t(
                   'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit.context',
@@ -156,7 +160,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -31,6 +31,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   CreateArgumentInput,
@@ -39,7 +40,7 @@ import {
 } from '~/services/data-api';
 
 export const CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CreateArgumentInputCreateArgumentInput_FormContainerHook';
+  'CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type CreateArgumentInputCreateArgumentInput_FormContainerHook = (
   data: CreateArgumentInputStored,
   editMode: boolean,
@@ -47,6 +48,7 @@ export type CreateArgumentInputCreateArgumentInput_FormContainerHook = (
 ) => CreateArgumentInputCreateArgumentInput_FormActionDefinitions;
 
 export interface CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
+  getPageTitle?: (data: CreateArgumentInput) => string;
   backAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
   isDescriptionRequired?: (data: CreateArgumentInput | CreateArgumentInputStored, editMode?: boolean) => boolean;
@@ -65,10 +67,10 @@ export interface CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
 
 export interface CreateArgumentInputCreateArgumentInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CreateArgumentInputCreateArgumentInput_FormActionDefinitions;
 
   data: CreateArgumentInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void;
@@ -76,6 +78,7 @@ export interface CreateArgumentInputCreateArgumentInput_FormProps {
   validation: Map<keyof CreateArgumentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateArgumentInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -86,9 +89,10 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -117,22 +121,37 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
   const containerActions: CreateArgumentInputCreateArgumentInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CreateArgumentInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectFormVisualElement"
+          data-name="CreateArgumentInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="group::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="group::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="account-voice" sx={{ marginRight: 1 }} />
@@ -148,9 +167,10 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="group" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_h6ID0IfREe2u0fVmwtP5bA)/GroupVisualElement"
+                      data-name="group"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -162,7 +182,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                           required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_3m5J4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-                          autoFocus
+                          inputRef={autoFocusInputRef}
                           label={
                             t('CreateArgumentInput.CreateArgumentInput_Form.title', { defaultValue: 'Title' }) as string
                           }
@@ -190,7 +210,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -235,7 +255,7 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -246,9 +266,10 @@ export default function CreateArgumentInputCreateArgumentInput_Form(
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="buttons" xs={12} sm={12}>
             <Grid
               id="User/(esm/_KipKkIfSEe2u0fVmwtP5bA)/GroupVisualElement"
+              data-name="buttons"
               container
               direction="row"
               alignItems="flex-start"

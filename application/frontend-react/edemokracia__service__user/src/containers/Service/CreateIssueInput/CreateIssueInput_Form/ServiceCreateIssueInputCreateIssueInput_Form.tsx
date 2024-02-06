@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,6 +28,7 @@ import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErr
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCity,
@@ -56,7 +57,7 @@ import type { ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActi
 import { ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent } from './components/ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent';
 
 export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCreateIssueInputCreateIssueInput_FormContainerHook';
+  'SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceCreateIssueInputCreateIssueInput_FormContainerHook = (
   data: ServiceCreateIssueInputStored,
   editMode: boolean,
@@ -68,6 +69,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions
     ServiceCreateIssueInputCreateIssueInput_FormCountyComponentActionDefinitions,
     ServiceCreateIssueInputCreateIssueInput_FormDistrictComponentActionDefinitions,
     ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentActionDefinitions {
+  getPageTitle?: (data: ServiceCreateIssueInput) => string;
   isDebateCloseAtRequired?: (
     data: ServiceCreateIssueInput | ServiceCreateIssueInputStored,
     editMode?: boolean,
@@ -96,10 +98,10 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions;
 
   data: ServiceCreateIssueInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void;
@@ -107,6 +109,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormProps {
   validation: Map<keyof ServiceCreateIssueInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateIssueInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -117,9 +120,10 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -148,21 +152,34 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
   const containerActions: ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CreateIssueInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormVisualElement"
+          data-name="CreateIssueInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="issue" xs={12} sm={12}>
             <Grid
               id="User/(esm/_RqJLwI1DEe2VSOmaAz6G9Q)/GroupVisualElement"
+              data-name="issue"
               container
               direction="row"
               alignItems="flex-start"
@@ -176,6 +193,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   ownerData={data}
                   editMode={editMode}
                   isLoading={isLoading}
+                  isDraft={isDraft}
                   storeDiff={storeDiff}
                   validationError={validation.get('issueType')}
                   actions={actions}
@@ -188,7 +206,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                   name="title"
                   id="User/(esm/_DenhMI1DEe2VSOmaAz6G9Q)/StringTypeTextInput"
-                  autoFocus
+                  inputRef={autoFocusInputRef}
                   label={t('service.CreateIssueInput.CreateIssueInput_Form.title', { defaultValue: 'Title' }) as string}
                   value={data.title ?? ''}
                   className={clsx({
@@ -212,7 +230,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                     ),
                   }}
                   inputProps={{
-                    maxlength: 255,
+                    maxLength: 255,
                   }}
                 />
               </Grid>
@@ -314,7 +332,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                     ),
                   }}
                   inputProps={{
-                    maxlength: 16384,
+                    maxLength: 16384,
                   }}
                 />
               </Grid>
@@ -326,6 +344,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   ownerData={data}
                   editMode={editMode}
                   isLoading={isLoading}
+                  isDraft={isDraft}
                   storeDiff={storeDiff}
                   validationError={validation.get('county')}
                   actions={actions}
@@ -340,6 +359,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   ownerData={data}
                   editMode={editMode}
                   isLoading={isLoading}
+                  isDraft={isDraft}
                   storeDiff={storeDiff}
                   validationError={validation.get('city')}
                   actions={actions}
@@ -354,6 +374,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_Form(
                   ownerData={data}
                   editMode={editMode}
                   isLoading={isLoading}
+                  isDraft={isDraft}
                   storeDiff={storeDiff}
                   validationError={validation.get('district')}
                   actions={actions}

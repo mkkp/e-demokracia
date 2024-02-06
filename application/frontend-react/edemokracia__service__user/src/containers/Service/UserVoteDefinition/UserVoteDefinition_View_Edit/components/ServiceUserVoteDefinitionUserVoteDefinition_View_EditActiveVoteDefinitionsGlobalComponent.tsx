@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,7 +43,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -74,17 +74,29 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
   activeVoteDefinitionsGlobalRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceVoteDefinitionStored[]>;
-  activeVoteDefinitionsGlobalOpenPageAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  getActiveVoteDefinitionsGlobalMask?: () => string;
+  activeVoteDefinitionsGlobalOpenPageAction?: (row: ServiceVoteDefinitionStored, isDraft?: boolean) => Promise<void>;
   activeVoteDefinitionsGlobalVoteRatingAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   activeVoteDefinitionsGlobalVoteSelectAnswerAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   activeVoteDefinitionsGlobalVoteYesNoAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
   activeVoteDefinitionsGlobalVoteYesNoAbstainAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  activeVoteDefinitionsGlobalAdditionalToolbarButtons?: (
+    data: ServiceVoteDefinitionStored[],
+    isLoading: boolean,
+    selectedRows: ServiceVoteDefinitionStored[],
+    clearSelections: () => void,
+    ownerData: ServiceUserVoteDefinitionStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponentProps {
   uniqueId: string;
   actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceUserVoteDefinitionStored;
   editMode: boolean;
@@ -96,7 +108,17 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
 export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponent(
   props: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsGlobalComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -106,22 +128,23 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceVoteDefinitionStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'scope', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceVoteDefinitionQueryCustomizer>({
-    _mask: '{scope,title,voteType,numberOfVotes,created,closeAt,status}',
+    _mask: '{closeAt,created,numberOfVotes,scope,status,title,voteType}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -139,29 +162,33 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const [firstItem, setFirstItem] = useState<ServiceVoteDefinitionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceVoteDefinitionStored[]>([]);
 
   const scopeColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'scope',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.scope', {
+      defaultValue: 'Scope',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const titleColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.title', {
+      defaultValue: 'Title',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -171,7 +198,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const voteTypeColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'voteType',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteType', {
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.voteType', {
       defaultValue: 'VoteType',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -179,18 +206,16 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteType.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const numberOfVotesColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'numberOfVotes',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.numberOfVotes', {
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.numberOfVotes', {
       defaultValue: 'NumberOfVotes',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -205,7 +230,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const createdColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.created', {
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.created', {
       defaultValue: 'Created',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -232,7 +257,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const closeAtColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'closeAt',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.closeAt', {
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.closeAt', {
       defaultValue: 'CloseAt',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -259,7 +284,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
   const statusColumn: GridColDef<ServiceVoteDefinitionStored> = {
     ...baseColumnConfig,
     field: 'status',
-    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.status', {
+    headerName: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.activeVoteDefinitionsGlobal.status', {
       defaultValue: 'Status',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -267,13 +292,11 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceVoteDefinitionStored>[]>(
@@ -281,60 +304,132 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
-        defaultValue: 'voteRating',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isRatingType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteRatingAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteRatingAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
-        defaultValue: 'voteSelectAnswer',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isSelectAnswerType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteSelectAnswerAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteSelectAnswerAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
-        defaultValue: 'voteYesNoAbstain',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoAbstainType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
-        defaultValue: 'voteYesNo',
-      }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceVoteDefinitionStored) => editMode || !row.isYesNoType || isLoading,
-      action: actions.activeVoteDefinitionsGlobalVoteYesNoAction
-        ? async (rowData) => {
-            await actions.activeVoteDefinitionsGlobalVoteYesNoAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteRating', {
+          defaultValue: 'voteRating',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isRatingType || isLoading,
+        action: actions.activeVoteDefinitionsGlobalVoteRatingAction
+          ? async (rowData) => {
+              await actions.activeVoteDefinitionsGlobalVoteRatingAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteSelectAnswer', {
+          defaultValue: 'voteSelectAnswer',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isSelectAnswerType || isLoading,
+        action: actions.activeVoteDefinitionsGlobalVoteSelectAnswerAction
+          ? async (rowData) => {
+              await actions.activeVoteDefinitionsGlobalVoteSelectAnswerAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6DvII4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNoAbstain', {
+          defaultValue: 'voteYesNoAbstain',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isYesNoAbstainType || isLoading,
+        action: actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction
+          ? async (rowData) => {
+              await actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_T6ChAI4jEe29qs15q2b6yw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserVoteDefinition.UserVoteDefinition_View_Edit.voteYesNo', {
+          defaultValue: 'voteYesNo',
+        }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isYesNoType || isLoading,
+        action: actions.activeVoteDefinitionsGlobalVoteYesNoAction
+          ? async (rowData) => {
+              await actions.activeVoteDefinitionsGlobalVoteYesNoAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceVoteDefinitionStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceVoteDefinitionStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> =
+    actions?.activeVoteDefinitionsGlobalAdditionalToolbarButtons
+      ? actions.activeVoteDefinitionsGlobalAdditionalToolbarButtons(
+          data,
+          isLoading,
+          getSelectedRows(),
+          clearSelections,
+          ownerData,
+          editMode,
+          isFormUpdateable,
+        )
+      : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceVoteDefinitionQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -416,7 +511,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -446,7 +541,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -457,7 +552,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -467,21 +562,28 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.activeVoteDefinitionsGlobalRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getActiveVoteDefinitionsGlobalMask
+            ? actions.getActiveVoteDefinitionsGlobalMask()
+            : queryCustomizer._mask,
+        };
+        const res = await actions.activeVoteDefinitionsGlobalRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -492,13 +594,14 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -508,7 +611,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -519,24 +622,19 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.activeVoteDefinitionsGlobalOpenPageAction
             ? async (params: GridRowParams<ServiceVoteDefinitionStored>) =>
-                await actions.activeVoteDefinitionsGlobalOpenPageAction!(params.row)
+                await actions.activeVoteDefinitionsGlobalOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -546,7 +644,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -581,7 +679,13 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.activeVoteDefinitionsGlobalRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActiveVoteDefinitionsGlobalMask
+                        ? actions.getActiveVoteDefinitionsGlobalMask()
+                        : queryCustomizer._mask,
+                    };
+                    await actions.activeVoteDefinitionsGlobalRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -591,16 +695,19 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

@@ -39,12 +39,13 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_Table
@@ -55,12 +56,12 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -80,6 +81,8 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
           <ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

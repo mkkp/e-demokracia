@@ -71,4 +71,17 @@ export class ServiceIssueAttachmentServiceImpl extends JudoAxiosService implemen
 
     return response.data;
   }
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored> {
+    const path = '/service/IssueAttachment/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+      },
+    });
+
+    return response.data;
+  }
 }

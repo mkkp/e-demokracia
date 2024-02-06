@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,7 +33,7 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
 
 export const CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateInputCloseDebateInput_View_EditContainerHook';
+  'CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateInputCloseDebateInput_View_EditContainerHook = (
   data: CloseDebateInputStored,
   editMode: boolean,
@@ -41,20 +41,22 @@ export type CloseDebateInputCloseDebateInput_View_EditContainerHook = (
 ) => CloseDebateInputCloseDebateInput_View_EditActionDefinitions;
 
 export interface CloseDebateInputCloseDebateInput_View_EditActionDefinitions {
+  getPageTitle?: (data: CloseDebateInput) => string;
   isVoteTypeRequired?: (data: CloseDebateInput | CloseDebateInputStored, editMode?: boolean) => boolean;
   isVoteTypeDisabled?: (
     data: CloseDebateInput | CloseDebateInputStored,
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface CloseDebateInputCloseDebateInput_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateInputCloseDebateInput_View_EditActionDefinitions;
 
   data: CloseDebateInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;
@@ -62,6 +64,7 @@ export interface CloseDebateInputCloseDebateInput_View_EditProps {
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_NG3PIG6JEe2wNaja8kBvcQ)/TransferObjectViewPageContainer
@@ -72,9 +75,10 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -106,21 +110,21 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CloseDebateInput_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_NG3PIG6JEe2wNaja8kBvcQ)/TransferObjectViewVisualElement"
+          data-name="CloseDebateInput_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isVoteTypeRequired ? actions.isVoteTypeRequired(data, editMode) : true}
               name="voteType"
               id="User/(esm/_ye8zUH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
-              autoFocus
               label={t('CloseDebateInput.CloseDebateInput_View_Edit.voteType', { defaultValue: 'VoteType' }) as string}
               value={data.voteType || ''}
               className={clsx({

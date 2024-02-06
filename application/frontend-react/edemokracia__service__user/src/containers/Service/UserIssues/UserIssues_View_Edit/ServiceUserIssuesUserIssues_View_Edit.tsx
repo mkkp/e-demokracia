@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -56,7 +56,7 @@ import type { ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentActionDef
 import { ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent } from './components/ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent';
 
 export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserIssuesUserIssues_View_EditContainerHook';
+  'SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceUserIssuesUserIssues_View_EditContainerHook = (
   data: ServiceUserIssuesStored,
   editMode: boolean,
@@ -72,15 +72,17 @@ export interface ServiceUserIssuesUserIssues_View_EditActionDefinitions
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentActionDefinitions {
+  getPageTitle?: (data: ServiceUserIssues) => string;
   createIssueAction?: () => Promise<void>;
+  getMask?: () => string;
 }
 
 export interface ServiceUserIssuesUserIssues_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceUserIssuesUserIssues_View_EditActionDefinitions;
 
   data: ServiceUserIssuesStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void;
@@ -88,6 +90,7 @@ export interface ServiceUserIssuesUserIssues_View_EditProps {
   validation: Map<keyof ServiceUserIssues, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserIssues, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewPageContainer
@@ -96,9 +99,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -130,18 +134,20 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="UserIssues_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewVisualElement"
+          data-name="UserIssues_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="root" xs={12} sm={12}>
             <Grid
               id="User/(esm/_AMMw8FrVEe6gN-oVBDDIOQ)/GroupVisualElement"
+              data-name="root"
               container
               direction="row"
               alignItems="flex-start"
@@ -149,28 +155,24 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
               spacing={2}
             >
               <Grid item xs={12} sm={4.0}>
-                <Grid container spacing={2}>
-                  <Grid item>
-                    <LoadingButton
-                      id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="wechat" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.createIssueAction
-                          ? async () => {
-                              await actions.createIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      <span>
-                        {t('service.UserIssues.UserIssues_View_Edit.createIssue', { defaultValue: 'Create issue' })}
-                      </span>
-                    </LoadingButton>
-                  </Grid>
-                </Grid>
+                <Box sx={{ display: 'flex', gap: 1 }}>
+                  <LoadingButton
+                    id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormVisualElement"
+                    loading={isLoading}
+                    startIcon={<MdiIcon path="wechat" />}
+                    loadingPosition="start"
+                    onClick={
+                      actions.createIssueAction
+                        ? async () => {
+                            await actions.createIssueAction!();
+                          }
+                        : undefined
+                    }
+                    disabled={editMode}
+                  >
+                    {t('service.UserIssues.UserIssues_View_Edit.createIssue', { defaultValue: 'Create issue' })}
+                  </LoadingButton>
+                </Box>
               </Grid>
 
               <Grid container item xs={12} sm={12}>
@@ -234,10 +236,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     },
                   ]}
                 >
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement">
+                  <Grid item data-name="ownedIssuesGroup" xs={12} sm={12}>
+                    <Card id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement" data-name="ownedIssuesGroup">
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable"
@@ -256,6 +258,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                 isFormUpdateable={isFormUpdateable}
                                 validationError={validation.get('ownedIssues')}
                                 refreshCounter={refreshCounter}
+                                isOwnerLoading={isLoading}
                               />
                             </Grid>
                           </Grid>
@@ -264,13 +267,14 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <Grid item data-name="activeGlobalIssues" xs={12} sm={12}>
+                    <Card id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement" data-name="activeGlobalIssues">
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                          <Grid item xs={12} sm={12}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                          <Grid item data-name="activeGlobal::LabelWrapper" xs={12} sm={12}>
                             <Grid
                               id="(User/(esm/_ZNCGQFrXEe6gN-oVBDDIOQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                              data-name="activeGlobal::LabelWrapper"
                               container
                               direction="column"
                               alignItems="stretch"
@@ -291,9 +295,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeGlobal" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_ZNCGQFrXEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeGlobal"
                                   container
                                   direction="row"
                                   alignItems="stretch"
@@ -318,6 +323,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesGlobal')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
@@ -330,10 +336,13 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <Grid item data-name="activeIssuesByActivityArea" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement"
+                      data-name="activeIssuesByActivityArea"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_W_R1QFrXEe6gN-oVBDDIOQ)/TabBarVisualElement"
@@ -376,9 +385,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                 },
                               ]}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByActivityInCounty" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_4JbF8FrXEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByActivityInCounty"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -403,15 +413,17 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInActivityCounties')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByActivityInCity" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_u6ZqQFraEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByActivityInCity"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -436,15 +448,17 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInActivityCities')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByActivityInDistrict" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_od5rcFrbEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByActivityInDistrict"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -469,6 +483,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInActivityDistricts')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
@@ -481,10 +496,13 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement">
+                  <Grid item data-name="activeIssuesByResidentArea" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
+                      data-name="activeIssuesByResidentArea"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_l86f8FrcEe6gN-oVBDDIOQ)/TabBarVisualElement"
@@ -527,9 +545,10 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                 },
                               ]}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByResidentInCounty" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_BZzvYFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByResidentInCounty"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -554,15 +573,17 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInResidentCounty')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByResidentInCity" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_BZzIUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByResidentInCity"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -587,15 +608,17 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInResidentCity')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="activeByResidentInDistrict" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_BZzIV1rcEe6gN-oVBDDIOQ)/GroupVisualElement"
+                                  data-name="activeByResidentInDistrict"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -620,6 +643,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeIssuesInResidentDistrict')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -70,6 +70,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDef
     selectedRows: ServiceYesNoVoteDefinitionStored[],
   ) => Promise<DialogResult<ServiceYesNoVoteDefinitionStored[]>>;
   clearAction?: () => Promise<void>;
+  exportAction?: (queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
     id: string,
@@ -80,6 +81,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDef
   refreshAction?: (
     queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer,
   ) => Promise<ServiceYesNoVoteDefinitionStored[]>;
+  getMask?: () => string;
   activateForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   addToFavoritesForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   closeVoteForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
@@ -87,15 +89,23 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDef
   removeFromFavoritesForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   deleteAction?: (row: ServiceYesNoVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceYesNoVoteDefinitionStored, silentMode?: boolean) => Promise<void>;
-  openPageAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+  openPageAction?: (row: ServiceYesNoVoteDefinitionStored, isDraft?: boolean) => Promise<void>;
   takeBackVoteForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   voteAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
+  AdditionalToolbarButtons?: (
+    data: ServiceYesNoVoteDefinitionStored[],
+    isLoading: boolean,
+    selectedRows: ServiceYesNoVoteDefinitionStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentProps {
   uniqueId: string;
   actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
 }
 
@@ -104,7 +114,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDef
 export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponent(
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError } = props;
+  const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const filterModelKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -114,7 +124,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceYesNoVoteDefinitionStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
@@ -122,14 +132,15 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceYesNoVoteDefinitionQueryCustomizer>({
-    _mask: '{title,created,description,status,closeAt}',
+    _mask: '{closeAt,created,description,status,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -146,6 +157,8 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   const [lastItem, setLastItem] = useState<ServiceYesNoVoteDefinitionStored>();
   const [firstItem, setFirstItem] = useState<ServiceYesNoVoteDefinitionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
   const selectedRows = useRef<ServiceYesNoVoteDefinitionStored[]>([]);
 
@@ -207,13 +220,11 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const closeAtColumn: GridColDef<ServiceYesNoVoteDefinitionStored> = {
     ...baseColumnConfig,
@@ -248,119 +259,183 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceYesNoVoteDefinitionStored>[] = [
-    {
-      id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.removeAction
-        ? async (rowData) => {
-            await actions.removeAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.__deleteable || isLoading,
-      action: actions.deleteAction
-        ? async (rowData) => {
-            await actions.deleteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_uXiyNXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.activate', {
-        defaultValue: 'activate',
-      }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.activateForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.activateForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_uXiyMnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.addToFavorites', {
-        defaultValue: 'addToFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.addToFavoritesForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.addToFavoritesForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_uXiyNHsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeVote', {
-        defaultValue: 'closeVote',
-      }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.closeVoteForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.closeVoteForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_uXiyNnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.deleteOrArchiveForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.deleteOrArchiveForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_uXiyM3sCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => isLoading,
-      action: actions.removeFromFavoritesForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.removeFromFavoritesForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_--H4sFouEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.takeBackVote', {
-        defaultValue: 'takeBackVote',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.userHasVoteEntry || isLoading,
-      action: actions.takeBackVoteForYesNoVoteDefinitionAction
-        ? async (rowData) => {
-            await actions.takeBackVoteForYesNoVoteDefinitionAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
-      label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceYesNoVoteDefinitionStored) => !row.userHasNoVoteEntry || isLoading,
-      action: actions.voteAction
-        ? async (rowData) => {
-            await actions.voteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceYesNoVoteDefinitionStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeAction
+          ? async (rowData) => {
+              await actions.removeAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || !row.__deleteable || isLoading,
+        action: actions.deleteAction
+          ? async (rowData) => {
+              await actions.deleteAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_uXiyNXsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.activate', {
+          defaultValue: 'activate',
+        }) as string,
+        icon: <MdiIcon path="lock-open" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.activateForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.activateForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_uXiyMnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.addToFavorites', {
+          defaultValue: 'addToFavorites',
+        }) as string,
+        icon: <MdiIcon path="star-plus" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.addToFavoritesForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.addToFavoritesForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_uXiyNHsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.closeVote', {
+          defaultValue: 'closeVote',
+        }) as string,
+        icon: <MdiIcon path="lock-check" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.closeVoteForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.closeVoteForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_uXiyNnsCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.deleteOrArchive', {
+          defaultValue: 'deleteOrArchive',
+        }) as string,
+        icon: <MdiIcon path="delete" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.deleteOrArchiveForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.deleteOrArchiveForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_uXiyM3sCEe6bP4FWw7fjQA)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.removeFromFavorites', {
+          defaultValue: 'removeFromFavorites',
+        }) as string,
+        icon: <MdiIcon path="star-minus" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeFromFavoritesForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.removeFromFavoritesForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_--H4sFouEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.takeBackVote', {
+          defaultValue: 'takeBackVote',
+        }) as string,
+        icon: <MdiIcon path="delete" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || !row.userHasVoteEntry || isLoading,
+        action: actions.takeBackVoteForYesNoVoteDefinitionAction
+          ? async (rowData) => {
+              await actions.takeBackVoteForYesNoVoteDefinitionAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTable)',
+        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.vote', { defaultValue: 'vote' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceYesNoVoteDefinitionStored) =>
+          getSelectedRows().length > 0 || !row.userHasNoVoteEntry || isLoading,
+        action: actions.voteAction
+          ? async (rowData) => {
+              await actions.voteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_-Ze00H4XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceYesNoVoteDefinitionStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceYesNoVoteDefinitionStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -422,7 +497,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -452,7 +527,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -463,7 +538,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -473,21 +548,26 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+        };
+        const res = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -498,20 +578,21 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
     <div id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable" data-table-name="YesNoVoteDefinition_Table">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -521,29 +602,22 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_-Ze00H4XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.openPageAction
             ? async (params: GridRowParams<ServiceYesNoVoteDefinitionStored>) =>
-                await actions.openPageAction!(params.row)
+                await actions.openPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -553,7 +627,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -587,7 +661,11 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.refreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -596,12 +674,33 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   })}
                 </Button>
               ) : null}
+              {actions.exportAction && true ? (
+                <Button
+                  id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableExportButton"
+                  startIcon={<MdiIcon path="file-export-outline" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.exportAction!(processedQueryCustomizer);
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Export', { defaultValue: 'Export' })}
+                </Button>
+              ) : null}
               {actions.openAddSelectorAction && true ? (
                 <Button
                   id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorButton"
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -615,6 +714,10 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openSetSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -628,7 +731,12 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.clearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={isLoading}
                 >
@@ -641,9 +749,13 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -657,9 +769,13 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -667,16 +783,19 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

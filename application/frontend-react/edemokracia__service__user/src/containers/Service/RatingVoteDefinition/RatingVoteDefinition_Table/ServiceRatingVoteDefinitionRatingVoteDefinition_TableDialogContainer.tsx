@@ -39,12 +39,13 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TableDialogActi
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::RatingVoteDefinition::RatingVoteDefinition_Table
@@ -55,12 +56,12 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_TableDia
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_-dsmcH4XEe2cB7_PsKXsHQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -77,7 +78,12 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_TableDia
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceRatingVoteDefinitionRatingVoteDefinition_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceRatingVoteDefinitionRatingVoteDefinition_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

@@ -9,6 +9,7 @@
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -80,46 +81,55 @@ export const NavItem = ({ item, level }: NavItemProps) => {
   return (
     <>
       {menuOrientation === MenuOrientation.VERTICAL || downLG ? (
-        <ListItemButton
-          component={LinkComponent}
-          disabled={item.disabled}
-          sx={{
-            zIndex: 1201,
-            pl: !miniDrawer ? `${level * iconWidth}px` : borderRadius,
-            py: miniDrawer && level === 1 ? 1.25 : 1,
-            '&:hover': {
-              bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
-            },
-          }}
-          {...(downLG && {
-            onClick: () => onChangeMiniDrawer(true),
-          })}
+        <Tooltip
+          title={
+            miniDrawer && level !== undefined && level <= 1
+              ? t(`menuTree.${item.title}`, { defaultValue: item.title })
+              : undefined
+          }
+          placement="right"
         >
-          {item.icon && (
-            <ListItemIcon
-              sx={{
-                minWidth: iconWidth,
-                color: textColor,
-                ...(miniDrawer && {
-                  width: iconSize,
-                  height: iconSize,
-                  ...iconPropsVertical,
-                }),
-              }}
-            >
-              <MdiIcon path={item.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
-            </ListItemIcon>
-          )}
-          {(!miniDrawer || (miniDrawer && level !== 1)) && (
-            <ListItemText
-              primary={
-                <Typography variant="h6" sx={{ color: textColor }}>
-                  {t(`menuTree.${item.title}`, { defaultValue: item.title })}
-                </Typography>
-              }
-            />
-          )}
-        </ListItemButton>
+          <ListItemButton
+            component={LinkComponent}
+            disabled={item.disabled}
+            sx={{
+              zIndex: 1201,
+              pl: !miniDrawer ? `${level * 1.5}rem` : borderRadius,
+              py: miniDrawer && level === 1 ? 1.25 : 1,
+              '&:hover': {
+                bgcolor: theme.palette.mode === ThemeMode.DARK ? 'divider' : 'primary.lighter',
+              },
+            }}
+            {...(downLG && {
+              onClick: () => onChangeMiniDrawer(true),
+            })}
+          >
+            {item.icon && (
+              <ListItemIcon
+                sx={{
+                  minWidth: iconWidth,
+                  color: textColor,
+                  ...(miniDrawer && {
+                    width: iconSize,
+                    height: iconSize,
+                    ...iconPropsVertical,
+                  }),
+                }}
+              >
+                <MdiIcon path={item.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
+              </ListItemIcon>
+            )}
+            {(!miniDrawer || (miniDrawer && level !== 1)) && (
+              <ListItemText
+                primary={
+                  <Typography variant="h6" sx={{ color: textColor }}>
+                    {t(`menuTree.${item.title}`, { defaultValue: item.title })}
+                  </Typography>
+                }
+              />
+            )}
+          </ListItemButton>
+        </Tooltip>
       ) : (
         <ListItemButton
           component={LinkComponent}

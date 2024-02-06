@@ -9,13 +9,17 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceUserProfileUserProfile_View_EditDialogActions } from '~/containers/Service/UserProfile/UserProfile_View_Edit/ServiceUserProfileUserProfile_View_EditDialogContainer';
+import type {
+  ServiceUserProfileUserProfile_View_EditDialogActions,
+  ServiceUserProfileUserProfile_View_EditDialogProps,
+} from '~/containers/Service/UserProfile/UserProfile_View_Edit/ServiceUserProfileUserProfile_View_EditDialogContainer';
 import { useServiceUserProfileActivityCitiesRelationViewPage } from '~/dialogs/Service/UserProfile/ActivityCities/RelationViewPage';
 import { useServiceUserProfileActivityCountiesRelationViewPage } from '~/dialogs/Service/UserProfile/ActivityCounties/RelationViewPage';
 import { useServiceUserProfileActivityDistrictsRelationViewPage } from '~/dialogs/Service/UserProfile/ActivityDistricts/RelationViewPage';
@@ -28,7 +32,7 @@ import { useServiceUserProfileUserProfile_View_EditAreasActivityTab_activity_cou
 import { useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCityLinkSetSelectorPage } from '~/dialogs/Service/UserProfile/UserProfile_View_Edit/Areas/Residency/ResidentCity/LinkSetSelectorPage';
 import { useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPage } from '~/dialogs/Service/UserProfile/UserProfile_View_Edit/Areas/Residency/ResidentCounty/LinkSetSelectorPage';
 import { useServiceUserProfileUserProfile_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage } from '~/dialogs/Service/UserProfile/UserProfile_View_Edit/Areas/Residency/ResidentDistrict/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -46,7 +50,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceUserProfileUserProfile_View_EditDialogActionsExtended =
@@ -59,20 +63,52 @@ export type ServiceUserProfileUserProfile_View_EditDialogActionsExtended =
   };
 
 export const SERVICE_USER_USER_PROFILE_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserProfileUserProfile_View_EditActionsHook';
+  'SERVICE_USER_USER_PROFILE_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceUserProfileUserProfile_View_EditActionsHook = (
   ownerData: any,
   data: ServiceUserProfileStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceUserProfile, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceUserProfileUserProfile_View_EditDialogActionsExtended;
+
+export interface ServiceUserProfileUserProfile_View_EditViewModel
+  extends ServiceUserProfileUserProfile_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceUserProfile>;
+  isDraft?: boolean;
+}
+
+const ServiceUserProfileUserProfile_View_EditViewModelContext =
+  createContext<ServiceUserProfileUserProfile_View_EditViewModel>({} as any);
+export const useServiceUserProfileUserProfile_View_EditViewModel = () => {
+  const context = useContext(ServiceUserProfileUserProfile_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceUserProfileUserProfile_View_EditViewModel must be used within a(n) ServiceUserProfileUserProfile_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserUserProfileAccessViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceUserProfile>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceUserProfile) => Promise<void>,
 ) => Promise<DialogResult<ServiceUserProfileStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceUserProfile>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceUserProfile) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -88,16 +124,19 @@ export const useServiceUserUserProfileAccessViewPage = (): ((
         children: (
           <ServiceUserUserProfileAccessViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -124,14 +163,17 @@ const ServiceUserProfileUserProfile_View_EditDialogContainer = lazy(
 export interface ServiceUserUserProfileAccessViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceUserProfile>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceUserProfile) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceUserProfileStored) => Promise<void>;
+  onSubmit: (result?: ServiceUserProfileStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_NDSZcFvYEe6bTb-1BwQgmA)/AccessViewPageDefinition
 // Name: service::User::userProfile::AccessViewPage
 export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserUserProfileAccessViewPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
@@ -142,6 +184,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -181,10 +224,22 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceUserProfileQueryCustomizer = {
-    _mask:
-      '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+  const getPageQueryCustomizer: () => ServiceUserProfileQueryCustomizer = () => ({
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
+
+  // Validation
+  const validate: (data: ServiceUserProfile) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceUserProfileUserProfile_View_EditActionsHook>(
@@ -195,6 +250,8 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
@@ -220,13 +277,10 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const openServiceUserProfileResidentDistrictRelationViewPage =
     useServiceUserProfileResidentDistrictRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.UserProfile.UserProfile_View_Edit', { defaultValue: 'My profile' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceUserProfile): string => {
+    return t('service.UserProfile.UserProfile_View_Edit', { defaultValue: 'My profile' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -236,8 +290,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserProfileImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await userServiceForUserProfileImpl.refresh(ownerData, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -251,6 +306,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -261,7 +317,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentCity(data, queryCustomizer);
+      return userServiceForUserProfileImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -281,20 +337,23 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     }
     return undefined;
   };
-  const residentCityUnsetAction = async (target: ServiceCityStored) => {
+  const residentCityUnsetAction = async (target: ServiceCity | ServiceCityStored) => {
     storeDiff('residentCity', null);
   };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileResidentCityRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentCityOpenPageAction = async (target: ServiceCity | ServiceCityStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCityStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileResidentCityRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const residentCountyAutocompleteRangeAction = async (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentCounty(data, queryCustomizer);
+      return userServiceForUserProfileImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -314,20 +373,23 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     }
     return undefined;
   };
-  const residentCountyUnsetAction = async (target: ServiceCountyStored) => {
+  const residentCountyUnsetAction = async (target: ServiceCounty | ServiceCountyStored) => {
     storeDiff('residentCounty', null);
   };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileResidentCountyRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentCountyOpenPageAction = async (target: ServiceCounty | ServiceCountyStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCountyStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileResidentCountyRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const residentDistrictAutocompleteRangeAction = async (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentDistrict(data, queryCustomizer);
+      return userServiceForUserProfileImpl.getRangeForResidentDistrict(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -347,13 +409,16 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     }
     return undefined;
   };
-  const residentDistrictUnsetAction = async (target: ServiceDistrictStored) => {
+  const residentDistrictUnsetAction = async (target: ServiceDistrict | ServiceDistrictStored) => {
     storeDiff('residentDistrict', null);
   };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileResidentDistrictRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentDistrictOpenPageAction = async (target: ServiceDistrict | ServiceDistrictStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceDistrictStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileResidentDistrictRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityCitiesOpenAddSelectorAction = async () => {
@@ -374,7 +439,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   ): Promise<DialogResult<Array<ServiceCityStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityCities ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityCities ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityCities', newList);
       resolve({
         result: 'submit',
@@ -395,14 +460,17 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   };
   const activityCitiesRemoveAction = async (target?: ServiceCityStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityCities ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityCities ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityCities', newList);
     }
   };
-  const activityCitiesOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceUserProfileActivityCitiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityCitiesOpenPageAction = async (target: ServiceCity | ServiceCityStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCityStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileActivityCitiesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityDistrictsOpenAddSelectorAction = async () => {
@@ -423,7 +491,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityDistricts ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityDistricts ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityDistricts', newList);
       resolve({
         result: 'submit',
@@ -444,14 +512,20 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   };
   const activityDistrictsRemoveAction = async (target?: ServiceDistrictStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityDistricts ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityDistricts ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityDistricts', newList);
     }
   };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityDistrictsOpenPageAction = async (
+    target: ServiceDistrict | ServiceDistrictStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceDistrictStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileActivityDistrictsRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityCountiesOpenAddSelectorAction = async () => {
@@ -472,7 +546,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   ): Promise<DialogResult<Array<ServiceCountyStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityCounties ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityCounties ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityCounties', newList);
       resolve({
         result: 'submit',
@@ -493,18 +567,22 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   };
   const activityCountiesRemoveAction = async (target?: ServiceCountyStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityCounties ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityCounties ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityCounties', newList);
     }
   };
-  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserProfileActivityCountiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityCountiesOpenPageAction = async (target: ServiceCounty | ServiceCountyStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCountyStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserProfileActivityCountiesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
 
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     residentCityAutocompleteRangeAction,
@@ -537,21 +615,43 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceUserProfileUserProfile_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_NDSZcFvYEe6bTb-1BwQgmA)/AccessViewPageDefinition"
-      data-page-name="service::User::userProfile::AccessViewPage"
-    >
+    <ServiceUserProfileUserProfile_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_NDSZcFvYEe6bTb-1BwQgmA)/AccessViewPageDefinition"
+          data-page-name="service::User::userProfile::AccessViewPage"
+        />
         <ServiceUserProfileUserProfile_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -563,8 +663,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceUserProfileUserProfile_View_EditViewModelContext.Provider>
   );
 }

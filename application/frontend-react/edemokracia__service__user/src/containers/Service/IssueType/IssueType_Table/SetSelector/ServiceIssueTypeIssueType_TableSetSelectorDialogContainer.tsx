@@ -33,7 +33,6 @@ export interface ServiceIssueTypeIssueType_TableSetSelectorDialogActions
 
 export interface ServiceIssueTypeIssueType_TableSetSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions;
   isLoading: boolean;
@@ -42,6 +41,7 @@ export interface ServiceIssueTypeIssueType_TableSetSelectorDialogProps {
   alreadySelected: ServiceIssueTypeStored[];
   selectionDiff: ServiceIssueTypeStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceIssueTypeStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::IssueType::IssueType_Table::SetSelector
@@ -54,7 +54,6 @@ export default function ServiceIssueTypeIssueType_TableSetSelectorDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -63,12 +62,13 @@ export default function ServiceIssueTypeIssueType_TableSetSelectorDialog(
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_J4eloNu4Ee2Bgcx6em3jZg)/TransferObjectTableSetSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -88,9 +88,11 @@ export default function ServiceIssueTypeIssueType_TableSetSelectorDialog(
           <ServiceIssueTypeIssueType_TableSetSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

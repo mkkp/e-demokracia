@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -42,7 +42,7 @@ import type { ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponentActionDe
 import { ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent } from './components/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent';
 
 export const SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceYesNoVoteEntryYesNoVoteEntry_View_EditContainerHook';
+  'SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditContainerHook = (
   data: ServiceYesNoVoteEntryStored,
   editMode: boolean,
@@ -51,6 +51,7 @@ export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditContainerHook = (
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionDefinitions
   extends ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponentActionDefinitions {
+  getPageTitle?: (data: ServiceYesNoVoteEntry) => string;
   isCreatedRequired?: (data: ServiceYesNoVoteEntry | ServiceYesNoVoteEntryStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (
     data: ServiceYesNoVoteEntry | ServiceYesNoVoteEntryStored,
@@ -63,14 +64,15 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionDefinitions
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionDefinitions;
 
   data: ServiceYesNoVoteEntryStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoVoteEntry, value: any) => void;
@@ -78,6 +80,7 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditProps {
   validation: Map<keyof ServiceYesNoVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoVoteEntry, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_LNbaEFoiEe6_67aMO2jOsw)/TransferObjectViewPageContainer
@@ -88,9 +91,10 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -122,16 +126,17 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="YesNoVoteEntry_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_LNbaEFoiEe6_67aMO2jOsw)/TransferObjectViewVisualElement"
+          data-name="YesNoVoteEntry_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -139,7 +144,6 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              autoFocus
               slotProps={{
                 textField: {
                   id: 'User/(esm/_88hicFowEe6_67aMO2jOsw)/TimestampTypeDateTimeInput',
@@ -183,7 +187,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : true}
               name="value"
@@ -220,13 +224,14 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit(
             </TextField>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserComponent
               disabled={false}
               readOnly={false || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

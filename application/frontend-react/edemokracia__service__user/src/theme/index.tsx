@@ -165,6 +165,21 @@ const baseTheme = (paletteTheme: Theme) =>
             variant: 'filled',
             color: 'secondary',
           },
+          styleOverrides: {
+            root: {
+              '.AggregationInputButtonGroup': {
+                position: 'absolute',
+                top: 'calc(50% - 14px)', // MUI internals have the same burned in values...
+                right: 8,
+              },
+              '.AggregationInputButtonGroup .AggregationInputLoading': {
+                margin: 'auto 0',
+              },
+              '.MuiInputBase-root.MuiInputBase-formControl.MuiAutocomplete-inputRoot': {
+                paddingRight: '85px',
+              },
+            },
+          },
         },
         MuiRadio: {
           defaultProps: {

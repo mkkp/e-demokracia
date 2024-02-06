@@ -46,7 +46,6 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialog
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialogActions;
   isLoading: boolean;
@@ -60,6 +59,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialog
   validation: Map<keyof ServiceRatingVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::RatingVoteDefinition::RatingVoteDefinition_View_Edit
@@ -72,7 +72,6 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -85,16 +84,18 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,maxRateValue,minRateValue,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{created,value}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,maxRateValue,minRateValue,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{created,value}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_-dfLEH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -114,8 +115,8 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
           <ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -123,6 +124,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

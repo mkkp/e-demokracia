@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceCity,
@@ -57,6 +57,7 @@ import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utili
 
 export interface ServiceCityCity_View_EditDistrictsComponentActionDefinitions {
   districtsBulkDeleteAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
+  districtsBulkRemoveAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
   districtsOpenFormAction?: () => Promise<void>;
   districtsFilterAction?: (
     id: string,
@@ -65,14 +66,27 @@ export interface ServiceCityCity_View_EditDistrictsComponentActionDefinitions {
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   districtsRefreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored[]>;
+  getDistrictsMask?: () => string;
   districtsDeleteAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
-  districtsOpenPageAction?: (row: ServiceDistrictStored) => Promise<void>;
+  districtsRemoveAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
+  districtsOpenPageAction?: (row: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
+  districtsAdditionalToolbarButtons?: (
+    data: ServiceDistrictStored[],
+    isLoading: boolean,
+    selectedRows: ServiceDistrictStored[],
+    clearSelections: () => void,
+    ownerData: ServiceCityStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceCityCity_View_EditDistrictsComponentProps {
   uniqueId: string;
   actions: ServiceCityCity_View_EditDistrictsComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceCityStored;
   editMode: boolean;
@@ -82,7 +96,17 @@ export interface ServiceCityCity_View_EditDistrictsComponentProps {
 // XMIID: User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable
 // Name: districts
 export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCity_View_EditDistrictsComponentProps) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -90,7 +114,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceDistrictStored>[]>(ownerData?.districts || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: null }]);
@@ -98,14 +122,15 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceDistrictQueryCustomizer>({
     _mask: '{name}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -118,12 +143,14 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceDistrictStored[]>([]);
 
   const nameColumn: GridColDef<ServiceDistrictStored> = {
     ...baseColumnConfig,
     field: 'name',
-    headerName: t('service.City.City_View_Edit.name', { defaultValue: 'Name' }) as string,
+    headerName: t('service.City.City_View_Edit.districts.name', { defaultValue: 'Name' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -133,19 +160,103 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const columns = useMemo<GridColDef<ServiceDistrictStored>[]>(() => [nameColumn], []);
 
-  const rowActions: TableRowAction<ServiceDistrictStored>[] = [
-    {
-      id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.City.City_View_Edit.districts.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceDistrictStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.districtsDeleteAction
-        ? async (rowData) => {
-            await actions.districtsDeleteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceDistrictStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
+        label: t('service.City.City_View_Edit.districts.Remove', { defaultValue: 'Remove' }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceDistrictStored) => isLoading,
+        action: actions.districtsRemoveAction
+          ? async (rowData) => {
+              await actions.districtsRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
+        label: t('service.City.City_View_Edit.districts.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceDistrictStored) =>
+          getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
+        action: actions.districtsDeleteAction
+          ? async (rowData) => {
+              await actions.districtsDeleteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceDistrictStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceDistrictStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.districtsAdditionalToolbarButtons
+    ? actions.districtsAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceDistrictQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -175,7 +286,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -208,26 +319,28 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceDistrictStored>(filters, ownerData?.districts ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.districts, filters]);
 
   return (
     <div id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" data-table-name="districts">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -238,28 +351,22 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.districtsOpenPageAction
-            ? async (params: GridRowParams<ServiceDistrictStored>) => await actions.districtsOpenPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceDistrictStored>) =>
+                await actions.districtsOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -297,7 +404,11 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.districtsRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getDistrictsMask ? actions.getDistrictsMask() : queryCustomizer._mask,
+                    };
+                    await actions.districtsRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -310,11 +421,35 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getDistrictsMask ? actions.getDistrictsMask() : queryCustomizer._mask,
+                    };
                     await actions.districtsOpenFormAction!();
                   }}
-                  disabled={editMode || isLoading}
+                  disabled={false}
                 >
                   {t('service.City.City_View_Edit.districts.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {actions.districtsBulkRemoveAction && selectionModel.length > 0 ? (
+                <Button
+                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getDistrictsMask ? actions.getDistrictsMask() : queryCustomizer._mask,
+                    };
+                    const { result: bulkResult } = await actions.districtsBulkRemoveAction!(selectedRows.current);
+                    if (bulkResult === 'submit') {
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.City.City_View_Edit.districts.BulkRemove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.districtsBulkDeleteAction && selectionModel.length > 0 ? (
@@ -323,9 +458,13 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getDistrictsMask ? actions.getDistrictsMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.districtsBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -333,6 +472,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   {t('service.City.City_View_Edit.districts.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

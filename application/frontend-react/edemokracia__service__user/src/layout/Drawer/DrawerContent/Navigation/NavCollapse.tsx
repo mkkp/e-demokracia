@@ -135,7 +135,7 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
             {...(miniDrawer && { onMouseEnter: handleClick, onMouseLeave: handleClose })}
             onClick={handleClick}
             sx={{
-              pl: !miniDrawer ? `${level * 24}px` : 1.5,
+              pl: !miniDrawer ? `${level * 1.5}rem` : 1.5,
               py: miniDrawer && level === 1 ? 1.25 : 1,
               '&:hover': {
                 bgcolor: miniDrawer

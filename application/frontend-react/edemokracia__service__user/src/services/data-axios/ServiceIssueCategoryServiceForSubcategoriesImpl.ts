@@ -103,6 +103,24 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
   }
 
   /**
+   * From: relation.validateCreate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateCreate(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceIssueCategory,
+  ): Promise<ServiceIssueCategory> {
+    const path = '/service/IssueCategory/~update/subcategories/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -121,6 +139,24 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
    */
   async update(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored> {
     const path = '/service/IssueCategory/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceIssueCategoryStored>,
+  ): Promise<ServiceIssueCategoryStored> {
+    const path = '/service/IssueCategory/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,
@@ -156,6 +192,34 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
     const response = await this.axios.post(this.getPathForActor(path), {
       owner: owner,
       queryCustomizer: queryCustomizer ?? {},
+    });
+
+    return response.data;
+  }
+
+  async validateCreateOwner(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceServiceUser,
+  ): Promise<ServiceServiceUser> {
+    const path = '/service/IssueCategory/~update/owner/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateOwner(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored> {
+    const path = '/service/IssueCategory/~update/owner/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
     });
 
     return response.data;
@@ -225,6 +289,20 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
     return response.data;
   }
 
+  async validateCreateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceIssueCategory,
+  ): Promise<ServiceIssueCategory> {
+    const path = '/service/IssueCategory/~update/subcategories/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
   async deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void> {
     const path = '/service/IssueCategory/~delete';
     await this.axios.post(this.getPathForActor(path), undefined, {
@@ -239,6 +317,20 @@ export class ServiceIssueCategoryServiceForSubcategoriesImpl
     target: Partial<ServiceIssueCategoryStored>,
   ): Promise<ServiceIssueCategoryStored> {
     const path = '/service/IssueCategory/~update/subcategories/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  async validateUpdateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceIssueCategoryStored>,
+  ): Promise<ServiceIssueCategoryStored> {
+    const path = '/service/IssueCategory/~update/subcategories/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': owner.__signedIdentifier,

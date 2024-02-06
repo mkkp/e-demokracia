@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,6 +29,7 @@ import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErr
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 import { AssociationButton, NumericInput } from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCon,
@@ -50,7 +51,7 @@ import { ServiceConCon_FormCreatedByComponent } from './components/ServiceConCon
 import type { ServiceConCon_FormProsComponentActionDefinitions } from './components/ServiceConCon_FormProsComponent';
 import { ServiceConCon_FormProsComponent } from './components/ServiceConCon_FormProsComponent';
 
-export const SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceConCon_FormContainerHook';
+export const SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceConCon_FormContainerHook = (
   data: ServiceConStored,
   editMode: boolean,
@@ -61,7 +62,8 @@ export interface ServiceConCon_FormActionDefinitions
   extends ServiceConCon_FormConsComponentActionDefinitions,
     ServiceConCon_FormCreatedByComponentActionDefinitions,
     ServiceConCon_FormProsComponentActionDefinitions {
-  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  getPageTitle?: (data: ServiceCon) => string;
+  votesOpenPageAction?: (target: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
   isCreatedRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isCreatedByNameRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
@@ -78,10 +80,10 @@ export interface ServiceConCon_FormActionDefinitions
 
 export interface ServiceConCon_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceConCon_FormActionDefinitions;
 
   data: ServiceConStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;
@@ -89,6 +91,7 @@ export interface ServiceConCon_FormProps {
   validation: Map<keyof ServiceCon, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCon, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qAjNIGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -97,9 +100,10 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -127,19 +131,31 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
   );
   const containerActions: ServiceConCon_FormActionDefinitions = customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Con_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qAjNIGksEe25ONJ3V89cVA)/TransferObjectFormVisualElement"
+          data-name="Con_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isCreatedByNameRequired ? actions.isCreatedByNameRequired(data, editMode) : false}
               name="createdByName"
@@ -171,12 +187,12 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -184,7 +200,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              autoFocus
+              inputRef={autoFocusInputRef}
               slotProps={{
                 textField: {
                   id: 'User/(esm/_3nMr4H4bEe2j59SYy0JH0Q)/TimestampTypeDateTimeInput',
@@ -226,7 +242,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
@@ -256,12 +272,12 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 ),
               }}
               inputProps={{
-                maxlength: 16384,
+                maxLength: 16384,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
@@ -289,12 +305,12 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <NumericInput
               required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
               name="upVotes"
@@ -327,7 +343,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <NumericInput
               required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
               name="downVotes"
@@ -382,6 +398,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('createdBy')}
               actions={actions}
@@ -389,9 +406,10 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="cons::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="cons::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -427,15 +445,17 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                     isFormUpdateable={isFormUpdateable}
                     validationError={validation.get('cons')}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="pros::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="pros::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -471,6 +491,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
                     isFormUpdateable={isFormUpdateable}
                     validationError={validation.get('pros')}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

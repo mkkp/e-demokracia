@@ -24,4 +24,7 @@ export interface ServiceSelectAnswerVoteSelectionService {
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
   delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
   update(target: Partial<ServiceSelectAnswerVoteSelectionStored>): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  validateUpdate(
+    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
 }

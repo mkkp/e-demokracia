@@ -101,6 +101,24 @@ export class ServiceIssueServiceForAttachmentsImpl
   }
 
   /**
+   * From: relation.validateCreate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateCreate(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: ServiceIssueAttachment,
+  ): Promise<ServiceIssueAttachment> {
+    const path = '/service/Issue/~update/attachments/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -119,6 +137,24 @@ export class ServiceIssueServiceForAttachmentsImpl
    */
   async update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored> {
     const path = '/service/IssueAttachment/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceIssueAttachmentStored>,
+  ): Promise<ServiceIssueAttachmentStored> {
+    const path = '/service/IssueAttachment/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,

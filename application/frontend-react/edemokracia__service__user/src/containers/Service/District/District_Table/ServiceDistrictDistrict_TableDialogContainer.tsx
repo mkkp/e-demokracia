@@ -31,12 +31,13 @@ export interface ServiceDistrictDistrict_TableDialogActions extends ServiceDistr
 
 export interface ServiceDistrictDistrict_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceDistrictDistrict_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::District::District_Table
@@ -45,12 +46,12 @@ export default function ServiceDistrictDistrict_TableDialog(props: ServiceDistri
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -67,7 +68,12 @@ export default function ServiceDistrictDistrict_TableDialog(props: ServiceDistri
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceDistrictDistrict_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceDistrictDistrict_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

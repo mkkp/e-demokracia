@@ -9,14 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueTypeIssueType_TableSetSelectorDialogActions } from '~/containers/Service/IssueType/IssueType_Table/SetSelector/ServiceIssueTypeIssueType_TableSetSelectorDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceIssueTypeIssueType_TableSetSelectorDialogActions,
+  ServiceIssueTypeIssueType_TableSetSelectorDialogProps,
+} from '~/containers/Service/IssueType/IssueType_Table/SetSelector/ServiceIssueTypeIssueType_TableSetSelectorDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
@@ -28,28 +32,51 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForIssueTypeImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended =
   ServiceIssueTypeIssueType_TableSetSelectorDialogActions & {};
 
 export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_ISSUE_TYPE_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueTypeIssueType_TableSetSelectorActionsHook';
+  'SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_ISSUE_TYPE_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
 export type ServiceIssueTypeIssueType_TableSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceIssueTypeStored[],
   editMode: boolean,
   selectionDiff: ServiceIssueTypeStored[],
+  submit: () => Promise<void>,
 ) => ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended;
+
+export interface ServiceIssueTypeIssueType_TableSetSelectorViewModel
+  extends ServiceIssueTypeIssueType_TableSetSelectorDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueTypeIssueType_TableSetSelectorViewModelContext =
+  createContext<ServiceIssueTypeIssueType_TableSetSelectorViewModel>({} as any);
+export const useServiceIssueTypeIssueType_TableSetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueTypeIssueType_TableSetSelectorViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueTypeIssueType_TableSetSelectorViewModel must be used within a(n) ServiceIssueTypeIssueType_TableSetSelectorViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage = (): ((
   ownerData: any,
   alreadySelected: ServiceIssueTypeStored[],
+  isDraft?: boolean,
 ) => Promise<DialogResult<ServiceIssueTypeStored[]>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any, alreadySelected: ServiceIssueTypeStored[]) =>
+  return (ownerData: any, alreadySelected: ServiceIssueTypeStored[], isDraft?: boolean) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -66,16 +93,17 @@ export const useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSe
           <ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -94,9 +122,13 @@ const ServiceIssueTypeIssueType_TableSetSelectorDialogContainer = lazy(
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPageProps {
   ownerData: any;
+
   alreadySelected: ServiceIssueTypeStored[];
+
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueType) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueTypeStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored[], isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition
@@ -104,7 +136,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkS
 export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage(
   props: ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPageProps,
 ) {
-  const { ownerData, alreadySelected, onClose, onSubmit } = props;
+  const { ownerData, alreadySelected, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceCreateIssueInputServiceForIssueTypeImpl = useMemo(
@@ -118,6 +150,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -129,22 +162,28 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
   const [data, setData] = useState<ServiceIssueTypeStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceIssueTypeStored[]>([]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // Validation
+  const validate: (data: ServiceIssueType) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_TableSetSelectorActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_ISSUE_TYPE_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceIssueTypeIssueType_TableSetSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff);
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('service.IssueType.IssueType_Table.SetSelector', { defaultValue: 'IssueType Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.IssueType.IssueType_Table.SetSelector', { defaultValue: 'IssueType Table' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -166,7 +205,10 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceCreateIssueInputServiceForIssueTypeImpl.getRangeForIssueType(ownerData, queryCustomizer);
+      return serviceCreateIssueInputServiceForIssueTypeImpl.getRangeForIssueType(
+        cleanUpPayload(ownerData),
+        queryCustomizer,
+      );
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -174,6 +216,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
   };
 
   const actions: ServiceIssueTypeIssueType_TableSetSelectorDialogActions = {
+    getPageTitle,
     backAction,
     setAction,
     filterAction,
@@ -181,18 +224,36 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueTypeIssueType_TableSetSelectorViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    alreadySelected,
+    selectionDiff,
+    setSelectionDiff,
+    isDraft,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
-      data-page-name="service::CreateIssueInput::CreateIssueInput_Form::issue::issueType::LinkSetSelectorPage"
-    >
+    <ServiceIssueTypeIssueType_TableSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+          data-page-name="service::CreateIssueInput::CreateIssueInput_Form::issue::issueType::LinkSetSelectorPage"
+        />
         <ServiceIssueTypeIssueType_TableSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -200,8 +261,9 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueIssueTy
           selectionDiff={selectionDiff}
           setSelectionDiff={setSelectionDiff}
           alreadySelected={alreadySelected}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueTypeIssueType_TableSetSelectorViewModelContext.Provider>
   );
 }

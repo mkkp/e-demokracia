@@ -32,6 +32,10 @@ export interface ServiceServiceUserServiceForActivityDistricts {
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplate(): Promise<ServiceDistrict>;
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,

@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -47,7 +47,7 @@ import type { ServiceCommentComment_View_EditCreatedByComponentActionDefinitions
 import { ServiceCommentComment_View_EditCreatedByComponent } from './components/ServiceCommentComment_View_EditCreatedByComponent';
 
 export const SERVICE_COMMENT_COMMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCommentComment_View_EditContainerHook';
+  'SERVICE_COMMENT_COMMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceCommentComment_View_EditContainerHook = (
   data: ServiceCommentStored,
   editMode: boolean,
@@ -56,9 +56,10 @@ export type ServiceCommentComment_View_EditContainerHook = (
 
 export interface ServiceCommentComment_View_EditActionDefinitions
   extends ServiceCommentComment_View_EditCreatedByComponentActionDefinitions {
+  getPageTitle?: (data: ServiceComment) => string;
   voteDownForCommentAction?: () => Promise<void>;
   voteUpForCommentAction?: () => Promise<void>;
-  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
   isCommentRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
   isCommentDisabled?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isCreatedRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
@@ -71,14 +72,15 @@ export interface ServiceCommentComment_View_EditActionDefinitions
   ) => boolean;
   isUpVotesRequired?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean) => boolean;
   isUpVotesDisabled?: (data: ServiceComment | ServiceCommentStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceCommentComment_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCommentComment_View_EditActionDefinitions;
 
   data: ServiceCommentStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceComment, value: any) => void;
@@ -86,6 +88,7 @@ export interface ServiceCommentComment_View_EditProps {
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p_AVAGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -94,9 +97,10 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -128,19 +132,23 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Comment_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p_AVAGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="Comment_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="group::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="group::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="comment-text-multiple" sx={{ marginRight: 1 }} />
@@ -154,9 +162,10 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="group" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_eX7kkG5YEe2wNaja8kBvcQ)/GroupVisualElement"
+                      data-name="group"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -223,6 +232,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
@@ -235,7 +245,6 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           required={actions?.isCommentRequired ? actions.isCommentRequired(data, editMode) : true}
                           name="comment"
                           id="User/(esm/_BYJGYG5WEe2wNaja8kBvcQ)/StringTypeTextArea"
-                          autoFocus
                           label={t('service.Comment.Comment_View_Edit.comment', { defaultValue: 'Comment' }) as string}
                           value={data.comment ?? ''}
                           className={clsx({
@@ -265,7 +274,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -284,7 +293,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           }}
                           disabled={!actions.voteUpForCommentAction || editMode}
                         >
-                          <span>{t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
+                          {t('service.Comment.Comment_View_Edit.voteUp', { defaultValue: 'Vote Up' })}
                         </LoadingButton>
                       </Grid>
 
@@ -342,7 +351,7 @@ export default function ServiceCommentComment_View_Edit(props: ServiceCommentCom
                           }}
                           disabled={!actions.voteDownForCommentAction || editMode}
                         >
-                          <span>{t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
+                          {t('service.Comment.Comment_View_Edit.voteDown', { defaultValue: 'Vote Down' })}
                         </LoadingButton>
                       </Grid>
 

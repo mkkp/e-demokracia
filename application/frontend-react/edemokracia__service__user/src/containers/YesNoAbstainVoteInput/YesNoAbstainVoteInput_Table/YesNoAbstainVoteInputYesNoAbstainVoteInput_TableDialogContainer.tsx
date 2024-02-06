@@ -39,12 +39,13 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialogActions
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: YesNoAbstainVoteInput::YesNoAbstainVoteInput_Table
@@ -55,12 +56,12 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_-1U_1HWyEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -77,7 +78,12 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <YesNoAbstainVoteInputYesNoAbstainVoteInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <YesNoAbstainVoteInputYesNoAbstainVoteInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

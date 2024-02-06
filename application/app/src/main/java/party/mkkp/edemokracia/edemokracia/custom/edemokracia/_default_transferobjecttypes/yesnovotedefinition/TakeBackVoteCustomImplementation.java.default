@@ -28,6 +28,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.yesnovotedefinition.TakeBackVote.class)
 public class TakeBackVoteCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.yesnovotedefinition.TakeBackVote {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.yesnovotedefinition.YesNoVoteDefinition _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.yesnovotedefinition.TakeBackVoteExchangeFunctionsComponent");
     }

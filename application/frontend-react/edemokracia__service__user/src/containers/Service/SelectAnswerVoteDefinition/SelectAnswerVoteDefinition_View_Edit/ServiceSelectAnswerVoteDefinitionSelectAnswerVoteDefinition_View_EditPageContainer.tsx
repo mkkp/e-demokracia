@@ -43,7 +43,6 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 }
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageProps {
-  title: string;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -66,7 +65,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -80,13 +78,14 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
     submit,
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{created,valueRepresentation}}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -194,8 +193,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

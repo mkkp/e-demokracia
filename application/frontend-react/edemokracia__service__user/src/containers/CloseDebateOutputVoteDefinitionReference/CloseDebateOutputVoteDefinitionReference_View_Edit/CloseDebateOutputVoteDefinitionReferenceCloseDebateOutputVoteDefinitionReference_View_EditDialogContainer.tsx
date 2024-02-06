@@ -46,7 +46,6 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditDialogActions;
   isLoading: boolean;
@@ -60,6 +59,7 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   validation: Map<keyof CloseDebateOutputVoteDefinitionReference, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateOutputVoteDefinitionReference, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_View_Edit
@@ -72,7 +72,6 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -85,15 +84,16 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
-    _mask: '{context}',
+    _mask: actions.getMask ? actions.getMask!() : '{context}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_YoAHwVu1Ee6Lb6PYNSnQSA)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -113,8 +113,8 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -122,6 +122,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

@@ -19,7 +19,7 @@ import type {
 } from '~/services/data-api';
 import { processQueryCustomizer } from '~/utilities';
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions {
-  userVoteEntryOpenPageAction?: (target: ServiceYesNoVoteEntryStored) => Promise<void>;
+  userVoteEntryOpenPageAction?: (target: ServiceYesNoVoteEntryStored, isDraft?: boolean) => Promise<void>;
   userVoteEntryAutocompleteRangeAction?: (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
   ) => Promise<Array<ServiceYesNoVoteEntryStored>>;
@@ -44,6 +44,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVote
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_h4NScFouEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedLink
@@ -51,7 +52,8 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVote
 export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponent(
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -74,6 +76,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteE
       }
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'value'}
       onAutoCompleteSelect={(userVoteEntry) => {
         storeDiff('userVoteEntry', userVoteEntry);
@@ -81,7 +84,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteE
       onView={
         ownerData.userVoteEntry && actions.userVoteEntryOpenPageAction
           ? async () => {
-              await actions.userVoteEntryOpenPageAction!(ownerData.userVoteEntry!);
+              await actions.userVoteEntryOpenPageAction!(ownerData.userVoteEntry!, false);
             }
           : undefined
       }

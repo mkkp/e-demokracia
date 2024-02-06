@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -32,7 +32,7 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
 
 export const SERVICE_DISTRICT_DISTRICT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceDistrictDistrict_View_EditContainerHook';
+  'SERVICE_DISTRICT_DISTRICT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceDistrictDistrict_View_EditContainerHook = (
   data: ServiceDistrictStored,
   editMode: boolean,
@@ -40,16 +40,18 @@ export type ServiceDistrictDistrict_View_EditContainerHook = (
 ) => ServiceDistrictDistrict_View_EditActionDefinitions;
 
 export interface ServiceDistrictDistrict_View_EditActionDefinitions {
+  getPageTitle?: (data: ServiceDistrict) => string;
   isNameRequired?: (data: ServiceDistrict | ServiceDistrictStored, editMode?: boolean) => boolean;
   isNameDisabled?: (data: ServiceDistrict | ServiceDistrictStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceDistrictDistrict_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceDistrictDistrict_View_EditActionDefinitions;
 
   data: ServiceDistrictStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void;
@@ -57,6 +59,7 @@ export interface ServiceDistrictDistrict_View_EditProps {
   validation: Map<keyof ServiceDistrict, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDistrict, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0UhZn2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer
@@ -65,9 +68,10 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -99,21 +103,21 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="District_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_a0UhZn2iEe2LTNnGda5kaw)/TransferObjectViewVisualElement"
+          data-name="District_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dMOo8H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-              autoFocus
               label={t('service.District.District_View_Edit.name', { defaultValue: 'District name' }) as string}
               value={data.name ?? ''}
               className={clsx({
@@ -137,7 +141,7 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

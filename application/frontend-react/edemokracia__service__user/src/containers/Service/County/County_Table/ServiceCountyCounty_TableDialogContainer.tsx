@@ -31,12 +31,13 @@ export interface ServiceCountyCounty_TableDialogActions extends ServiceCountyCou
 
 export interface ServiceCountyCounty_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCountyCounty_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::County::County_Table
@@ -45,12 +46,12 @@ export default function ServiceCountyCounty_TableDialog(props: ServiceCountyCoun
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -67,7 +68,12 @@ export default function ServiceCountyCounty_TableDialog(props: ServiceCountyCoun
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceCountyCounty_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCountyCounty_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

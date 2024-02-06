@@ -15,7 +15,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -39,7 +39,7 @@ import type { ServiceUserManagerUserManager_View_EditUsersComponentActionDefinit
 import { ServiceUserManagerUserManager_View_EditUsersComponent } from './components/ServiceUserManagerUserManager_View_EditUsersComponent';
 
 export const SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserManagerUserManager_View_EditContainerHook';
+  'SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceUserManagerUserManager_View_EditContainerHook = (
   data: ServiceUserManagerStored,
   editMode: boolean,
@@ -48,15 +48,17 @@ export type ServiceUserManagerUserManager_View_EditContainerHook = (
 
 export interface ServiceUserManagerUserManager_View_EditActionDefinitions
   extends ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions {
+  getPageTitle?: (data: ServiceUserManager) => string;
   createUserAction?: () => Promise<void>;
+  getMask?: () => string;
 }
 
 export interface ServiceUserManagerUserManager_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceUserManagerUserManager_View_EditActionDefinitions;
 
   data: ServiceUserManagerStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceUserManager, value: any) => void;
@@ -64,6 +66,7 @@ export interface ServiceUserManagerUserManager_View_EditProps {
   validation: Map<keyof ServiceUserManager, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserManager, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_dGIWgFvOEe6jm_SkPSYEYw)/TransferObjectViewPageContainer
@@ -72,9 +75,10 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -106,38 +110,35 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="UserManager_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_dGIWgFvOEe6jm_SkPSYEYw)/TransferObjectViewVisualElement"
+          data-name="UserManager_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12}>
-            <Grid container spacing={2}>
-              <Grid item>
-                <LoadingButton
-                  id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
-                  loading={isLoading}
-                  startIcon={<MdiIcon path="account-plus" />}
-                  loadingPosition="start"
-                  onClick={
-                    actions.createUserAction
-                      ? async () => {
-                          await actions.createUserAction!();
-                        }
-                      : undefined
-                  }
-                  disabled={editMode}
-                >
-                  <span>
-                    {t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}
-                  </span>
-                </LoadingButton>
-              </Grid>
-            </Grid>
+          <Grid item xs={12} sm={4.0}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <LoadingButton
+                id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
+                loading={isLoading}
+                startIcon={<MdiIcon path="account-plus" />}
+                loadingPosition="start"
+                onClick={
+                  actions.createUserAction
+                    ? async () => {
+                        await actions.createUserAction!();
+                      }
+                    : undefined
+                }
+                disabled={editMode}
+              >
+                {t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}
+              </LoadingButton>
+            </Box>
           </Grid>
 
           <Grid item xs={12} sm={12}>
@@ -156,6 +157,7 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
                 isFormUpdateable={isFormUpdateable}
                 validationError={validation.get('users')}
                 refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
               />
             </Grid>
           </Grid>

@@ -9,14 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCountyCounty_TableSetSelectorDialogActions } from '~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceCountyCounty_TableSetSelectorDialogActions,
+  ServiceCountyCounty_TableSetSelectorDialogProps,
+} from '~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCounty,
   ServiceCountyQueryCustomizer,
@@ -27,28 +31,50 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserProfileServiceForResidentCountyImpl } from '~/services/data-axios/ServiceUserProfileServiceForResidentCountyImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
   ServiceCountyCounty_TableSetSelectorDialogActions & {};
 
 export const SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_TableSetSelectorActionsHook';
+  'SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
 export type ServiceCountyCounty_TableSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceCountyStored[],
   editMode: boolean,
   selectionDiff: ServiceCountyStored[],
+  submit: () => Promise<void>,
 ) => ServiceCountyCounty_TableSetSelectorDialogActionsExtended;
+
+export interface ServiceCountyCounty_TableSetSelectorViewModel extends ServiceCountyCounty_TableSetSelectorDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  isDraft?: boolean;
+}
+
+const ServiceCountyCounty_TableSetSelectorViewModelContext =
+  createContext<ServiceCountyCounty_TableSetSelectorViewModel>({} as any);
+export const useServiceCountyCounty_TableSetSelectorViewModel = () => {
+  const context = useContext(ServiceCountyCounty_TableSetSelectorViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceCountyCounty_TableSetSelectorViewModel must be used within a(n) ServiceCountyCounty_TableSetSelectorViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPage = (): ((
   ownerData: any,
   alreadySelected: ServiceCountyStored[],
+  isDraft?: boolean,
 ) => Promise<DialogResult<ServiceCountyStored[]>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any, alreadySelected: ServiceCountyStored[]) =>
+  return (ownerData: any, alreadySelected: ServiceCountyStored[], isDraft?: boolean) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -65,16 +91,17 @@ export const useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCou
           <ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPage
             ownerData={ownerData}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -91,9 +118,13 @@ const ServiceCountyCounty_TableSetSelectorDialogContainer = lazy(
 
 export interface ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPageProps {
   ownerData: any;
+
   alreadySelected: ServiceCountyStored[];
+
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored[]) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored[], isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_fsW_olvTEe6jm_SkPSYEYw)/TabularReferenceFieldLinkSetSelectorPageDefinition
@@ -101,7 +132,7 @@ export interface ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCo
 export default function ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPage(
   props: ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountyLinkSetSelectorPageProps,
 ) {
-  const { ownerData, alreadySelected, onClose, onSubmit } = props;
+  const { ownerData, alreadySelected, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceUserProfileServiceForResidentCountyImpl = useMemo(
@@ -115,6 +146,7 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -126,6 +158,15 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   const [data, setData] = useState<ServiceCountyStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<ServiceCountyStored[]>([]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // Validation
+  const validate: (data: ServiceCounty) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableSetSelectorActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -135,17 +176,15 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
     data,
     editMode,
     selectionDiff,
+    submit,
   );
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -165,7 +204,10 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   };
   const selectorRangeAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserProfileServiceForResidentCountyImpl.getRangeForResidentCounty(ownerData, queryCustomizer);
+      return serviceUserProfileServiceForResidentCountyImpl.getRangeForResidentCounty(
+        cleanUpPayload(ownerData),
+        queryCustomizer,
+      );
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -173,6 +215,7 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   };
 
   const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
+    getPageTitle,
     backAction,
     setAction,
     filterAction,
@@ -180,18 +223,36 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceCountyCounty_TableSetSelectorViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    alreadySelected,
+    selectionDiff,
+    setSelectionDiff,
+    isDraft,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_fsW_olvTEe6jm_SkPSYEYw)/TabularReferenceFieldLinkSetSelectorPageDefinition"
-      data-page-name="service::UserProfile::UserProfile_View_Edit::Areas::Residency::residentCounty::LinkSetSelectorPage"
-    >
+    <ServiceCountyCounty_TableSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_fsW_olvTEe6jm_SkPSYEYw)/TabularReferenceFieldLinkSetSelectorPageDefinition"
+          data-page-name="service::UserProfile::UserProfile_View_Edit::Areas::Residency::residentCounty::LinkSetSelectorPage"
+        />
         <ServiceCountyCounty_TableSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -199,8 +260,9 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
           selectionDiff={selectionDiff}
           setSelectionDiff={setSelectionDiff}
           alreadySelected={alreadySelected}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceCountyCounty_TableSetSelectorViewModelContext.Provider>
   );
 }

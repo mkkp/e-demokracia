@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -56,7 +56,7 @@ import type { ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefin
 import { ServiceDashboardDashboard_View_EditVoteEntriesComponent } from './components/ServiceDashboardDashboard_View_EditVoteEntriesComponent';
 
 export const SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceDashboardDashboard_View_EditContainerHook';
+  'SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceDashboardDashboard_View_EditContainerHook = (
   data: ServiceDashboardStored,
   editMode: boolean,
@@ -68,14 +68,17 @@ export interface ServiceDashboardDashboard_View_EditActionDefinitions
     ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentActionDefinitions,
     ServiceDashboardDashboard_View_EditOwnedIssuesComponentActionDefinitions,
     ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentActionDefinitions,
-    ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions {}
+    ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions {
+  getPageTitle?: (data: ServiceDashboard) => string;
+  getMask?: () => string;
+}
 
 export interface ServiceDashboardDashboard_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceDashboardDashboard_View_EditActionDefinitions;
 
   data: ServiceDashboardStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceDashboard, value: any) => void;
@@ -83,6 +86,7 @@ export interface ServiceDashboardDashboard_View_EditProps {
   validation: Map<keyof ServiceDashboard, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceDashboard, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewPageContainer
@@ -91,9 +95,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -125,9 +130,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Dashboard_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewVisualElement"
+          data-name="Dashboard_View_Edit"
           container
           direction="column"
           alignItems="stretch"
@@ -178,10 +184,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                 },
               ]}
             >
-              <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupVisualElement">
+              <Grid item data-name="issues" xs={12} sm={12}>
+                <Card id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" data-name="issues">
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid container item xs={12} sm={12}>
                         <ModeledTabs
                           id="User/(esm/_CR_JgIyUEe2VSOmaAz6G9Q)/TabBarVisualElement"
@@ -213,9 +219,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                             },
                           ]}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="myissues" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_E0b4IIyUEe2VSOmaAz6G9Q)/GroupVisualElement"
+                              data-name="myissues"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -240,15 +247,17 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('ownedIssues')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="favoriteIssues" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_wto7cFw4Ee6gN-oVBDDIOQ)/GroupVisualElement"
+                              data-name="favoriteIssues"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -273,6 +282,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('favoriteIssues')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
@@ -285,10 +295,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                 </Card>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupVisualElement">
+              <Grid item data-name="votes" xs={12} sm={12}>
+                <Card id="User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupVisualElement" data-name="votes">
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid container item xs={12} sm={12}>
                         <ModeledTabs
                           id="User/(esm/_ju2mUGBVEe6M1JBD8stPIg)/TabBarVisualElement"
@@ -320,9 +330,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                             },
                           ]}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="myVotesGroup" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_rK5hIGBVEe6M1JBD8stPIg)/GroupVisualElement"
+                              data-name="myVotesGroup"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -347,22 +358,24 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('ownedVoteDefinitions')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12} md={4.0}>
+                          <Grid item data-name="favoriteVotesGroup" xs={12} sm={12} md={4.0}>
                             <Grid
                               id="User/(esm/_wvlRsGBVEe6M1JBD8stPIg)/GroupVisualElement"
+                              data-name="favoriteVotesGroup"
                               container
                               direction="row"
                               alignItems="flex-start"
                               justifyContent="flex-start"
                               spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item xs={12} sm={12} md={36.0}>
                                 <Grid
                                   id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable"
                                   container
@@ -380,6 +393,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('favoriteVoteDefinitions')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
@@ -392,10 +406,10 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                 </Card>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
-                <Card id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupVisualElement">
+              <Grid item data-name="votesCast" xs={12} sm={12}>
+                <Card id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" data-name="votesCast">
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable"
@@ -412,6 +426,7 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
                             isFormUpdateable={isFormUpdateable}
                             validationError={validation.get('userVoteEntries')}
                             refreshCounter={refreshCounter}
+                            isOwnerLoading={isLoading}
                           />
                         </Grid>
                       </Grid>

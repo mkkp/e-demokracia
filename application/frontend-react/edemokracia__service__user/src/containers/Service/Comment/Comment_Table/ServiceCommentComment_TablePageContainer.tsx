@@ -28,7 +28,6 @@ export interface ServiceCommentComment_TablePageActions extends ServiceCommentCo
 }
 
 export interface ServiceCommentComment_TablePageProps {
-  title: string;
   actions: ServiceCommentComment_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -41,11 +40,11 @@ export default function ServiceCommentComment_TablePage(props: ServiceCommentCom
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -66,7 +65,7 @@ export default function ServiceCommentComment_TablePage(props: ServiceCommentCom
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceCommentComment_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCommentComment_Table actions={actions} refreshCounter={refreshCounter} isLoading={isLoading} />
         </Box>
       </Suspense>
     </>

@@ -44,7 +44,6 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditDialogActions
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceVoteDefinitionVoteDefinition_View_EditDialogActions;
   isLoading: boolean;
@@ -58,6 +57,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditDialogProps {
   validation: Map<keyof ServiceVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::VoteDefinition::VoteDefinition_View_Edit
@@ -70,7 +70,6 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -83,16 +82,18 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isNotRatingType,isNotSelectAnswerType,isNotYesNoAbstainType,isNotYesNoType,isRatingType,isSelectAnswerType,isYesNoAbstainType,isYesNoType,status,title}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isNotRatingType,isNotSelectAnswerType,isNotYesNoAbstainType,isNotYesNoType,isRatingType,isSelectAnswerType,isYesNoAbstainType,isYesNoType,status,title}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_-gFzIH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -112,8 +113,8 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
           <ServiceVoteDefinitionVoteDefinition_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -121,6 +122,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

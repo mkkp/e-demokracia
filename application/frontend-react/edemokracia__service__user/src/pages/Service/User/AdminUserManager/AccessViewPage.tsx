@@ -9,16 +9,20 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceUserManagerUserManager_View_EditPageActions } from '~/containers/Service/UserManager/UserManager_View_Edit/ServiceUserManagerUserManager_View_EditPageContainer';
+import type {
+  ServiceUserManagerUserManager_View_EditPageActions,
+  ServiceUserManagerUserManager_View_EditPageProps,
+} from '~/containers/Service/UserManager/UserManager_View_Edit/ServiceUserManagerUserManager_View_EditPageContainer';
 import { useServiceUserManagerUserManager_View_EditCreateUserInputForm } from '~/dialogs/Service/UserManager/UserManager_View_Edit/CreateUser/Input/Form';
 import { useServiceUserManagerUsersRelationViewPage } from '~/dialogs/Service/UserManager/Users/RelationViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -31,7 +35,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminUserManagerImpl } from '~/services/data-axios/UserServiceForAdminUserManagerImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceUserManagerUserManager_View_EditPageActionsExtended =
@@ -44,12 +48,34 @@ export type ServiceUserManagerUserManager_View_EditPageActionsExtended =
   };
 
 export const SERVICE_USER_ADMIN_USER_MANAGER_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserManagerUserManager_View_EditActionsHook';
+  'SERVICE_USER_ADMIN_USER_MANAGER_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceUserManagerUserManager_View_EditActionsHook = (
   data: ServiceUserManagerStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceUserManager, value: any) => void,
+
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceUserManagerUserManager_View_EditPageActionsExtended;
+
+export interface ServiceUserManagerUserManager_View_EditViewModel
+  extends ServiceUserManagerUserManager_View_EditPageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceUserManagerUserManager_View_EditViewModelContext =
+  createContext<ServiceUserManagerUserManager_View_EditViewModel>({} as any);
+export const useServiceUserManagerUserManager_View_EditViewModel = () => {
+  const context = useContext(ServiceUserManagerUserManager_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceUserManagerUserManager_View_EditViewModel must be used within a(n) ServiceUserManagerUserManager_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const convertServiceUserAdminUserManagerAccessViewPagePayload = (
   attributeName: keyof ServiceUserManager,
@@ -80,6 +106,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -122,8 +149,18 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceUserManagerQueryCustomizer = {
-    _mask: '{}',
+  const getPageQueryCustomizer: () => ServiceUserManagerQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{}',
+  });
+
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
 
   // Pandino Action overrides
@@ -134,6 +171,8 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
@@ -141,21 +180,16 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     useServiceUserManagerUserManager_View_EditCreateUserInputForm();
   const openServiceUserManagerUsersRelationViewPage = useServiceUserManagerUsersRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.UserManager.UserManager_View_Edit', { defaultValue: 'UserManager View / Edit' });
-
-  // Private actions
-  const submit = async () => {
-    await updateAction();
-  };
-
   // Action section
+  const getPageTitle = (data: ServiceUserManager): string => {
+    return t('service.UserManager.UserManager_View_Edit', { defaultValue: 'UserManager View / Edit' });
+  };
   const backAction = async () => {
     navigateBack();
   };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
   const refreshAction = async (
     queryCustomizer: ServiceUserManagerQueryCustomizer,
@@ -163,8 +197,9 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminUserManagerImpl.refresh(singletonHost.current, pageQueryCustomizer);
+      const result = await userServiceForAdminUserManagerImpl.refresh(singletonHost.current, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -178,6 +213,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -191,7 +227,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceUserManager, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
+        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
       }
     } catch (error) {
@@ -200,10 +236,10 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const createUserAction = async () => {
+  const createUserAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceUserManagerUserManager_View_EditCreateUserInputForm(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const usersFilterAction = async (
@@ -222,10 +258,13 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   ): Promise<ServiceServiceUserStored[]> => {
     return userServiceForAdminUserManagerImpl.listUsers(singletonHost.current, queryCustomizer);
   };
-  const usersOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceUserManagerUsersRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const usersOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserManagerUsersRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
@@ -235,6 +274,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   };
 
   const actions: ServiceUserManagerUserManager_View_EditPageActions = {
+    getPageTitle,
     backAction,
     cancelAction,
     refreshAction,
@@ -244,6 +284,24 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     usersRefreshAction,
     usersOpenPageAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceUserManagerUserManager_View_EditViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    submit,
+    isFormUpdateable,
+    isFormDeleteable,
   };
 
   // Effect section
@@ -256,19 +314,19 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.refreshAction!(pageQueryCustomizer);
+      await actions.refreshAction!(getPageQueryCustomizer());
     })();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition"
-      data-page-name="service::User::adminUserManager::AccessViewPage"
-    >
+    <ServiceUserManagerUserManager_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition"
+          data-page-name="service::User::adminUserManager::AccessViewPage"
+        />
         <PageContainerTransition>
           <ServiceUserManagerUserManager_View_EditPageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -283,6 +341,6 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceUserManagerUserManager_View_EditViewModelContext.Provider>
   );
 }

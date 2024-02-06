@@ -27,6 +27,7 @@ export interface ServiceIssueCategoryService {
   ): Promise<ServiceIssueCategoryStored>;
   delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
   update(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
+  validateUpdate(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
   getOwner(
     target: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -45,6 +46,10 @@ export interface ServiceIssueCategoryService {
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: JudoIdentifiable<ServiceIssueCategory>,
   ): Promise<ServiceIssueCategoryStored>;
+  validateCreateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceIssueCategory,
+  ): Promise<ServiceIssueCategory>;
   listSubcategories(
     target: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,

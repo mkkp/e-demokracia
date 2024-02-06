@@ -26,7 +26,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -37,6 +37,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceCreateUserInput,
@@ -45,7 +46,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCreateUserInputCreateUserInput_FormContainerHook';
+  'SERVICE_CREATE_USER_INPUT_CREATE_USER_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceCreateUserInputCreateUserInput_FormContainerHook = (
   data: ServiceCreateUserInputStored,
   editMode: boolean,
@@ -53,6 +54,7 @@ export type ServiceCreateUserInputCreateUserInput_FormContainerHook = (
 ) => ServiceCreateUserInputCreateUserInput_FormActionDefinitions;
 
 export interface ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
+  getPageTitle?: (data: ServiceCreateUserInput) => string;
   cancelAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
   isEmailRequired?: (data: ServiceCreateUserInput | ServiceCreateUserInputStored, editMode?: boolean) => boolean;
@@ -98,10 +100,10 @@ export interface ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
 
 export interface ServiceCreateUserInputCreateUserInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCreateUserInputCreateUserInput_FormActionDefinitions;
 
   data: ServiceCreateUserInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCreateUserInput, value: any) => void;
@@ -109,6 +111,7 @@ export interface ServiceCreateUserInputCreateUserInput_FormProps {
   validation: Map<keyof ServiceCreateUserInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCreateUserInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormPageContainer
@@ -119,9 +122,10 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -150,22 +154,37 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   const containerActions: ServiceCreateUserInputCreateUserInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CreateUserInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_eNqicI1eEe2J66C5CrhpQw)/TransferObjectFormVisualElement"
+          data-name="CreateUserInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_ngqE4I1rEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="security::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_ngqE4I1rEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="security::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
@@ -179,9 +198,10 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="security" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_ngqE4I1rEe29qs15q2b6yw)/GroupVisualElement"
+                      data-name="security"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -193,7 +213,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                           required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : true}
                           name="userName"
                           id="User/(esm/_kCfU4I1rEe29qs15q2b6yw)/StringTypeTextInput"
-                          autoFocus
+                          inputRef={autoFocusInputRef}
                           label={
                             t('service.CreateUserInput.CreateUserInput_Form.userName', {
                               defaultValue: 'UserName',
@@ -225,7 +245,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -276,10 +296,13 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_DmCbMI1sEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="personal::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_DmCbMI1sEe29qs15q2b6yw)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="personal::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
@@ -293,18 +316,20 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="personal" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_DmCbMI1sEe29qs15q2b6yw)/GroupVisualElement"
+                      data-name="personal"
                       container
                       direction="row"
                       alignItems="stretch"
                       justifyContent="flex-start"
                       spacing={2}
                     >
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="name" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_NdrOsI1sEe29qs15q2b6yw)/GroupVisualElement"
+                          data-name="name"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -349,7 +374,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
@@ -390,7 +415,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
@@ -431,7 +456,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
@@ -472,7 +497,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 20,
+                                maxLength: 20,
                               }}
                             />
                           </Grid>
@@ -485,9 +510,10 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="buttons" xs={12} sm={12}>
             <Grid
               id="User/(esm/_CEJ8QI1tEe29qs15q2b6yw)/GroupVisualElement"
+              data-name="buttons"
               container
               direction="row"
               alignItems="flex-start"

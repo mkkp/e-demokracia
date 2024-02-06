@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,15 +28,20 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CreateCommentInputCreateCommentInput_TableContainerHook';
+  'CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_TABLE_CONTAINER_ACTIONS_HOOK';
 export type CreateCommentInputCreateCommentInput_TableContainerHook =
   () => CreateCommentInputCreateCommentInput_TableActionDefinitions;
 
-export interface CreateCommentInputCreateCommentInput_TableActionDefinitions {}
+export interface CreateCommentInputCreateCommentInput_TableActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface CreateCommentInputCreateCommentInput_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CreateCommentInputCreateCommentInput_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTablePageContainer
@@ -45,7 +50,7 @@ export default function CreateCommentInputCreateCommentInput_Table(
   props: CreateCommentInputCreateCommentInput_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -62,10 +67,13 @@ export default function CreateCommentInputCreateCommentInput_Table(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="CreateCommentInput_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTableVisualElement"
+          data-name="CreateCommentInput_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTableEmpty">
                   {

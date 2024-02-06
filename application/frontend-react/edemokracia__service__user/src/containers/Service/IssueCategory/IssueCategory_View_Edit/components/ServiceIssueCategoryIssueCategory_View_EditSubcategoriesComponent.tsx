@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceIssueCategory,
@@ -57,6 +57,9 @@ export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesCompone
   subcategoriesBulkDeleteAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
+  subcategoriesBulkRemoveAction?: (
+    selectedRows: ServiceIssueCategoryStored[],
+  ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
   subcategoriesOpenFormAction?: () => Promise<void>;
   subcategoriesFilterAction?: (
     id: string,
@@ -67,14 +70,27 @@ export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesCompone
   subcategoriesRefreshAction?: (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ) => Promise<ServiceIssueCategoryStored[]>;
+  getSubcategoriesMask?: () => string;
   subcategoriesDeleteAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
-  subcategoriesOpenPageAction?: (row: ServiceIssueCategoryStored) => Promise<void>;
+  subcategoriesRemoveAction?: (row: ServiceIssueCategoryStored, silentMode?: boolean) => Promise<void>;
+  subcategoriesOpenPageAction?: (row: ServiceIssueCategoryStored, isDraft?: boolean) => Promise<void>;
+  subcategoriesAdditionalToolbarButtons?: (
+    data: ServiceIssueCategoryStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueCategoryStored[],
+    clearSelections: () => void,
+    ownerData: ServiceIssueCategoryStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentProps {
   uniqueId: string;
   actions: ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceIssueCategoryStored;
   editMode: boolean;
@@ -86,7 +102,17 @@ export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesCompone
 export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent(
   props: ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -94,7 +120,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueCategoryStored>[]>(ownerData?.subcategories || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
@@ -102,14 +128,15 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueCategoryQueryCustomizer>({
-    _mask: '{title,description}',
+    _mask: '{description,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -122,12 +149,16 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceIssueCategoryStored[]>([]);
 
   const titleColumn: GridColDef<ServiceIssueCategoryStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.title', {
+      defaultValue: 'Title',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -137,7 +168,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
   const descriptionColumn: GridColDef<ServiceIssueCategoryStored> = {
     ...baseColumnConfig,
     field: 'description',
-    headerName: t('service.IssueCategory.IssueCategory_View_Edit.description', {
+    headerName: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.description', {
       defaultValue: 'Description',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -149,21 +180,108 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const columns = useMemo<GridColDef<ServiceIssueCategoryStored>[]>(() => [titleColumn, descriptionColumn], []);
 
-  const rowActions: TableRowAction<ServiceIssueCategoryStored>[] = [
-    {
-      id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueCategoryStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.subcategoriesDeleteAction
-        ? async (rowData) => {
-            await actions.subcategoriesDeleteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceIssueCategoryStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
+        label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Remove', {
+          defaultValue: 'Remove',
+        }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueCategoryStored) => isLoading,
+        action: actions.subcategoriesRemoveAction
+          ? async (rowData) => {
+              await actions.subcategoriesRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
+        label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Delete', {
+          defaultValue: 'Delete',
+        }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueCategoryStored) =>
+          getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
+        action: actions.subcategoriesDeleteAction
+          ? async (rowData) => {
+              await actions.subcategoriesDeleteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueCategoryStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueCategoryStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.subcategoriesAdditionalToolbarButtons
+    ? actions.subcategoriesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueCategoryQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -202,7 +320,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -235,19 +353,21 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceIssueCategoryStored>(filters, ownerData?.subcategories ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.subcategories, filters]);
 
   return (
@@ -257,7 +377,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -268,29 +388,22 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.subcategoriesOpenPageAction
             ? async (params: GridRowParams<ServiceIssueCategoryStored>) =>
-                await actions.subcategoriesOpenPageAction!(params.row)
+                await actions.subcategoriesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -330,7 +443,11 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.subcategoriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getSubcategoriesMask ? actions.getSubcategoriesMask() : queryCustomizer._mask,
+                    };
+                    await actions.subcategoriesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -345,11 +462,37 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getSubcategoriesMask ? actions.getSubcategoriesMask() : queryCustomizer._mask,
+                    };
                     await actions.subcategoriesOpenFormAction!();
                   }}
-                  disabled={editMode || isLoading}
+                  disabled={false}
                 >
                   {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {actions.subcategoriesBulkRemoveAction && selectionModel.length > 0 ? (
+                <Button
+                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getSubcategoriesMask ? actions.getSubcategoriesMask() : queryCustomizer._mask,
+                    };
+                    const { result: bulkResult } = await actions.subcategoriesBulkRemoveAction!(selectedRows.current);
+                    if (bulkResult === 'submit') {
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
               {actions.subcategoriesBulkDeleteAction && selectionModel.length > 0 ? (
@@ -358,9 +501,13 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getSubcategoriesMask ? actions.getSubcategoriesMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.subcategoriesBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -370,6 +517,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

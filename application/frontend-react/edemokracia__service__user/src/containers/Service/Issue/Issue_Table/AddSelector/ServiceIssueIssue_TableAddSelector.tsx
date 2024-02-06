@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,25 +29,37 @@ import type { ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentA
 import { ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponent } from './components/ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponent';
 
 export const SERVICE_ISSUE_ISSUE_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueIssue_TableAddSelectorContainerHook';
+  'SERVICE_ISSUE_ISSUE_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueIssue_TableAddSelectorContainerHook = () => ServiceIssueIssue_TableAddSelectorActionDefinitions;
 
 export interface ServiceIssueIssue_TableAddSelectorActionDefinitions
-  extends ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentActionDefinitions {}
+  extends ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceIssueIssue_TableAddSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueIssue_TableAddSelectorActionDefinitions;
   selectionDiff: ServiceIssueStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceIssueStored[]>>;
   alreadySelected: ServiceIssueStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorPageContainer
 // Name: service::Issue::Issue_Table::AddSelector
 export default function ServiceIssueIssue_TableAddSelector(props: ServiceIssueIssue_TableAddSelectorProps) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -64,10 +76,13 @@ export default function ServiceIssueIssue_TableAddSelector(props: ServiceIssueIs
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement">
+      <Grid item data-name="Issue_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement"
+          data-name="Issue_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable"
@@ -83,6 +98,7 @@ export default function ServiceIssueIssue_TableAddSelector(props: ServiceIssueIs
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

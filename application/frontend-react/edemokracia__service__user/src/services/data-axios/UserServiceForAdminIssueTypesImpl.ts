@@ -86,6 +86,17 @@ export class UserServiceForAdminIssueTypesImpl extends JudoAxiosService implemen
   }
 
   /**
+   * From: relation.validateCreate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateCreate(target: ServiceIssueType): Promise<ServiceIssueType> {
+    const path = '/service/User/adminIssueTypes/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target);
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -104,6 +115,21 @@ export class UserServiceForAdminIssueTypesImpl extends JudoAxiosService implemen
    */
   async update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored> {
     const path = '/service/IssueType/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored> {
+    const path = '/service/IssueType/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,

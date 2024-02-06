@@ -36,12 +36,13 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_TableDialogActions
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceYesNoVoteEntryYesNoVoteEntry_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::YesNoVoteEntry::YesNoVoteEntry_Table
@@ -52,12 +53,12 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -74,7 +75,12 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceYesNoVoteEntryYesNoVoteEntry_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceYesNoVoteEntryYesNoVoteEntry_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

@@ -44,7 +44,6 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions;
   isLoading: boolean;
@@ -58,6 +57,7 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogProps {
   validation: Map<keyof ServiceYesNoVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoVoteEntry, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::YesNoVoteEntry::YesNoVoteEntry_View_Edit
@@ -70,7 +70,6 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -83,15 +82,16 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer = {
-    _mask: '{created,value,owner{representation}}',
+    _mask: actions.getMask ? actions.getMask!() : '{created,value,owner{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_LNbaEFoiEe6_67aMO2jOsw)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -111,8 +111,8 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialog(
           <ServiceYesNoVoteEntryYesNoVoteEntry_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -120,6 +120,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

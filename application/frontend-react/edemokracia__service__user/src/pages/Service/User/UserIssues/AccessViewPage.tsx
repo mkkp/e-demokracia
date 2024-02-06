@@ -9,20 +9,24 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceUserIssuesUserIssues_View_EditPageActions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/ServiceUserIssuesUserIssues_View_EditPageContainer';
+import type {
+  ServiceUserIssuesUserIssues_View_EditPageActions,
+  ServiceUserIssuesUserIssues_View_EditPageProps,
+} from '~/containers/Service/UserIssues/UserIssues_View_Edit/ServiceUserIssuesUserIssues_View_EditPageContainer';
 import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
 import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
 import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
 import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
 import { useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
 import { useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage } from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/OwnedIssuesGroup/OwnedIssues/TableAddSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserIssuesActiveIssuesGlobalRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage } from '~/routes';
 import { routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage } from '~/routes';
@@ -43,7 +47,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserIssuesImpl } from '~/services/data-axios/UserServiceForUserIssuesImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceUserIssuesUserIssues_View_EditPageActionsExtended =
@@ -96,12 +100,33 @@ export type ServiceUserIssuesUserIssues_View_EditPageActionsExtended =
   };
 
 export const SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserIssuesUserIssues_View_EditActionsHook';
+  'SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceUserIssuesUserIssues_View_EditActionsHook = (
   data: ServiceUserIssuesStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceUserIssues, value: any) => void,
+
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceUserIssuesUserIssues_View_EditPageActionsExtended;
+
+export interface ServiceUserIssuesUserIssues_View_EditViewModel extends ServiceUserIssuesUserIssues_View_EditPageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceUserIssuesUserIssues_View_EditViewModelContext =
+  createContext<ServiceUserIssuesUserIssues_View_EditViewModel>({} as any);
+export const useServiceUserIssuesUserIssues_View_EditViewModel = () => {
+  const context = useContext(ServiceUserIssuesUserIssues_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceUserIssuesUserIssues_View_EditViewModel must be used within a(n) ServiceUserIssuesUserIssues_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const convertServiceUserUserIssuesAccessViewPagePayload = (
   attributeName: keyof ServiceUserIssues,
@@ -127,6 +152,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -166,8 +192,16 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceUserIssuesQueryCustomizer = {
-    _mask: '{}',
+  const getPageQueryCustomizer: () => ServiceUserIssuesQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
 
   // Pandino Action overrides
@@ -178,6 +212,8 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
@@ -192,13 +228,10 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   const openServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage =
     useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPage();
 
-  // Calculated section
-  const title: string = t('service.UserIssues.UserIssues_View_Edit', { defaultValue: 'UserIssues View / Edit' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceUserIssues): string => {
+    return t('service.UserIssues.UserIssues_View_Edit', { defaultValue: 'UserIssues View / Edit' });
+  };
   const activeIssuesGlobalActivateForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -210,7 +243,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -230,7 +263,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -250,7 +283,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -270,7 +303,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -290,7 +323,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -310,7 +343,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -330,7 +363,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -350,7 +383,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -370,7 +403,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -390,7 +423,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -410,7 +443,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -430,7 +463,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -450,7 +483,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -470,7 +503,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -490,7 +523,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -510,7 +543,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -519,52 +552,92 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const activeIssuesGlobalCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesGlobalCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCitiesCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCitiesCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCountiesCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCountiesCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityDistrictsCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityDistrictsCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCityCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCityCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCountyCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCountyCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentDistrictCloseDebateAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentDistrictCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedIssuesCloseDebateAction = async (target: ServiceIssueStored) => {
+  const ownedIssuesCloseDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const activeIssuesGlobalCloseVoteForIssueAction = async (target?: ServiceIssueStored) => {
@@ -578,7 +651,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -598,7 +671,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -618,7 +691,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -638,7 +711,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -658,7 +731,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -678,7 +751,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -698,7 +771,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -718,7 +791,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -738,7 +811,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -758,7 +831,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -778,7 +851,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -798,7 +871,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -818,7 +891,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -838,7 +911,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -858,7 +931,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -878,7 +951,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -898,7 +971,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -918,7 +991,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -938,7 +1011,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -958,7 +1031,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -978,7 +1051,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -998,7 +1071,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -1018,7 +1091,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -1038,7 +1111,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -1047,148 +1120,268 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const activeIssuesGlobalCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesGlobalCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCitiesCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCitiesCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCountiesCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCountiesCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityDistrictsCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityDistrictsCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCityCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCityCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCountyCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCountyCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentDistrictCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentDistrictCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedIssuesCreateConArgumentAction = async (target: ServiceIssueStored) => {
+  const ownedIssuesCreateConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesGlobalCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesGlobalCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCitiesCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCitiesCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCountiesCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCountiesCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityDistrictsCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityDistrictsCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCityCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCityCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCountyCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCountyCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentDistrictCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentDistrictCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedIssuesCreateProArgumentAction = async (target: ServiceIssueStored) => {
+  const ownedIssuesCreateProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesGlobalCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesGlobalCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCitiesCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCitiesCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityCountiesCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityCountiesCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInActivityDistrictsCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInActivityDistrictsCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCityCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCityCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentCountyCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentCountyCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeIssuesInResidentDistrictCreateCommentAction = async (target: ServiceIssueStored) => {
+  const activeIssuesInResidentDistrictCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedIssuesCreateCommentAction = async (target: ServiceIssueStored) => {
+  const ownedIssuesCreateCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const backAction = async () => {
@@ -1198,8 +1391,9 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserIssuesImpl.refresh(singletonHost.current, pageQueryCustomizer);
+      const result = await userServiceForUserIssuesImpl.refresh(singletonHost.current, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -1213,16 +1407,17 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
       setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const createIssueAction = async () => {
+  const createIssueAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceUserIssuesUserIssues_View_EditCreateIssueInputForm(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const activeIssuesGlobalFilterAction = async (
@@ -1241,9 +1436,16 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesGlobal(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesGlobalOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesActiveIssuesGlobalRelationViewPage((target || data).__signedIdentifier));
+  const activeIssuesGlobalOpenPageAction = async (target: ServiceIssue | ServiceIssueStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesGlobalRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInActivityCitiesFilterAction = async (
     id: string,
@@ -1261,9 +1463,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCities(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInActivityCitiesOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage((target || data).__signedIdentifier));
+  const activeIssuesInActivityCitiesOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInActivityCitiesRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInActivityCountiesFilterAction = async (
     id: string,
@@ -1281,11 +1493,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCounties(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInActivityCountiesOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage((target || data).__signedIdentifier),
-    );
+  const activeIssuesInActivityCountiesOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInActivityCountiesRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInActivityDistrictsFilterAction = async (
     id: string,
@@ -1303,11 +1523,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityDistricts(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInActivityDistrictsOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserIssuesActiveIssuesInActivityDistrictsRelationViewPage((target || data).__signedIdentifier),
-    );
+  const activeIssuesInActivityDistrictsOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInActivityDistrictsRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInResidentCityFilterAction = async (
     id: string,
@@ -1325,9 +1553,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCity(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInResidentCityOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesActiveIssuesInResidentCityRelationViewPage((target || data).__signedIdentifier));
+  const activeIssuesInResidentCityOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInResidentCityRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInResidentCountyFilterAction = async (
     id: string,
@@ -1345,9 +1583,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCounty(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInResidentCountyOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage((target || data).__signedIdentifier));
+  const activeIssuesInResidentCountyOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInResidentCountyRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeIssuesInResidentDistrictFilterAction = async (
     id: string,
@@ -1365,11 +1613,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<ServiceIssueStored[]> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentDistrict(singletonHost.current, queryCustomizer);
   };
-  const activeIssuesInResidentDistrictOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserIssuesActiveIssuesInResidentDistrictRelationViewPage((target || data).__signedIdentifier),
-    );
+  const activeIssuesInResidentDistrictOpenPageAction = async (
+    target: ServiceIssue | ServiceIssueStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesActiveIssuesInResidentDistrictRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const ownedIssuesOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
@@ -1383,7 +1639,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           setIsLoading(true);
           await userServiceForUserIssuesImpl.addOwnedIssues(data, returnedData);
           if (!editMode) {
-            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
           }
         } catch (e) {
           console.error(e);
@@ -1417,7 +1673,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -1457,7 +1713,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         await userServiceForUserIssuesImpl.removeOwnedIssues(data, [target!]);
         if (!silentMode) {
           if (!editMode) {
-            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
           }
         }
       } catch (error) {
@@ -1471,9 +1727,16 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       }
     }
   };
-  const ownedIssuesOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserIssuesOwnedIssuesRelationViewPage((target || data).__signedIdentifier));
+  const ownedIssuesOpenPageAction = async (target: ServiceIssue | ServiceIssueStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserIssuesOwnedIssuesRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
     return await userServiceForUserIssuesImpl.refreshForUserIssues({
@@ -1482,6 +1745,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
 
   const actions: ServiceUserIssuesUserIssues_View_EditPageActions = {
+    getPageTitle,
     activeIssuesGlobalActivateForIssueAction,
     activeIssuesInActivityCitiesActivateForIssueAction,
     activeIssuesInActivityCountiesActivateForIssueAction,
@@ -1587,6 +1851,24 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceUserIssuesUserIssues_View_EditViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    submit,
+    isFormUpdateable,
+    isFormDeleteable,
+  };
+
   // Effect section
   useEffect(() => {
     (async () => {
@@ -1597,19 +1879,19 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.refreshAction!(pageQueryCustomizer);
+      await actions.refreshAction!(getPageQueryCustomizer());
     })();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_UUu7kFrMEe6_67aMO2jOsw)/AccessViewPageDefinition"
-      data-page-name="service::User::userIssues::AccessViewPage"
-    >
+    <ServiceUserIssuesUserIssues_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_UUu7kFrMEe6_67aMO2jOsw)/AccessViewPageDefinition"
+          data-page-name="service::User::userIssues::AccessViewPage"
+        />
         <PageContainerTransition>
           <ServiceUserIssuesUserIssues_View_EditPageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -1624,6 +1906,6 @@ export default function ServiceUserUserIssuesAccessViewPage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceUserIssuesUserIssues_View_EditViewModelContext.Provider>
   );
 }

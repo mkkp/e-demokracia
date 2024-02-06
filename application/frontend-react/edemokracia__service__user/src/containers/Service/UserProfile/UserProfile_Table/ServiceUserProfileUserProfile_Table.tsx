@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,22 +28,27 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_USER_PROFILE_USER_PROFILE_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserProfileUserProfile_TableContainerHook';
+  'SERVICE_USER_PROFILE_USER_PROFILE_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceUserProfileUserProfile_TableContainerHook =
   () => ServiceUserProfileUserProfile_TableActionDefinitions;
 
-export interface ServiceUserProfileUserProfile_TableActionDefinitions {}
+export interface ServiceUserProfileUserProfile_TableActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceUserProfileUserProfile_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceUserProfileUserProfile_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_1QjBMFvQEe6jm_SkPSYEYw)/TransferObjectTablePageContainer
 // Name: service::UserProfile::UserProfile_Table
 export default function ServiceUserProfileUserProfile_Table(props: ServiceUserProfileUserProfile_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -60,10 +65,10 @@ export default function ServiceUserProfileUserProfile_Table(props: ServiceUserPr
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_1QjBMFvQEe6jm_SkPSYEYw)/TransferObjectTableVisualElement">
+      <Grid item data-name="UserProfile_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_1QjBMFvQEe6jm_SkPSYEYw)/TransferObjectTableVisualElement" data-name="UserProfile_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_1QjBMFvQEe6jm_SkPSYEYw)/TransferObjectTableEmpty">
                   {

@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentActionDefinitions {
   ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
-  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -46,6 +46,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUser
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_eryuAFskEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedLink
@@ -53,7 +54,8 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUser
 export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponent(
   props: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -72,6 +74,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserC
       disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {
         storeDiff('owner', owner);
@@ -96,7 +99,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserC
       onView={
         ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.ownerOpenPageAction!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!, false);
             }
           : undefined
       }

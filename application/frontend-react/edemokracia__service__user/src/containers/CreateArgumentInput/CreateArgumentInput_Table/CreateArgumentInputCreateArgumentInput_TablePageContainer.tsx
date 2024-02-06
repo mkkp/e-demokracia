@@ -34,7 +34,6 @@ export interface CreateArgumentInputCreateArgumentInput_TablePageActions
 }
 
 export interface CreateArgumentInputCreateArgumentInput_TablePageProps {
-  title: string;
   actions: CreateArgumentInputCreateArgumentInput_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -49,11 +48,11 @@ export default function CreateArgumentInputCreateArgumentInput_TablePage(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -74,7 +73,11 @@ export default function CreateArgumentInputCreateArgumentInput_TablePage(
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <CreateArgumentInputCreateArgumentInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <CreateArgumentInputCreateArgumentInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+          />
         </Box>
       </Suspense>
     </>

@@ -32,6 +32,10 @@ export interface ServiceServiceUserServiceForActivityCounties {
   ): Promise<Array<ServiceCountyStored>>;
   getTemplate(): Promise<ServiceCounty>;
   update(target: Partial<ServiceCountyStored>): Promise<ServiceCountyStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
@@ -52,4 +56,8 @@ export interface ServiceServiceUserServiceForActivityCounties {
   createCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void>;
   updateCities(owner: JudoIdentifiable<ServiceCounty>, target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+  validateUpdateCities(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
 }

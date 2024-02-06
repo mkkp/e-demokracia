@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+      
+    <ns0:preConditions xmlns:ns0="http://www.liquibase.org/xml/ns/dbchangelog">
+            
+        <ns1:tableExists xmlns:ns1="http://www.liquibase.org/xml/ns/dbchangelog" tableName="BACKUP_T_EDEMOKRACIA_VOTEDEFINITION"/>
+          
+    </ns0:preConditions>
+      
+    <ns2:changeSet xmlns:ns2="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-backup-tables-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-backup-tables">
+            
+        <ns3:dropTable xmlns:ns3="http://www.liquibase.org/xml/ns/dbchangelog" tableName="BACKUP_T_EDEMOKRACIA_VOTEDEFINITION"/>
+          
+    </ns2:changeSet>
+    
+</databaseChangeLog>

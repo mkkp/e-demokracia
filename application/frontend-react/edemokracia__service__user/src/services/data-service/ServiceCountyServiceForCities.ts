@@ -25,16 +25,26 @@ export interface ServiceCountyServiceForCities {
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCityQueryCustomizer): Promise<ServiceCityStored>;
   getTemplate(): Promise<ServiceCity>;
   create(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
+  validateCreate(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCity>;
   delete(target: JudoIdentifiable<ServiceCity>): Promise<void>;
   update(target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
   listDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplateForDistricts(): Promise<ServiceDistrict>;
   createDistricts(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrictStored>;
+  validateCreateDistricts(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrict>;
   deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   updateDistricts(
+    owner: JudoIdentifiable<ServiceCity>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
+  validateUpdateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
   ): Promise<ServiceDistrictStored>;

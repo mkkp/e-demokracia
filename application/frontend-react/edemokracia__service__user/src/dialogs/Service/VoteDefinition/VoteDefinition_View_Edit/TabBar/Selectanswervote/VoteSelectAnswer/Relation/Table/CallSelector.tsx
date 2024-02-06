@@ -9,13 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions } from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/CallOperation/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions,
+  ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogProps,
+} from '~/containers/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/CallOperation/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
@@ -24,7 +29,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActionsExtended =
@@ -33,20 +38,47 @@ export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteV
   };
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_RELATION_TABLE_CALL_SELECTOR_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionsHook';
+  'SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_RELATION_TABLE_CALL_SELECTOR_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionsHook =
   (
     ownerData: any,
     data: SelectAnswerVoteSelectionStored[],
     editMode: boolean,
     selectionDiff: SelectAnswerVoteSelectionStored[],
+    submit: () => Promise<void>,
   ) => ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActionsExtended;
 
+export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModel
+  extends ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  isDraft?: boolean;
+}
+
+const ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModelContext =
+  createContext<ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModel>(
+    {} as any,
+  );
+export const useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModel =
+  () => {
+    const context = useContext(
+      ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModelContext,
+    );
+    if (!context) {
+      throw new Error(
+        'useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModel must be used within a(n) ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModelProvider',
+      );
+    }
+    return context;
+  };
+
 export const useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector =
-  (): ((ownerData: any) => Promise<DialogResult<SelectAnswerVoteSelectionStored[]>>) => {
+  (): ((ownerData: any, isDraft?: boolean) => Promise<DialogResult<SelectAnswerVoteSelectionStored[]>>) => {
     const [createDialog, closeDialog] = useDialog();
 
-    return (ownerData: any) =>
+    return (ownerData: any, isDraft?: boolean) =>
       new Promise((resolve) => {
         createDialog({
           fullWidth: true,
@@ -62,16 +94,17 @@ export const useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswerv
           children: (
             <ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector
               ownerData={ownerData}
+              isDraft={isDraft}
               onClose={async () => {
                 await closeDialog();
                 resolve({
                   result: 'close',
                 });
               }}
-              onSubmit={async (result) => {
+              onSubmit={async (result, isDraft) => {
                 await closeDialog();
                 resolve({
-                  result: 'submit',
+                  result: isDraft ? 'submit-draft' : 'submit',
                   data: result,
                 });
               }}
@@ -92,8 +125,10 @@ const ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSel
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelectorProps {
   ownerData: any;
 
+  isDraft?: boolean;
+  ownerValidation?: (data: SelectAnswerVoteSelection) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: SelectAnswerVoteSelectionStored[]) => Promise<void>;
+  onSubmit: (result?: SelectAnswerVoteSelectionStored[], isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputSelectorCallOperationPageDefinition
@@ -101,7 +136,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswer
 export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector(
   props: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelectorProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceVoteDefinitionServiceImpl = useMemo(() => new ServiceVoteDefinitionServiceImpl(judoAxiosProvider), []);
@@ -112,6 +147,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -123,6 +159,17 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
   const [data, setData] = useState<SelectAnswerVoteSelectionStored[]>([]);
   const [selectionDiff, setSelectionDiff] = useState<SelectAnswerVoteSelectionStored[]>([]);
 
+  // Private actions
+  const submit = async () => {
+    await voteSelectAnswerForVoteDefinitionAction();
+  };
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
+
+  // Validation
+  const validate: (data: SelectAnswerVoteSelection) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } =
     useTrackService<ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionsHook>(
@@ -130,24 +177,18 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     );
   const customActions:
     | ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActionsExtended
-    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff);
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
   const openServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector =
     useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector();
 
-  // Calculated section
-  const title: string = t(
-    'service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation',
-    { defaultValue: 'Select Input' },
-  );
-
-  // Private actions
-  const submit = async () => {
-    await voteSelectAnswerForVoteDefinitionAction();
-  };
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.CallOperation', {
+      defaultValue: 'Select Input',
+    });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -184,7 +225,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
   ): Promise<SelectAnswerVoteSelectionStored[]> => {
     try {
-      return serviceVoteDefinitionServiceImpl.getRangeOnVoteSelectAnswer(ownerData, queryCustomizer);
+      return serviceVoteDefinitionServiceImpl.getRangeOnVoteSelectAnswer(cleanUpPayload(ownerData), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -193,6 +234,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 
   const actions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogActions =
     {
+      getPageTitle,
       backAction,
       voteSelectAnswerForVoteDefinitionAction,
       filterAction,
@@ -200,26 +242,47 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
       ...(customActions ?? {}),
     };
 
+  // ViewModel setup
+  const viewModel: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModel =
+    {
+      onClose,
+      actions,
+      ownerData,
+      isLoading,
+      setIsLoading,
+      editMode,
+      setEditMode,
+      refresh,
+      refreshCounter,
+      submit,
+      selectionDiff,
+      setSelectionDiff,
+      isDraft,
+    };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputSelectorCallOperationPageDefinition"
-      data-page-name="service::VoteDefinition::VoteDefinition_View_Edit::tabBar::selectanswervote::voteSelectAnswer::Relation::Table::CallSelector"
+    <ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModelContext.Provider
+      value={viewModel}
     >
       <Suspense>
+        <div
+          id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputSelectorCallOperationPageDefinition"
+          data-page-name="service::VoteDefinition::VoteDefinition_View_Edit::tabBar::selectanswervote::voteSelectAnswer::Relation::Table::CallSelector"
+        />
         <ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
           refreshCounter={refreshCounter}
           selectionDiff={selectionDiff}
           setSelectionDiff={setSelectionDiff}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationViewModelContext.Provider>
   );
 }

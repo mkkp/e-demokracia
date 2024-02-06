@@ -21,7 +21,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -32,11 +32,12 @@ import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErr
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
 
 export const CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateInputCloseDebateInput_FormContainerHook';
+  'CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateInputCloseDebateInput_FormContainerHook = (
   data: CloseDebateInputStored,
   editMode: boolean,
@@ -44,6 +45,7 @@ export type CloseDebateInputCloseDebateInput_FormContainerHook = (
 ) => CloseDebateInputCloseDebateInput_FormActionDefinitions;
 
 export interface CloseDebateInputCloseDebateInput_FormActionDefinitions {
+  getPageTitle?: (data: CloseDebateInput) => string;
   isCloseAtRequired?: (data: CloseDebateInput | CloseDebateInputStored, editMode?: boolean) => boolean;
   isCloseAtDisabled?: (
     data: CloseDebateInput | CloseDebateInputStored,
@@ -72,10 +74,10 @@ export interface CloseDebateInputCloseDebateInput_FormActionDefinitions {
 
 export interface CloseDebateInputCloseDebateInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateInputCloseDebateInput_FormActionDefinitions;
 
   data: CloseDebateInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void;
@@ -83,6 +85,7 @@ export interface CloseDebateInputCloseDebateInput_FormProps {
   validation: Map<keyof CloseDebateInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CloseDebateInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormPageContainer
@@ -91,9 +94,10 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -122,22 +126,37 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
   const containerActions: CloseDebateInputCloseDebateInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CloseDebateInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormVisualElement"
+          data-name="CloseDebateInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="debate::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="debate::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
@@ -151,9 +170,10 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="debate" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_-U_QAIfTEe2u0fVmwtP5bA)/GroupVisualElement"
+                      data-name="debate"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -165,7 +185,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                           required={actions?.isVoteTypeRequired ? actions.isVoteTypeRequired(data, editMode) : true}
                           name="voteType"
                           id="User/(esm/_yfDhAH5VEe2kLcMqsIbMgQ)/EnumerationTypeCombo"
-                          autoFocus
+                          inputRef={autoFocusInputRef}
                           label={
                             t('CloseDebateInput.CloseDebateInput_Form.voteType', { defaultValue: 'VoteType' }) as string
                           }
@@ -308,7 +328,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -353,7 +373,7 @@ export default function CloseDebateInputCloseDebateInput_Form(props: CloseDebate
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>

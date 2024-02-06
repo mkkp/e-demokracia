@@ -8,10 +8,12 @@
 
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { hasAuthParams, useAuth } from 'react-oidc-context';
 
 export const Auth = ({ children }: { children?: ReactNode }) => {
-  const { isAuthenticated, isLoading, activeNavigator, signinRedirect } = useAuth();
+  const { isAuthenticated, isLoading, activeNavigator, signinRedirect, events } = useAuth();
+  const { t } = useTranslation();
 
   // automatically sign-in
   useEffect(() => {
@@ -28,6 +30,19 @@ export const Auth = ({ children }: { children?: ReactNode }) => {
       }
     }
   }, [isAuthenticated, activeNavigator, isLoading]);
+
+  useEffect(() => {
+    return events.addAccessTokenExpired(() => {
+      const res = confirm(
+        t('judo.security.session-expired', {
+          defaultValue: 'Session expired. The application must be reloaded in order to refresh it.',
+        }) as string,
+      );
+      if (res) {
+        window.location.reload();
+      }
+    });
+  }, [events]);
 
   if (activeNavigator) {
     return <div>Signing you in/out...</div>;

@@ -37,7 +37,6 @@ export interface ServiceIssueTypeIssueType_View_EditDialogActions
 
 export interface ServiceIssueTypeIssueType_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceIssueTypeIssueType_View_EditDialogActions;
   isLoading: boolean;
@@ -51,6 +50,7 @@ export interface ServiceIssueTypeIssueType_View_EditDialogProps {
   validation: Map<keyof ServiceIssueType, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::IssueType::IssueType_View_Edit
@@ -63,7 +63,6 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -76,15 +75,16 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceIssueTypeQueryCustomizer = {
-    _mask: '{description,title,voteType}',
+    _mask: actions.getMask ? actions.getMask!() : '{description,title,voteType}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_J4MRwNu4Ee2Bgcx6em3jZg)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -104,8 +104,8 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
           <ServiceIssueTypeIssueType_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -113,6 +113,7 @@ export default function ServiceIssueTypeIssueType_View_EditDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

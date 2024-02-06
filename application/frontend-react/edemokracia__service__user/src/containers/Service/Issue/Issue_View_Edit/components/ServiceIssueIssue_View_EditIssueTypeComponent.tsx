@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions {
   issueTypeOpenSetSelectorAction?: () => Promise<ServiceIssueTypeStored | undefined>;
   issueTypeUnsetAction?: (target: ServiceIssueTypeStored) => Promise<void>;
-  issueTypeOpenPageAction?: (target: ServiceIssueTypeStored) => Promise<void>;
+  issueTypeOpenPageAction?: (target: ServiceIssueTypeStored, isDraft?: boolean) => Promise<void>;
   issueTypeAutocompleteRangeAction?: (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ) => Promise<Array<ServiceIssueTypeStored>>;
@@ -39,6 +39,7 @@ export interface ServiceIssueIssue_View_EditIssueTypeComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_FHpVENvSEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -46,7 +47,8 @@ export interface ServiceIssueIssue_View_EditIssueTypeComponentProps {
 export function ServiceIssueIssue_View_EditIssueTypeComponent(
   props: ServiceIssueIssue_View_EditIssueTypeComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -63,6 +65,7 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
       disabled={actions?.isIssueTypeDisabled ? actions.isIssueTypeDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'title'}
       onAutoCompleteSelect={(issueType) => {
         storeDiff('issueType', issueType);
@@ -87,7 +90,7 @@ export function ServiceIssueIssue_View_EditIssueTypeComponent(
       onView={
         ownerData.issueType && actions.issueTypeOpenPageAction
           ? async () => {
-              await actions.issueTypeOpenPageAction!(ownerData.issueType!);
+              await actions.issueTypeOpenPageAction!(ownerData.issueType!, false);
             }
           : undefined
       }

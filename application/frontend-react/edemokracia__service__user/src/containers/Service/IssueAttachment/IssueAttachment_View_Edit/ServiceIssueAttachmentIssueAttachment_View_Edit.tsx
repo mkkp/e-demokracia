@@ -19,7 +19,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -38,7 +38,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueAttachmentIssueAttachment_View_EditContainerHook';
+  'SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueAttachmentIssueAttachment_View_EditContainerHook = (
   data: ServiceIssueAttachmentStored,
   editMode: boolean,
@@ -46,6 +46,7 @@ export type ServiceIssueAttachmentIssueAttachment_View_EditContainerHook = (
 ) => ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions;
 
 export interface ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions {
+  getPageTitle?: (data: ServiceIssueAttachment) => string;
   isFileRequired?: (data: ServiceIssueAttachment | ServiceIssueAttachmentStored, editMode?: boolean) => boolean;
   isFileDisabled?: (
     data: ServiceIssueAttachment | ServiceIssueAttachmentStored,
@@ -64,14 +65,15 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditActionDefinition
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions;
 
   data: ServiceIssueAttachmentStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void;
@@ -79,6 +81,7 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditProps {
   validation: Map<keyof ServiceIssueAttachment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueAttachment, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p5jNQGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -89,9 +92,10 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -124,18 +128,20 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="IssueAttachment_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p5jNQGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="IssueAttachment_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group" xs={12} sm={12}>
             <Grid
               id="User/(esm/_XJwIoG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group"
               container
               direction="row"
               alignItems="flex-start"
@@ -147,7 +153,6 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                   required={actions?.isTypeRequired ? actions.isTypeRequired(data, editMode) : true}
                   name="type"
                   id="User/(esm/_Rd-4oG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
-                  autoFocus
                   label={
                     t('service.IssueAttachment.IssueAttachment_View_Edit.type', { defaultValue: 'Type' }) as string
                   }
@@ -246,7 +251,7 @@ export default function ServiceIssueAttachmentIssueAttachment_View_Edit(
                     ),
                   }}
                   inputProps={{
-                    maxlength: 1024,
+                    maxLength: 1024,
                   }}
                 />
               </Grid>

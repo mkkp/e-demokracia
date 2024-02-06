@@ -8,13 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueTypeIssueType_FormDialogActions } from '~/containers/Service/IssueType/IssueType_Form/ServiceIssueTypeIssueType_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceIssueTypeIssueType_FormDialogActions,
+  ServiceIssueTypeIssueType_FormDialogProps,
+} from '~/containers/Service/IssueType/IssueType_Form/ServiceIssueTypeIssueType_FormDialogContainer';
+import { useServiceUserAdminIssueTypesAccessViewPage } from '~/dialogs/Service/User/AdminIssueTypes/AccessViewPage';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueType,
   ServiceIssueTypeQueryCustomizer,
@@ -24,7 +29,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminIssueTypesImpl } from '~/services/data-axios/UserServiceForAdminIssueTypesImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueTypeIssueType_FormDialogActionsExtended = ServiceIssueTypeIssueType_FormDialogActions & {
@@ -33,23 +38,61 @@ export type ServiceIssueTypeIssueType_FormDialogActionsExtended = ServiceIssueTy
     data: ServiceIssueType,
     storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
   ) => Promise<void>;
+  postCreateAction?: (
+    data: ServiceIssueType,
+    res: ServiceIssueTypeStored,
+    onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>,
+    onClose: () => Promise<void>,
+    openCreated?: boolean,
+  ) => Promise<void>;
 };
 
 export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueTypeIssueType_FormActionsHook';
+  'SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK';
 export type ServiceIssueTypeIssueType_FormActionsHook = (
   ownerData: any,
   data: ServiceIssueTypeStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceIssueTypeIssueType_FormDialogActionsExtended;
+
+export interface ServiceIssueTypeIssueType_FormViewModel extends ServiceIssueTypeIssueType_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceIssueType>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueTypeIssueType_FormViewModelContext = createContext<ServiceIssueTypeIssueType_FormViewModel>(
+  {} as any,
+);
+export const useServiceIssueTypeIssueType_FormViewModel = () => {
+  const context = useContext(ServiceIssueTypeIssueType_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueTypeIssueType_FormViewModel must be used within a(n) ServiceIssueTypeIssueType_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceIssueType>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceIssueType) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueTypeStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceIssueType>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceIssueType) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -65,16 +108,19 @@ export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
         children: (
           <ServiceUserAdminIssueTypesAccessFormPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -98,14 +144,17 @@ const ServiceIssueTypeIssueType_FormDialogContainer = lazy(
 export interface ServiceUserAdminIssueTypesAccessFormPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceIssueType>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueType) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition
 // Name: service::User::adminIssueTypes::AccessFormPage
 export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceUserAdminIssueTypesAccessFormPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const userServiceForAdminIssueTypesImpl = useMemo(() => new UserServiceForAdminIssueTypesImpl(judoAxiosProvider), []);
@@ -116,6 +165,7 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -158,6 +208,27 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceIssueType) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await userServiceForAdminIssueTypesImpl.validateCreate(data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'adminIssueTypes')) {
+        throw error;
+      }
+    }
+  };
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -167,28 +238,33 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
-
-  // Calculated section
-  const title: string = t('service.IssueType.IssueType_Form', { defaultValue: 'IssueType Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createAction();
-  };
+  const openServiceUserAdminIssueTypesAccessViewPage = useServiceUserAdminIssueTypesAccessViewPage();
 
   // Action section
+  const getPageTitle = (data: ServiceIssueType): string => {
+    return t('service.IssueType.IssueType_Form', { defaultValue: 'IssueType Form' });
+  };
   const backAction = async () => {
     onClose();
   };
-  const createAction = async () => {
+  const createAction = async (openCreated?: boolean) => {
     try {
       setIsLoading(true);
-      const res = await userServiceForAdminIssueTypesImpl.create(payloadDiff.current);
-      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-      onSubmit(res);
+      const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
+      const res = await userServiceForAdminIssueTypesImpl.create(payload);
+      if (customActions?.postCreateAction) {
+        await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
+      } else {
+        showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
+        await onSubmit(res);
+        if (openCreated) {
+          await openServiceUserAdminIssueTypesAccessViewPage(res!);
+        }
+      }
     } catch (error) {
       handleError<ServiceIssueType>(error, { setValidation }, data);
     } finally {
@@ -206,6 +282,12 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceIssueTypeStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -216,10 +298,33 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
   };
 
   const actions: ServiceIssueTypeIssueType_FormDialogActions = {
+    getPageTitle,
     backAction,
     createAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceIssueTypeIssueType_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -228,15 +333,15 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
   }, []);
 
   return (
-    <div
-      id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition"
-      data-page-name="service::User::adminIssueTypes::AccessFormPage"
-    >
+    <ServiceIssueTypeIssueType_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition"
+          data-page-name="service::User::adminIssueTypes::AccessFormPage"
+        />
         <ServiceIssueTypeIssueType_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -248,8 +353,9 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueTypeIssueType_FormViewModelContext.Provider>
   );
 }

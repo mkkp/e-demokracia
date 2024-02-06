@@ -34,6 +34,7 @@ export interface ServiceServiceUserService {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
   update(target: Partial<ServiceServiceUserStored>): Promise<ServiceServiceUserStored>;
+  validateUpdate(target: Partial<ServiceServiceUserStored>): Promise<ServiceServiceUserStored>;
   getTemplateForActivityCities(): Promise<ServiceCity>;
   listActivityCities(
     target: JudoIdentifiable<ServiceServiceUser>,

@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentActionDefinitions {
   residentCityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
   residentCityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
-  residentCityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
+  residentCityOpenPageAction?: (target: ServiceCityStored, isDraft?: boolean) => Promise<void>;
   residentCityAutocompleteRangeAction?: (
     queryCustomizer: ServiceCityQueryCustomizer,
   ) => Promise<Array<ServiceCityStored>>;
@@ -43,6 +43,7 @@ export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentPro
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_I-5hoIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
@@ -50,7 +51,8 @@ export interface ServiceServiceUserServiceUser_View_EditResidentCityComponentPro
 export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
   props: ServiceServiceUserServiceUser_View_EditResidentCityComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -69,6 +71,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
       }
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCity) => {
         storeDiff('residentCity', residentCity);
@@ -93,7 +96,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentCityComponent(
       onView={
         ownerData.residentCity && actions.residentCityOpenPageAction
           ? async () => {
-              await actions.residentCityOpenPageAction!(ownerData.residentCity!);
+              await actions.residentCityOpenPageAction!(ownerData.residentCity!, false);
             }
           : undefined
       }

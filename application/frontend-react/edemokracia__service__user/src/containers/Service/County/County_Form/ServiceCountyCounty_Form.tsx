@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,10 +28,12 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 
-export const SERVICE_COUNTY_COUNTY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCountyCounty_FormContainerHook';
+export const SERVICE_COUNTY_COUNTY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_COUNTY_COUNTY_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceCountyCounty_FormContainerHook = (
   data: ServiceCountyStored,
   editMode: boolean,
@@ -39,16 +41,17 @@ export type ServiceCountyCounty_FormContainerHook = (
 ) => ServiceCountyCounty_FormActionDefinitions;
 
 export interface ServiceCountyCounty_FormActionDefinitions {
+  getPageTitle?: (data: ServiceCounty) => string;
   isNameRequired?: (data: ServiceCounty | ServiceCountyStored, editMode?: boolean) => boolean;
   isNameDisabled?: (data: ServiceCounty | ServiceCountyStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface ServiceCountyCounty_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCountyCounty_FormActionDefinitions;
 
   data: ServiceCountyStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCounty, value: any) => void;
@@ -56,6 +59,7 @@ export interface ServiceCountyCounty_FormProps {
   validation: Map<keyof ServiceCounty, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0aoBn2iEe2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -64,9 +68,10 @@ export default function ServiceCountyCounty_Form(props: ServiceCountyCounty_Form
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -95,24 +100,36 @@ export default function ServiceCountyCounty_Form(props: ServiceCountyCounty_Form
   const containerActions: ServiceCountyCounty_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="County_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_a0aoBn2iEe2LTNnGda5kaw)/TransferObjectFormVisualElement"
+          data-name="County_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dLdM4H4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={t('service.County.County_Form.name', { defaultValue: 'County name' }) as string}
               value={data.name ?? ''}
               className={clsx({
@@ -136,7 +153,7 @@ export default function ServiceCountyCounty_Form(props: ServiceCountyCounty_Form
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

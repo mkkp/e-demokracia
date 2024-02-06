@@ -8,12 +8,19 @@
 
 import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
+import Grow from '@mui/material/Grow';
 import IconButton from '@mui/material/IconButton';
-import { Suspense, lazy } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import { Suspense, lazy, useCallback, useRef, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
@@ -34,13 +41,12 @@ export interface CreateCommentInputCreateCommentInput_FormDialogActions
   extends CreateCommentInputCreateCommentInput_FormActionDefinitions {
   getTemplateAction?: () => Promise<CreateCommentInput>;
   backAction?: () => Promise<void>;
-  createAction?: () => Promise<void>;
+  createAction?: (openCreated?: boolean) => Promise<void>;
   createCommentForIssueAction?: () => Promise<void>;
 }
 
 export interface CreateCommentInputCreateCommentInput_FormDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CreateCommentInputCreateCommentInput_FormDialogActions;
   isLoading: boolean;
@@ -54,6 +60,7 @@ export interface CreateCommentInputCreateCommentInput_FormDialogProps {
   validation: Map<keyof CreateCommentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateCommentInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: CreateCommentInput::CreateCommentInput_Form
@@ -64,9 +71,10 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
+  const [isCreateDropdownOpen, setIsCreateDropdownOpen] = useState<boolean>(false);
+  const createDropdownRef = useRef<HTMLDivElement>(null);
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -79,15 +87,23 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: CreateCommentInputQueryCustomizer = {
     _mask: '{comment}',
   };
 
+  const handleCreateDropdownToggle = useCallback(() => {
+    setIsCreateDropdownOpen((prevOpen) => !prevOpen);
+  }, [isCreateDropdownOpen]);
+  const handleCreateDropdownClose = useCallback(() => {
+    setIsCreateDropdownOpen(false);
+  }, [isCreateDropdownOpen]);
+
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -107,8 +123,8 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
           <CreateCommentInputCreateCommentInput_Form
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -116,6 +132,7 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>
@@ -138,18 +155,73 @@ export default function CreateCommentInputCreateCommentInput_FormDialog(
         )}
         {editMode && actions.createAction && (
           <Grid className="page-action" item>
-            <LoadingButton
-              id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormCreateButton"
-              loading={isLoading}
-              loadingPosition="start"
+            <ButtonGroup
+              disabled={isLoading}
               variant={'contained'}
-              startIcon={<MdiIcon path="content-save" />}
-              onClick={async () => {
-                await actions.createAction!();
-              }}
+              ref={createDropdownRef}
+              sx={{ borderRadius: 0, boxShadow: 0 }}
+              aria-label="split button for create action"
             >
-              <span>{t('CreateCommentInput.CreateCommentInput_Form.Create', { defaultValue: 'Create' })}</span>
-            </LoadingButton>
+              <LoadingButton
+                id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormCreateButton"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={'contained'}
+                startIcon={isDraft ? <MdiIcon path="check" /> : <MdiIcon path="content-save" />}
+                onClick={async () => {
+                  await actions.createAction!();
+                }}
+              >
+                <span>
+                  {isDraft
+                    ? t('judo.dialogs.draft.submit', { defaultValue: 'Ok' })
+                    : t('CreateCommentInput.CreateCommentInput_Form.Create', { defaultValue: 'Create' })}
+                </span>
+              </LoadingButton>
+              {!isDraft && (
+                <Button
+                  size="small"
+                  onClick={handleCreateDropdownToggle}
+                  aria-label="dropdown toggle for create dialog"
+                >
+                  <MdiIcon path="menu-down" />
+                </Button>
+              )}
+            </ButtonGroup>
+            <Popper
+              sx={{ zIndex: 1 }}
+              open={isCreateDropdownOpen}
+              anchorEl={createDropdownRef.current}
+              role={undefined}
+              transition
+              disablePortal
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
+                  }}
+                >
+                  <Paper>
+                    <ClickAwayListener onClickAway={handleCreateDropdownClose}>
+                      <MenuList id="split-button-menu" autoFocusItem>
+                        <MenuItem
+                          aria-label="create and open"
+                          onClick={async () => {
+                            if (actions.createAction) {
+                              await actions.createAction!(true);
+                            }
+                          }}
+                        >
+                          {t('judo.pages.create-and-navigate', { defaultValue: 'Create and open' })}
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
           </Grid>
         )}
         {editMode && actions.createCommentForIssueAction && (

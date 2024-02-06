@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,16 +33,21 @@ import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableS
 import { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent } from './components/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponent';
 
 export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableContainerHook';
+  'SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableContainerHook =
   () => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions;
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions
-  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions {}
+  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableSelectAnswerVoteDefinition_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTablePageContainer
@@ -51,7 +56,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -70,10 +75,13 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="SelectAnswerVoteDefinition_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableVisualElement"
+          data-name="SelectAnswerVoteDefinition_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable"
@@ -86,6 +94,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                     uniqueId={'User/(esm/_-cUGYH4XEe2cB7_PsKXsHQ)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

@@ -19,7 +19,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -30,6 +30,7 @@ import { fileHandling, isErrorOperationFault, useErrorHandler } from '~/utilitie
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import { BinaryInput } from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssueAttachment,
@@ -38,7 +39,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueAttachmentIssueAttachment_FormContainerHook';
+  'SERVICE_ISSUE_ATTACHMENT_ISSUE_ATTACHMENT_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueAttachmentIssueAttachment_FormContainerHook = (
   data: ServiceIssueAttachmentStored,
   editMode: boolean,
@@ -46,6 +47,7 @@ export type ServiceIssueAttachmentIssueAttachment_FormContainerHook = (
 ) => ServiceIssueAttachmentIssueAttachment_FormActionDefinitions;
 
 export interface ServiceIssueAttachmentIssueAttachment_FormActionDefinitions {
+  getPageTitle?: (data: ServiceIssueAttachment) => string;
   isFileRequired?: (data: ServiceIssueAttachment | ServiceIssueAttachmentStored, editMode?: boolean) => boolean;
   isFileDisabled?: (
     data: ServiceIssueAttachment | ServiceIssueAttachmentStored,
@@ -68,10 +70,10 @@ export interface ServiceIssueAttachmentIssueAttachment_FormActionDefinitions {
 
 export interface ServiceIssueAttachmentIssueAttachment_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueAttachmentIssueAttachment_FormActionDefinitions;
 
   data: ServiceIssueAttachmentStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void;
@@ -79,6 +81,7 @@ export interface ServiceIssueAttachmentIssueAttachment_FormProps {
   validation: Map<keyof ServiceIssueAttachment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueAttachment, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p5sXMGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -89,9 +92,10 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -120,21 +124,34 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
   const containerActions: ServiceIssueAttachmentIssueAttachment_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="IssueAttachment_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p5sXMGksEe25ONJ3V89cVA)/TransferObjectFormVisualElement"
+          data-name="IssueAttachment_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group" xs={12} sm={12}>
             <Grid
               id="User/(esm/_jr9sAG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group"
               container
               direction="row"
               alignItems="flex-start"
@@ -146,7 +163,7 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
                   required={actions?.isTypeRequired ? actions.isTypeRequired(data, editMode) : true}
                   name="type"
                   id="User/(esm/_Rd_fsG5CEe2Q6M99rsfqSQ)/EnumerationTypeCombo"
-                  autoFocus
+                  inputRef={autoFocusInputRef}
                   label={t('service.IssueAttachment.IssueAttachment_Form.type', { defaultValue: 'Type' }) as string}
                   value={data.type || ''}
                   className={clsx({
@@ -213,7 +230,7 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
                     ),
                   }}
                   inputProps={{
-                    maxlength: 1024,
+                    maxLength: 1024,
                   }}
                 />
               </Grid>

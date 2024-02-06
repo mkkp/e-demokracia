@@ -32,12 +32,13 @@ export interface RatingVoteInputRatingVoteInput_TableDialogActions
 
 export interface RatingVoteInputRatingVoteInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: RatingVoteInputRatingVoteInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: RatingVoteInput::RatingVoteInput_Table
@@ -48,12 +49,12 @@ export default function RatingVoteInputRatingVoteInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_LEKjpH5YEe2kLcMqsIbMgQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -70,7 +71,12 @@ export default function RatingVoteInputRatingVoteInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <RatingVoteInputRatingVoteInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <RatingVoteInputRatingVoteInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

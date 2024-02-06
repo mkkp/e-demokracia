@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -32,15 +32,20 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceYesNoVoteEntryYesNoVoteEntry_TableContainerHook';
+  'SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceYesNoVoteEntryYesNoVoteEntry_TableContainerHook =
   () => ServiceYesNoVoteEntryYesNoVoteEntry_TableActionDefinitions;
 
-export interface ServiceYesNoVoteEntryYesNoVoteEntry_TableActionDefinitions {}
+export interface ServiceYesNoVoteEntryYesNoVoteEntry_TableActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceYesNoVoteEntryYesNoVoteEntry_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceYesNoVoteEntryYesNoVoteEntry_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTablePageContainer
@@ -49,7 +54,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_Table(
   props: ServiceYesNoVoteEntryYesNoVoteEntry_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -66,10 +71,10 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_Table(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableVisualElement">
+      <Grid item data-name="YesNoVoteEntry_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableVisualElement" data-name="YesNoVoteEntry_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableEmpty">
                   {

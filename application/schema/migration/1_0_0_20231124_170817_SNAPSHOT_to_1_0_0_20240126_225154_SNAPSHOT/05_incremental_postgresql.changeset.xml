@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+      
+    <ns0:changeSet xmlns:ns0="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="drop-fields-in-T_EDEMOKRACIA_VOTEDEFINITION-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="drop-fields">
+            
+        <ns1:dropColumn xmlns:ns1="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_DEBATEVOTE_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+          
+    </ns0:changeSet>
+      
+    <ns2:changeSet xmlns:ns2="http://www.liquibase.org/xml/ns/dbchangelog" author="tatami-rdbms2liquibase" context="1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" dbms="postgresql" id="create-fields-in-T_EDEMOKRACIA_VOTEDEFINITION-1.0.0.20231124_170817_SNAPSHOT_1.0.0.20240126_225154_SNAPSHOT" logicalFilePath="create-fields">
+            
+        <ns3:addColumn xmlns:ns3="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_VOTEDEFINITION">
+                  
+            <ns4:column xmlns:ns4="http://www.liquibase.org/xml/ns/dbchangelog" name="C_EDEMOKRACIA_ISSUE_VOTEDEFINITIONS_ID" remarks="edemokracia.Issue#voteDefinitions" type="UUID"/>
+                
+        </ns3:addColumn>
+          
+    </ns2:changeSet>
+    
+</databaseChangeLog>

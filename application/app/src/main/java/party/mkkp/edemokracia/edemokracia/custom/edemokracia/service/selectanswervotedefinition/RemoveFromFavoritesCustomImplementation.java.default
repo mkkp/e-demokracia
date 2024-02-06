@@ -27,6 +27,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.selectansw
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.selectanswervotedefinition.RemoveFromFavorites.class)
 public class RemoveFromFavoritesCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.selectanswervotedefinition.RemoveFromFavorites {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.selectanswervotedefinition.SelectAnswerVoteDefinition _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.selectanswervotedefinition.RemoveFromFavoritesExchangeFunctionsComponent");
     }

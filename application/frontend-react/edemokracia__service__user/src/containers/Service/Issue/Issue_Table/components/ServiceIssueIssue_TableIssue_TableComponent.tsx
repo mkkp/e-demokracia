@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceIssue, ServiceIssueQueryCustomizer, ServiceIssueStored } from '~/services/data-api';
@@ -62,6 +62,7 @@ export interface ServiceIssueIssue_TableIssue_TableComponentActionDefinitions {
   bulkDeleteAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
   bulkRemoveAction?: (selectedRows: ServiceIssueStored[]) => Promise<DialogResult<ServiceIssueStored[]>>;
   clearAction?: () => Promise<void>;
+  exportAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
     id: string,
@@ -70,6 +71,7 @@ export interface ServiceIssueIssue_TableIssue_TableComponentActionDefinitions {
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   refreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  getMask?: () => string;
   activateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   addToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   closeDebateAction?: (row: ServiceIssueStored) => Promise<void>;
@@ -81,20 +83,28 @@ export interface ServiceIssueIssue_TableIssue_TableComponentActionDefinitions {
   removeFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   deleteAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  openPageAction?: (row: ServiceIssueStored) => Promise<void>;
+  openPageAction?: (row: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
+  AdditionalToolbarButtons?: (
+    data: ServiceIssueStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceIssueIssue_TableIssue_TableComponentProps {
   uniqueId: string;
   actions: ServiceIssueIssue_TableIssue_TableComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
 }
 
 // XMIID: User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTable
 // Name: Issue_Table
 export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueIssue_TableIssue_TableComponentProps) {
-  const { uniqueId, actions, refreshCounter, validationError } = props;
+  const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const filterModelKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -104,22 +114,23 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'scope', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-    _mask: '{scope,title,status,created,description}',
+    _mask: '{created,description,scope,status,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -137,6 +148,8 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
   const [firstItem, setFirstItem] = useState<ServiceIssueStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
   const scopeColumn: GridColDef<ServiceIssueStored> = {
@@ -148,13 +161,11 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const titleColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
@@ -175,13 +186,11 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const createdColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
@@ -224,129 +233,189 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-      label: t('service.Issue.Issue_Table.Remove', { defaultValue: 'Remove' }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.removeAction
-        ? async (rowData) => {
-            await actions.removeAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-      label: t('service.Issue.Issue_Table.Delete', { defaultValue: 'Delete' }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueStored) => !row.__deleteable || isLoading,
-      action: actions.deleteAction
-        ? async (rowData) => {
-            await actions.deleteAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDraft || isLoading,
-      action: actions.activateForIssueAction
-        ? async (rowData) => {
-            await actions.activateForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.addToFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.addToFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueActive || isLoading,
-      action: actions.closeDebateAction
-        ? async (rowData) => {
-            await actions.closeDebateAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => !row.isVoteClosable || isLoading,
-      action: actions.closeVoteForIssueAction
-        ? async (rowData) => {
-            await actions.closeVoteForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createCommentAction
-        ? async (rowData) => {
-            await actions.createCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createConArgumentAction
-        ? async (rowData) => {
-            await actions.createConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.createProArgumentAction
-        ? async (rowData) => {
-            await actions.createProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => !row.isIssueDeletable || isLoading,
-      action: actions.deleteOrArchiveForIssueAction
-        ? async (rowData) => {
-            await actions.deleteOrArchiveForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
-      label: t('service.Issue.Issue_Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceIssueStored) => isLoading,
-      action: actions.removeFromFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.removeFromFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceIssueStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
+        label: t('service.Issue.Issue_Table.Remove', { defaultValue: 'Remove' }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeAction
+          ? async (rowData) => {
+              await actions.removeAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
+        label: t('service.Issue.Issue_Table.Delete', { defaultValue: 'Delete' }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.__deleteable || isLoading,
+        action: actions.deleteAction
+          ? async (rowData) => {
+              await actions.deleteAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.activate', { defaultValue: 'activate' }) as string,
+        icon: <MdiIcon path="lock-open" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isIssueDraft || isLoading,
+        action: actions.activateForIssueAction
+          ? async (rowData) => {
+              await actions.activateForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+        icon: <MdiIcon path="star-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.addToFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.addToFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.closeDebate', { defaultValue: 'closeDebate' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isIssueActive || isLoading,
+        action: actions.closeDebateAction
+          ? async (rowData) => {
+              await actions.closeDebateAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.closeVote', { defaultValue: 'closeVote' }) as string,
+        icon: <MdiIcon path="lock-check" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isVoteClosable || isLoading,
+        action: actions.closeVoteForIssueAction
+          ? async (rowData) => {
+              await actions.closeVoteForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
+        icon: <MdiIcon path="comment-text-multiple" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.createCommentAction
+          ? async (rowData) => {
+              await actions.createCommentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
+        icon: <MdiIcon path="chat-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.createConArgumentAction
+          ? async (rowData) => {
+              await actions.createConArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
+        icon: <MdiIcon path="chat-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.createProArgumentAction
+          ? async (rowData) => {
+              await actions.createProArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
+        icon: <MdiIcon path="delete" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isIssueDeletable || isLoading,
+        action: actions.deleteOrArchiveForIssueAction
+          ? async (rowData) => {
+              await actions.deleteOrArchiveForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
+        label: t('service.Issue.Issue_Table.removeFromFavorites', { defaultValue: 'removeFromFavorites' }) as string,
+        icon: <MdiIcon path="star-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeFromFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.removeFromFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -403,7 +472,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -433,7 +502,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -444,7 +513,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -454,21 +523,26 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+        };
+        const res = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -479,20 +553,21 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
     <div id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Issue_Table">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -502,28 +577,21 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.openPageAction
-            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.openPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceIssueStored>) => await actions.openPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -533,7 +601,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -565,11 +633,32 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.refreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.Issue.Issue_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                </Button>
+              ) : null}
+              {actions.exportAction && true ? (
+                <Button
+                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableExportButton"
+                  startIcon={<MdiIcon path="file-export-outline" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.exportAction!(processedQueryCustomizer);
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Issue.Issue_Table.Export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
               {actions.openAddSelectorAction && true ? (
@@ -578,6 +667,10 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -591,6 +684,10 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openSetSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -604,7 +701,12 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.clearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={isLoading}
                 >
@@ -617,9 +719,13 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -633,9 +739,13 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -643,16 +753,19 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
                   {t('service.Issue.Issue_Table.BulkDelete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -73,13 +73,25 @@ export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDe
   userVoteEntriesRefreshAction?: (
     queryCustomizer: ServiceVoteEntryQueryCustomizer,
   ) => Promise<ServiceVoteEntryStored[]>;
-  userVoteEntriesOpenPageAction?: (row: ServiceVoteEntryStored) => Promise<void>;
+  getUserVoteEntriesMask?: () => string;
+  userVoteEntriesOpenPageAction?: (row: ServiceVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  userVoteEntriesAdditionalToolbarButtons?: (
+    data: ServiceVoteEntryStored[],
+    isLoading: boolean,
+    selectedRows: ServiceVoteEntryStored[],
+    clearSelections: () => void,
+    ownerData: ServiceDashboardStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentProps {
   uniqueId: string;
   actions: ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceDashboardStored;
   editMode: boolean;
@@ -91,7 +103,17 @@ export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentProps {
 export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   props: ServiceDashboardDashboard_View_EditVoteEntriesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -101,7 +123,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceVoteEntryStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
@@ -109,14 +131,15 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceVoteEntryQueryCustomizer>({
-    _mask: '{created,issueTitle,voteTitle,voteStatus}',
+    _mask: '{created,issueTitle,voteStatus,voteTitle}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -134,12 +157,16 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const [firstItem, setFirstItem] = useState<ServiceVoteEntryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceVoteEntryStored[]>([]);
 
   const createdColumn: GridColDef<ServiceVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.userVoteEntries.created', {
+      defaultValue: 'Created',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -164,7 +191,9 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const issueTitleColumn: GridColDef<ServiceVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'issueTitle',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.issueTitle', { defaultValue: 'IssueTitle' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.userVoteEntries.issueTitle', {
+      defaultValue: 'IssueTitle',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -174,7 +203,9 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const voteTitleColumn: GridColDef<ServiceVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'voteTitle',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.voteTitle', { defaultValue: 'VoteTitle' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.userVoteEntries.voteTitle', {
+      defaultValue: 'VoteTitle',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -184,19 +215,19 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const voteStatusColumn: GridColDef<ServiceVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'voteStatus',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.voteStatus', { defaultValue: 'VoteStatus' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.userVoteEntries.voteStatus', {
+      defaultValue: 'VoteStatus',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.VoteStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceVoteEntryStored>[]>(
@@ -204,7 +235,70 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceVoteEntryStored>[] = [];
+  const rowActions: TableRowAction<ServiceVoteEntryStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_q9zlcOSEEe20cv3f2msZXg)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceVoteEntryStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceVoteEntryStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.userVoteEntriesAdditionalToolbarButtons
+    ? actions.userVoteEntriesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceVoteEntryQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -253,7 +347,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -283,7 +377,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -294,7 +388,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -304,21 +398,26 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.userVoteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getUserVoteEntriesMask ? actions.getUserVoteEntriesMask() : queryCustomizer._mask,
+        };
+        const res = await actions.userVoteEntriesRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -329,13 +428,14 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -345,7 +445,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -356,24 +456,19 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_q9zlcOSEEe20cv3f2msZXg)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.userVoteEntriesOpenPageAction
             ? async (params: GridRowParams<ServiceVoteEntryStored>) =>
-                await actions.userVoteEntriesOpenPageAction!(params.row)
+                await actions.userVoteEntriesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -383,7 +478,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -417,7 +512,11 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.userVoteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getUserVoteEntriesMask ? actions.getUserVoteEntriesMask() : queryCustomizer._mask,
+                    };
+                    await actions.userVoteEntriesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -426,16 +525,19 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

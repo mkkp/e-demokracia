@@ -36,6 +36,7 @@ export interface ServiceProService {
   refresh(target: JudoIdentifiable<ServicePro>, queryCustomizer?: ServiceProQueryCustomizer): Promise<ServiceProStored>;
   delete(target: JudoIdentifiable<ServicePro>): Promise<void>;
   update(target: Partial<ServiceProStored>): Promise<ServiceProStored>;
+  validateUpdate(target: Partial<ServiceProStored>): Promise<ServiceProStored>;
   listCons(
     target: JudoIdentifiable<ServicePro>,
     queryCustomizer?: ServiceConQueryCustomizer,

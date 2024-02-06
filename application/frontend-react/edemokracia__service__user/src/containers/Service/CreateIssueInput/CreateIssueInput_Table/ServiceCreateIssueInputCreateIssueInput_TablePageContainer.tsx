@@ -36,7 +36,6 @@ export interface ServiceCreateIssueInputCreateIssueInput_TablePageActions
 }
 
 export interface ServiceCreateIssueInputCreateIssueInput_TablePageProps {
-  title: string;
   actions: ServiceCreateIssueInputCreateIssueInput_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -51,11 +50,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_TablePage(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -76,7 +75,11 @@ export default function ServiceCreateIssueInputCreateIssueInput_TablePage(
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceCreateIssueInputCreateIssueInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCreateIssueInputCreateIssueInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+          />
         </Box>
       </Suspense>
     </>

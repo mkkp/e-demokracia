@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -55,7 +55,7 @@ import type { ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefi
 import { ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent } from './components/ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponent';
 
 export const SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook';
+  'SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook = (
   data: ServiceUserVoteDefinitionStored,
   editMode: boolean,
@@ -70,14 +70,17 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefi
     ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCityComponentActionDefinitions,
     ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentCountyComponentActionDefinitions,
     ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentDistrictComponentActionDefinitions,
-    ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentActionDefinitions {}
+    ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentActionDefinitions {
+  getPageTitle?: (data: ServiceUserVoteDefinition) => string;
+  getMask?: () => string;
+}
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions;
 
   data: ServiceUserVoteDefinitionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceUserVoteDefinition, value: any) => void;
@@ -85,6 +88,7 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditProps {
   validation: Map<keyof ServiceUserVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewPageContainer
@@ -95,9 +99,10 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -130,25 +135,27 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="UserVoteDefinition_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewVisualElement"
+          data-name="UserVoteDefinition_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="root" xs={12} sm={12} md={4.0}>
             <Grid
               id="User/(esm/_aZHu8F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+              data-name="root"
               container
               direction="row"
               alignItems="flex-start"
               justifyContent="flex-start"
               spacing={2}
             >
-              <Grid container item xs={12} sm={12}>
+              <Grid container item xs={12} sm={12} md={36.0}>
                 <ModeledTabs
                   id="User/(esm/_w3mHIF5FEe6vsex_cZNQbQ)/TabBarVisualElement"
                   ownerData={data}
@@ -212,10 +219,13 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                     },
                   ]}
                 >
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <Grid item data-name="OwnedVoteDefinitionsGroup" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                      data-name="OwnedVoteDefinitionsGroup"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
@@ -234,6 +244,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                 isFormUpdateable={isFormUpdateable}
                                 validationError={validation.get('ownedVoteDefinitions')}
                                 refreshCounter={refreshCounter}
+                                isOwnerLoading={isLoading}
                               />
                             </Grid>
                           </Grid>
@@ -242,10 +253,13 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <Grid item data-name="ActiveGlobalVoteDefinitionsGroup" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                      data-name="ActiveGlobalVoteDefinitionsGroup"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
@@ -264,6 +278,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                 isFormUpdateable={isFormUpdateable}
                                 validationError={validation.get('activeVoteDefinitionsGlobal')}
                                 refreshCounter={refreshCounter}
+                                isOwnerLoading={isLoading}
                               />
                             </Grid>
                           </Grid>
@@ -272,10 +287,13 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <Grid item data-name="ActiveVoteDefinitionsByOwnerActivityArea" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                      data-name="ActiveVoteDefinitionsByOwnerActivityArea"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_75CCAF5KEe6vsex_cZNQbQ)/TabBarVisualElement"
@@ -321,9 +339,10 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                 },
                               ]}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveVoteDefinitionsInActivityCountiesGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_-qljoF5KEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveVoteDefinitionsInActivityCountiesGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -348,15 +367,17 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInActivityCounties')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveVoteDefinitionsInActivityCityGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/__jKxcF5KEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveVoteDefinitionsInActivityCityGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -381,15 +402,17 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInActivityCities')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveVoteDefinitionsInActivityDistrictGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_APhhIF5LEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveVoteDefinitionsInActivityDistrictGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -414,6 +437,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInActivityDistricts')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
@@ -426,10 +450,13 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
-                    <Card id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement">
+                  <Grid item data-name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" xs={12} sm={12}>
+                    <Card
+                      id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                      data-name="ActiveVoteDefinitionsByOwnerResidentAreaGroup"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_9cDT8F5KEe6vsex_cZNQbQ)/TabBarVisualElement"
@@ -475,9 +502,10 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                 },
                               ]}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveDebatesInResidentCountyGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_BgLQsF5LEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveDebatesInResidentCountyGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -502,15 +530,17 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInResidentCounty')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveDebatesInResidentCityGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_CEZ_IF5LEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveDebatesInResidentCityGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -535,15 +565,17 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInResidentCity')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="ActiveDebatesInResidentDistrictGroup" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_Cwu5oF5LEe6vsex_cZNQbQ)/GroupVisualElement"
+                                  data-name="ActiveDebatesInResidentDistrictGroup"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -568,6 +600,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('activeVoteDefinitionsInResidentDistrict')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>

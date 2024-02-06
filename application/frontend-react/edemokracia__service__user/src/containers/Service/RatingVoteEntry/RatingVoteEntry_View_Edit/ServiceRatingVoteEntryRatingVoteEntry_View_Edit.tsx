@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -41,7 +41,7 @@ import type { ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentActio
 import { ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent } from './components/ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponent';
 
 export const SERVICE_RATING_VOTE_ENTRY_RATING_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceRatingVoteEntryRatingVoteEntry_View_EditContainerHook';
+  'SERVICE_RATING_VOTE_ENTRY_RATING_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceRatingVoteEntryRatingVoteEntry_View_EditContainerHook = (
   data: ServiceRatingVoteEntryStored,
   editMode: boolean,
@@ -50,6 +50,7 @@ export type ServiceRatingVoteEntryRatingVoteEntry_View_EditContainerHook = (
 
 export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditActionDefinitions
   extends ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerComponentActionDefinitions {
+  getPageTitle?: (data: ServiceRatingVoteEntry) => string;
   isCreatedRequired?: (data: ServiceRatingVoteEntry | ServiceRatingVoteEntryStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (
     data: ServiceRatingVoteEntry | ServiceRatingVoteEntryStored,
@@ -62,14 +63,15 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditActionDefinition
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceRatingVoteEntryRatingVoteEntry_View_EditActionDefinitions;
 
   data: ServiceRatingVoteEntryStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceRatingVoteEntry, value: any) => void;
@@ -77,6 +79,7 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditProps {
   validation: Map<keyof ServiceRatingVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteEntry, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_J1HkoFslEe6Mx9dH3yj5gQ)/TransferObjectViewPageContainer
@@ -87,9 +90,10 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -122,16 +126,17 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="RatingVoteEntry_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_J1HkoFslEe6Mx9dH3yj5gQ)/TransferObjectViewVisualElement"
+          data-name="RatingVoteEntry_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -139,7 +144,6 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              autoFocus
               slotProps={{
                 textField: {
                   id: 'User/(esm/_V523gFuWEe6T042_LMmSdQ)/TimestampTypeDateTimeInput',
@@ -183,7 +187,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <NumericInput
               required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : true}
               name="value"
@@ -223,6 +227,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_Edit(
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

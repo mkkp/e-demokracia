@@ -15,3 +15,4 @@ export * from './useLocalStorage';
 export * from './useLogoProps';
 export * from './useNavigationConfirmation';
 export * from './useSnacks';
+export * from './ViewDataContext';

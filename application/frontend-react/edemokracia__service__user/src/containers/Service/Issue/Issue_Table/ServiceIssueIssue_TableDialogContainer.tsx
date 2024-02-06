@@ -29,12 +29,13 @@ export interface ServiceIssueIssue_TableDialogActions extends ServiceIssueIssue_
 
 export interface ServiceIssueIssue_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceIssueIssue_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::Issue::Issue_Table
@@ -43,12 +44,12 @@ export default function ServiceIssueIssue_TableDialog(props: ServiceIssueIssue_T
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -65,7 +66,12 @@ export default function ServiceIssueIssue_TableDialog(props: ServiceIssueIssue_T
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceIssueIssue_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceIssueIssue_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

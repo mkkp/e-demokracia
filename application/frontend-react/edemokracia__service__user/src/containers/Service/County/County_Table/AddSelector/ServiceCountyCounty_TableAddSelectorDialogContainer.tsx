@@ -33,7 +33,6 @@ export interface ServiceCountyCounty_TableAddSelectorDialogActions
 
 export interface ServiceCountyCounty_TableAddSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCountyCounty_TableAddSelectorDialogActions;
   isLoading: boolean;
@@ -42,6 +41,7 @@ export interface ServiceCountyCounty_TableAddSelectorDialogProps {
   alreadySelected: ServiceCountyStored[];
   selectionDiff: ServiceCountyStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceCountyStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::County::County_Table::AddSelector
@@ -54,7 +54,6 @@ export default function ServiceCountyCounty_TableAddSelectorDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -63,12 +62,13 @@ export default function ServiceCountyCounty_TableAddSelectorDialog(
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -88,9 +88,11 @@ export default function ServiceCountyCounty_TableAddSelectorDialog(
           <ServiceCountyCounty_TableAddSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

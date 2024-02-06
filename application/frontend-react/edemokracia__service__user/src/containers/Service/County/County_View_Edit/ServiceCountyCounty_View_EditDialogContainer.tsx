@@ -36,7 +36,6 @@ export interface ServiceCountyCounty_View_EditDialogActions extends ServiceCount
 
 export interface ServiceCountyCounty_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCountyCounty_View_EditDialogActions;
   isLoading: boolean;
@@ -50,6 +49,7 @@ export interface ServiceCountyCounty_View_EditDialogProps {
   validation: Map<keyof ServiceCounty, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::County::County_View_Edit
@@ -60,7 +60,6 @@ export default function ServiceCountyCounty_View_EditDialog(props: ServiceCounty
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -73,15 +72,16 @@ export default function ServiceCountyCounty_View_EditDialog(props: ServiceCounty
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceCountyQueryCustomizer = {
-    _mask: '{name,representation,cities{name}}',
+    _mask: actions.getMask ? actions.getMask!() : '{name,representation,cities{name}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_a0aoCH2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -101,8 +101,8 @@ export default function ServiceCountyCounty_View_EditDialog(props: ServiceCounty
           <ServiceCountyCounty_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -110,6 +110,7 @@ export default function ServiceCountyCounty_View_EditDialog(props: ServiceCounty
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

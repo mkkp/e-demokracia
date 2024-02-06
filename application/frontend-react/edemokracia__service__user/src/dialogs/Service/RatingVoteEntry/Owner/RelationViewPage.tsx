@@ -9,14 +9,17 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceServiceUserServiceUser_View_EditDialogActions } from '~/containers/Service/ServiceUser/ServiceUser_View_Edit/ServiceServiceUserServiceUser_View_EditDialogContainer';
+import type {
+  ServiceServiceUserServiceUser_View_EditDialogActions,
+  ServiceServiceUserServiceUser_View_EditDialogProps,
+} from '~/containers/Service/ServiceUser/ServiceUser_View_Edit/ServiceServiceUserServiceUser_View_EditDialogContainer';
 import { useServiceServiceUserActivityCitiesRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityCities/RelationViewPage';
 import { useServiceServiceUserActivityCountiesRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityCounties/RelationViewPage';
 import { useServiceServiceUserActivityDistrictsRelationViewPage } from '~/dialogs/Service/ServiceUser/ActivityDistricts/RelationViewPage';
@@ -29,7 +32,7 @@ import { useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_cou
 import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCityLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCity/LinkSetSelectorPage';
 import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCountyLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentCounty/LinkSetSelectorPage';
 import { useServiceServiceUserServiceUser_View_EditAreasResidencyResidentDistrictLinkSetSelectorPage } from '~/dialogs/Service/ServiceUser/ServiceUser_View_Edit/Areas/Residency/ResidentDistrict/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceServiceUserVotesRelationTablePage } from '~/routes';
 import type {
   ServiceCity,
@@ -52,8 +55,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceServiceUserServiceImpl } from '~/services/data-axios/ServiceServiceUserServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceRatingVoteEntryServiceForOwnerImpl } from '~/services/data-axios/ServiceRatingVoteEntryServiceForOwnerImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceServiceUserServiceUser_View_EditDialogActionsExtended =
@@ -66,20 +69,52 @@ export type ServiceServiceUserServiceUser_View_EditDialogActionsExtended =
   };
 
 export const SERVICE_RATING_VOTE_ENTRY_OWNER_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceServiceUserServiceUser_View_EditActionsHook';
+  'SERVICE_RATING_VOTE_ENTRY_OWNER_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceServiceUserServiceUser_View_EditActionsHook = (
   ownerData: any,
   data: ServiceServiceUserStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceServiceUser, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceServiceUserServiceUser_View_EditDialogActionsExtended;
+
+export interface ServiceServiceUserServiceUser_View_EditViewModel
+  extends ServiceServiceUserServiceUser_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceServiceUser>;
+  isDraft?: boolean;
+}
+
+const ServiceServiceUserServiceUser_View_EditViewModelContext =
+  createContext<ServiceServiceUserServiceUser_View_EditViewModel>({} as any);
+export const useServiceServiceUserServiceUser_View_EditViewModel = () => {
+  const context = useContext(ServiceServiceUserServiceUser_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceServiceUserServiceUser_View_EditViewModel must be used within a(n) ServiceServiceUserServiceUser_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceRatingVoteEntryOwnerRelationViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceServiceUser>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceServiceUser) => Promise<void>,
 ) => Promise<DialogResult<ServiceServiceUserStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceServiceUser>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceServiceUser) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -95,16 +130,19 @@ export const useServiceRatingVoteEntryOwnerRelationViewPage = (): ((
         children: (
           <ServiceRatingVoteEntryOwnerRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -135,8 +173,11 @@ const ServiceServiceUserServiceUser_View_EditDialogContainer = lazy(
 export interface ServiceRatingVoteEntryOwnerRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceServiceUser>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceServiceUser) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_ap8zwFslEe6Mx9dH3yj5gQ)/RelationFeatureView
@@ -144,10 +185,13 @@ export interface ServiceRatingVoteEntryOwnerRelationViewPageProps {
 export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   props: ServiceRatingVoteEntryOwnerRelationViewPageProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceServiceUserServiceImpl = useMemo(() => new ServiceServiceUserServiceImpl(judoAxiosProvider), []);
+  const serviceRatingVoteEntryServiceForOwnerImpl = useMemo(
+    () => new ServiceRatingVoteEntryServiceForOwnerImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -155,6 +199,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -197,10 +242,22 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceServiceUserQueryCustomizer = {
-    _mask:
-      '{created,email,firstName,isAdmin,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+  const getPageQueryCustomizer: () => ServiceServiceUserQueryCustomizer = () => ({
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,email,firstName,isAdmin,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
+
+  // Validation
+  const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_View_EditActionsHook>(
@@ -211,6 +268,8 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
@@ -236,13 +295,10 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   const openServiceServiceUserResidentDistrictRelationViewPage =
     useServiceServiceUserResidentDistrictRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.ServiceUser.ServiceUser_View_Edit', { defaultValue: 'ServiceUser View / Edit' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceServiceUser): string => {
+    return t('service.ServiceUser.ServiceUser_View_Edit', { defaultValue: 'ServiceUser View / Edit' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -252,8 +308,9 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceServiceUserServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceRatingVoteEntryServiceForOwnerImpl.refresh(ownerData, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -267,6 +324,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -277,7 +335,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceServiceUserServiceImpl.getRangeForResidentCity(data, queryCustomizer);
+      return serviceRatingVoteEntryServiceForOwnerImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -297,20 +355,23 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     }
     return undefined;
   };
-  const residentCityUnsetAction = async (target: ServiceCityStored) => {
+  const residentCityUnsetAction = async (target: ServiceCity | ServiceCityStored) => {
     storeDiff('residentCity', null);
   };
-  const residentCityOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceServiceUserResidentCityRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentCityOpenPageAction = async (target: ServiceCity | ServiceCityStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCityStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserResidentCityRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const residentCountyAutocompleteRangeAction = async (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceServiceUserServiceImpl.getRangeForResidentCounty(data, queryCustomizer);
+      return serviceRatingVoteEntryServiceForOwnerImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -330,20 +391,26 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     }
     return undefined;
   };
-  const residentCountyUnsetAction = async (target: ServiceCountyStored) => {
+  const residentCountyUnsetAction = async (target: ServiceCounty | ServiceCountyStored) => {
     storeDiff('residentCounty', null);
   };
-  const residentCountyOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceServiceUserResidentCountyRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentCountyOpenPageAction = async (target: ServiceCounty | ServiceCountyStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCountyStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserResidentCountyRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const residentDistrictAutocompleteRangeAction = async (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceServiceUserServiceImpl.getRangeForResidentDistrict(data, queryCustomizer);
+      return serviceRatingVoteEntryServiceForOwnerImpl.getRangeForResidentDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -363,13 +430,16 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     }
     return undefined;
   };
-  const residentDistrictUnsetAction = async (target: ServiceDistrictStored) => {
+  const residentDistrictUnsetAction = async (target: ServiceDistrict | ServiceDistrictStored) => {
     storeDiff('residentDistrict', null);
   };
-  const residentDistrictOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceServiceUserResidentDistrictRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const residentDistrictOpenPageAction = async (target: ServiceDistrict | ServiceDistrictStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceDistrictStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserResidentDistrictRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityCitiesOpenAddSelectorAction = async () => {
@@ -390,7 +460,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   ): Promise<DialogResult<Array<ServiceCityStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityCities ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityCities ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityCities', newList);
       resolve({
         result: 'submit',
@@ -414,14 +484,17 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   };
   const activityCitiesRemoveAction = async (target?: ServiceCityStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityCities ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityCities ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityCities', newList);
     }
   };
-  const activityCitiesOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceServiceUserActivityCitiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityCitiesOpenPageAction = async (target: ServiceCity | ServiceCityStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCityStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserActivityCitiesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityDistrictsOpenAddSelectorAction = async () => {
@@ -442,7 +515,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityDistricts ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityDistricts ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityDistricts', newList);
       resolve({
         result: 'submit',
@@ -466,14 +539,20 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   };
   const activityDistrictsRemoveAction = async (target?: ServiceDistrictStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityDistricts ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityDistricts ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityDistricts', newList);
     }
   };
-  const activityDistrictsOpenPageAction = async (target?: ServiceDistrictStored) => {
-    await openServiceServiceUserActivityDistrictsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityDistrictsOpenPageAction = async (
+    target: ServiceDistrict | ServiceDistrictStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceDistrictStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserActivityDistrictsRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activityCountiesOpenAddSelectorAction = async () => {
@@ -494,7 +573,7 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   ): Promise<DialogResult<Array<ServiceCountyStored>>> => {
     return new Promise((resolve) => {
       const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.activityCounties ?? []).filter((c) => !selectedIds.includes(c.__identifier));
+      const newList = (data?.activityCounties ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
       storeDiff('activityCounties', newList);
       resolve({
         result: 'submit',
@@ -518,23 +597,34 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
   };
   const activityCountiesRemoveAction = async (target?: ServiceCountyStored, silentMode?: boolean) => {
     if (target) {
-      const newList = (data?.activityCounties ?? []).filter((c) => c.__identifier !== target!.__identifier);
+      const newList = (data?.activityCounties ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
       storeDiff('activityCounties', newList);
     }
   };
-  const activityCountiesOpenPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceServiceUserActivityCountiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const activityCountiesOpenPageAction = async (target: ServiceCounty | ServiceCountyStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCountyStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceServiceUserActivityCountiesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
-  const votesOpenPageAction = async (target?: ServiceSimpleVoteStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceServiceUserVotesRelationTablePage((target || data).__signedIdentifier));
-    onClose();
+  const votesOpenPageAction = async (target: ServiceSimpleVote | ServiceSimpleVoteStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceSimpleVoteStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceServiceUserVotesRelationTablePage(
+          ((target as ServiceSimpleVoteStored) || data).__signedIdentifier,
+        ),
+      );
+      onClose();
+    }
   };
 
   const actions: ServiceServiceUserServiceUser_View_EditDialogActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     residentCityAutocompleteRangeAction,
@@ -571,21 +661,43 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceServiceUserServiceUser_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_ap8zwFslEe6Mx9dH3yj5gQ)/RelationFeatureView"
-      data-page-name="service::RatingVoteEntry::owner::RelationViewPage"
-    >
+    <ServiceServiceUserServiceUser_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_ap8zwFslEe6Mx9dH3yj5gQ)/RelationFeatureView"
+          data-page-name="service::RatingVoteEntry::owner::RelationViewPage"
+        />
         <ServiceServiceUserServiceUser_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -597,8 +709,9 @@ export default function ServiceRatingVoteEntryOwnerRelationViewPage(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceServiceUserServiceUser_View_EditViewModelContext.Provider>
   );
 }

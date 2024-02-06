@@ -46,7 +46,6 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditDialogActions;
   isLoading: boolean;
@@ -60,6 +59,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   validation: Map<keyof ServiceSelectAnswerVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit
@@ -72,7 +72,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -85,16 +84,18 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{created,valueRepresentation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_-cGrAH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -114,8 +115,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -123,6 +124,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

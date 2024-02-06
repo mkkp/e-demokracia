@@ -9,15 +9,20 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueTypeIssueType_TablePageActions } from '~/containers/Service/IssueType/IssueType_Table/ServiceIssueTypeIssueType_TablePageContainer';
+import type {
+  ServiceIssueTypeIssueType_TablePageActions,
+  ServiceIssueTypeIssueType_TablePageProps,
+} from '~/containers/Service/IssueType/IssueType_Table/ServiceIssueTypeIssueType_TablePageContainer';
 import { useServiceUserAdminIssueTypesAccessFormPage } from '~/dialogs/Service/User/AdminIssueTypes/AccessFormPage';
 import { useServiceUserAdminIssueTypesAccessViewPage } from '~/dialogs/Service/User/AdminIssueTypes/AccessViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueType,
   ServiceIssueTypeQueryCustomizer,
@@ -28,7 +33,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminIssueTypesImpl } from '~/services/data-axios/UserServiceForAdminIssueTypesImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueTypeIssueType_TablePageActionsExtended = ServiceIssueTypeIssueType_TablePageActions & {
@@ -36,11 +41,30 @@ export type ServiceIssueTypeIssueType_TablePageActionsExtended = ServiceIssueTyp
 };
 
 export const SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueTypeIssueType_TableActionsHook';
+  'SERVICE_USER_ADMIN_ISSUE_TYPES_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceIssueTypeIssueType_TableActionsHook = (
   data: ServiceIssueTypeStored[],
   editMode: boolean,
 ) => ServiceIssueTypeIssueType_TablePageActionsExtended;
+
+export interface ServiceIssueTypeIssueType_TableViewModel extends ServiceIssueTypeIssueType_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceIssueTypeIssueType_TableViewModelContext = createContext<ServiceIssueTypeIssueType_TableViewModel>(
+  {} as any,
+);
+export const useServiceIssueTypeIssueType_TableViewModel = () => {
+  const context = useContext(ServiceIssueTypeIssueType_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueTypeIssueType_TableViewModel must be used within a(n) ServiceIssueTypeIssueType_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceIssueTypeIssueType_TablePageContainer = lazy(
   () => import('~/containers/Service/IssueType/IssueType_Table/ServiceIssueTypeIssueType_TablePageContainer'),
@@ -58,6 +82,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -66,6 +91,12 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceIssueTypeStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_TableActionsHook>(
@@ -80,13 +111,13 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   const openServiceUserAdminIssueTypesAccessFormPage = useServiceUserAdminIssueTypesAccessFormPage();
   const openServiceUserAdminIssueTypesAccessViewPage = useServiceUserAdminIssueTypesAccessViewPage();
 
-  // Calculated section
-  const title: string = t('service.IssueType.IssueType_Table', { defaultValue: 'IssueType Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.IssueType.IssueType_Table', { defaultValue: 'IssueType Table' });
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceIssueTypeStored[],
   ): Promise<DialogResult<Array<ServiceIssueTypeStored>>> => {
@@ -122,8 +153,8 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async () => {
-    const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(data);
+  const openFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+    const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -170,18 +201,23 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       return userServiceForAdminIssueTypesImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceIssueTypeStored) => {
-    await openServiceUserAdminIssueTypesAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
+  const openPageAction = async (target: ServiceIssueType | ServiceIssueTypeStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceIssueTypeStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserAdminIssueTypesAccessViewPage(target!);
+      setRefreshCounter((prev) => prev + 1);
+    }
   };
 
   const actions: ServiceIssueTypeIssueType_TablePageActions = {
+    getPageTitle,
+    backAction,
     bulkDeleteAction,
     openFormAction,
     deleteAction,
@@ -191,17 +227,28 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueTypeIssueType_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessTablePageDefinition"
-      data-page-name="service::User::adminIssueTypes::AccessTablePage"
-    >
+    <ServiceIssueTypeIssueType_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessTablePageDefinition"
+          data-page-name="service::User::adminIssueTypes::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceIssueTypeIssueType_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -209,6 +256,6 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceIssueTypeIssueType_TableViewModelContext.Provider>
   );
 }

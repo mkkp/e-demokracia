@@ -8,17 +8,22 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCreateIssueInputCreateIssueInput_FormDialogActions } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/ServiceCreateIssueInputCreateIssueInput_FormDialogContainer';
+import type {
+  ServiceCreateIssueInputCreateIssueInput_FormDialogActions,
+  ServiceCreateIssueInputCreateIssueInput_FormDialogProps,
+} from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/ServiceCreateIssueInputCreateIssueInput_FormDialogContainer';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/City/LinkSetSelectorPage';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/LinkSetSelectorPage';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueDistrictLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/District/LinkSetSelectorPage';
 import { useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage } from '~/dialogs/Service/CreateIssueInput/CreateIssueInput_Form/Issue/IssueType/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
+import { routeToServiceUserIssuesUserIssues_View_EditCreateIssueOutputView } from '~/routes';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -41,7 +46,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceImpl } from '~/services/data-axios/ServiceUserIssuesServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended =
@@ -56,23 +61,61 @@ export type ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended =
       data: ServiceCreateIssueInput,
       storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: ServiceCreateIssueInput,
+      res: ServiceCreateIssueInputStored,
+      onSubmit: (result?: ServiceCreateIssueInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCreateIssueInputCreateIssueInput_FormActionsHook';
+  'SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK';
 export type ServiceCreateIssueInputCreateIssueInput_FormActionsHook = (
   ownerData: any,
   data: ServiceCreateIssueInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceCreateIssueInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended;
+
+export interface ServiceCreateIssueInputCreateIssueInput_FormViewModel
+  extends ServiceCreateIssueInputCreateIssueInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceCreateIssueInput>;
+  isDraft?: boolean;
+}
+
+const ServiceCreateIssueInputCreateIssueInput_FormViewModelContext =
+  createContext<ServiceCreateIssueInputCreateIssueInput_FormViewModel>({} as any);
+export const useServiceCreateIssueInputCreateIssueInput_FormViewModel = () => {
+  const context = useContext(ServiceCreateIssueInputCreateIssueInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceCreateIssueInputCreateIssueInput_FormViewModel must be used within a(n) ServiceCreateIssueInputCreateIssueInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceCreateIssueInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceCreateIssueInput) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceCreateIssueInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceCreateIssueInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -88,16 +131,19 @@ export const useServiceUserIssuesUserIssues_View_EditCreateIssueInputForm = (): 
         children: (
           <ServiceUserIssuesUserIssues_View_EditCreateIssueInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -128,8 +174,11 @@ const ServiceCreateIssueInputCreateIssueInput_FormDialogContainer = lazy(
 export interface ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceCreateIssueInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceCreateIssueInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition
@@ -137,7 +186,7 @@ export interface ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps 
 export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputForm(
   props: ServiceUserIssuesUserIssues_View_EditCreateIssueInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceUserIssuesServiceImpl = useMemo(() => new ServiceUserIssuesServiceImpl(judoAxiosProvider), []);
@@ -148,6 +197,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -190,12 +240,21 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createIssueForUserIssuesAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceCreateIssueInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCreateIssueInputCreateIssueInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceCreateIssueInputCreateIssueInput_FormDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, submit);
 
   // Dialog hooks
   const openServiceCreateIssueInputCreateIssueInput_FormIssueCityLinkSetSelectorPage =
@@ -207,20 +266,15 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   const openServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage =
     useServiceCreateIssueInputCreateIssueInput_FormIssueIssueTypeLinkSetSelectorPage();
 
-  // Calculated section
-  const title: string = t('service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createIssueForUserIssuesAction();
-  };
-
   // Action section
+  const getPageTitle = (data: ServiceCreateIssueInput): string => {
+    return t('service.CreateIssueInput.CreateIssueInput_Form', { defaultValue: 'CreateIssueInput Form' });
+  };
   const cityAutocompleteRangeAction = async (
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -240,14 +294,14 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     }
     return undefined;
   };
-  const cityUnsetAction = async (target: ServiceCityStored) => {
+  const cityUnsetAction = async (target: ServiceCity | ServiceCityStored) => {
     storeDiff('city', null);
   };
   const countyAutocompleteRangeAction = async (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -267,14 +321,14 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     }
     return undefined;
   };
-  const countyUnsetAction = async (target: ServiceCountyStored) => {
+  const countyUnsetAction = async (target: ServiceCounty | ServiceCountyStored) => {
     storeDiff('county', null);
   };
   const districtAutocompleteRangeAction = async (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -294,14 +348,14 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     }
     return undefined;
   };
-  const districtUnsetAction = async (target: ServiceDistrictStored) => {
+  const districtUnsetAction = async (target: ServiceDistrict | ServiceDistrictStored) => {
     storeDiff('district', null);
   };
   const issueTypeAutocompleteRangeAction = async (
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(data, queryCustomizer);
+      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -321,7 +375,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     }
     return undefined;
   };
-  const issueTypeUnsetAction = async (target: ServiceIssueTypeStored) => {
+  const issueTypeUnsetAction = async (target: ServiceIssueType | ServiceIssueTypeStored) => {
     storeDiff('issueType', null);
   };
   const backAction = async () => {
@@ -330,7 +384,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   const createIssueForUserIssuesAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserIssuesServiceImpl.createIssue(payloadDiff.current);
+      const result = await serviceUserIssuesServiceImpl.createIssue(cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateIssueForUserIssuesAction) {
         await customActions.postCreateIssueForUserIssuesAction(result, onSubmit, onClose);
       } else {
@@ -338,7 +392,8 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (result) {
-          onSubmit(result);
+          onClose();
+          navigate(routeToServiceUserIssuesUserIssues_View_EditCreateIssueOutputView(result.__signedIdentifier));
         } else {
           onSubmit();
         }
@@ -360,6 +415,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceCreateIssueInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -370,6 +431,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   };
 
   const actions: ServiceCreateIssueInputCreateIssueInput_FormDialogActions = {
+    getPageTitle,
     cityAutocompleteRangeAction,
     cityOpenSetSelectorAction,
     cityUnsetAction,
@@ -388,21 +450,43 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceCreateIssueInputCreateIssueInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
     actions.getTemplateAction!();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form"
-    >
+    <ServiceCreateIssueInputCreateIssueInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::UserIssues::UserIssues_View_Edit::createIssue::Input::Form"
+        />
         <ServiceCreateIssueInputCreateIssueInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -414,8 +498,9 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceCreateIssueInputCreateIssueInput_FormViewModelContext.Provider>
   );
 }

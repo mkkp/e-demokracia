@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,11 +28,12 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import { NumericInput } from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
 
 export const RATING_VOTE_INPUT_RATING_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'RatingVoteInputRatingVoteInput_FormContainerHook';
+  'RATING_VOTE_INPUT_RATING_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type RatingVoteInputRatingVoteInput_FormContainerHook = (
   data: RatingVoteInputStored,
   editMode: boolean,
@@ -40,16 +41,17 @@ export type RatingVoteInputRatingVoteInput_FormContainerHook = (
 ) => RatingVoteInputRatingVoteInput_FormActionDefinitions;
 
 export interface RatingVoteInputRatingVoteInput_FormActionDefinitions {
+  getPageTitle?: (data: RatingVoteInput) => string;
   isValueRequired?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean) => boolean;
   isValueDisabled?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
 
 export interface RatingVoteInputRatingVoteInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: RatingVoteInputRatingVoteInput_FormActionDefinitions;
 
   data: RatingVoteInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof RatingVoteInput, value: any) => void;
@@ -57,6 +59,7 @@ export interface RatingVoteInputRatingVoteInput_FormProps {
   validation: Map<keyof RatingVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof RatingVoteInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -65,9 +68,10 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -96,24 +100,36 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
   const containerActions: RatingVoteInputRatingVoteInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="RatingVoteInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_LEKjo35YEe2kLcMqsIbMgQ)/TransferObjectFormVisualElement"
+          data-name="RatingVoteInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <NumericInput
               required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : false}
               name="value"
               id="User/(esm/_UNECcOSNEe20cv3f2msZXg)/NumericTypeVisualInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={t('RatingVoteInput.RatingVoteInput_Form.value', { defaultValue: 'Vote rate' }) as string}
               customInput={TextField}
               value={data.value ?? ''}

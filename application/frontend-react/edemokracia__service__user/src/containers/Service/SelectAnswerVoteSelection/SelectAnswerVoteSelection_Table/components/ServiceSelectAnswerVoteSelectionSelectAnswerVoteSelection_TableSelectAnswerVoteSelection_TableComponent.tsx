@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceSelectAnswerVoteSelection,
@@ -63,6 +63,7 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
   ) => Promise<DialogResult<ServiceSelectAnswerVoteSelectionStored[]>>;
   clearAction?: () => Promise<void>;
   openFormAction?: () => Promise<void>;
+  exportAction?: (queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
     id: string,
@@ -73,15 +74,24 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
   refreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ) => Promise<ServiceSelectAnswerVoteSelectionStored[]>;
+  getMask?: () => string;
   deleteAction?: (row: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
-  openPageAction?: (row: ServiceSelectAnswerVoteSelectionStored) => Promise<void>;
+  openPageAction?: (row: ServiceSelectAnswerVoteSelectionStored, isDraft?: boolean) => Promise<void>;
+  AdditionalToolbarButtons?: (
+    data: ServiceSelectAnswerVoteSelectionStored[],
+    isLoading: boolean,
+    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentProps {
   uniqueId: string;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
 }
 
@@ -90,7 +100,7 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
 export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponent(
   props: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError } = props;
+  const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const filterModelKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -99,7 +109,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceSelectAnswerVoteSelectionStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
@@ -107,14 +117,15 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceSelectAnswerVoteSelectionQueryCustomizer>({
-    _mask: '{title,description}',
+    _mask: '{description,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -131,6 +142,8 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
   const [lastItem, setLastItem] = useState<ServiceSelectAnswerVoteSelectionStored>();
   const [firstItem, setFirstItem] = useState<ServiceSelectAnswerVoteSelectionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
   const selectedRows = useRef<ServiceSelectAnswerVoteSelectionStored[]>([]);
 
@@ -164,34 +177,96 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     [],
   );
 
-  const rowActions: TableRowAction<ServiceSelectAnswerVoteSelectionStored>[] = [
-    {
-      id: 'User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableRowRemoveButton',
-      label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceSelectAnswerVoteSelectionStored) => isLoading,
-      action: actions.removeAction
-        ? async (rowData) => {
-            await actions.removeAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableRowDeleteButton',
-      label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceSelectAnswerVoteSelectionStored) => !row.__deleteable || isLoading,
-      action: actions.deleteAction
-        ? async (rowData) => {
-            await actions.deleteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceSelectAnswerVoteSelectionStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableRowRemoveButton',
+        label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Remove', {
+          defaultValue: 'Remove',
+        }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceSelectAnswerVoteSelectionStored) => getSelectedRows().length > 0 || isLoading,
+        action: actions.removeAction
+          ? async (rowData) => {
+              await actions.removeAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableRowDeleteButton',
+        label: t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Delete', {
+          defaultValue: 'Delete',
+        }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceSelectAnswerVoteSelectionStored) =>
+          getSelectedRows().length > 0 || !row.__deleteable || isLoading,
+        action: actions.deleteAction
+          ? async (rowData) => {
+              await actions.deleteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_pSF7gFtqEe6Mx9dH3yj5gQ)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceSelectAnswerVoteSelectionStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceSelectAnswerVoteSelectionStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -229,7 +304,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -259,7 +334,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -270,7 +345,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -280,21 +355,26 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+        };
+        const res = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -305,13 +385,14 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -321,7 +402,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -331,29 +412,22 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_pSF7gFtqEe6Mx9dH3yj5gQ)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.openPageAction
             ? async (params: GridRowParams<ServiceSelectAnswerVoteSelectionStored>) =>
-                await actions.openPageAction!(params.row)
+                await actions.openPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -363,7 +437,7 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -397,12 +471,35 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.refreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Table.Refresh', {
                     defaultValue: 'Refresh',
+                  })}
+                </Button>
+              ) : null}
+              {actions.exportAction && true ? (
+                <Button
+                  id="User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableExportButton"
+                  startIcon={<MdiIcon path="file-export-outline" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
+                    await actions.exportAction!(processedQueryCustomizer);
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Table.Export', {
+                    defaultValue: 'Export',
                   })}
                 </Button>
               ) : null}
@@ -412,6 +509,10 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openFormAction!();
                   }}
                   disabled={isLoading}
@@ -427,6 +528,10 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openAddSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -440,6 +545,10 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.openSetSelectorAction!();
                   }}
                   disabled={isLoading}
@@ -453,7 +562,12 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     await actions.clearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={isLoading}
                 >
@@ -468,9 +582,13 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -486,9 +604,13 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.bulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -498,16 +620,19 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

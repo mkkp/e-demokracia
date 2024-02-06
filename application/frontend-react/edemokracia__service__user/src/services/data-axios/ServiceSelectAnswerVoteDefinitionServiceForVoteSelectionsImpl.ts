@@ -101,6 +101,24 @@ export class ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl
   }
 
   /**
+   * From: relation.validateCreate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateCreate(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: ServiceSelectAnswerVoteSelection,
+  ): Promise<ServiceSelectAnswerVoteSelection> {
+    const path = '/service/SelectAnswerVoteDefinition/~update/voteSelections/~validate';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
@@ -121,6 +139,24 @@ export class ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
   ): Promise<ServiceSelectAnswerVoteSelectionStored> {
     const path = '/service/SelectAnswerVoteSelection/~update';
+    const response = await this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+      },
+    });
+
+    return response.data;
+  }
+
+  /**
+   * From: relation.validateUpdate
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored> {
+    const path = '/service/SelectAnswerVoteSelection/~validate';
     const response = await this.axios.post(this.getPathForActor(path), target, {
       headers: {
         'X-Judo-SignedIdentifier': target.__signedIdentifier,

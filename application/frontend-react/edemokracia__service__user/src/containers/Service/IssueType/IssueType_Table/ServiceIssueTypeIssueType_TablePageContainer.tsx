@@ -28,7 +28,6 @@ export interface ServiceIssueTypeIssueType_TablePageActions extends ServiceIssue
 }
 
 export interface ServiceIssueTypeIssueType_TablePageProps {
-  title: string;
   actions: ServiceIssueTypeIssueType_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -41,11 +40,11 @@ export default function ServiceIssueTypeIssueType_TablePage(props: ServiceIssueT
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -66,7 +65,7 @@ export default function ServiceIssueTypeIssueType_TablePage(props: ServiceIssueT
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceIssueTypeIssueType_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceIssueTypeIssueType_Table actions={actions} refreshCounter={refreshCounter} isLoading={isLoading} />
         </Box>
       </Suspense>
     </>

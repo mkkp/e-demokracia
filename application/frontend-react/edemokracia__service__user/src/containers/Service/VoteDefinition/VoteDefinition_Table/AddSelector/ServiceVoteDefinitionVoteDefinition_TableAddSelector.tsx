@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,19 +33,23 @@ import type { ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition
 import { ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition_TableAddSelectorComponent } from './components/ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition_TableAddSelectorComponent';
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_TableAddSelectorContainerHook';
+  'SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorContainerHook =
   () => ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionDefinitions;
 
 export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionDefinitions
-  extends ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition_TableAddSelectorComponentActionDefinitions {}
+  extends ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition_TableAddSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionDefinitions;
   selectionDiff: ServiceVoteDefinitionStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceVoteDefinitionStored[]>>;
   alreadySelected: ServiceVoteDefinitionStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorPageContainer
@@ -54,7 +58,15 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelector(
   props: ServiceVoteDefinitionVoteDefinition_TableAddSelectorProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -73,10 +85,13 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelector(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorVisualElement">
+      <Grid item data-name="VoteDefinition_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorVisualElement"
+          data-name="VoteDefinition_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable"
@@ -92,6 +107,7 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelector(
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

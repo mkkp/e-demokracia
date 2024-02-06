@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,22 +29,27 @@ import type { ServiceCommentComment_TableComment_TableComponentActionDefinitions
 import { ServiceCommentComment_TableComment_TableComponent } from './components/ServiceCommentComment_TableComment_TableComponent';
 
 export const SERVICE_COMMENT_COMMENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCommentComment_TableContainerHook';
+  'SERVICE_COMMENT_COMMENT_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceCommentComment_TableContainerHook = () => ServiceCommentComment_TableActionDefinitions;
 
 export interface ServiceCommentComment_TableActionDefinitions
-  extends ServiceCommentComment_TableComment_TableComponentActionDefinitions {}
+  extends ServiceCommentComment_TableComment_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceCommentComment_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCommentComment_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTablePageContainer
 // Name: service::Comment::Comment_Table
 export default function ServiceCommentComment_Table(props: ServiceCommentComment_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -61,10 +66,10 @@ export default function ServiceCommentComment_Table(props: ServiceCommentComment
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableVisualElement">
+      <Grid item data-name="Comment_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableVisualElement" data-name="Comment_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable"
@@ -77,6 +82,7 @@ export default function ServiceCommentComment_Table(props: ServiceCommentComment
                     uniqueId={'User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

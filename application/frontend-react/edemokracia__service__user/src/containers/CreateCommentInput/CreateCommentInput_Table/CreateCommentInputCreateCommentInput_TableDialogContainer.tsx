@@ -36,12 +36,13 @@ export interface CreateCommentInputCreateCommentInput_TableDialogActions
 
 export interface CreateCommentInputCreateCommentInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CreateCommentInputCreateCommentInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: CreateCommentInput::CreateCommentInput_Table
@@ -52,12 +53,12 @@ export default function CreateCommentInputCreateCommentInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_kYeCcIe5Ee2kLcMqsIbMgQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -74,7 +75,12 @@ export default function CreateCommentInputCreateCommentInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <CreateCommentInputCreateCommentInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <CreateCommentInputCreateCommentInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

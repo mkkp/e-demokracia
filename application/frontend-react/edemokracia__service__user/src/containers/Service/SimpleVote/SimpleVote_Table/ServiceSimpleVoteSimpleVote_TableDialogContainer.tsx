@@ -32,12 +32,13 @@ export interface ServiceSimpleVoteSimpleVote_TableDialogActions
 
 export interface ServiceSimpleVoteSimpleVote_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSimpleVoteSimpleVote_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::SimpleVote::SimpleVote_Table
@@ -46,12 +47,12 @@ export default function ServiceSimpleVoteSimpleVote_TableDialog(props: ServiceSi
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -68,7 +69,12 @@ export default function ServiceSimpleVoteSimpleVote_TableDialog(props: ServiceSi
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceSimpleVoteSimpleVote_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceSimpleVoteSimpleVote_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

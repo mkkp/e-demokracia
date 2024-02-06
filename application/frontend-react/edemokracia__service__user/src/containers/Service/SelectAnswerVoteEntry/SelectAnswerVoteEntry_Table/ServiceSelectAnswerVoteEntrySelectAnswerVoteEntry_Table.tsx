@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -32,15 +32,20 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableContainerHook';
+  'SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableContainerHook =
   () => ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableActionDefinitions;
 
-export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableActionDefinitions {}
+export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_mtLkMFtpEe6Mx9dH3yj5gQ)/TransferObjectTablePageContainer
@@ -49,7 +54,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_Table(
   props: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -68,10 +73,13 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_Table(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_mtLkMFtpEe6Mx9dH3yj5gQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="SelectAnswerVoteEntry_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_mtLkMFtpEe6Mx9dH3yj5gQ)/TransferObjectTableVisualElement"
+          data-name="SelectAnswerVoteEntry_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_mtLkMFtpEe6Mx9dH3yj5gQ)/TransferObjectTableEmpty">
                   {

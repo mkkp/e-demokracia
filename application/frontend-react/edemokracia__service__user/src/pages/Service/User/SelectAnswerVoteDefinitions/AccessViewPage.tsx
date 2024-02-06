@@ -9,14 +9,18 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions } from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer';
+import type {
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions,
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageProps,
+} from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer';
 import { useServiceSelectAnswerVoteDefinitionOwnerRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/Owner/RelationViewPage';
 import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/UserVoteEntryGroup/TakeVote/Vote/Relation/Table/CallSelector';
 import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/LinkSetSelectorPage';
@@ -24,7 +28,7 @@ import { useServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage } fro
 import { useServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteEntries/RelationViewPage';
 import { useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteSelections/RelationFormPage';
 import { useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage } from '~/dialogs/Service/SelectAnswerVoteDefinition/VoteSelections/RelationViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage } from '~/routes';
 import type {
   ServiceIssue,
@@ -46,9 +50,9 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceSelectAnswerVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceImpl';
+import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended =
@@ -67,12 +71,34 @@ export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_Edi
   };
 
 export const SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionsHook';
+  'SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionsHook = (
   data: ServiceSelectAnswerVoteDefinitionStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteDefinition, value: any) => void,
+
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended;
+
+export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModel
+  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModelContext =
+  createContext<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModel>({} as any);
+export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModel = () => {
+  const context = useContext(ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModel must be used within a(n) ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const convertServiceUserSelectAnswerVoteDefinitionsAccessViewPagePayload = (
   attributeName: keyof ServiceSelectAnswerVoteDefinition,
@@ -103,8 +129,8 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const { signedIdentifier } = useParams();
 
   // Services
-  const serviceSelectAnswerVoteDefinitionServiceImpl = useMemo(
-    () => new ServiceSelectAnswerVoteDefinitionServiceImpl(judoAxiosProvider),
+  const userServiceForSelectAnswerVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForSelectAnswerVoteDefinitionsImpl(judoAxiosProvider),
     [],
   );
 
@@ -114,6 +140,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -157,9 +184,20 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{valueRepresentation,created}}',
+  const getPageQueryCustomizer: () => ServiceSelectAnswerVoteDefinitionQueryCustomizer = () => ({
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,voteSelections{description,title},userVoteEntry{created,valueRepresentation}}',
+  });
+
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
 
   // Pandino Action overrides
@@ -169,7 +207,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     );
   const customActions:
     | ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActionsExtended
-    | undefined = customActionsHook?.(data, editMode, storeDiff);
+    | undefined = customActionsHook?.(data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
   const openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage =
@@ -187,23 +225,25 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage =
     useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit', {
-    defaultValue: 'SelectAnswerVoteDefinition View / Edit',
-  });
-
-  // Private actions
-  const submit = async () => {
-    await updateAction();
-  };
-
   // Action section
-  const issueOpenPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage((target || data).__signedIdentifier));
+  const getPageTitle = (data: ServiceSelectAnswerVoteDefinition): string => {
+    return t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit', {
+      defaultValue: 'SelectAnswerVoteDefinition View / Edit',
+    });
+  };
+  const issueOpenPageAction = async (target: ServiceIssue | ServiceIssueStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceSelectAnswerVoteDefinitionIssueRelationViewPage(
+          ((target as ServiceIssueStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.getIssue(
+    return userServiceForSelectAnswerVoteDefinitionsImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {
         _mask: '{}',
@@ -214,7 +254,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceSelectAnswerVoteDefinitionServiceImpl.getRangeForOwner(data, queryCustomizer);
+      return userServiceForSelectAnswerVoteDefinitionsImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -234,13 +274,16 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     }
     return undefined;
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUser | ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceSelectAnswerVoteDefinitionOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownerOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceSelectAnswerVoteDefinitionOwnerRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const voteSelectionsBulkDeleteAction = async (
@@ -267,7 +310,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -283,11 +326,24 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       });
     });
   };
-  const voteSelectionsOpenFormAction = async () => {
+  const voteSelectionsBulkRemoveAction = async (
+    selectedRows: ServiceSelectAnswerVoteSelectionStored[],
+  ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
+    return new Promise((resolve) => {
+      const selectedIds = selectedRows.map((r) => r.__identifier);
+      const newList = (data?.voteSelections ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
+      storeDiff('voteSelections', newList);
+      resolve({
+        result: 'submit',
+        data: [],
+      });
+    });
+  };
+  const voteSelectionsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } =
       await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const voteSelectionsFilterAction = async (
@@ -313,10 +369,10 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           )
         : true;
       if (confirmed) {
-        await serviceSelectAnswerVoteDefinitionServiceImpl.deleteVoteSelections(target);
+        await userServiceForSelectAnswerVoteDefinitionsImpl.deleteVoteSelections(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+          refreshAction(getPageQueryCustomizer());
         }
       }
     } catch (error) {
@@ -325,16 +381,46 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       }
     }
   };
-  const voteSelectionsOpenPageAction = async (target?: ServiceSelectAnswerVoteSelectionStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const voteSelectionsRemoveAction = async (target?: ServiceSelectAnswerVoteSelectionStored, silentMode?: boolean) => {
+    if (target) {
+      const newList = (data?.voteSelections ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
+      storeDiff('voteSelections', newList);
+    }
+  };
+  const voteSelectionsOpenPageAction = async (
+    target: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceSelectAnswerVoteSelectionStored).__signedIdentifier)) {
+      const { result, data: returnedData } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(
+        { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
+        target,
+        true,
+      );
+      // we might need to differentiate result handling between operation inputs and crud relation creates
+      if (result === 'submit-draft' && returnedData) {
+        const existingIndex = (payloadDiff.current.voteSelections || []).findIndex(
+          (r: { __identifier?: string }) => r.__identifier === returnedData.__identifier,
+        );
+        if (existingIndex > -1) {
+          payloadDiff.current.voteSelections[existingIndex] = {
+            ...returnedData,
+          };
+        }
+        storeDiff('voteSelections', [...(payloadDiff.current.voteSelections || [])]);
+        return;
+      }
+    } else if (!isDraft) {
+      await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const activateForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.activate(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.activate(data);
       if (customActions?.postActivateForSelectAnswerVoteDefinitionAction) {
         await customActions.postActivateForSelectAnswerVoteDefinitionAction();
       } else {
@@ -342,7 +428,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -354,7 +440,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const addToFavoritesForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.addToFavorites(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.addToFavorites(data);
       if (customActions?.postAddToFavoritesForSelectAnswerVoteDefinitionAction) {
         await customActions.postAddToFavoritesForSelectAnswerVoteDefinitionAction();
       } else {
@@ -362,7 +448,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -374,7 +460,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const closeVoteForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.closeVote(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.closeVote(data);
       if (customActions?.postCloseVoteForSelectAnswerVoteDefinitionAction) {
         await customActions.postCloseVoteForSelectAnswerVoteDefinitionAction();
       } else {
@@ -382,7 +468,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -394,7 +480,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const deleteOrArchiveForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.deleteOrArchive(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.deleteOrArchive(data);
       if (customActions?.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction) {
         await customActions.postDeleteOrArchiveForSelectAnswerVoteDefinitionAction();
       } else {
@@ -402,7 +488,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -414,7 +500,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const removeFromFavoritesForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.removeFromFavorites(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.removeFromFavorites(data);
       if (customActions?.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction) {
         await customActions.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction();
       } else {
@@ -422,7 +508,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -445,15 +531,21 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteEntryStored[]> => {
-    return serviceSelectAnswerVoteDefinitionServiceImpl.listVoteEntries(
+    return userServiceForSelectAnswerVoteDefinitionsImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,
     );
   };
-  const voteEntriesOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const voteEntriesOpenPageAction = async (
+    target: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceSelectAnswerVoteEntryStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceSelectAnswerVoteDefinitionVoteEntriesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const voteAction = async () => {
@@ -463,14 +555,14 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
   const takeBackVoteForSelectAnswerVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceSelectAnswerVoteDefinitionServiceImpl.takeBackVote(data);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.takeBackVote(data);
       if (customActions?.postTakeBackVoteForSelectAnswerVoteDefinitionAction) {
         await customActions.postTakeBackVoteForSelectAnswerVoteDefinitionAction();
       } else {
@@ -478,7 +570,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
       }
     } catch (error) {
@@ -487,10 +579,16 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const userVoteEntryOpenPageAction = async (target?: ServiceSelectAnswerVoteEntryStored) => {
-    await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const userVoteEntryOpenPageAction = async (
+    target: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceSelectAnswerVoteEntryStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceSelectAnswerVoteDefinitionUserVoteEntryRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const backAction = async () => {
@@ -498,7 +596,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
   const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
@@ -506,11 +604,12 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceSelectAnswerVoteDefinitionServiceImpl.refresh(
+      const result = await userServiceForSelectAnswerVoteDefinitionsImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
+        getPageQueryCustomizer(),
       );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -524,6 +623,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -533,11 +633,11 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceSelectAnswerVoteDefinitionServiceImpl.update(payloadDiff.current);
+      const res = await userServiceForSelectAnswerVoteDefinitionsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceSelectAnswerVoteDefinition, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
+        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
       }
     } catch (error) {
@@ -548,6 +648,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions = {
+    getPageTitle,
     issueOpenPageAction,
     issuePreFetchAction,
     ownerAutocompleteRangeAction,
@@ -555,9 +656,11 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     ownerUnsetAction,
     ownerOpenPageAction,
     voteSelectionsBulkDeleteAction,
+    voteSelectionsBulkRemoveAction,
     voteSelectionsOpenFormAction,
     voteSelectionsFilterAction,
     voteSelectionsDeleteAction,
+    voteSelectionsRemoveAction,
     voteSelectionsOpenPageAction,
     activateForSelectAnswerVoteDefinitionAction,
     addToFavoritesForSelectAnswerVoteDefinitionAction,
@@ -577,22 +680,40 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    submit,
+    isFormUpdateable,
+    isFormDeleteable,
+  };
+
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.refreshAction!(pageQueryCustomizer);
+      await actions.refreshAction!(getPageQueryCustomizer());
     })();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessViewPageDefinition"
-      data-page-name="service::User::selectAnswerVoteDefinitions::AccessViewPage"
-    >
+    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessViewPageDefinition"
+          data-page-name="service::User::selectAnswerVoteDefinitions::AccessViewPage"
+        />
         <PageContainerTransition>
           <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -607,6 +728,6 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditViewModelContext.Provider>
   );
 }

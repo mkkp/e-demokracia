@@ -29,7 +29,6 @@ export interface RatingVoteInputRatingVoteInput_TablePageActions
 }
 
 export interface RatingVoteInputRatingVoteInput_TablePageProps {
-  title: string;
   actions: RatingVoteInputRatingVoteInput_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -42,11 +41,11 @@ export default function RatingVoteInputRatingVoteInput_TablePage(props: RatingVo
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -67,7 +66,11 @@ export default function RatingVoteInputRatingVoteInput_TablePage(props: RatingVo
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <RatingVoteInputRatingVoteInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <RatingVoteInputRatingVoteInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+          />
         </Box>
       </Suspense>
     </>

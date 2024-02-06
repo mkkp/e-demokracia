@@ -46,7 +46,6 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDialogActions;
   isLoading: boolean;
@@ -60,6 +59,7 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_
   validation: Map<keyof ServiceSelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteSelection, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::SelectAnswerVoteSelection::SelectAnswerVoteSelection_View_Edit
@@ -72,7 +72,6 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -85,15 +84,16 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer = {
-    _mask: '{description,title}',
+    _mask: actions.getMask ? actions.getMask!() : '{description,title}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_pSHJoFtqEe6Mx9dH3yj5gQ)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -113,8 +113,8 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
           <ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -122,6 +122,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

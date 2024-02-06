@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -53,7 +53,8 @@ import { ServiceConCon_View_EditCreatedByComponent } from './components/ServiceC
 import type { ServiceConCon_View_EditProsComponentActionDefinitions } from './components/ServiceConCon_View_EditProsComponent';
 import { ServiceConCon_View_EditProsComponent } from './components/ServiceConCon_View_EditProsComponent';
 
-export const SERVICE_CON_CON_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceConCon_View_EditContainerHook';
+export const SERVICE_CON_CON_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_CON_CON_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceConCon_View_EditContainerHook = (
   data: ServiceConStored,
   editMode: boolean,
@@ -64,11 +65,12 @@ export interface ServiceConCon_View_EditActionDefinitions
   extends ServiceConCon_View_EditConsComponentActionDefinitions,
     ServiceConCon_View_EditCreatedByComponentActionDefinitions,
     ServiceConCon_View_EditProsComponentActionDefinitions {
+  getPageTitle?: (data: ServiceCon) => string;
   createConArgumentAction?: () => Promise<void>;
   createProArgumentAction?: () => Promise<void>;
   voteDownForConAction?: () => Promise<void>;
   voteUpForConAction?: () => Promise<void>;
-  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
   isCreatedRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isDescriptionRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
@@ -79,14 +81,15 @@ export interface ServiceConCon_View_EditActionDefinitions
   isTitleDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isUpVotesRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
   isUpVotesDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceConCon_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceConCon_View_EditActionDefinitions;
 
   data: ServiceConStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCon, value: any) => void;
@@ -94,6 +97,7 @@ export interface ServiceConCon_View_EditProps {
   validation: Map<keyof ServiceCon, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCon, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -102,9 +106,10 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -136,19 +141,23 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Con_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qAaDMGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="Con_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="con::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="con::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
@@ -162,9 +171,10 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="con" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/GroupVisualElement"
+                      data-name="con"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -176,7 +186,6 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_3ndKkH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-                          autoFocus
                           label={t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string}
                           value={data.title ?? ''}
                           className={clsx({
@@ -202,7 +211,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -267,6 +276,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
@@ -310,7 +320,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -329,7 +339,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           }}
                           disabled={!actions.voteUpForConAction || editMode}
                         >
-                          <span>{t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
+                          {t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'Vote Up' })}
                         </LoadingButton>
                       </Grid>
 
@@ -387,7 +397,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                           }}
                           disabled={!actions.voteDownForConAction || editMode}
                         >
-                          <span>{t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
+                          {t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'Vote Down' })}
                         </LoadingButton>
                       </Grid>
 
@@ -450,19 +460,23 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="Arguments" xs={12} sm={12}>
             <Grid
               id="User/(esm/_AnjwQG5REe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="Arguments"
               container
               direction="row"
               alignItems="flex-start"
               justifyContent="flex-start"
               spacing={2}
             >
-              <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="(User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+              <Grid item data-name="pros::LabelWrapper" xs={12} sm={12} md={6.0}>
+                <Card
+                  id="(User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                  data-name="pros::LabelWrapper"
+                >
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
@@ -476,18 +490,20 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                         </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="pros" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="pros"
                           container
                           direction="row"
                           alignItems="stretch"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="actions" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_PwgIEHjsEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="actions"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -508,19 +524,18 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                                   }}
                                   disabled={!actions.createProArgumentAction || editMode}
                                 >
-                                  <span>
-                                    {t('service.Con.Con_View_Edit.createProArgument', {
-                                      defaultValue: 'Add Pro Argument',
-                                    })}
-                                  </span>
+                                  {t('service.Con.Con_View_Edit.createProArgument', {
+                                    defaultValue: 'Add Pro Argument',
+                                  })}
                                 </LoadingButton>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="table" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_UuxjcHjtEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="table"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -545,6 +560,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('pros')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
@@ -557,10 +573,13 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                 </Card>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="(User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+              <Grid item data-name="cons::LabelWrapper" xs={12} sm={12} md={6.0}>
+                <Card
+                  id="(User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                  data-name="cons::LabelWrapper"
+                >
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
@@ -574,18 +593,20 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                         </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="cons" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="cons"
                           container
                           direction="row"
                           alignItems="stretch"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="actions" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_DsGQIHjuEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="actions"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -606,19 +627,18 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                                   }}
                                   disabled={!actions.createConArgumentAction || editMode}
                                 >
-                                  <span>
-                                    {t('service.Con.Con_View_Edit.createConArgument', {
-                                      defaultValue: 'Add Con Argument',
-                                    })}
-                                  </span>
+                                  {t('service.Con.Con_View_Edit.createConArgument', {
+                                    defaultValue: 'Add Con Argument',
+                                  })}
                                 </LoadingButton>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="table" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_w-gIkHjtEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="table"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -643,6 +663,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('cons')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>

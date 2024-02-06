@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -41,7 +41,7 @@ import type { ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerCo
 import { ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent } from './components/ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponent';
 
 export const SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainerHook';
+  'SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainerHook = (
   data: ServiceSelectAnswerVoteEntryStored,
   editMode: boolean,
@@ -50,6 +50,7 @@ export type ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditContainer
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionDefinitions
   extends ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerComponentActionDefinitions {
+  getPageTitle?: (data: ServiceSelectAnswerVoteEntry) => string;
   isCreatedRequired?: (
     data: ServiceSelectAnswerVoteEntry | ServiceSelectAnswerVoteEntryStored,
     editMode?: boolean,
@@ -68,14 +69,15 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActi
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditActionDefinitions;
 
   data: ServiceSelectAnswerVoteEntryStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteEntry, value: any) => void;
@@ -83,6 +85,7 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditProp
   validation: Map<keyof ServiceSelectAnswerVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteEntry, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_mtFdkFtpEe6Mx9dH3yj5gQ)/TransferObjectViewPageContainer
@@ -93,9 +96,10 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -128,16 +132,17 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="SelectAnswerVoteEntry_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_mtFdkFtpEe6Mx9dH3yj5gQ)/TransferObjectViewVisualElement"
+          data-name="SelectAnswerVoteEntry_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -145,7 +150,6 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': true,
               })}
-              autoFocus
               slotProps={{
                 textField: {
                   id: 'User/(esm/_Kg6pUFuWEe6T042_LMmSdQ)/TimestampTypeDateTimeInput',
@@ -191,7 +195,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={
                 actions?.isValueRepresentationRequired ? actions.isValueRepresentationRequired(data, editMode) : false
@@ -229,7 +233,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
@@ -241,6 +245,7 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_E
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

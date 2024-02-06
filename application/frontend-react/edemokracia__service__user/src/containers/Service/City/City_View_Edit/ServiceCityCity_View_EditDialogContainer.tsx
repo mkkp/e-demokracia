@@ -36,7 +36,6 @@ export interface ServiceCityCity_View_EditDialogActions extends ServiceCityCity_
 
 export interface ServiceCityCity_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCityCity_View_EditDialogActions;
   isLoading: boolean;
@@ -50,6 +49,7 @@ export interface ServiceCityCity_View_EditDialogProps {
   validation: Map<keyof ServiceCity, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCity, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::City::City_View_Edit
@@ -60,7 +60,6 @@ export default function ServiceCityCity_View_EditDialog(props: ServiceCityCity_V
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -73,15 +72,16 @@ export default function ServiceCityCity_View_EditDialog(props: ServiceCityCity_V
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceCityQueryCustomizer = {
-    _mask: '{name,representation,districts{name}}',
+    _mask: actions.getMask ? actions.getMask!() : '{name,representation,districts{name}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_a0XkuH2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -101,8 +101,8 @@ export default function ServiceCityCity_View_EditDialog(props: ServiceCityCity_V
           <ServiceCityCity_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -110,6 +110,7 @@ export default function ServiceCityCity_View_EditDialog(props: ServiceCityCity_V
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

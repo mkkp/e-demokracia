@@ -34,7 +34,6 @@ export interface ServiceUserIssuesUserIssues_View_EditPageActions
 }
 
 export interface ServiceUserIssuesUserIssues_View_EditPageProps {
-  title: string;
   actions: ServiceUserIssuesUserIssues_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -57,7 +56,6 @@ export default function ServiceUserIssuesUserIssues_View_EditPage(
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -71,12 +69,12 @@ export default function ServiceUserIssuesUserIssues_View_EditPage(
     submit,
   } = props;
   const queryCustomizer: ServiceUserIssuesQueryCustomizer = {
-    _mask: '{}',
+    _mask: actions.getMask ? actions.getMask!() : '{}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -164,8 +162,8 @@ export default function ServiceUserIssuesUserIssues_View_EditPage(
           <ServiceUserIssuesUserIssues_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

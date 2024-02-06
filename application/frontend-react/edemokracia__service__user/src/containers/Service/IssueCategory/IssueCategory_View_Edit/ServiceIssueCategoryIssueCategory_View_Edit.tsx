@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -44,7 +44,7 @@ import type { ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentA
 import { ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent } from './components/ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent';
 
 export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueCategoryIssueCategory_View_EditContainerHook';
+  'SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueCategoryIssueCategory_View_EditContainerHook = (
   data: ServiceIssueCategoryStored,
   editMode: boolean,
@@ -54,6 +54,7 @@ export type ServiceIssueCategoryIssueCategory_View_EditContainerHook = (
 export interface ServiceIssueCategoryIssueCategory_View_EditActionDefinitions
   extends ServiceIssueCategoryIssueCategory_View_EditOwnerComponentActionDefinitions,
     ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponentActionDefinitions {
+  getPageTitle?: (data: ServiceIssueCategory) => string;
   isDescriptionRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
   isDescriptionDisabled?: (
     data: ServiceIssueCategory | ServiceIssueCategoryStored,
@@ -66,14 +67,15 @@ export interface ServiceIssueCategoryIssueCategory_View_EditActionDefinitions
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceIssueCategoryIssueCategory_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueCategoryIssueCategory_View_EditActionDefinitions;
 
   data: ServiceIssueCategoryStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void;
@@ -81,6 +83,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditProps {
   validation: Map<keyof ServiceIssueCategory, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueCategory, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qJBzsGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -91,9 +94,10 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -125,21 +129,21 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="IssueCategory_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qJBzsGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="IssueCategory_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T0J4EG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-              autoFocus
               label={t('service.IssueCategory.IssueCategory_View_Edit.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
               className={clsx({
@@ -163,12 +167,12 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
@@ -202,7 +206,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                 ),
               }}
               inputProps={{
-                maxlength: 16384,
+                maxLength: 16384,
               }}
             />
           </Grid>
@@ -214,6 +218,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}
@@ -221,9 +226,10 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="subcategories::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="subcategories::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -261,6 +267,7 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
                     isFormUpdateable={isFormUpdateable}
                     validationError={validation.get('subcategories')}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

@@ -8,14 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceDistrictDistrict_FormDialogActions } from '~/containers/Service/District/District_Form/ServiceDistrictDistrict_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceDistrictDistrict_FormDialogActions,
+  ServiceDistrictDistrict_FormDialogProps,
+} from '~/containers/Service/District/District_Form/ServiceDistrictDistrict_FormDialogContainer';
+import { useServiceCityDistrictsRelationViewPage } from '~/dialogs/Service/City/Districts/RelationViewPage';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
   ServiceCityStored,
@@ -26,7 +30,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCityServiceForDistrictsImpl } from '~/services/data-axios/ServiceCityServiceForDistrictsImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictDistrict_FormDialogActions & {
@@ -35,23 +39,59 @@ export type ServiceDistrictDistrict_FormDialogActionsExtended = ServiceDistrictD
     data: ServiceDistrict,
     storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
   ) => Promise<void>;
+  postCreateAction?: (
+    data: ServiceDistrict,
+    res: ServiceDistrictStored,
+    onSubmit: (result?: ServiceDistrictStored) => Promise<void>,
+    onClose: () => Promise<void>,
+    openCreated?: boolean,
+  ) => Promise<void>;
 };
 
 export const SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceDistrictDistrict_FormActionsHook';
+  'SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK';
 export type ServiceDistrictDistrict_FormActionsHook = (
   ownerData: any,
   data: ServiceDistrictStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceDistrict, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceDistrictDistrict_FormDialogActionsExtended;
+
+export interface ServiceDistrictDistrict_FormViewModel extends ServiceDistrictDistrict_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceDistrict>;
+  isDraft?: boolean;
+}
+
+const ServiceDistrictDistrict_FormViewModelContext = createContext<ServiceDistrictDistrict_FormViewModel>({} as any);
+export const useServiceDistrictDistrict_FormViewModel = () => {
+  const context = useContext(ServiceDistrictDistrict_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceDistrictDistrict_FormViewModel must be used within a(n) ServiceDistrictDistrict_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceCityDistrictsRelationFormPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceDistrict>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceDistrict) => Promise<void>,
 ) => Promise<DialogResult<ServiceDistrictStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceDistrict>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceDistrict) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -67,16 +107,19 @@ export const useServiceCityDistrictsRelationFormPage = (): ((
         children: (
           <ServiceCityDistrictsRelationFormPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -100,14 +143,17 @@ const ServiceDistrictDistrict_FormDialogContainer = lazy(
 export interface ServiceCityDistrictsRelationFormPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceDistrict>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceDistrict) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceDistrictStored) => Promise<void>;
+  onSubmit: (result?: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm
 // Name: service::City::districts::RelationFormPage
 export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityDistrictsRelationFormPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceCityServiceForDistrictsImpl = useMemo(
@@ -121,6 +167,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -160,6 +207,27 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceDistrict) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await serviceCityServiceForDistrictsImpl.validateCreate(ownerData, data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'districts')) {
+        throw error;
+      }
+    }
+  };
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceDistrictDistrict_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_CITY_DISTRICTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -169,28 +237,51 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
-
-  // Calculated section
-  const title: string = t('service.District.District_Form', { defaultValue: 'District Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createAction();
-  };
+  const openServiceCityDistrictsRelationViewPage = useServiceCityDistrictsRelationViewPage();
 
   // Action section
+  const getPageTitle = (data: ServiceDistrict): string => {
+    return t('service.District.District_Form', { defaultValue: 'District Form' });
+  };
   const backAction = async () => {
     onClose();
   };
-  const createAction = async () => {
+  const createAction = async (openCreated?: boolean) => {
     try {
+      if (isDraft) {
+        try {
+          setIsLoading(true);
+          await validate(cleanUpPayload(payloadDiff.current));
+          onSubmit(payloadDiff.current, true);
+        } catch (error) {
+          if (!isErrorNestedValidationError(error, 'districts')) {
+            // relation form has no remaining error(s), proceed with submission
+            onSubmit(payloadDiff.current, true);
+          } else {
+            handleError<ServiceDistrict>(error, { setValidation }, data, isDraft ? 'districts' : undefined);
+          }
+        } finally {
+          setIsLoading(false);
+        }
+
+        return;
+      }
       setIsLoading(true);
-      const res = await serviceCityServiceForDistrictsImpl.create(ownerData, payloadDiff.current);
-      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-      onSubmit(res);
+      const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
+      const res = await serviceCityServiceForDistrictsImpl.create(ownerData, payload);
+      if (customActions?.postCreateAction) {
+        await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
+      } else {
+        showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
+        await onSubmit(res);
+        if (openCreated) {
+          await openServiceCityDistrictsRelationViewPage(res!);
+        }
+      }
     } catch (error) {
       handleError<ServiceDistrict>(error, { setValidation }, data);
     } finally {
@@ -208,6 +299,12 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceDistrictStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -218,10 +315,33 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
   };
 
   const actions: ServiceDistrictDistrict_FormDialogActions = {
+    getPageTitle,
     backAction,
     createAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceDistrictDistrict_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -230,15 +350,15 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
   }, []);
 
   return (
-    <div
-      id="User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm"
-      data-page-name="service::City::districts::RelationFormPage"
-    >
+    <ServiceDistrictDistrict_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm"
+          data-page-name="service::City::districts::RelationFormPage"
+        />
         <ServiceDistrictDistrict_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -250,8 +370,9 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceDistrictDistrict_FormViewModelContext.Provider>
   );
 }

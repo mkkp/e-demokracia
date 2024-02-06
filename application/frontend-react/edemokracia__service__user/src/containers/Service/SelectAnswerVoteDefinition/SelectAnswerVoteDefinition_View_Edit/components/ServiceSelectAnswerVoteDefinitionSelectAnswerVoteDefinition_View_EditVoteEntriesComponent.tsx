@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator, dateTimeColumnOperators } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -67,13 +67,25 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   voteEntriesRefreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
   ) => Promise<ServiceSelectAnswerVoteEntryStored[]>;
-  voteEntriesOpenPageAction?: (row: ServiceSelectAnswerVoteEntryStored) => Promise<void>;
+  getVoteEntriesMask?: () => string;
+  voteEntriesOpenPageAction?: (row: ServiceSelectAnswerVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  voteEntriesAdditionalToolbarButtons?: (
+    data: ServiceSelectAnswerVoteEntryStored[],
+    isLoading: boolean,
+    selectedRows: ServiceSelectAnswerVoteEntryStored[],
+    clearSelections: () => void,
+    ownerData: ServiceSelectAnswerVoteDefinitionStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentProps {
   uniqueId: string;
   actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceSelectAnswerVoteDefinitionStored;
   editMode: boolean;
@@ -85,7 +97,17 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
 export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponent(
   props: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -95,7 +117,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceSelectAnswerVoteEntryStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'created', sort: null }]);
@@ -103,14 +125,15 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceSelectAnswerVoteEntryQueryCustomizer>({
     _mask: '{created,createdBy,valueRepresentation}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -128,12 +151,14 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const [firstItem, setFirstItem] = useState<ServiceSelectAnswerVoteEntryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceSelectAnswerVoteEntryStored[]>([]);
 
   const createdColumn: GridColDef<ServiceSelectAnswerVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.created', {
+    headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteEntries.created', {
       defaultValue: 'Created',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -160,7 +185,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const createdByColumn: GridColDef<ServiceSelectAnswerVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'createdBy',
-    headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.createdBy', {
+    headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteEntries.createdBy', {
       defaultValue: 'CreatedBy',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -172,9 +197,10 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const valueRepresentationColumn: GridColDef<ServiceSelectAnswerVoteEntryStored> = {
     ...baseColumnConfig,
     field: 'valueRepresentation',
-    headerName: t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.valueRepresentation', {
-      defaultValue: 'ValueRepresentation',
-    }) as string,
+    headerName: t(
+      'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.voteEntries.valueRepresentation',
+      { defaultValue: 'ValueRepresentation' },
+    ) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -187,7 +213,71 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceSelectAnswerVoteEntryStored>[] = [];
+  const rowActions: TableRowAction<ServiceSelectAnswerVoteEntryStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_AXx6IFtqEe6Mx9dH3yj5gQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceSelectAnswerVoteEntryStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceSelectAnswerVoteEntryStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.voteEntriesAdditionalToolbarButtons
+    ? actions.voteEntriesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -234,7 +324,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -264,7 +354,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -275,7 +365,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -285,21 +375,26 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
+        };
+        const res = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -310,13 +405,14 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -326,7 +422,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -337,24 +433,19 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_AXx6IFtqEe6Mx9dH3yj5gQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.voteEntriesOpenPageAction
             ? async (params: GridRowParams<ServiceSelectAnswerVoteEntryStored>) =>
-                await actions.voteEntriesOpenPageAction!(params.row)
+                await actions.voteEntriesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -364,7 +455,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -399,7 +490,11 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.voteEntriesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
+                    };
+                    await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -409,16 +504,19 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

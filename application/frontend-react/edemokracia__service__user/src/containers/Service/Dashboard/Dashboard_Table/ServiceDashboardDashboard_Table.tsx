@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,22 +29,27 @@ import type { ServiceDashboardDashboard_TableDashboard_TableComponentActionDefin
 import { ServiceDashboardDashboard_TableDashboard_TableComponent } from './components/ServiceDashboardDashboard_TableDashboard_TableComponent';
 
 export const SERVICE_DASHBOARD_DASHBOARD_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceDashboardDashboard_TableContainerHook';
+  'SERVICE_DASHBOARD_DASHBOARD_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceDashboardDashboard_TableContainerHook = () => ServiceDashboardDashboard_TableActionDefinitions;
 
 export interface ServiceDashboardDashboard_TableActionDefinitions
-  extends ServiceDashboardDashboard_TableDashboard_TableComponentActionDefinitions {}
+  extends ServiceDashboardDashboard_TableDashboard_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceDashboardDashboard_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceDashboardDashboard_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTablePageContainer
 // Name: service::Dashboard::Dashboard_Table
 export default function ServiceDashboardDashboard_Table(props: ServiceDashboardDashboard_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -61,10 +66,10 @@ export default function ServiceDashboardDashboard_Table(props: ServiceDashboardD
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableVisualElement">
+      <Grid item data-name="Dashboard_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableVisualElement" data-name="Dashboard_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable"
@@ -77,6 +82,7 @@ export default function ServiceDashboardDashboard_Table(props: ServiceDashboardD
                     uniqueId={'User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

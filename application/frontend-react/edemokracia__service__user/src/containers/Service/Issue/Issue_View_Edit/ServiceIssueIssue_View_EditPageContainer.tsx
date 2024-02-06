@@ -33,7 +33,6 @@ export interface ServiceIssueIssue_View_EditPageActions extends ServiceIssueIssu
 }
 
 export interface ServiceIssueIssue_View_EditPageProps {
-  title: string;
   actions: ServiceIssueIssue_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -54,7 +53,6 @@ export default function ServiceIssueIssue_View_EditPage(props: ServiceIssueIssue
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -68,13 +66,14 @@ export default function ServiceIssueIssue_View_EditPage(props: ServiceIssueIssue
     submit,
   } = props;
   const queryCustomizer: ServiceIssueQueryCustomizer = {
-    _mask:
-      '{created,defaultVoteType,description,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes},issueType{title,description},owner{representation},city{representation},county{representation},district{representation}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,defaultVoteType,description,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},attachments{file,link,type},categories{description,title},comments{comment,created,createdByName,downVotes,upVotes},issueType{description,title},owner{representation},city{representation},county{representation},district{representation}}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -162,8 +161,8 @@ export default function ServiceIssueIssue_View_EditPage(props: ServiceIssueIssue
           <ServiceIssueIssue_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

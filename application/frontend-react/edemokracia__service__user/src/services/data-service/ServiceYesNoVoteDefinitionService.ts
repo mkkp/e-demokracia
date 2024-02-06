@@ -36,6 +36,7 @@ export interface ServiceYesNoVoteDefinitionService {
     queryCustomizer?: ServiceYesNoVoteDefinitionQueryCustomizer,
   ): Promise<ServiceYesNoVoteDefinitionStored>;
   update(target: Partial<ServiceYesNoVoteDefinitionStored>): Promise<ServiceYesNoVoteDefinitionStored>;
+  validateUpdate(target: Partial<ServiceYesNoVoteDefinitionStored>): Promise<ServiceYesNoVoteDefinitionStored>;
   getIssue(
     target: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,

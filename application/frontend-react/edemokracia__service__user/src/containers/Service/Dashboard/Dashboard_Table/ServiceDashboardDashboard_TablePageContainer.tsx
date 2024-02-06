@@ -28,7 +28,6 @@ export interface ServiceDashboardDashboard_TablePageActions extends ServiceDashb
 }
 
 export interface ServiceDashboardDashboard_TablePageProps {
-  title: string;
   actions: ServiceDashboardDashboard_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -41,11 +40,11 @@ export default function ServiceDashboardDashboard_TablePage(props: ServiceDashbo
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -66,7 +65,7 @@ export default function ServiceDashboardDashboard_TablePage(props: ServiceDashbo
       </PageHeader>
       <Suspense>
         <Box sx={mainContainerPadding}>
-          <ServiceDashboardDashboard_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceDashboardDashboard_Table actions={actions} refreshCounter={refreshCounter} isLoading={isLoading} />
         </Box>
       </Suspense>
     </>

@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,22 +29,27 @@ import type { ServiceCountyCounty_TableCounty_TableComponentActionDefinitions } 
 import { ServiceCountyCounty_TableCounty_TableComponent } from './components/ServiceCountyCounty_TableCounty_TableComponent';
 
 export const SERVICE_COUNTY_COUNTY_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_TableContainerHook';
+  'SERVICE_COUNTY_COUNTY_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceCountyCounty_TableContainerHook = () => ServiceCountyCounty_TableActionDefinitions;
 
 export interface ServiceCountyCounty_TableActionDefinitions
-  extends ServiceCountyCounty_TableCounty_TableComponentActionDefinitions {}
+  extends ServiceCountyCounty_TableCounty_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceCountyCounty_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCountyCounty_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTablePageContainer
 // Name: service::County::County_Table
 export default function ServiceCountyCounty_Table(props: ServiceCountyCounty_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -61,10 +66,10 @@ export default function ServiceCountyCounty_Table(props: ServiceCountyCounty_Tab
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableVisualElement">
+      <Grid item data-name="County_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableVisualElement" data-name="County_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable"
@@ -77,6 +82,7 @@ export default function ServiceCountyCounty_Table(props: ServiceCountyCounty_Tab
                     uniqueId={'User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

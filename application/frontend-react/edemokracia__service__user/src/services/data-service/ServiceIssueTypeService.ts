@@ -20,4 +20,5 @@ export interface ServiceIssueTypeService {
   ): Promise<ServiceIssueTypeStored>;
   delete(target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
   update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
+  validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
 }

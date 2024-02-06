@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,11 +29,12 @@ import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErr
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 
 export const SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSimpleVoteSimpleVote_FormContainerHook';
+  'SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceSimpleVoteSimpleVote_FormContainerHook = (
   data: ServiceSimpleVoteStored,
   editMode: boolean,
@@ -41,6 +42,7 @@ export type ServiceSimpleVoteSimpleVote_FormContainerHook = (
 ) => ServiceSimpleVoteSimpleVote_FormActionDefinitions;
 
 export interface ServiceSimpleVoteSimpleVote_FormActionDefinitions {
+  getPageTitle?: (data: ServiceSimpleVote) => string;
   isCreatedRequired?: (data: ServiceSimpleVote | ServiceSimpleVoteStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (
     data: ServiceSimpleVote | ServiceSimpleVoteStored,
@@ -57,10 +59,10 @@ export interface ServiceSimpleVoteSimpleVote_FormActionDefinitions {
 
 export interface ServiceSimpleVoteSimpleVote_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSimpleVoteSimpleVote_FormActionDefinitions;
 
   data: ServiceSimpleVoteStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void;
@@ -68,6 +70,7 @@ export interface ServiceSimpleVoteSimpleVote_FormProps {
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p9AJ4GksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -76,9 +79,10 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -107,21 +111,34 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
   const containerActions: ServiceSimpleVoteSimpleVote_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="SimpleVote_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p9AJ4GksEe25ONJ3V89cVA)/TransferObjectFormVisualElement"
+          data-name="SimpleVote_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group" xs={12} sm={12}>
             <Grid
               id="User/(esm/_5-_pMG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group"
               container
               direction="row"
               alignItems="flex-start"
@@ -136,7 +153,7 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  autoFocus
+                  inputRef={autoFocusInputRef}
                   slotProps={{
                     textField: {
                       id: 'User/(esm/_VQSXUGk5Ee25ONJ3V89cVA)/TimestampTypeDateTimeInput',
@@ -219,9 +236,10 @@ export default function ServiceSimpleVoteSimpleVote_Form(props: ServiceSimpleVot
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group_2" xs={12} sm={12}>
             <Grid
               id="User/(esm/_7txfMG5CEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group_2"
               container
               direction="row"
               alignItems="flex-start"

@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditCityComponentActionDefinitions {
   cityOpenSetSelectorAction?: () => Promise<ServiceCityStored | undefined>;
   cityUnsetAction?: (target: ServiceCityStored) => Promise<void>;
-  cityOpenPageAction?: (target: ServiceCityStored) => Promise<void>;
+  cityOpenPageAction?: (target: ServiceCityStored, isDraft?: boolean) => Promise<void>;
   cityAutocompleteRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<Array<ServiceCityStored>>;
   isCityRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
   isCityDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
@@ -37,12 +37,14 @@ export interface ServiceIssueIssue_View_EditCityComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_pPQKgNvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: city
 export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssue_View_EditCityComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -59,6 +61,7 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
       disabled={actions?.isCityDisabled ? actions.isCityDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(city) => {
         storeDiff('city', city);
@@ -83,7 +86,7 @@ export function ServiceIssueIssue_View_EditCityComponent(props: ServiceIssueIssu
       onView={
         ownerData.city && actions.cityOpenPageAction
           ? async () => {
-              await actions.cityOpenPageAction!(ownerData.city!);
+              await actions.cityOpenPageAction!(ownerData.city!, false);
             }
           : undefined
       }

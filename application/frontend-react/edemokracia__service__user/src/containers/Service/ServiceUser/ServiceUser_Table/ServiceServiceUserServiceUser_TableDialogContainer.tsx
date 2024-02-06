@@ -36,12 +36,13 @@ export interface ServiceServiceUserServiceUser_TableDialogActions
 
 export interface ServiceServiceUserServiceUser_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceServiceUserServiceUser_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::ServiceUser::ServiceUser_Table
@@ -52,12 +53,12 @@ export default function ServiceServiceUserServiceUser_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -74,7 +75,12 @@ export default function ServiceServiceUserServiceUser_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceServiceUserServiceUser_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceServiceUserServiceUser_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

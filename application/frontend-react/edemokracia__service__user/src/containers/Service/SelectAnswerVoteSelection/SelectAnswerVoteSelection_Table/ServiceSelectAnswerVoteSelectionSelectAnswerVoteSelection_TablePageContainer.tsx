@@ -36,7 +36,6 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
 }
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TablePageProps {
-  title: string;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TablePageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -51,11 +50,11 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { title, actions, isLoading, editMode, refreshCounter } = props;
+  const { actions, isLoading, editMode, refreshCounter } = props;
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle() : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -81,6 +80,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
           <ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Table
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
           />
         </Box>
       </Suspense>

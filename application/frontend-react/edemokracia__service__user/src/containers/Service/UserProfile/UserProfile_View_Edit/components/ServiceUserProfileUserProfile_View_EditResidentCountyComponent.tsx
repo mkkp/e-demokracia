@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentActionDefinitions {
   residentCountyOpenSetSelectorAction?: () => Promise<ServiceCountyStored | undefined>;
   residentCountyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
-  residentCountyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
+  residentCountyOpenPageAction?: (target: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
   residentCountyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
@@ -43,6 +43,7 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_fsW_olvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedLink
@@ -50,7 +51,8 @@ export interface ServiceUserProfileUserProfile_View_EditResidentCountyComponentP
 export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
   props: ServiceUserProfileUserProfile_View_EditResidentCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -71,6 +73,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
       }
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentCounty) => {
         storeDiff('residentCounty', residentCounty);
@@ -95,7 +98,7 @@ export function ServiceUserProfileUserProfile_View_EditResidentCountyComponent(
       onView={
         ownerData.residentCounty && actions.residentCountyOpenPageAction
           ? async () => {
-              await actions.residentCountyOpenPageAction!(ownerData.residentCounty!);
+              await actions.residentCountyOpenPageAction!(ownerData.residentCounty!, false);
             }
           : undefined
       }

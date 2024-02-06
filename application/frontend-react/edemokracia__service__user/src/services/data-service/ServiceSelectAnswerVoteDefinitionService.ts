@@ -41,6 +41,9 @@ export interface ServiceSelectAnswerVoteDefinitionService {
     queryCustomizer?: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ): Promise<ServiceSelectAnswerVoteDefinitionStored>;
   update(target: Partial<ServiceSelectAnswerVoteDefinitionStored>): Promise<ServiceSelectAnswerVoteDefinitionStored>;
+  validateUpdate(
+    target: Partial<ServiceSelectAnswerVoteDefinitionStored>,
+  ): Promise<ServiceSelectAnswerVoteDefinitionStored>;
   getIssue(
     target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
@@ -99,6 +102,10 @@ export interface ServiceSelectAnswerVoteDefinitionService {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  validateCreateVoteSelections(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: ServiceSelectAnswerVoteSelection,
+  ): Promise<ServiceSelectAnswerVoteSelection>;
   listVoteSelections(
     target: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,

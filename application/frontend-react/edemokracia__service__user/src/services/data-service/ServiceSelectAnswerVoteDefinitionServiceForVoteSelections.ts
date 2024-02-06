@@ -31,6 +31,14 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForVoteSelections {
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: ServiceSelectAnswerVoteSelection,
   ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  validateCreate(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: ServiceSelectAnswerVoteSelection,
+  ): Promise<ServiceSelectAnswerVoteSelection>;
   delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
   update(target: Partial<ServiceSelectAnswerVoteSelectionStored>): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
+    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
 }

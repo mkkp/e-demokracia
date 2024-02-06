@@ -39,12 +39,13 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Tab
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_Table
@@ -55,12 +56,12 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_-a9bgH4XEe2cB7_PsKXsHQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -80,6 +81,8 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Table
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

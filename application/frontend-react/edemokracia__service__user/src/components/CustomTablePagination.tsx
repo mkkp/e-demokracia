@@ -7,9 +7,11 @@
 // Template file: actor/src/components/CustomTablePagination.tsx.hbs
 
 import TablePagination from '@mui/material/TablePagination';
-import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import { type ChangeEventHandler, type Dispatch, type MouseEvent, type SetStateAction, useCallback } from 'react';
 
 export interface CustomTablePaginationProps {
+  pageSizeOptions: number[];
+  setPageSize: (newValue: number) => void;
   pageChange: (isNext: boolean) => Promise<void>;
   isNextButtonEnabled: boolean;
   page: number;
@@ -28,6 +30,10 @@ export const CustomTablePagination = (props: CustomTablePaginationProps) => {
 
     await props.pageChange(isNext);
   };
+  const onRowsPerPageChange = useCallback<ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>>(
+    (evt) => props.setPageSize(Number(evt.target.value)),
+    [],
+  );
 
   return (
     <TablePagination
@@ -36,7 +42,8 @@ export const CustomTablePagination = (props: CustomTablePaginationProps) => {
       page={props.page}
       onPageChange={handleChangePage}
       rowsPerPage={props.rowPerPage}
-      rowsPerPageOptions={[props.rowPerPage]}
+      rowsPerPageOptions={props.pageSizeOptions}
+      onRowsPerPageChange={onRowsPerPageChange}
       labelDisplayedRows={({ from, to }) => `${from}–${to}`}
       nextIconButtonProps={{
         disabled: !props.isNextButtonEnabled,

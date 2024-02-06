@@ -8,14 +8,17 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueTypeIssueType_View_EditDialogActions } from '~/containers/Service/IssueType/IssueType_View_Edit/ServiceIssueTypeIssueType_View_EditDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceIssueTypeIssueType_View_EditDialogActions,
+  ServiceIssueTypeIssueType_View_EditDialogProps,
+} from '~/containers/Service/IssueType/IssueType_View_Edit/ServiceIssueTypeIssueType_View_EditDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCreateIssueInput,
   ServiceCreateIssueInputStored,
@@ -26,8 +29,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceIssueTypeServiceImpl } from '~/services/data-axios/ServiceIssueTypeServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForIssueTypeImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
@@ -40,20 +43,52 @@ export type ServiceIssueTypeIssueType_View_EditDialogActionsExtended =
   };
 
 export const SERVICE_CREATE_ISSUE_INPUT_ISSUE_TYPE_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueTypeIssueType_View_EditActionsHook';
+  'SERVICE_CREATE_ISSUE_INPUT_ISSUE_TYPE_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceIssueTypeIssueType_View_EditActionsHook = (
   ownerData: any,
   data: ServiceIssueTypeStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceIssueTypeIssueType_View_EditDialogActionsExtended;
+
+export interface ServiceIssueTypeIssueType_View_EditViewModel extends ServiceIssueTypeIssueType_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceIssueType>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueTypeIssueType_View_EditViewModelContext = createContext<ServiceIssueTypeIssueType_View_EditViewModel>(
+  {} as any,
+);
+export const useServiceIssueTypeIssueType_View_EditViewModel = () => {
+  const context = useContext(ServiceIssueTypeIssueType_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueTypeIssueType_View_EditViewModel must be used within a(n) ServiceIssueTypeIssueType_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceCreateIssueInputIssueTypeRelationViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceIssueType>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceIssueType) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueTypeStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceIssueType>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceIssueType) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +104,19 @@ export const useServiceCreateIssueInputIssueTypeRelationViewPage = (): ((
         children: (
           <ServiceCreateIssueInputIssueTypeRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -102,8 +140,11 @@ const ServiceIssueTypeIssueType_View_EditDialogContainer = lazy(
 export interface ServiceCreateIssueInputIssueTypeRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceIssueType>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueType) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueTypeStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_I14DsNu5Ee2Bgcx6em3jZg)/RelationFeatureView
@@ -111,10 +152,13 @@ export interface ServiceCreateIssueInputIssueTypeRelationViewPageProps {
 export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   props: ServiceCreateIssueInputIssueTypeRelationViewPageProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceIssueTypeServiceImpl = useMemo(() => new ServiceIssueTypeServiceImpl(judoAxiosProvider), []);
+  const serviceCreateIssueInputServiceForIssueTypeImpl = useMemo(
+    () => new ServiceCreateIssueInputServiceForIssueTypeImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -122,6 +166,7 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -164,9 +209,20 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
     return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceIssueTypeQueryCustomizer = {
-    _mask: '{description,title,voteType}',
+  const getPageQueryCustomizer: () => ServiceIssueTypeQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{description,title,voteType}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
+
+  // Validation
+  const validate: (data: ServiceIssueType) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueTypeIssueType_View_EditActionsHook>(
@@ -177,17 +233,16 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceIssueType): string => {
+    return t('service.IssueType.IssueType_View_Edit', { defaultValue: 'IssueType View / Edit' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -195,8 +250,9 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueTypeServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceCreateIssueInputServiceForIssueTypeImpl.refresh(ownerData, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -210,6 +266,7 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -218,26 +275,49 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   };
 
   const actions: ServiceIssueTypeIssueType_View_EditDialogActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueTypeIssueType_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_I14DsNu5Ee2Bgcx6em3jZg)/RelationFeatureView"
-      data-page-name="service::CreateIssueInput::issueType::RelationViewPage"
-    >
+    <ServiceIssueTypeIssueType_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_I14DsNu5Ee2Bgcx6em3jZg)/RelationFeatureView"
+          data-page-name="service::CreateIssueInput::issueType::RelationViewPage"
+        />
         <ServiceIssueTypeIssueType_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -249,8 +329,9 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueTypeIssueType_View_EditViewModelContext.Provider>
   );
 }

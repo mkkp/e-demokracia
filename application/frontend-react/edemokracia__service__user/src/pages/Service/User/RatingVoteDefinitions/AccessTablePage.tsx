@@ -9,14 +9,19 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions } from '~/containers/Service/RatingVoteDefinition/RatingVoteDefinition_Table/ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer';
+import type {
+  ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions,
+  ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageProps,
+} from '~/containers/Service/RatingVoteDefinition/RatingVoteDefinition_Table/ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer';
 import { useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/RatingVoteDefinition/RatingVoteDefinition_View_Edit/Vote/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserRatingVoteDefinitionsAccessViewPage } from '~/routes';
 import type {
   ServiceRatingVoteDefinition,
@@ -28,7 +33,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended =
@@ -43,11 +48,30 @@ export type ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExte
   };
 
 export const SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionsHook';
+  'SERVICE_USER_RATING_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionsHook = (
   data: ServiceRatingVoteDefinitionStored[],
   editMode: boolean,
 ) => ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActionsExtended;
+
+export interface ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModel
+  extends ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModelContext =
+  createContext<ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModel>({} as any);
+export const useServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModel = () => {
+  const context = useContext(ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModel must be used within a(n) ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -71,6 +95,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -79,6 +104,12 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceRatingVoteDefinitionStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } =
@@ -92,15 +123,10 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
   const openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm =
     useServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm();
 
-  // Calculated section
-  const title: string = t('service.RatingVoteDefinition.RatingVoteDefinition_Table', {
-    defaultValue: 'RatingVoteDefinition Table',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.RatingVoteDefinition.RatingVoteDefinition_Table', { defaultValue: 'RatingVoteDefinition Table' });
+  };
   const activateForRatingVoteDefinitionAction = async (target?: ServiceRatingVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -191,7 +217,12 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
       setIsLoading(false);
     }
   };
-  const voteAction = async (target: ServiceRatingVoteDefinitionStored) => {
+  const voteAction = async (
+    target: ServiceRatingVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceRatingVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputForm(target);
     if (result === 'submit') {
@@ -216,6 +247,9 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
       setIsLoading(false);
     }
   };
+  const backAction = async () => {
+    navigateBack();
+  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -236,18 +270,29 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
       return userServiceForRatingVoteDefinitionsImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceRatingVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  const openPageAction = async (
+    target: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceRatingVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserRatingVoteDefinitionsAccessViewPage(
+          (target as ServiceRatingVoteDefinitionStored)!.__signedIdentifier,
+        ),
+      );
+    }
   };
 
   const actions: ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageActions = {
+    getPageTitle,
     activateForRatingVoteDefinitionAction,
     addToFavoritesForRatingVoteDefinitionAction,
     closeVoteForRatingVoteDefinitionAction,
@@ -255,23 +300,35 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
     removeFromFavoritesForRatingVoteDefinitionAction,
     voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
+    backAction,
     filterAction,
     refreshAction,
     openPageAction,
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_s3Fx0FuiEe6rLvwZQOpyUA)/AccessTablePageDefinition"
-      data-page-name="service::User::ratingVoteDefinitions::AccessTablePage"
-    >
+    <ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_s3Fx0FuiEe6rLvwZQOpyUA)/AccessTablePageDefinition"
+          data-page-name="service::User::ratingVoteDefinitions::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceRatingVoteDefinitionRatingVoteDefinition_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -279,6 +336,6 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceRatingVoteDefinitionRatingVoteDefinition_TableViewModelContext.Provider>
   );
 }

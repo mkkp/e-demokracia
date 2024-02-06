@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,16 +33,21 @@ import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefin
 import { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponent } from './components/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponent';
 
 export const CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableContainerHook';
+  'CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableContainerHook =
   () => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions;
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions
-  extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentActionDefinitions {}
+  extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTablePageContainer
@@ -51,7 +56,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   props: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -70,10 +75,13 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableVisualElement">
+      <Grid item data-name="CloseDebateOutputVoteDefinitionReference_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableVisualElement"
+          data-name="CloseDebateOutputVoteDefinitionReference_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable"
@@ -86,6 +94,7 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
                     uniqueId={'User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

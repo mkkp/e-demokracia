@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,23 +29,28 @@ import type { CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableCompon
 import { CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponent } from './components/CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponent';
 
 export const CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateInputCloseDebateInput_TableContainerHook';
+  'CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK';
 export type CloseDebateInputCloseDebateInput_TableContainerHook =
   () => CloseDebateInputCloseDebateInput_TableActionDefinitions;
 
 export interface CloseDebateInputCloseDebateInput_TableActionDefinitions
-  extends CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponentActionDefinitions {}
+  extends CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface CloseDebateInputCloseDebateInput_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CloseDebateInputCloseDebateInput_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTablePageContainer
 // Name: CloseDebateInput::CloseDebateInput_Table
 export default function CloseDebateInputCloseDebateInput_Table(props: CloseDebateInputCloseDebateInput_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -62,10 +67,13 @@ export default function CloseDebateInputCloseDebateInput_Table(props: CloseDebat
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="CloseDebateInput_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableVisualElement"
+          data-name="CloseDebateInput_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableTable"
@@ -78,6 +86,7 @@ export default function CloseDebateInputCloseDebateInput_Table(props: CloseDebat
                     uniqueId={'User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

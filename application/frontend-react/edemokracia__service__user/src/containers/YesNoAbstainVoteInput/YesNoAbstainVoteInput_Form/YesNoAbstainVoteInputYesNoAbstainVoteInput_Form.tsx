@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,6 +29,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   YesNoAbstainVoteInput,
@@ -37,7 +38,7 @@ import {
 } from '~/services/data-api';
 
 export const YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook';
+  'YES_NO_ABSTAIN_VOTE_INPUT_YES_NO_ABSTAIN_VOTE_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook = (
   data: YesNoAbstainVoteInputStored,
   editMode: boolean,
@@ -45,6 +46,7 @@ export type YesNoAbstainVoteInputYesNoAbstainVoteInput_FormContainerHook = (
 ) => YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions;
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions {
+  getPageTitle?: (data: YesNoAbstainVoteInput) => string;
   isValueRequired?: (data: YesNoAbstainVoteInput | YesNoAbstainVoteInputStored, editMode?: boolean) => boolean;
   isValueDisabled?: (
     data: YesNoAbstainVoteInput | YesNoAbstainVoteInputStored,
@@ -55,10 +57,10 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinition
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions;
 
   data: YesNoAbstainVoteInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof YesNoAbstainVoteInput, value: any) => void;
@@ -66,6 +68,7 @@ export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormProps {
   validation: Map<keyof YesNoAbstainVoteInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof YesNoAbstainVoteInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormPageContainer
@@ -76,9 +79,10 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -108,24 +112,36 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_Form(
   const containerActions: YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="YesNoAbstainVoteInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_-1U_03WyEe2LTNnGda5kaw)/TransferObjectFormVisualElement"
+          data-name="YesNoAbstainVoteInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isValueRequired ? actions.isValueRequired(data, editMode) : false}
               name="value"
               id="User/(esm/_6ISHYOSLEe20cv3f2msZXg)/EnumerationTypeCombo"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Form.value', { defaultValue: 'Vote' }) as string}
               value={data.value || ''}
               className={clsx({

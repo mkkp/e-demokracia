@@ -31,6 +31,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.pro;
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.VoteUp.class)
 public class VoteUpCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.VoteUp {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.pro.Pro _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.pro.VoteUpExchangeFunctionsComponent");
     }

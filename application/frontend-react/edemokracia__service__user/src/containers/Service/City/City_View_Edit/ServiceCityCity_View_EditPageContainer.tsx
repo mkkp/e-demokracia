@@ -33,7 +33,6 @@ export interface ServiceCityCity_View_EditPageActions extends ServiceCityCity_Vi
 }
 
 export interface ServiceCityCity_View_EditPageProps {
-  title: string;
   actions: ServiceCityCity_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -54,7 +53,6 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -68,12 +66,12 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
     submit,
   } = props;
   const queryCustomizer: ServiceCityQueryCustomizer = {
-    _mask: '{name,representation,districts{name}}',
+    _mask: actions.getMask ? actions.getMask!() : '{name,representation,districts{name}}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -161,8 +159,8 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
           <ServiceCityCity_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

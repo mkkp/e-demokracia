@@ -29,12 +29,13 @@ export interface ServiceCityCity_TableDialogActions extends ServiceCityCity_Tabl
 
 export interface ServiceCityCity_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCityCity_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::City::City_Table
@@ -43,12 +44,12 @@ export default function ServiceCityCity_TableDialog(props: ServiceCityCity_Table
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -65,7 +66,12 @@ export default function ServiceCityCity_TableDialog(props: ServiceCityCity_Table
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceCityCity_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCityCity_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

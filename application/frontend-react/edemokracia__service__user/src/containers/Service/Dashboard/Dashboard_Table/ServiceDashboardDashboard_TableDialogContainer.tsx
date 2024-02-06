@@ -31,12 +31,13 @@ export interface ServiceDashboardDashboard_TableDialogActions extends ServiceDas
 
 export interface ServiceDashboardDashboard_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceDashboardDashboard_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::Dashboard::Dashboard_Table
@@ -45,12 +46,12 @@ export default function ServiceDashboardDashboard_TableDialog(props: ServiceDash
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -67,7 +68,12 @@ export default function ServiceDashboardDashboard_TableDialog(props: ServiceDash
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceDashboardDashboard_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceDashboardDashboard_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

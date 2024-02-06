@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponentActionDefinitions {
   residentDistrictOpenSetSelectorAction?: () => Promise<ServiceDistrictStored | undefined>;
   residentDistrictUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
-  residentDistrictOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
+  residentDistrictOpenPageAction?: (target: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
   residentDistrictAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
@@ -43,6 +43,7 @@ export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponen
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_I_CEgIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
@@ -50,7 +51,8 @@ export interface ServiceServiceUserServiceUser_View_EditResidentDistrictComponen
 export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent(
   props: ServiceServiceUserServiceUser_View_EditResidentDistrictComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -73,6 +75,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
       }
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(residentDistrict) => {
         storeDiff('residentDistrict', residentDistrict);
@@ -97,7 +100,7 @@ export function ServiceServiceUserServiceUser_View_EditResidentDistrictComponent
       onView={
         ownerData.residentDistrict && actions.residentDistrictOpenPageAction
           ? async () => {
-              await actions.residentDistrictOpenPageAction!(ownerData.residentDistrict!);
+              await actions.residentDistrictOpenPageAction!(ownerData.residentDistrict!, false);
             }
           : undefined
       }

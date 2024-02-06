@@ -27,14 +27,21 @@ export interface UserServiceForAdminCounties {
   refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored>;
   getTemplate(): Promise<ServiceCounty>;
   create(target: ServiceCounty): Promise<ServiceCountyStored>;
+  validateCreate(target: ServiceCounty): Promise<ServiceCounty>;
   delete(target: JudoIdentifiable<ServiceCounty>): Promise<void>;
   update(target: Partial<ServiceCountyStored>): Promise<ServiceCountyStored>;
+  validateUpdate(target: Partial<ServiceCountyStored>): Promise<ServiceCountyStored>;
   listCities(
     owner: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
   getTemplateForCities(): Promise<ServiceCity>;
   createCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
+  validateCreateCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCity>;
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void>;
   updateCities(owner: JudoIdentifiable<ServiceCounty>, target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+  validateUpdateCities(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
 }

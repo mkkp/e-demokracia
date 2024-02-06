@@ -45,9 +45,16 @@ export interface UserServiceForYesNoAbstainVoteDefinitions {
     queryCustomizer?: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteDefinitionStored>;
   update(target: Partial<ServiceYesNoAbstainVoteDefinitionStored>): Promise<ServiceYesNoAbstainVoteDefinitionStored>;
+  validateUpdate(
+    target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
+  ): Promise<ServiceYesNoAbstainVoteDefinitionStored>;
   getIssue(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<ServiceIssueStored>;
+  validateUpdateIssue(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: Partial<ServiceIssueStored>,
   ): Promise<ServiceIssueStored>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
@@ -73,6 +80,10 @@ export interface UserServiceForYesNoAbstainVoteDefinitions {
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  validateUpdateOwner(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored>;
   setOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     selected: JudoIdentifiable<ServiceServiceUser>,
@@ -85,10 +96,18 @@ export interface UserServiceForYesNoAbstainVoteDefinitions {
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<ServiceYesNoAbstainVoteEntryStored>;
+  validateUpdateUserVoteEntry(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+  ): Promise<ServiceYesNoAbstainVoteEntryStored>;
   listVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ): Promise<Array<ServiceYesNoAbstainVoteEntryStored>>;
+  validateUpdateVoteEntries(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+  ): Promise<ServiceYesNoAbstainVoteEntryStored>;
   activate(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void>;
   addToFavorites(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void>;
   closeVote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void>;

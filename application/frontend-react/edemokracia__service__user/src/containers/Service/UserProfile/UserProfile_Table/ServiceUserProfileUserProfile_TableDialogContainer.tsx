@@ -36,12 +36,13 @@ export interface ServiceUserProfileUserProfile_TableDialogActions
 
 export interface ServiceUserProfileUserProfile_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceUserProfileUserProfile_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::UserProfile::UserProfile_Table
@@ -52,12 +53,12 @@ export default function ServiceUserProfileUserProfile_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_1QjBMFvQEe6jm_SkPSYEYw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -74,7 +75,12 @@ export default function ServiceUserProfileUserProfile_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceUserProfileUserProfile_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceUserProfileUserProfile_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

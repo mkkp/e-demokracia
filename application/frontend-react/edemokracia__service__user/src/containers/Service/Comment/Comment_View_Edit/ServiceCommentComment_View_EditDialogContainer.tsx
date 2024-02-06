@@ -36,7 +36,6 @@ export interface ServiceCommentComment_View_EditDialogActions extends ServiceCom
 
 export interface ServiceCommentComment_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCommentComment_View_EditDialogActions;
   isLoading: boolean;
@@ -50,6 +49,7 @@ export interface ServiceCommentComment_View_EditDialogProps {
   validation: Map<keyof ServiceComment, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceComment, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::Comment::Comment_View_Edit
@@ -60,7 +60,6 @@ export default function ServiceCommentComment_View_EditDialog(props: ServiceComm
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -73,15 +72,16 @@ export default function ServiceCommentComment_View_EditDialog(props: ServiceComm
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceCommentQueryCustomizer = {
-    _mask: '{comment,created,downVotes,upVotes,createdBy{representation}}',
+    _mask: actions.getMask ? actions.getMask!() : '{comment,created,downVotes,upVotes,createdBy{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_p_AVAGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -101,8 +101,8 @@ export default function ServiceCommentComment_View_EditDialog(props: ServiceComm
           <ServiceCommentComment_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -110,6 +110,7 @@ export default function ServiceCommentComment_View_EditDialog(props: ServiceComm
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

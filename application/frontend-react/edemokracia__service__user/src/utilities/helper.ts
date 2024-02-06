@@ -47,3 +47,6 @@ export const booleanToStringSelect = (booleanParam?: boolean | null): string | n
 };
 
 export const endWithSlash = (input: string): string => (input.endsWith('/') ? input : input + '/');
+
+// only for testing purposes
+export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));

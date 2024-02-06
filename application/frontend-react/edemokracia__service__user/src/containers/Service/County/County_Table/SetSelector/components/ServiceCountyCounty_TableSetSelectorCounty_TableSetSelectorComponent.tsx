@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
@@ -50,6 +50,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentActionDefinitions {
+  openFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -57,12 +58,20 @@ export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComp
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   selectorRangeAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
+  AdditionalToolbarButtons?: (
+    data: ServiceCountyStored[],
+    isLoading: boolean,
+    selectedRows: ServiceCountyStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentProps {
   uniqueId: string;
   actions: ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   selectionDiff: ServiceCountyStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceCountyStored[]>>;
@@ -74,8 +83,17 @@ export interface ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComp
 export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponent(
   props: ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, selectionDiff, setSelectionDiff, alreadySelected } =
-    props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
   const filterModelKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable-${uniqueId}-filters`;
 
@@ -84,7 +102,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceCountyStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'name', sort: null }]);
@@ -92,14 +110,15 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceCountyQueryCustomizer>({
     _mask: '{name}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -117,6 +136,8 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
   const [firstItem, setFirstItem] = useState<ServiceCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const nameColumn: GridColDef<ServiceCountyStored> = {
     ...baseColumnConfig,
     field: 'name',
@@ -130,7 +151,62 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
 
   const columns = useMemo<GridColDef<ServiceCountyStored>[]>(() => [nameColumn], []);
 
-  const rowActions: TableRowAction<ServiceCountyStored>[] = [];
+  const rowActions: TableRowAction<ServiceCountyStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_a0aoAH2iEe2LTNnGda5kaw)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceCountyStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceCountyStored[] = () => {
+    return selectionDiff;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceCountyQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -157,7 +233,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -187,7 +263,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -198,7 +274,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -231,15 +307,18 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+        };
+        const res = await actions.selectorRangeAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -250,13 +329,14 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -266,7 +346,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -276,19 +356,13 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_a0aoAH2iEe2LTNnGda5kaw)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
-        disableRowSelectionOnClick
+        columns={effectiveTableColumns}
         isRowSelectable={handleIsRowSelectable}
         hideFooterSelectedRowCount={!false}
         checkboxSelection
@@ -302,7 +376,7 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -334,23 +408,45 @@ export function ServiceCountyCounty_TableSetSelectorCounty_TableSetSelectorCompo
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.selectorRangeAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.County.County_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
+              {actions.openFormAction && true ? (
+                <Button
+                  id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTableCreateButton"
+                  startIcon={<MdiIcon path="note-add" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.openFormAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.County.County_Table.Table.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

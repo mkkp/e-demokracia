@@ -28,11 +28,16 @@ export interface UserServiceForAdminUserManager {
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
   ): Promise<ServiceUserManagerStored>;
   update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
+  validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
   listUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
   updateUsers(
+    owner: JudoIdentifiable<ServiceUserManager>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored>;
+  validateUpdateUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
   ): Promise<ServiceServiceUserStored>;

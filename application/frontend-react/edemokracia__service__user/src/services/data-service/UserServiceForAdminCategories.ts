@@ -30,8 +30,10 @@ export interface UserServiceForAdminCategories {
   ): Promise<ServiceIssueCategoryStored>;
   getTemplate(): Promise<ServiceIssueCategory>;
   create(target: ServiceIssueCategory): Promise<ServiceIssueCategoryStored>;
+  validateCreate(target: ServiceIssueCategory): Promise<ServiceIssueCategory>;
   delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
   update(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
+  validateUpdate(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
   getOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -40,6 +42,14 @@ export interface UserServiceForAdminCategories {
     owner: JudoIdentifiable<ServiceIssueCategory> | ServiceIssueCategory,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  validateCreateOwner(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceServiceUser,
+  ): Promise<ServiceServiceUser>;
+  validateUpdateOwner(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored>;
   setOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     selected: JudoIdentifiable<ServiceServiceUser>,
@@ -57,8 +67,16 @@ export interface UserServiceForAdminCategories {
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
   ): Promise<ServiceIssueCategoryStored>;
+  validateCreateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: ServiceIssueCategory,
+  ): Promise<ServiceIssueCategory>;
   deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
   updateSubcategories(
+    owner: JudoIdentifiable<ServiceIssueCategory>,
+    target: Partial<ServiceIssueCategoryStored>,
+  ): Promise<ServiceIssueCategoryStored>;
+  validateUpdateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
   ): Promise<ServiceIssueCategoryStored>;

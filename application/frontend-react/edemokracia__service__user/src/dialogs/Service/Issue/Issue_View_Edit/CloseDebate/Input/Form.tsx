@@ -8,13 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { CloseDebateInputCloseDebateInput_FormDialogActions } from '~/containers/CloseDebateInput/CloseDebateInput_Form/CloseDebateInputCloseDebateInput_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  CloseDebateInputCloseDebateInput_FormDialogActions,
+  CloseDebateInputCloseDebateInput_FormDialogProps,
+} from '~/containers/CloseDebateInput/CloseDebateInput_Form/CloseDebateInputCloseDebateInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
+import { routeToServiceIssueIssue_View_EditCloseDebateOutputView } from '~/routes';
 import type {
   CloseDebateInput,
   CloseDebateInputQueryCustomizer,
@@ -26,7 +31,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type CloseDebateInputCloseDebateInput_FormDialogActionsExtended =
@@ -41,23 +46,61 @@ export type CloseDebateInputCloseDebateInput_FormDialogActionsExtended =
       data: CloseDebateInput,
       storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: CloseDebateInput,
+      res: CloseDebateInputStored,
+      onSubmit: (result?: CloseDebateInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateInputCloseDebateInput_FormActionsHook';
+  'SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK';
 export type CloseDebateInputCloseDebateInput_FormActionsHook = (
   ownerData: any,
   data: CloseDebateInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof CloseDebateInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => CloseDebateInputCloseDebateInput_FormDialogActionsExtended;
+
+export interface CloseDebateInputCloseDebateInput_FormViewModel
+  extends CloseDebateInputCloseDebateInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<CloseDebateInput>;
+  isDraft?: boolean;
+}
+
+const CloseDebateInputCloseDebateInput_FormViewModelContext =
+  createContext<CloseDebateInputCloseDebateInput_FormViewModel>({} as any);
+export const useCloseDebateInputCloseDebateInput_FormViewModel = () => {
+  const context = useContext(CloseDebateInputCloseDebateInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useCloseDebateInputCloseDebateInput_FormViewModel must be used within a(n) CloseDebateInputCloseDebateInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceIssueIssue_View_EditCloseDebateInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<CloseDebateInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: CloseDebateInput) => Promise<void>,
 ) => Promise<DialogResult<CloseDebateOutputVoteDefinitionReferenceStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<CloseDebateInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: CloseDebateInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -73,16 +116,19 @@ export const useServiceIssueIssue_View_EditCloseDebateInputForm = (): ((
         children: (
           <ServiceIssueIssue_View_EditCloseDebateInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -111,8 +157,11 @@ const CloseDebateInputCloseDebateInput_FormDialogContainer = lazy(
 export interface ServiceIssueIssue_View_EditCloseDebateInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<CloseDebateInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: CloseDebateInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: CloseDebateOutputVoteDefinitionReferenceStored) => Promise<void>;
+  onSubmit: (result?: CloseDebateOutputVoteDefinitionReferenceStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
@@ -120,7 +169,7 @@ export interface ServiceIssueIssue_View_EditCloseDebateInputFormProps {
 export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   props: ServiceIssueIssue_View_EditCloseDebateInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceIssueServiceImpl = useMemo(() => new ServiceIssueServiceImpl(judoAxiosProvider), []);
@@ -131,6 +180,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -173,6 +223,15 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await closeDebateForIssueAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: CloseDebateInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<CloseDebateInputCloseDebateInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -182,26 +241,22 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('CloseDebateInput.CloseDebateInput_Form', { defaultValue: 'CloseDebateInput Form' });
-
-  // Private actions
-  const submit = async () => {
-    await closeDebateForIssueAction();
-  };
-
   // Action section
+  const getPageTitle = (data: CloseDebateInput): string => {
+    return t('CloseDebateInput.CloseDebateInput_Form', { defaultValue: 'CloseDebateInput Form' });
+  };
   const backAction = async () => {
     onClose();
   };
   const closeDebateForIssueAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.closeDebate(ownerData, payloadDiff.current);
+      const result = await serviceIssueServiceImpl.closeDebate(ownerData, cleanUpPayload(payloadDiff.current));
       if (customActions?.postCloseDebateForIssueAction) {
         await customActions.postCloseDebateForIssueAction(result, onSubmit, onClose);
       } else {
@@ -209,7 +264,8 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
         if (result) {
-          onSubmit(result);
+          onClose();
+          navigate(routeToServiceIssueIssue_View_EditCloseDebateOutputView(result.__signedIdentifier));
         } else {
           onSubmit();
         }
@@ -231,6 +287,12 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof CloseDebateInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -241,10 +303,33 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   };
 
   const actions: CloseDebateInputCloseDebateInput_FormDialogActions = {
+    getPageTitle,
     backAction,
     closeDebateForIssueAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: CloseDebateInputCloseDebateInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -253,15 +338,15 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   }, []);
 
   return (
-    <div
-      id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::Issue::Issue_View_Edit::closeDebate::Input::Form"
-    >
+    <CloseDebateInputCloseDebateInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::Issue::Issue_View_Edit::closeDebate::Input::Form"
+        />
         <CloseDebateInputCloseDebateInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -273,8 +358,9 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </CloseDebateInputCloseDebateInput_FormViewModelContext.Provider>
   );
 }

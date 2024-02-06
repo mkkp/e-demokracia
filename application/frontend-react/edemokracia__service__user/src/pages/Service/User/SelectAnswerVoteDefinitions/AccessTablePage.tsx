@@ -9,14 +9,19 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions } from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_Table/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer';
+import type {
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions,
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageProps,
+} from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_Table/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer';
 import { useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector } from '~/dialogs/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/UserVoteEntryGroup/TakeVote/Vote/Relation/Table/CallSelector';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage } from '~/routes';
 import type {
   ServiceSelectAnswerVoteDefinition,
@@ -28,7 +33,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended =
@@ -51,11 +56,30 @@ export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePag
   };
 
 export const SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionsHook';
+  'SERVICE_USER_SELECT_ANSWER_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionsHook = (
   data: ServiceSelectAnswerVoteDefinitionStored[],
   editMode: boolean,
 ) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActionsExtended;
+
+export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModel
+  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModelContext =
+  createContext<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModel>({} as any);
+export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModel = () => {
+  const context = useContext(ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModel must be used within a(n) ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -79,6 +103,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -87,6 +112,12 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceSelectAnswerVoteDefinitionStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } =
@@ -101,15 +132,12 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
   const openServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector =
     useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupTakeVoteVoteRelationTableCallSelector();
 
-  // Calculated section
-  const title: string = t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table', {
-    defaultValue: 'SelectAnswerVoteDefinition Table',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_Table', {
+      defaultValue: 'SelectAnswerVoteDefinition Table',
+    });
+  };
   const activateForSelectAnswerVoteDefinitionAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
     try {
       setIsLoading(true);
@@ -232,6 +260,9 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
       setIsLoading(false);
     }
   };
+  const backAction = async () => {
+    navigateBack();
+  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -252,18 +283,29 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
       return userServiceForSelectAnswerVoteDefinitionsImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceSelectAnswerVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  const openPageAction = async (
+    target: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceSelectAnswerVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(
+          (target as ServiceSelectAnswerVoteDefinitionStored)!.__signedIdentifier,
+        ),
+      );
+    }
   };
 
   const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageActions = {
+    getPageTitle,
     activateForSelectAnswerVoteDefinitionAction,
     addToFavoritesForSelectAnswerVoteDefinitionAction,
     closeVoteForSelectAnswerVoteDefinitionAction,
@@ -271,23 +313,35 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
     removeFromFavoritesForSelectAnswerVoteDefinitionAction,
     voteAction,
     takeBackVoteForSelectAnswerVoteDefinitionAction,
+    backAction,
     filterAction,
     refreshAction,
     openPageAction,
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessTablePageDefinition"
-      data-page-name="service::User::selectAnswerVoteDefinitions::AccessTablePage"
-    >
+    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_jf3kwFuXEe6T042_LMmSdQ)/AccessTablePageDefinition"
+          data-page-name="service::User::selectAnswerVoteDefinitions::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -295,6 +349,6 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableViewModelContext.Provider>
   );
 }

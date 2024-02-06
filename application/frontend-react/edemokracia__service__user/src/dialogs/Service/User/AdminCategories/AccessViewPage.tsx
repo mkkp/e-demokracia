@@ -9,19 +9,22 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueCategoryIssueCategory_View_EditDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_View_Edit/ServiceIssueCategoryIssueCategory_View_EditDialogContainer';
+import type {
+  ServiceIssueCategoryIssueCategory_View_EditDialogActions,
+  ServiceIssueCategoryIssueCategory_View_EditDialogProps,
+} from '~/containers/Service/IssueCategory/IssueCategory_View_Edit/ServiceIssueCategoryIssueCategory_View_EditDialogContainer';
 import { useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_View_Edit/Owner/LinkSetSelectorPage';
 import { useServiceIssueCategoryOwnerRelationViewPage } from '~/dialogs/Service/IssueCategory/Owner/RelationViewPage';
 import { useServiceIssueCategorySubcategoriesRelationFormPage } from '~/dialogs/Service/IssueCategory/Subcategories/RelationFormPage';
 import { useServiceIssueCategorySubcategoriesRelationViewPage } from '~/dialogs/Service/IssueCategory/Subcategories/RelationViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueCategory,
   ServiceIssueCategoryQueryCustomizer,
@@ -32,8 +35,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceIssueCategoryServiceImpl } from '~/services/data-axios/ServiceIssueCategoryServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended =
@@ -46,20 +49,52 @@ export type ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended =
   };
 
 export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueCategoryIssueCategory_View_EditActionsHook';
+  'SERVICE_USER_ADMIN_CATEGORIES_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceIssueCategoryIssueCategory_View_EditActionsHook = (
   ownerData: any,
   data: ServiceIssueCategoryStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended;
+
+export interface ServiceIssueCategoryIssueCategory_View_EditViewModel
+  extends ServiceIssueCategoryIssueCategory_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceIssueCategory>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueCategoryIssueCategory_View_EditViewModelContext =
+  createContext<ServiceIssueCategoryIssueCategory_View_EditViewModel>({} as any);
+export const useServiceIssueCategoryIssueCategory_View_EditViewModel = () => {
+  const context = useContext(ServiceIssueCategoryIssueCategory_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueCategoryIssueCategory_View_EditViewModel must be used within a(n) ServiceIssueCategoryIssueCategory_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserAdminCategoriesAccessViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceIssueCategory>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceIssueCategory) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueCategoryStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceIssueCategory>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceIssueCategory) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -75,16 +110,19 @@ export const useServiceUserAdminCategoriesAccessViewPage = (): ((
         children: (
           <ServiceUserAdminCategoriesAccessViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -111,17 +149,20 @@ const ServiceIssueCategoryIssueCategory_View_EditDialogContainer = lazy(
 export interface ServiceUserAdminCategoriesAccessViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceIssueCategory>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueCategory) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueCategoryStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessViewPageDefinition
 // Name: service::User::adminCategories::AccessViewPage
 export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceUserAdminCategoriesAccessViewPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceIssueCategoryServiceImpl = useMemo(() => new ServiceIssueCategoryServiceImpl(judoAxiosProvider), []);
+  const userServiceForAdminCategoriesImpl = useMemo(() => new UserServiceForAdminCategoriesImpl(judoAxiosProvider), []);
 
   // Hooks section
   const { t } = useTranslation();
@@ -129,6 +170,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -171,8 +213,35 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceIssueCategoryQueryCustomizer = {
-    _mask: '{description,title,subcategories{title,description},owner{representation}}',
+  const getPageQueryCustomizer: () => ServiceIssueCategoryQueryCustomizer = () => ({
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{description,title,subcategories{description,title},owner{representation}}',
+  });
+
+  // Private actions
+  const submit = async () => {
+    await updateAction();
+  };
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+
+  // Validation
+  const validate: (data: ServiceIssueCategory) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await userServiceForAdminCategoriesImpl.validateCreate(data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'adminCategories')) {
+        throw error;
+      }
+    }
   };
 
   // Pandino Action overrides
@@ -180,7 +249,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_CATEGORIES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceIssueCategoryIssueCategory_View_EditDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
   const openServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorPage =
@@ -189,22 +258,15 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   const openServiceIssueCategorySubcategoriesRelationFormPage = useServiceIssueCategorySubcategoriesRelationFormPage();
   const openServiceIssueCategorySubcategoriesRelationViewPage = useServiceIssueCategorySubcategoriesRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.IssueCategory.IssueCategory_View_Edit', {
-    defaultValue: 'IssueCategory View / Edit',
-  });
-
-  // Private actions
-  const submit = async () => {
-    await updateAction();
-  };
-
   // Action section
+  const getPageTitle = (data: ServiceIssueCategory): string => {
+    return t('service.IssueCategory.IssueCategory_View_Edit', { defaultValue: 'IssueCategory View / Edit' });
+  };
   const ownerAutocompleteRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceIssueCategoryServiceImpl.getRangeForOwner(data, queryCustomizer);
+      return userServiceForAdminCategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -224,13 +286,16 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     }
     return undefined;
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUser | ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceIssueCategoryOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownerOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceIssueCategoryOwnerRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const subcategoriesBulkDeleteAction = async (
@@ -256,7 +321,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -272,10 +337,23 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       });
     });
   };
-  const subcategoriesOpenFormAction = async () => {
+  const subcategoriesBulkRemoveAction = async (
+    selectedRows: ServiceIssueCategoryStored[],
+  ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
+    return new Promise((resolve) => {
+      const selectedIds = selectedRows.map((r) => r.__identifier);
+      const newList = (data?.subcategories ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
+      storeDiff('subcategories', newList);
+      resolve({
+        result: 'submit',
+        data: [],
+      });
+    });
+  };
+  const subcategoriesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const subcategoriesFilterAction = async (
@@ -301,10 +379,10 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
           )
         : true;
       if (confirmed) {
-        await serviceIssueCategoryServiceImpl.deleteSubcategories(target);
+        await userServiceForAdminCategoriesImpl.deleteSubcategories(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+          refreshAction(getPageQueryCustomizer());
         }
       }
     } catch (error) {
@@ -313,10 +391,40 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       }
     }
   };
-  const subcategoriesOpenPageAction = async (target?: ServiceIssueCategoryStored) => {
-    await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const subcategoriesRemoveAction = async (target?: ServiceIssueCategoryStored, silentMode?: boolean) => {
+    if (target) {
+      const newList = (data?.subcategories ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
+      storeDiff('subcategories', newList);
+    }
+  };
+  const subcategoriesOpenPageAction = async (
+    target: ServiceIssueCategory | ServiceIssueCategoryStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceIssueCategoryStored).__signedIdentifier)) {
+      const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(
+        ownerData,
+        target,
+        true,
+      );
+      // we might need to differentiate result handling between operation inputs and crud relation creates
+      if (result === 'submit-draft' && returnedData) {
+        const existingIndex = (payloadDiff.current.subcategories || []).findIndex(
+          (r: { __identifier?: string }) => r.__identifier === returnedData.__identifier,
+        );
+        if (existingIndex > -1) {
+          payloadDiff.current.subcategories[existingIndex] = {
+            ...returnedData,
+          };
+        }
+        storeDiff('subcategories', [...(payloadDiff.current.subcategories || [])]);
+        return;
+      }
+    } else if (!isDraft) {
+      await openServiceIssueCategorySubcategoriesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const backAction = async () => {
@@ -324,7 +432,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
   const deleteAction = async () => {
     try {
@@ -336,7 +444,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
         t('judo.modal.confirm.confirm-title', { defaultValue: 'Confirm action' }),
       );
       if (confirmed) {
-        await serviceIssueCategoryServiceImpl.delete(data);
+        await userServiceForAdminCategoriesImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
         onClose();
       }
@@ -350,8 +458,9 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueCategoryServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await userServiceForAdminCategoriesImpl.refresh(ownerData, getPageQueryCustomizer());
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -365,6 +474,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -374,11 +484,11 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceIssueCategoryServiceImpl.update(payloadDiff.current);
+      const res = await userServiceForAdminCategoriesImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceIssueCategory, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
+        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
       }
     } catch (error) {
@@ -389,14 +499,17 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   };
 
   const actions: ServiceIssueCategoryIssueCategory_View_EditDialogActions = {
+    getPageTitle,
     ownerAutocompleteRangeAction,
     ownerOpenSetSelectorAction,
     ownerUnsetAction,
     ownerOpenPageAction,
     subcategoriesBulkDeleteAction,
+    subcategoriesBulkRemoveAction,
     subcategoriesOpenFormAction,
     subcategoriesFilterAction,
     subcategoriesDeleteAction,
+    subcategoriesRemoveAction,
     subcategoriesOpenPageAction,
     backAction,
     cancelAction,
@@ -406,21 +519,43 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueCategoryIssueCategory_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessViewPageDefinition"
-      data-page-name="service::User::adminCategories::AccessViewPage"
-    >
+    <ServiceIssueCategoryIssueCategory_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessViewPageDefinition"
+          data-page-name="service::User::adminCategories::AccessViewPage"
+        />
         <ServiceIssueCategoryIssueCategory_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -432,8 +567,9 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueCategoryIssueCategory_View_EditViewModelContext.Provider>
   );
 }

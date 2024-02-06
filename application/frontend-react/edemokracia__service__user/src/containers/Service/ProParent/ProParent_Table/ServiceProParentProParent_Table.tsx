@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,21 +28,26 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_PRO_PARENT_PRO_PARENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceProParentProParent_TableContainerHook';
+  'SERVICE_PRO_PARENT_PRO_PARENT_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceProParentProParent_TableContainerHook = () => ServiceProParentProParent_TableActionDefinitions;
 
-export interface ServiceProParentProParent_TableActionDefinitions {}
+export interface ServiceProParentProParent_TableActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceProParentProParent_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceProParentProParent_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_Mga8EFV5Ee6uPON95HTfyQ)/TransferObjectTablePageContainer
 // Name: service::ProParent::ProParent_Table
 export default function ServiceProParentProParent_Table(props: ServiceProParentProParent_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -59,10 +64,10 @@ export default function ServiceProParentProParent_Table(props: ServiceProParentP
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_Mga8EFV5Ee6uPON95HTfyQ)/TransferObjectTableVisualElement">
+      <Grid item data-name="ProParent_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_Mga8EFV5Ee6uPON95HTfyQ)/TransferObjectTableVisualElement" data-name="ProParent_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_Mga8EFV5Ee6uPON95HTfyQ)/TransferObjectTableEmpty">
                   {t('service.ProParent.ProParent_Table.ProParent_Table', { defaultValue: 'No columns.' }) as string}

@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,19 +33,23 @@ import type { ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_Ta
 import { ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponent } from './components/ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponent';
 
 export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueCategoryIssueCategory_TableAddSelectorContainerHook';
+  'SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueCategoryIssueCategory_TableAddSelectorContainerHook =
   () => ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions;
 
 export interface ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions
-  extends ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponentActionDefinitions {}
+  extends ServiceIssueCategoryIssueCategory_TableAddSelectorIssueCategory_TableAddSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceIssueCategoryIssueCategory_TableAddSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueCategoryIssueCategory_TableAddSelectorActionDefinitions;
   selectionDiff: ServiceIssueCategoryStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceIssueCategoryStored[]>>;
   alreadySelected: ServiceIssueCategoryStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorPageContainer
@@ -54,7 +58,15 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelector(
   props: ServiceIssueCategoryIssueCategory_TableAddSelectorProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -73,10 +85,13 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelector(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement">
+      <Grid item data-name="IssueCategory_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement"
+          data-name="IssueCategory_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable"
@@ -92,6 +107,7 @@ export default function ServiceIssueCategoryIssueCategory_TableAddSelector(
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,19 +29,23 @@ import type { ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSel
 import { ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponent } from './components/ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponent';
 
 export const SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSimpleVoteSimpleVote_TableAddSelectorContainerHook';
+  'SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceSimpleVoteSimpleVote_TableAddSelectorContainerHook =
   () => ServiceSimpleVoteSimpleVote_TableAddSelectorActionDefinitions;
 
 export interface ServiceSimpleVoteSimpleVote_TableAddSelectorActionDefinitions
-  extends ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponentActionDefinitions {}
+  extends ServiceSimpleVoteSimpleVote_TableAddSelectorSimpleVote_TableAddSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceSimpleVoteSimpleVote_TableAddSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSimpleVoteSimpleVote_TableAddSelectorActionDefinitions;
   selectionDiff: ServiceSimpleVoteStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceSimpleVoteStored[]>>;
   alreadySelected: ServiceSimpleVoteStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorPageContainer
@@ -50,7 +54,15 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelector(
   props: ServiceSimpleVoteSimpleVote_TableAddSelectorProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -67,10 +79,13 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelector(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement">
+      <Grid item data-name="SimpleVote_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorVisualElement"
+          data-name="SimpleVote_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable"
@@ -86,6 +101,7 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelector(
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

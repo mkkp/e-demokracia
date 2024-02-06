@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditCountyComponentActionDefinitions {
   countyOpenSetSelectorAction?: () => Promise<ServiceCountyStored | undefined>;
   countyUnsetAction?: (target: ServiceCountyStored) => Promise<void>;
-  countyOpenPageAction?: (target: ServiceCountyStored) => Promise<void>;
+  countyOpenPageAction?: (target: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
   countyAutocompleteRangeAction?: (
     queryCustomizer: ServiceCountyQueryCustomizer,
   ) => Promise<Array<ServiceCountyStored>>;
@@ -39,12 +39,14 @@ export interface ServiceIssueIssue_View_EditCountyComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: county
 export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIssue_View_EditCountyComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -61,6 +63,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
       disabled={actions?.isCountyDisabled ? actions.isCountyDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(county) => {
         storeDiff('county', county);
@@ -85,7 +88,7 @@ export function ServiceIssueIssue_View_EditCountyComponent(props: ServiceIssueIs
       onView={
         ownerData.county && actions.countyOpenPageAction
           ? async () => {
-              await actions.countyOpenPageAction!(ownerData.county!);
+              await actions.countyOpenPageAction!(ownerData.county!, false);
             }
           : undefined
       }

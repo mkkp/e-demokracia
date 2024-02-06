@@ -8,14 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueAttachmentIssueAttachment_FormDialogActions } from '~/containers/Service/IssueAttachment/IssueAttachment_Form/ServiceIssueAttachmentIssueAttachment_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceIssueAttachmentIssueAttachment_FormDialogActions,
+  ServiceIssueAttachmentIssueAttachment_FormDialogProps,
+} from '~/containers/Service/IssueAttachment/IssueAttachment_Form/ServiceIssueAttachmentIssueAttachment_FormDialogContainer';
+import { useServiceIssueAttachmentsRelationViewPage } from '~/dialogs/Service/Issue/Attachments/RelationViewPage';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   AttachmentType,
   ServiceIssue,
@@ -27,7 +31,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForAttachmentsImpl } from '~/services/data-axios/ServiceIssueServiceForAttachmentsImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
@@ -37,23 +41,61 @@ export type ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended =
       data: ServiceIssueAttachment,
       storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: ServiceIssueAttachment,
+      res: ServiceIssueAttachmentStored,
+      onSubmit: (result?: ServiceIssueAttachmentStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueAttachmentIssueAttachment_FormActionsHook';
+  'SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK';
 export type ServiceIssueAttachmentIssueAttachment_FormActionsHook = (
   ownerData: any,
   data: ServiceIssueAttachmentStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceIssueAttachment, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended;
+
+export interface ServiceIssueAttachmentIssueAttachment_FormViewModel
+  extends ServiceIssueAttachmentIssueAttachment_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceIssueAttachment>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueAttachmentIssueAttachment_FormViewModelContext =
+  createContext<ServiceIssueAttachmentIssueAttachment_FormViewModel>({} as any);
+export const useServiceIssueAttachmentIssueAttachment_FormViewModel = () => {
+  const context = useContext(ServiceIssueAttachmentIssueAttachment_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueAttachmentIssueAttachment_FormViewModel must be used within a(n) ServiceIssueAttachmentIssueAttachment_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceIssueAttachmentsRelationFormPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceIssueAttachment>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceIssueAttachment) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueAttachmentStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceIssueAttachment>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceIssueAttachment) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +111,19 @@ export const useServiceIssueAttachmentsRelationFormPage = (): ((
         children: (
           <ServiceIssueAttachmentsRelationFormPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -105,14 +150,17 @@ const ServiceIssueAttachmentIssueAttachment_FormDialogContainer = lazy(
 export interface ServiceIssueAttachmentsRelationFormPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceIssueAttachment>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueAttachment) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueAttachmentStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueAttachmentStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm
 // Name: service::Issue::attachments::RelationFormPage
 export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIssueAttachmentsRelationFormPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceIssueServiceForAttachmentsImpl = useMemo(
@@ -126,6 +174,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -165,33 +214,76 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceIssueAttachment) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await serviceIssueServiceForAttachmentsImpl.validateCreate(ownerData, data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'attachments')) {
+        throw error;
+      }
+    }
+  };
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueAttachmentIssueAttachment_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ATTACHMENTS_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceIssueAttachmentIssueAttachment_FormDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, submit);
 
   // Dialog hooks
-
-  // Calculated section
-  const title: string = t('service.IssueAttachment.IssueAttachment_Form', { defaultValue: 'IssueAttachment Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createAction();
-  };
+  const openServiceIssueAttachmentsRelationViewPage = useServiceIssueAttachmentsRelationViewPage();
 
   // Action section
+  const getPageTitle = (data: ServiceIssueAttachment): string => {
+    return t('service.IssueAttachment.IssueAttachment_Form', { defaultValue: 'IssueAttachment Form' });
+  };
   const backAction = async () => {
     onClose();
   };
-  const createAction = async () => {
+  const createAction = async (openCreated?: boolean) => {
     try {
+      if (isDraft) {
+        try {
+          setIsLoading(true);
+          await validate(cleanUpPayload(payloadDiff.current));
+          onSubmit(payloadDiff.current, true);
+        } catch (error) {
+          if (!isErrorNestedValidationError(error, 'attachments')) {
+            // relation form has no remaining error(s), proceed with submission
+            onSubmit(payloadDiff.current, true);
+          } else {
+            handleError<ServiceIssueAttachment>(error, { setValidation }, data, isDraft ? 'attachments' : undefined);
+          }
+        } finally {
+          setIsLoading(false);
+        }
+
+        return;
+      }
       setIsLoading(true);
-      const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, payloadDiff.current);
-      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-      onSubmit(res);
+      const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
+      const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, payload);
+      if (customActions?.postCreateAction) {
+        await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
+      } else {
+        showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
+        await onSubmit(res);
+        if (openCreated) {
+          await openServiceIssueAttachmentsRelationViewPage(res!);
+        }
+      }
     } catch (error) {
       handleError<ServiceIssueAttachment>(error, { setValidation }, data);
     } finally {
@@ -209,6 +301,12 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceIssueAttachmentStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -219,10 +317,33 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   };
 
   const actions: ServiceIssueAttachmentIssueAttachment_FormDialogActions = {
+    getPageTitle,
     backAction,
     createAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceIssueAttachmentIssueAttachment_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -231,15 +352,15 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
   }, []);
 
   return (
-    <div
-      id="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm"
-      data-page-name="service::Issue::attachments::RelationFormPage"
-    >
+    <ServiceIssueAttachmentIssueAttachment_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm"
+          data-page-name="service::Issue::attachments::RelationFormPage"
+        />
         <ServiceIssueAttachmentIssueAttachment_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -251,8 +372,9 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueAttachmentIssueAttachment_FormViewModelContext.Provider>
   );
 }

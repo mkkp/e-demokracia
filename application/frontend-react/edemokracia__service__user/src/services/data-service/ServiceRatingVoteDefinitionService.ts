@@ -36,6 +36,7 @@ export interface ServiceRatingVoteDefinitionService {
     queryCustomizer?: ServiceRatingVoteDefinitionQueryCustomizer,
   ): Promise<ServiceRatingVoteDefinitionStored>;
   update(target: Partial<ServiceRatingVoteDefinitionStored>): Promise<ServiceRatingVoteDefinitionStored>;
+  validateUpdate(target: Partial<ServiceRatingVoteDefinitionStored>): Promise<ServiceRatingVoteDefinitionStored>;
   getIssue(
     target: JudoIdentifiable<ServiceRatingVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,

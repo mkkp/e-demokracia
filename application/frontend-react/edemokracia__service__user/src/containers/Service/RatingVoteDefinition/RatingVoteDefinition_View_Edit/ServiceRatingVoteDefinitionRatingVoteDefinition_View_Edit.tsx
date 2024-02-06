@@ -21,7 +21,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -54,7 +54,7 @@ import type { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntri
 import { ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent } from './components/ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponent';
 
 export const SERVICE_RATING_VOTE_DEFINITION_RATING_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditContainerHook';
+  'SERVICE_RATING_VOTE_DEFINITION_RATING_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditContainerHook = (
   data: ServiceRatingVoteDefinitionStored,
   editMode: boolean,
@@ -65,7 +65,8 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
   extends ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponentActionDefinitions,
     ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
     ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
-  issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
+  getPageTitle?: (data: ServiceRatingVoteDefinition) => string;
+  issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
   activateForRatingVoteDefinitionAction?: () => Promise<void>;
   addToFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
@@ -165,14 +166,15 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
     data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
     editMode?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions;
 
   data: ServiceRatingVoteDefinitionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceRatingVoteDefinition, value: any) => void;
@@ -180,6 +182,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditProps 
   validation: Map<keyof ServiceRatingVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceRatingVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-dfLEH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer
@@ -190,9 +193,10 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -225,18 +229,20 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="RatingVoteDefinition_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_-dfLEH4XEe2cB7_PsKXsHQ)/TransferObjectViewVisualElement"
+          data-name="RatingVoteDefinition_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="actions" xs={12} sm={12}>
             <Grid
               id="User/(esm/_Vd5qAHsAEe6bP4FWw7fjQA)/GroupVisualElement"
+              data-name="actions"
               container
               direction="row"
               alignItems="flex-start"
@@ -244,136 +250,119 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
               spacing={2}
             >
               <Grid item xs={12}>
-                <Grid container spacing={2}>
+                <Box sx={{ display: 'flex', gap: 1 }}>
                   {!data.isNotFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-plus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.addToFavoritesForRatingVoteDefinitionAction
-                            ? async () => {
-                                await actions.addToFavoritesForRatingVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.addToFavorites', {
-                            defaultValue: 'Add to favorites',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-plus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.addToFavoritesForRatingVoteDefinitionAction
+                          ? async () => {
+                              await actions.addToFavoritesForRatingVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.addToFavorites', {
+                        defaultValue: 'Add to favorites',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-minus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.removeFromFavoritesForRatingVoteDefinitionAction
-                            ? async () => {
-                                await actions.removeFromFavoritesForRatingVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.removeFromFavorites', {
-                            defaultValue: 'Remove from favorites',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-minus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.removeFromFavoritesForRatingVoteDefinitionAction
+                          ? async () => {
+                              await actions.removeFromFavoritesForRatingVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.removeFromFavorites', {
+                        defaultValue: 'Remove from favorites',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotOpen && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-check" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.closeVoteForRatingVoteDefinitionAction
-                            ? async () => {
-                                await actions.closeVoteForRatingVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.closeVote', {
-                            defaultValue: 'Close Vote',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-check" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.closeVoteForRatingVoteDefinitionAction
+                          ? async () => {
+                              await actions.closeVoteForRatingVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.closeVote', {
+                        defaultValue: 'Close Vote',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotEditable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-open" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.activateForRatingVoteDefinitionAction
-                            ? async () => {
-                                await actions.activateForRatingVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.activate', {
-                            defaultValue: 'Activate',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-open" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.activateForRatingVoteDefinitionAction
+                          ? async () => {
+                              await actions.activateForRatingVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.activate', {
+                        defaultValue: 'Activate',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotDeletable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_Vd5qBnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="delete" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.deleteOrArchiveForRatingVoteDefinitionAction
-                            ? async () => {
-                                await actions.deleteOrArchiveForRatingVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.deleteOrArchive', {
-                            defaultValue: 'Delete',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_Vd5qBnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="delete" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.deleteOrArchiveForRatingVoteDefinitionAction
+                          ? async () => {
+                              await actions.deleteOrArchiveForRatingVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.deleteOrArchive', {
+                        defaultValue: 'Delete',
+                      })}
+                    </LoadingButton>
                   )}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="userVoteEntryGroup::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <Typography
@@ -388,9 +377,10 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="userVoteEntryGroup" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                      data-name="userVoteEntryGroup"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -398,20 +388,22 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                       spacing={2}
                     >
                       {(actions?.isUserVoteHidden
-                        ? actions?.isUserVoteHidden(data, editMode)
+                        ? !actions?.isUserVoteHidden(data, editMode)
                         : !data.userHasNoVoteEntry) && (
-                        <Grid item xs={12} sm={12}>
+                        <Grid item data-name="userVote" xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_NHnv0VsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                            data-name="userVote"
                             container
                             direction="row"
                             alignItems="flex-start"
                             justifyContent="flex-start"
                             spacing={2}
                           >
-                            <Grid item xs={12} sm={12}>
+                            <Grid item data-name="VirtualForUserVote" xs={12} sm={12}>
                               <Grid
                                 id="User/(esm/_NHnv0lsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                                data-name="VirtualForUserVote"
                                 container
                                 direction="row"
                                 alignItems="flex-start"
@@ -436,11 +428,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                                       editMode
                                     }
                                   >
-                                    <span>
-                                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.takeBackVote', {
-                                        defaultValue: 'TakeBackVote',
-                                      })}
-                                    </span>
+                                    {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.takeBackVote', {
+                                      defaultValue: 'TakeBackVote',
+                                    })}
                                   </LoadingButton>
                                 </Grid>
 
@@ -451,6 +441,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                                     ownerData={data}
                                     editMode={editMode}
                                     isLoading={isLoading}
+                                    isDraft={isDraft}
                                     storeDiff={storeDiff}
                                     validationError={validation.get('userVoteEntry')}
                                     actions={actions}
@@ -464,11 +455,12 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                       )}
 
                       {(actions?.isTakeVoteHidden
-                        ? actions?.isTakeVoteHidden(data, editMode)
+                        ? !actions?.isTakeVoteHidden(data, editMode)
                         : !data.userHasVoteEntry) && (
-                        <Grid item xs={12} sm={12}>
+                        <Grid item data-name="TakeVote" xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_NHnv11soEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                            data-name="TakeVote"
                             container
                             direction="row"
                             alignItems="flex-start"
@@ -489,11 +481,9 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                                 }}
                                 disabled={!actions.voteAction || !data.userHasNoVoteEntry || editMode}
                               >
-                                <span>
-                                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.vote', {
-                                    defaultValue: 'Take a vote',
-                                  })}
-                                </span>
+                                {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.vote', {
+                                  defaultValue: 'Take a vote',
+                                })}
                               </LoadingButton>
                             </Grid>
                           </Grid>
@@ -506,13 +496,14 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="User/(esm/_NHnIwFsoEe6Mx9dH3yj5gQ)/GroupVisualElement">
+          <Grid item data-name="VoteEntryBase" xs={12} sm={12}>
+            <Card id="User/(esm/_NHnIwFsoEe6Mx9dH3yj5gQ)/GroupVisualElement" data-name="VoteEntryBase">
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item data-name="virtual" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_NHnIwVsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                      data-name="virtual"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -524,7 +515,6 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_NHnIwlsoEe6Mx9dH3yj5gQ)/StringTypeTextInput"
-                          autoFocus
                           label={
                             t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.title', {
                               defaultValue: 'Title',
@@ -554,7 +544,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -748,6 +738,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('owner')}
                           actions={actions}
@@ -795,7 +786,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -892,9 +883,10 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="entries::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="entries::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -915,9 +907,10 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="entries" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                  data-name="entries"
                   container
                   direction="row"
                   alignItems="stretch"
@@ -940,6 +933,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
                         isFormUpdateable={isFormUpdateable}
                         validationError={validation.get('voteEntries')}
                         refreshCounter={refreshCounter}
+                        isOwnerLoading={isLoading}
                       />
                     </Grid>
                   </Grid>

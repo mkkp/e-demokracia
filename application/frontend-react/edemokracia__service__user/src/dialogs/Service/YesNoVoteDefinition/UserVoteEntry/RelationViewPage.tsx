@@ -8,16 +8,19 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions } from '~/containers/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer';
+import type {
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions,
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogProps,
+} from '~/containers/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer';
 import { useServiceYesNoVoteEntryOwnerRelationViewPage } from '~/dialogs/Service/YesNoVoteEntry/Owner/RelationViewPage';
 import { useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage } from '~/dialogs/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/User/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -31,8 +34,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceYesNoVoteEntryServiceImpl } from '~/services/data-axios/ServiceYesNoVoteEntryServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended =
@@ -45,20 +48,52 @@ export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended =
   };
 
 export const SERVICE_YES_NO_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook';
+  'SERVICE_YES_NO_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook = (
   ownerData: any,
   data: ServiceYesNoVoteEntryStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceYesNoVoteEntry, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended;
+
+export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModel
+  extends ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceYesNoVoteEntry>;
+  isDraft?: boolean;
+}
+
+const ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModelContext =
+  createContext<ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModel>({} as any);
+export const useServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModel = () => {
+  const context = useContext(ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModel must be used within a(n) ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceYesNoVoteEntry>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceYesNoVoteEntry) => Promise<void>,
 ) => Promise<DialogResult<ServiceYesNoVoteEntryStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceYesNoVoteEntry>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceYesNoVoteEntry) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -74,16 +109,19 @@ export const useServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage = (): ((
         children: (
           <ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -114,8 +152,11 @@ const ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer = lazy(
 export interface ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceYesNoVoteEntry>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceYesNoVoteEntry) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceYesNoVoteEntryStored) => Promise<void>;
+  onSubmit: (result?: ServiceYesNoVoteEntryStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_5gsq4FonEe6_67aMO2jOsw)/RelationFeatureView
@@ -123,10 +164,13 @@ export interface ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPageProps {
 export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
   props: ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPageProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceYesNoVoteEntryServiceImpl = useMemo(() => new ServiceYesNoVoteEntryServiceImpl(judoAxiosProvider), []);
+  const serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl = useMemo(
+    () => new ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -134,6 +178,7 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -176,31 +221,37 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceYesNoVoteEntryQueryCustomizer = {
-    _mask: '{created,value,owner{representation}}',
+  const getPageQueryCustomizer: () => ServiceYesNoVoteEntryQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{created,value,owner{representation}}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
+
+  // Validation
+  const validate: (data: ServiceYesNoVoteEntry) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceYesNoVoteEntryYesNoVoteEntry_View_EditActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_YES_NO_VOTE_DEFINITION_USER_VOTE_ENTRY_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
   const openServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage =
     useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelectorPage();
   const openServiceYesNoVoteEntryOwnerRelationViewPage = useServiceYesNoVoteEntryOwnerRelationViewPage();
 
-  // Calculated section
-  const title: string = t('service.YesNoVoteEntry.YesNoVoteEntry_View_Edit', {
-    defaultValue: 'YesNoVoteEntry View / Edit',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceYesNoVoteEntry): string => {
+    return t('service.YesNoVoteEntry.YesNoVoteEntry_View_Edit', { defaultValue: 'YesNoVoteEntry View / Edit' });
+  };
   const backAction = async () => {
     onClose();
   };
@@ -210,8 +261,12 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceYesNoVoteEntryServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.refresh(
+        ownerData,
+        getPageQueryCustomizer(),
+      );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -225,6 +280,7 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -235,7 +291,10 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceYesNoVoteEntryServiceImpl.getRangeForOwner(data, queryCustomizer);
+      return serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -255,17 +314,21 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     }
     return undefined;
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUser | ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
-  const ownerOpenPageAction = async (target?: ServiceServiceUserStored) => {
-    await openServiceYesNoVoteEntryOwnerRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownerOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceServiceUserStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceYesNoVoteEntryOwnerRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
 
   const actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     ownerAutocompleteRangeAction,
@@ -275,21 +338,43 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_5gsq4FonEe6_67aMO2jOsw)/RelationFeatureView"
-      data-page-name="service::YesNoVoteDefinition::userVoteEntry::RelationViewPage"
-    >
+    <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_5gsq4FonEe6_67aMO2jOsw)/RelationFeatureView"
+          data-page-name="service::YesNoVoteDefinition::userVoteEntry::RelationViewPage"
+        />
         <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -301,8 +386,9 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceYesNoVoteEntryYesNoVoteEntry_View_EditViewModelContext.Provider>
   );
 }

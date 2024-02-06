@@ -23,6 +23,8 @@ export interface UserServiceForAdminIssueTypes {
   ): Promise<ServiceIssueTypeStored>;
   getTemplate(): Promise<ServiceIssueType>;
   create(target: ServiceIssueType): Promise<ServiceIssueTypeStored>;
+  validateCreate(target: ServiceIssueType): Promise<ServiceIssueType>;
   delete(target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
   update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
+  validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
 }

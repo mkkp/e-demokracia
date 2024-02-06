@@ -18,6 +18,6 @@ export type ColumnActionsProvider<R> = (
 ) => GridColDef[];
 
 export interface DialogResult<T> {
-  result: 'close' | 'submit';
+  result: 'close' | 'submit' | 'submit-draft';
   data?: T;
 }

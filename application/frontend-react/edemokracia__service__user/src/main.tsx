@@ -27,7 +27,7 @@ import App from './App';
 import { Auth, axiosRequestInterceptor, storeMeta, userStore } from './auth';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
 import { applicationCustomizer } from './custom';
-import { ConfigProvider } from './hooks';
+import { ConfigProvider, ViewDataProvider } from './hooks';
 import { L10NProvider } from './l10n/l10n-context';
 import { routes } from './routes';
 import { ThemeCustomization } from './theme';
@@ -82,13 +82,15 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
       <ConfigProvider>
         <ThemeCustomization>
           <PandinoProvider ctx={pandino.getBundleContext()}>
-            <L10NProvider axios={axios}>
-              <AuthProvider {...oidcConfig}>
-                <Auth>
-                  <RouterProvider router={router} />
-                </Auth>
-              </AuthProvider>
-            </L10NProvider>
+            <ViewDataProvider>
+              <L10NProvider axios={axios}>
+                <AuthProvider {...oidcConfig}>
+                  <Auth>
+                    <RouterProvider router={router} />
+                  </Auth>
+                </AuthProvider>
+              </L10NProvider>
+            </ViewDataProvider>
           </PandinoProvider>
         </ThemeCustomization>
       </ConfigProvider>

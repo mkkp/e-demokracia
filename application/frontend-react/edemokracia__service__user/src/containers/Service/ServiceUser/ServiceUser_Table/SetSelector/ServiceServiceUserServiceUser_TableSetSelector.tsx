@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,19 +29,23 @@ import type { ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSet
 import { ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponent } from './components/ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponent';
 
 export const SERVICE_SERVICE_USER_SERVICE_USER_TABLE_SET_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceServiceUserServiceUser_TableSetSelectorContainerHook';
+  'SERVICE_SERVICE_USER_SERVICE_USER_TABLE_SET_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceServiceUserServiceUser_TableSetSelectorContainerHook =
   () => ServiceServiceUserServiceUser_TableSetSelectorActionDefinitions;
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorActionDefinitions
-  extends ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponentActionDefinitions {}
+  extends ServiceServiceUserServiceUser_TableSetSelectorServiceUser_TableSetSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceServiceUserServiceUser_TableSetSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceServiceUserServiceUser_TableSetSelectorActionDefinitions;
   selectionDiff: ServiceServiceUserStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceServiceUserStored[]>>;
   alreadySelected: ServiceServiceUserStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorPageContainer
@@ -50,7 +54,15 @@ export default function ServiceServiceUserServiceUser_TableSetSelector(
   props: ServiceServiceUserServiceUser_TableSetSelectorProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -68,10 +80,13 @@ export default function ServiceServiceUserServiceUser_TableSetSelector(
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorVisualElement">
+      <Grid item data-name="ServiceUser_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorVisualElement"
+          data-name="ServiceUser_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_p141QGksEe25ONJ3V89cVA)/TransferObjectTableSetSelectorTable"
@@ -87,6 +102,7 @@ export default function ServiceServiceUserServiceUser_TableSetSelector(
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

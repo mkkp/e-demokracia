@@ -8,14 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCityCity_FormDialogActions } from '~/containers/Service/City/City_Form/ServiceCityCity_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  ServiceCityCity_FormDialogActions,
+  ServiceCityCity_FormDialogProps,
+} from '~/containers/Service/City/City_Form/ServiceCityCity_FormDialogContainer';
+import { useServiceCountyCitiesRelationViewPage } from '~/dialogs/Service/County/Cities/RelationViewPage';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -26,7 +30,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCountyServiceForCitiesImpl } from '~/services/data-axios/ServiceCountyServiceForCitiesImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCityCity_FormDialogActionsExtended = ServiceCityCity_FormDialogActions & {
@@ -35,22 +39,57 @@ export type ServiceCityCity_FormDialogActionsExtended = ServiceCityCity_FormDial
     data: ServiceCity,
     storeDiff: (attributeName: keyof ServiceCity, value: any) => void,
   ) => Promise<void>;
+  postCreateAction?: (
+    data: ServiceCity,
+    res: ServiceCityStored,
+    onSubmit: (result?: ServiceCityStored) => Promise<void>,
+    onClose: () => Promise<void>,
+    openCreated?: boolean,
+  ) => Promise<void>;
 };
 
-export const SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceCityCity_FormActionsHook';
+export const SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK';
 export type ServiceCityCity_FormActionsHook = (
   ownerData: any,
   data: ServiceCityStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceCity, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceCityCity_FormDialogActionsExtended;
+
+export interface ServiceCityCity_FormViewModel extends ServiceCityCity_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceCity>;
+  isDraft?: boolean;
+}
+
+const ServiceCityCity_FormViewModelContext = createContext<ServiceCityCity_FormViewModel>({} as any);
+export const useServiceCityCity_FormViewModel = () => {
+  const context = useContext(ServiceCityCity_FormViewModelContext);
+  if (!context) {
+    throw new Error('useServiceCityCity_FormViewModel must be used within a(n) ServiceCityCity_FormViewModelProvider');
+  }
+  return context;
+};
 
 export const useServiceCountyCitiesRelationFormPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceCity>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceCity) => Promise<void>,
 ) => Promise<DialogResult<ServiceCityStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceCity>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceCity) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -66,16 +105,19 @@ export const useServiceCountyCitiesRelationFormPage = (): ((
         children: (
           <ServiceCountyCitiesRelationFormPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -99,14 +141,17 @@ const ServiceCityCity_FormDialogContainer = lazy(
 export interface ServiceCountyCitiesRelationFormPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceCity>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceCity) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCityStored) => Promise<void>;
+  onSubmit: (result?: ServiceCityStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_23Z_YH2nEe27Ga2Ojs4Fgg)/RelationFeatureForm
 // Name: service::County::cities::RelationFormPage
 export default function ServiceCountyCitiesRelationFormPage(props: ServiceCountyCitiesRelationFormPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceCountyServiceForCitiesImpl = useMemo(() => new ServiceCountyServiceForCitiesImpl(judoAxiosProvider), []);
@@ -117,6 +162,7 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -154,6 +200,27 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceCity) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await serviceCountyServiceForCitiesImpl.validateCreate(ownerData, data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'cities')) {
+        throw error;
+      }
+    }
+  };
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCityCity_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_COUNTY_CITIES_RELATION_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -163,28 +230,51 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
-
-  // Calculated section
-  const title: string = t('service.City.City_Form', { defaultValue: 'City Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createAction();
-  };
+  const openServiceCountyCitiesRelationViewPage = useServiceCountyCitiesRelationViewPage();
 
   // Action section
+  const getPageTitle = (data: ServiceCity): string => {
+    return t('service.City.City_Form', { defaultValue: 'City Form' });
+  };
   const backAction = async () => {
     onClose();
   };
-  const createAction = async () => {
+  const createAction = async (openCreated?: boolean) => {
     try {
+      if (isDraft) {
+        try {
+          setIsLoading(true);
+          await validate(cleanUpPayload(payloadDiff.current));
+          onSubmit(payloadDiff.current, true);
+        } catch (error) {
+          if (!isErrorNestedValidationError(error, 'cities')) {
+            // relation form has no remaining error(s), proceed with submission
+            onSubmit(payloadDiff.current, true);
+          } else {
+            handleError<ServiceCity>(error, { setValidation }, data, isDraft ? 'cities' : undefined);
+          }
+        } finally {
+          setIsLoading(false);
+        }
+
+        return;
+      }
       setIsLoading(true);
-      const res = await serviceCountyServiceForCitiesImpl.create(ownerData, payloadDiff.current);
-      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-      onSubmit(res);
+      const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
+      const res = await serviceCountyServiceForCitiesImpl.create(ownerData, payload);
+      if (customActions?.postCreateAction) {
+        await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
+      } else {
+        showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
+        await onSubmit(res);
+        if (openCreated) {
+          await openServiceCountyCitiesRelationViewPage(res!);
+        }
+      }
     } catch (error) {
       handleError<ServiceCity>(error, { setValidation }, data);
     } finally {
@@ -202,6 +292,12 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceCityStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -212,10 +308,33 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
   };
 
   const actions: ServiceCityCity_FormDialogActions = {
+    getPageTitle,
     backAction,
     createAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: ServiceCityCity_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -224,15 +343,15 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
   }, []);
 
   return (
-    <div
-      id="User/(esm/_23Z_YH2nEe27Ga2Ojs4Fgg)/RelationFeatureForm"
-      data-page-name="service::County::cities::RelationFormPage"
-    >
+    <ServiceCityCity_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_23Z_YH2nEe27Ga2Ojs4Fgg)/RelationFeatureForm"
+          data-page-name="service::County::cities::RelationFormPage"
+        />
         <ServiceCityCity_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -244,8 +363,9 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceCityCity_FormViewModelContext.Provider>
   );
 }

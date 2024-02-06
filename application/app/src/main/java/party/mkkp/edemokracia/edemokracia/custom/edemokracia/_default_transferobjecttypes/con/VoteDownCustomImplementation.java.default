@@ -31,6 +31,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.con.VoteDown.class)
 public class VoteDownCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.con.VoteDown {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.con.Con _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.con.VoteDownExchangeFunctionsComponent");
     }

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -73,6 +73,7 @@ export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActio
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   favoriteIssuesRefreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  getFavoriteIssuesMask?: () => string;
   favoriteIssuesActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
@@ -83,13 +84,24 @@ export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActio
   favoriteIssuesDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   favoriteIssuesRemoveAction?: (row: ServiceIssueStored, silentMode?: boolean) => Promise<void>;
-  favoriteIssuesOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
+  favoriteIssuesOpenPageAction?: (row: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
+  favoriteIssuesAdditionalToolbarButtons?: (
+    data: ServiceIssueStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueStored[],
+    clearSelections: () => void,
+    ownerData: ServiceDashboardStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentProps {
   uniqueId: string;
   actions: ServiceDashboardDashboard_View_EditFavoriteIssuesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceDashboardStored;
   editMode: boolean;
@@ -101,7 +113,17 @@ export interface ServiceDashboardDashboard_View_EditFavoriteIssuesComponentProps
 export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   props: ServiceDashboardDashboard_View_EditFavoriteIssuesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -111,22 +133,23 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'countyRepresentation', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'scope', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-    _mask: '{scope,countyRepresentation,cityRepresentation,districtRepresentation,title,created,status}',
+    _mask: '{cityRepresentation,countyRepresentation,created,districtRepresentation,scope,status,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -144,29 +167,29 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const [firstItem, setFirstItem] = useState<ServiceIssueStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
   const scopeColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'scope',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.scope', { defaultValue: 'Scope' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.scope', { defaultValue: 'Scope' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const countyRepresentationColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'countyRepresentation',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.countyRepresentation', {
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.countyRepresentation', {
       defaultValue: 'CountyRepresentation',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -178,7 +201,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const cityRepresentationColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'cityRepresentation',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.cityRepresentation', {
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.cityRepresentation', {
       defaultValue: 'CityRepresentation',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -190,7 +213,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const districtRepresentationColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'districtRepresentation',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.districtRepresentation', {
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.districtRepresentation', {
       defaultValue: 'DistrictRepresentation',
     }) as string,
     headerClassName: 'data-grid-column-header',
@@ -202,7 +225,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const titleColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.title', { defaultValue: 'Title' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -212,7 +235,9 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const createdColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.created', {
+      defaultValue: 'Created',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -237,19 +262,17 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
   const statusColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'status',
-    headerName: t('service.Dashboard.Dashboard_View_Edit.status', { defaultValue: 'Status' }) as string,
+    headerName: t('service.Dashboard.Dashboard_View_Edit.favoriteIssues.status', { defaultValue: 'Status' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
@@ -265,127 +288,200 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-      label: t(
-        'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.Remove',
-        { defaultValue: 'Remove' },
-      ) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceIssueStored) => !isFormUpdateable() || isLoading,
-      action: actions.favoriteIssuesRemoveAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesRemoveAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.favoriteIssuesActivateForIssueAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesActivateForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.favoriteIssuesAddToFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesAddToFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.favoriteIssuesCloseDebateAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesCloseDebateAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.favoriteIssuesCloseVoteForIssueAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesCloseVoteForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.favoriteIssuesCreateCommentAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesCreateCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.createConArgument', {
-        defaultValue: 'createConArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.favoriteIssuesCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.createProArgument', {
-        defaultValue: 'createProArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.favoriteIssuesCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', { defaultValue: 'deleteOrArchive' }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.favoriteIssuesDeleteOrArchiveForIssueAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesDeleteOrArchiveForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Dashboard.Dashboard_View_Edit.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.favoriteIssuesRemoveFromFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.favoriteIssuesRemoveFromFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceIssueStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
+        label: t(
+          'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.Remove',
+          { defaultValue: 'Remove' },
+        ) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
+        action: actions.favoriteIssuesRemoveAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.activate', { defaultValue: 'activate' }) as string,
+        icon: <MdiIcon path="lock-open" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueDraft || isLoading,
+        action: actions.favoriteIssuesActivateForIssueAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesActivateForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
+        icon: <MdiIcon path="star-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.favoriteIssuesAddToFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesAddToFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
+        action: actions.favoriteIssuesCloseDebateAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesCloseDebateAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
+        icon: <MdiIcon path="lock-check" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isVoteClosable || isLoading,
+        action: actions.favoriteIssuesCloseVoteForIssueAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesCloseVoteForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
+        icon: <MdiIcon path="comment-text-multiple" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.favoriteIssuesCreateCommentAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesCreateCommentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.createConArgument', {
+          defaultValue: 'createConArgument',
+        }) as string,
+        icon: <MdiIcon path="chat-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.favoriteIssuesCreateConArgumentAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesCreateConArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.createProArgument', {
+          defaultValue: 'createProArgument',
+        }) as string,
+        icon: <MdiIcon path="chat-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.favoriteIssuesCreateProArgumentAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesCreateProArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.deleteOrArchive', {
+          defaultValue: 'deleteOrArchive',
+        }) as string,
+        icon: <MdiIcon path="delete" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueDeletable || isLoading,
+        action: actions.favoriteIssuesDeleteOrArchiveForIssueAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesDeleteOrArchiveForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Dashboard.Dashboard_View_Edit.removeFromFavorites', {
+          defaultValue: 'removeFromFavorites',
+        }) as string,
+        icon: <MdiIcon path="star-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.favoriteIssuesRemoveFromFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.favoriteIssuesRemoveFromFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_Fp_g8Fw2Ee6gN-oVBDDIOQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.favoriteIssuesAdditionalToolbarButtons
+    ? actions.favoriteIssuesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -462,7 +558,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -492,7 +588,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -503,7 +599,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -513,21 +609,26 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.favoriteIssuesRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getFavoriteIssuesMask ? actions.getFavoriteIssuesMask() : queryCustomizer._mask,
+        };
+        const res = await actions.favoriteIssuesRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -538,13 +639,14 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -554,7 +656,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -565,29 +667,22 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_Fp_g8Fw2Ee6gN-oVBDDIOQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.favoriteIssuesOpenPageAction
             ? async (params: GridRowParams<ServiceIssueStored>) =>
-                await actions.favoriteIssuesOpenPageAction!(params.row)
+                await actions.favoriteIssuesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -597,7 +692,7 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -632,7 +727,11 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.favoriteIssuesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getFavoriteIssuesMask ? actions.getFavoriteIssuesMask() : queryCustomizer._mask,
+                    };
+                    await actions.favoriteIssuesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -648,6 +747,10 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getFavoriteIssuesMask ? actions.getFavoriteIssuesMask() : queryCustomizer._mask,
+                    };
                     await actions.favoriteIssuesOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
@@ -664,9 +767,13 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getFavoriteIssuesMask ? actions.getFavoriteIssuesMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.favoriteIssuesBulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -677,16 +784,19 @@ export function ServiceDashboardDashboard_View_EditFavoriteIssuesComponent(
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

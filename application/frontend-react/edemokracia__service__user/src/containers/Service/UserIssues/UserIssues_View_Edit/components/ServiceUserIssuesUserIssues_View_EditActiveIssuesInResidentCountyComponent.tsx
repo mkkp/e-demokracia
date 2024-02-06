@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -73,6 +73,7 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCoun
   activeIssuesInResidentCountyRefreshAction?: (
     queryCustomizer: ServiceIssueQueryCustomizer,
   ) => Promise<ServiceIssueStored[]>;
+  getActiveIssuesInResidentCountyMask?: () => string;
   activeIssuesInResidentCountyActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCountyAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCountyCloseDebateAction?: (row: ServiceIssueStored) => Promise<void>;
@@ -82,13 +83,24 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCoun
   activeIssuesInResidentCountyCreateProArgumentAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCountyDeleteOrArchiveForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   activeIssuesInResidentCountyRemoveFromFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
-  activeIssuesInResidentCountyOpenPageAction?: (row: ServiceIssueStored) => Promise<void>;
+  activeIssuesInResidentCountyOpenPageAction?: (row: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
+  activeIssuesInResidentCountyAdditionalToolbarButtons?: (
+    data: ServiceIssueStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueStored[],
+    clearSelections: () => void,
+    ownerData: ServiceUserIssuesStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentProps {
   uniqueId: string;
   actions: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceUserIssuesStored;
   editMode: boolean;
@@ -100,7 +112,17 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCoun
 export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent(
   props: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -110,7 +132,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
@@ -118,14 +140,15 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-    _mask: '{title,created,status}',
+    _mask: '{created,status,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -143,12 +166,16 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
   const [firstItem, setFirstItem] = useState<ServiceIssueStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceIssueStored[]>([]);
 
   const titleColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'title',
-    headerName: t('service.UserIssues.UserIssues_View_Edit.title', { defaultValue: 'Title' }) as string,
+    headerName: t('service.UserIssues.UserIssues_View_Edit.activeIssuesInResidentCounty.title', {
+      defaultValue: 'Title',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -158,7 +185,9 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
   const createdColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.UserIssues.UserIssues_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.UserIssues.UserIssues_View_Edit.activeIssuesInResidentCounty.created', {
+      defaultValue: 'Created',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -183,19 +212,19 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
   const statusColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'status',
-    headerName: t('service.UserIssues.UserIssues_View_Edit.status', { defaultValue: 'Status' }) as string,
+    headerName: t('service.UserIssues.UserIssues_View_Edit.activeIssuesInResidentCounty.status', {
+      defaultValue: 'Status',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceIssueStored>[]>(
@@ -203,115 +232,188 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceIssueStored>[] = [
-    {
-      id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
-      icon: <MdiIcon path="lock-open" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDraft || isLoading,
-      action: actions.activeIssuesInResidentCountyActivateForIssueAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyActivateForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.addToFavorites', { defaultValue: 'addToFavorites' }) as string,
-      icon: <MdiIcon path="star-plus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.activeIssuesInResidentCountyAddToFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyAddToFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
-      icon: <MdiIcon path="vote" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueActive || isLoading,
-      action: actions.activeIssuesInResidentCountyCloseDebateAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyCloseDebateAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
-      icon: <MdiIcon path="lock-check" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isVoteClosable || isLoading,
-      action: actions.activeIssuesInResidentCountyCloseVoteForIssueAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyCloseVoteForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
-      icon: <MdiIcon path="comment-text-multiple" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.activeIssuesInResidentCountyCreateCommentAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyCreateCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.createConArgument', {
-        defaultValue: 'createConArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.activeIssuesInResidentCountyCreateConArgumentAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyCreateConArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.createProArgument', {
-        defaultValue: 'createProArgument',
-      }) as string,
-      icon: <MdiIcon path="chat-plus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.activeIssuesInResidentCountyCreateProArgumentAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyCreateProArgumentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.deleteOrArchive', {
-        defaultValue: 'deleteOrArchive',
-      }) as string,
-      icon: <MdiIcon path="delete" />,
-      disabled: (row: ServiceIssueStored) => editMode || !row.isIssueDeletable || isLoading,
-      action: actions.activeIssuesInResidentCountyDeleteOrArchiveForIssueAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyDeleteOrArchiveForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.UserIssues.UserIssues_View_Edit.removeFromFavorites', {
-        defaultValue: 'removeFromFavorites',
-      }) as string,
-      icon: <MdiIcon path="star-minus" />,
-      disabled: (row: ServiceIssueStored) => editMode || isLoading,
-      action: actions.activeIssuesInResidentCountyRemoveFromFavoritesForIssueAction
-        ? async (rowData) => {
-            await actions.activeIssuesInResidentCountyRemoveFromFavoritesForIssueAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceIssueStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.activate', { defaultValue: 'activate' }) as string,
+        icon: <MdiIcon path="lock-open" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueDraft || isLoading,
+        action: actions.activeIssuesInResidentCountyActivateForIssueAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyActivateForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.addToFavorites', {
+          defaultValue: 'addToFavorites',
+        }) as string,
+        icon: <MdiIcon path="star-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.activeIssuesInResidentCountyAddToFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyAddToFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.closeDebate', { defaultValue: 'closeDebate' }) as string,
+        icon: <MdiIcon path="vote" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
+        action: actions.activeIssuesInResidentCountyCloseDebateAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyCloseDebateAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.closeVote', { defaultValue: 'closeVote' }) as string,
+        icon: <MdiIcon path="lock-check" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isVoteClosable || isLoading,
+        action: actions.activeIssuesInResidentCountyCloseVoteForIssueAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyCloseVoteForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
+        icon: <MdiIcon path="comment-text-multiple" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.activeIssuesInResidentCountyCreateCommentAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyCreateCommentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.createConArgument', {
+          defaultValue: 'createConArgument',
+        }) as string,
+        icon: <MdiIcon path="chat-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.activeIssuesInResidentCountyCreateConArgumentAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyCreateConArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.createProArgument', {
+          defaultValue: 'createProArgument',
+        }) as string,
+        icon: <MdiIcon path="chat-plus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.activeIssuesInResidentCountyCreateProArgumentAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyCreateProArgumentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.deleteOrArchive', {
+          defaultValue: 'deleteOrArchive',
+        }) as string,
+        icon: <MdiIcon path="delete" />,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueDeletable || isLoading,
+        action: actions.activeIssuesInResidentCountyDeleteOrArchiveForIssueAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyDeleteOrArchiveForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.UserIssues.UserIssues_View_Edit.removeFromFavorites', {
+          defaultValue: 'removeFromFavorites',
+        }) as string,
+        icon: <MdiIcon path="star-minus" />,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.activeIssuesInResidentCountyRemoveFromFavoritesForIssueAction
+          ? async (rowData) => {
+              await actions.activeIssuesInResidentCountyRemoveFromFavoritesForIssueAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_KOPO4FrbEe6gN-oVBDDIOQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> =
+    actions?.activeIssuesInResidentCountyAdditionalToolbarButtons
+      ? actions.activeIssuesInResidentCountyAdditionalToolbarButtons(
+          data,
+          isLoading,
+          getSelectedRows(),
+          clearSelections,
+          ownerData,
+          editMode,
+          isFormUpdateable,
+        )
+      : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -353,7 +455,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -383,7 +485,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -394,7 +496,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -404,21 +506,28 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
     setIsNextButtonEnabled(!isNext);
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   async function fetchData() {
     if (!isLoading && ownerData.__signedIdentifier) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.activeIssuesInResidentCountyRefreshAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+          _mask: actions.getActiveIssuesInResidentCountyMask
+            ? actions.getActiveIssuesInResidentCountyMask()
+            : queryCustomizer._mask,
+        };
+        const res = await actions.activeIssuesInResidentCountyRefreshAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -429,13 +538,14 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -445,7 +555,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -456,24 +566,19 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_KOPO4FrbEe6gN-oVBDDIOQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.activeIssuesInResidentCountyOpenPageAction
             ? async (params: GridRowParams<ServiceIssueStored>) =>
-                await actions.activeIssuesInResidentCountyOpenPageAction!(params.row)
+                await actions.activeIssuesInResidentCountyOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -483,7 +588,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -518,7 +623,13 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.activeIssuesInResidentCountyRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActiveIssuesInResidentCountyMask
+                        ? actions.getActiveIssuesInResidentCountyMask()
+                        : queryCustomizer._mask,
+                    };
+                    await actions.activeIssuesInResidentCountyRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -528,16 +639,19 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

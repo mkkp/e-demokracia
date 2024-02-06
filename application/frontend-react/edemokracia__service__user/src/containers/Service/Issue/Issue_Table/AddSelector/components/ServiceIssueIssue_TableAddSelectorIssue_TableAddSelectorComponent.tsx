@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceIssue, ServiceIssueQueryCustomizer, ServiceIssueStored } from '~/services/data-api';
@@ -58,6 +58,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentActionDefinitions {
+  openFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -65,12 +66,20 @@ export interface ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorCompone
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   selectorRangeAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  AdditionalToolbarButtons?: (
+    data: ServiceIssueStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentProps {
   uniqueId: string;
   actions: ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   selectionDiff: ServiceIssueStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceIssueStored[]>>;
@@ -82,8 +91,17 @@ export interface ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorCompone
 export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponent(
   props: ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, selectionDiff, setSelectionDiff, alreadySelected } =
-    props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
   const filterModelKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
@@ -93,22 +111,23 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
-  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'title', sort: null }]);
+  const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'scope', sort: null }]);
   const [filterModel, setFilterModel] = useState<GridFilterModel>(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueQueryCustomizer>({
-    _mask: '{scope,title,status,created,description}',
+    _mask: '{created,description,scope,status,title}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -126,6 +145,8 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
   const [firstItem, setFirstItem] = useState<ServiceIssueStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const scopeColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
     field: 'scope',
@@ -135,13 +156,11 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueScope.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const titleColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
@@ -162,13 +181,11 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.IssueStatus.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
   const createdColumn: GridColDef<ServiceIssueStored> = {
     ...baseColumnConfig,
@@ -211,7 +228,62 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceIssueStored>[] = [];
+  const rowActions: TableRowAction<ServiceIssueStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueStored[] = () => {
+    return selectionDiff;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -268,7 +340,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -298,7 +370,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -309,7 +381,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -352,15 +424,18 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+        };
+        const res = await actions.selectorRangeAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -371,13 +446,14 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -387,7 +463,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -397,19 +473,13 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
-        disableRowSelectionOnClick
+        columns={effectiveTableColumns}
         isRowSelectable={handleIsRowSelectable}
         hideFooterSelectedRowCount={!true}
         checkboxSelection
@@ -423,7 +493,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -455,23 +525,45 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.selectorRangeAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.Issue.Issue_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
+              {actions.openFormAction && true ? (
+                <Button
+                  id="User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTableCreateButton"
+                  startIcon={<MdiIcon path="note-add" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.openFormAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Issue.Issue_Table.Table.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

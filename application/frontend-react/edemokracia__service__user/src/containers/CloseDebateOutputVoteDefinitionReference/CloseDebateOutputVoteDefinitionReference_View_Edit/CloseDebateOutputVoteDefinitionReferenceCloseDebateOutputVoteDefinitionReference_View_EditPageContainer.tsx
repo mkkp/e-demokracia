@@ -43,7 +43,6 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
 }
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageProps {
-  title: string;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -66,7 +65,6 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -80,12 +78,12 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
     submit,
   } = props;
   const queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
-    _mask: '{context}',
+    _mask: actions.getMask ? actions.getMask!() : '{context}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -197,8 +195,8 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

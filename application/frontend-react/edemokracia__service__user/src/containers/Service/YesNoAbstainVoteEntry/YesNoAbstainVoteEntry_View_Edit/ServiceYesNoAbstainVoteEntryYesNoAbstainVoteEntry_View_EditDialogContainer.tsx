@@ -46,7 +46,6 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDial
 
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDialogActions;
   isLoading: boolean;
@@ -60,6 +59,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDial
   validation: Map<keyof ServiceYesNoAbstainVoteEntry, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoAbstainVoteEntry, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::YesNoAbstainVoteEntry::YesNoAbstainVoteEntry_View_Edit
@@ -72,7 +72,6 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -85,15 +84,16 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer = {
-    _mask: '{created,value,owner{representation}}',
+    _mask: actions.getMask ? actions.getMask!() : '{created,value,owner{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_L2sswFsjEe6Mx9dH3yj5gQ)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -113,8 +113,8 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
           <ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -122,6 +122,7 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_E
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

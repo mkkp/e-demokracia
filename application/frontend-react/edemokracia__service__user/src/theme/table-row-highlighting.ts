@@ -7,7 +7,8 @@ export type TableRowHighlightingHook<T extends GridValidRowModel> = () => () => 
 
 export interface CustomRowThemeData {
   name: string;
-  backgroundColor: string;
+  backgroundColor?: string;
+  fontColor?: string;
 }
 
 export interface RowStyler<T extends GridValidRowModel> {
@@ -17,7 +18,8 @@ export interface RowStyler<T extends GridValidRowModel> {
 
 export interface RowStylerConfigured<T extends GridValidRowModel> extends RowStyler<T>, CustomRowThemeData {
   label: string;
-  backgroundColor: string;
+  backgroundColor?: string;
+  fontColor?: string;
 }
 
 const getBackgroundColor = (color: string, mode: string) =>
@@ -29,19 +31,28 @@ const getSelectedBackgroundColor = (color: string, mode: string) =>
 const getSelectedHoverBackgroundColor = (color: string, mode: string) =>
   mode === 'dark' ? darken(color, 0.3) : lighten(color, 0.3);
 
-const createRowThemes = ({ name, backgroundColor }: CustomRowThemeData): any => {
+const createRowThemes = ({ name, backgroundColor, fontColor }: CustomRowThemeData): any => {
   return {
     [`& .${name}`]: {
-      backgroundColor: getBackgroundColor(backgroundColor, 'light'),
-      '&:hover': {
-        backgroundColor: getHoverBackgroundColor(backgroundColor, 'light'),
-      },
-      '&.Mui-selected': {
-        backgroundColor: getSelectedBackgroundColor(backgroundColor, 'light'),
-        '&:hover': {
-          backgroundColor: getSelectedHoverBackgroundColor(backgroundColor, 'light'),
-        },
-      },
+      ...(fontColor
+        ? {
+            color: fontColor,
+          }
+        : {}),
+      ...(backgroundColor
+        ? {
+            backgroundColor: getBackgroundColor(backgroundColor, 'light'),
+            '&:hover': {
+              backgroundColor: getHoverBackgroundColor(backgroundColor, 'light'),
+            },
+            '&.Mui-selected': {
+              backgroundColor: getSelectedBackgroundColor(backgroundColor, 'light'),
+              '&:hover': {
+                backgroundColor: getSelectedHoverBackgroundColor(backgroundColor, 'light'),
+              },
+            },
+          }
+        : {}),
     },
   };
 };

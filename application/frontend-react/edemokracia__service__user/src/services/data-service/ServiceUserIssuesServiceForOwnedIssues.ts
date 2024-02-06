@@ -66,6 +66,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<Array<ServiceIssueStored>>;
   update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceUserIssues>,
+    target: Partial<ServiceIssueStored>,
+  ): Promise<ServiceIssueStored>;
   addOwnedIssues(
     owner: JudoIdentifiable<ServiceUserIssues>,
     selected: Array<JudoIdentifiable<ServiceIssue>>,
@@ -88,6 +92,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
   ): Promise<ServiceIssueAttachmentStored>;
+  validateUpdateAttachments(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceIssueAttachmentStored>,
+  ): Promise<ServiceIssueAttachmentStored>;
   listCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
@@ -97,6 +105,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
   ): Promise<Array<ServiceIssueCategoryStored>>;
   getTemplateForCategories(): Promise<ServiceIssueCategory>;
+  validateUpdateCategories(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceIssueCategoryStored>,
+  ): Promise<ServiceIssueCategoryStored>;
   setCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
@@ -118,12 +130,20 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<Array<ServiceCityStored>>;
   getTemplateForCity(): Promise<ServiceCity>;
+  validateUpdateCity(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
   setCity(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
   unsetCity(owner: JudoIdentifiable<ServiceIssue>, target: JudoIdentifiable<ServiceCity>): Promise<void>;
   listComments(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
   ): Promise<Array<ServiceCommentStored>>;
+  validateUpdateComments(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceCommentStored>,
+  ): Promise<ServiceCommentStored>;
   voteDownForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
   voteUpForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
   listCons(
@@ -132,6 +152,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
   ): Promise<Array<ServiceConStored>>;
   deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void>;
   updateCons(owner: JudoIdentifiable<ServiceIssue>, target: Partial<ServiceConStored>): Promise<ServiceConStored>;
+  validateUpdateCons(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceConStored>,
+  ): Promise<ServiceConStored>;
   createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateConArgumentForCons(): Promise<CreateArgumentInput>;
   createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
@@ -147,11 +171,19 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<Array<ServiceCountyStored>>;
   getTemplateForCounty(): Promise<ServiceCounty>;
+  validateUpdateCounty(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored>;
   setCounty(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceCounty>): Promise<void>;
   unsetCounty(owner: JudoIdentifiable<ServiceIssue>, target: JudoIdentifiable<ServiceCounty>): Promise<void>;
   getCreatedBy(
     owner: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
+  ): Promise<ServiceServiceUserStored>;
+  validateUpdateCreatedBy(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceServiceUserStored>,
   ): Promise<ServiceServiceUserStored>;
   getDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -162,6 +194,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplateForDistrict(): Promise<ServiceDistrict>;
+  validateUpdateDistrict(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
   setDistrict(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   unsetDistrict(owner: JudoIdentifiable<ServiceIssue>, target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   getIssueType(
@@ -173,6 +209,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<Array<ServiceIssueTypeStored>>;
   getTemplateForIssueType(): Promise<ServiceIssueType>;
+  validateUpdateIssueType(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceIssueTypeStored>,
+  ): Promise<ServiceIssueTypeStored>;
   setIssueType(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceIssueType>): Promise<void>;
   unsetIssueType(owner: JudoIdentifiable<ServiceIssue>, target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
   getOwner(
@@ -183,6 +223,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
     owner: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<Array<ServiceServiceUserStored>>;
+  validateUpdateOwner(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored>;
   setOwner(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
   unsetOwner(owner: JudoIdentifiable<ServiceIssue>, target: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
   listPros(
@@ -191,6 +235,10 @@ export interface ServiceUserIssuesServiceForOwnedIssues {
   ): Promise<Array<ServiceProStored>>;
   deletePros(target: JudoIdentifiable<ServicePro>): Promise<void>;
   updatePros(owner: JudoIdentifiable<ServiceIssue>, target: Partial<ServiceProStored>): Promise<ServiceProStored>;
+  validateUpdatePros(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: Partial<ServiceProStored>,
+  ): Promise<ServiceProStored>;
   createConArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
   getTemplateOnCreateConArgumentForPros(): Promise<CreateArgumentInput>;
   createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;

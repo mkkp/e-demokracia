@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,18 +33,23 @@ import type { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervot
 import { ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponent } from './components/ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponent';
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_CALL_OPERATION_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationContainerHook';
+  'SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_VIEW_EDIT_TAB_BAR_SELECTANSWERVOTE_VOTE_SELECT_ANSWER_CALL_OPERATION_CONTAINER_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationContainerHook =
   () => ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions;
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions
-  extends ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponentActionDefinitions {}
+  extends ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions;
   selectionDiff: SelectAnswerVoteSelectionStored[];
   setSelectionDiff: Dispatch<SetStateAction<SelectAnswerVoteSelectionStored[]>>;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorPageContainer
@@ -53,7 +58,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
   props: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationProps,
 ) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions, selectionDiff, setSelectionDiff } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -72,10 +77,13 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorVisualElement">
+      <Grid item data-name="voteSelectAnswer" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorVisualElement"
+          data-name="voteSelectAnswer"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorTable"
@@ -90,6 +98,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
                     selectionDiff={selectionDiff}
                     setSelectionDiff={setSelectionDiff}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

@@ -9,19 +9,23 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions } from '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageContainer';
+import type {
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions,
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageProps,
+} from '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageContainer';
 import { useServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsTableAddSelectorPage } from '~/dialogs/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/Root/TabBar/OwnedVoteDefinitionsGroup/OwnedVoteDefinitions/TableAddSelectorPage';
 import { useServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerRelationTableCallSelector } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/TabBar/Selectanswervote/VoteSelectAnswer/Relation/Table/CallSelector';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteRating/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNo/Input/Form';
 import { useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm } from '~/dialogs/Service/VoteDefinition/VoteDefinition_View_Edit/VoteYesNoAbstain/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRelationViewPage } from '~/routes';
 import { routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesRelationViewPage } from '~/routes';
 import { routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesRelationViewPage } from '~/routes';
@@ -42,7 +46,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended =
@@ -55,12 +59,34 @@ export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExte
   };
 
 export const SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
+  'SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook = (
   data: ServiceUserVoteDefinitionStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceUserVoteDefinition, value: any) => void,
+
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended;
+
+export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModel
+  extends ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModelContext =
+  createContext<ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModel>({} as any);
+export const useServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModel = () => {
+  const context = useContext(ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModel must be used within a(n) ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const convertServiceUserUserVoteDefinitionsAccessViewPagePayload = (
   attributeName: keyof ServiceUserVoteDefinition,
@@ -91,6 +117,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -133,8 +160,16 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceUserVoteDefinitionQueryCustomizer = {
-    _mask: '{}',
+  const getPageQueryCustomizer: () => ServiceUserVoteDefinitionQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
 
   // Pandino Action overrides
@@ -143,7 +178,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       `(${OBJECTCLASS}=${SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
     );
   const customActions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActionsExtended | undefined =
-    customActionsHook?.(data, editMode, storeDiff);
+    customActionsHook?.(data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
   const openServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsTableAddSelectorPage =
@@ -157,15 +192,12 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   const openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm =
     useServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm();
 
-  // Calculated section
-  const title: string = t('service.UserVoteDefinition.UserVoteDefinition_View_Edit', {
-    defaultValue: 'UserVoteDefinition View / Edit',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: ServiceUserVoteDefinition): string => {
+    return t('service.UserVoteDefinition.UserVoteDefinition_View_Edit', {
+      defaultValue: 'UserVoteDefinition View / Edit',
+    });
+  };
   const backAction = async () => {
     navigateBack();
   };
@@ -175,8 +207,12 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserVoteDefinitionsImpl.refresh(singletonHost.current, pageQueryCustomizer);
+      const result = await userServiceForUserVoteDefinitionsImpl.refresh(
+        singletonHost.current,
+        getPageQueryCustomizer(),
+      );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -190,6 +226,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -215,11 +252,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsGlobalOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRelationViewPage((target || data).__signedIdentifier),
-    );
+  const activeVoteDefinitionsGlobalOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInActivityCitiesFilterAction = async (
     id: string,
@@ -240,13 +285,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInActivityCitiesOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInActivityCitiesOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCitiesRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInActivityCountiesFilterAction = async (
     id: string,
@@ -267,13 +318,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInActivityCountiesOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInActivityCountiesOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityCountiesRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInActivityDistrictsFilterAction = async (
     id: string,
@@ -294,13 +351,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInActivityDistrictsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInActivityDistrictsOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInActivityDistrictsRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInResidentCityFilterAction = async (
     id: string,
@@ -321,13 +384,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInResidentCityOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCityRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInResidentCityOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCityRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInResidentCountyFilterAction = async (
     id: string,
@@ -348,13 +417,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInResidentCountyOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInResidentCountyOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentCountyRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const activeVoteDefinitionsInResidentDistrictFilterAction = async (
     id: string,
@@ -375,13 +450,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       queryCustomizer,
     );
   };
-  const activeVoteDefinitionsInResidentDistrictOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(
-      routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictRelationViewPage(
-        (target || data).__signedIdentifier,
-      ),
-    );
+  const activeVoteDefinitionsInResidentDistrictOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionActiveVoteDefinitionsInResidentDistrictRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
+    }
   };
   const ownedVoteDefinitionsOpenAddSelectorAction = async () => {
     const { result, data: returnedData } =
@@ -395,7 +476,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
           setIsLoading(true);
           await userServiceForUserVoteDefinitionsImpl.addOwnedVoteDefinitions(data, returnedData);
           if (!editMode) {
-            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
           }
         } catch (e) {
           console.error(e);
@@ -430,7 +511,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -470,7 +551,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
         await userServiceForUserVoteDefinitionsImpl.removeOwnedVoteDefinitions(data, [target!]);
         if (!silentMode) {
           if (!editMode) {
-            await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+            await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
           }
         }
       } catch (error) {
@@ -484,64 +565,114 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       }
     }
   };
-  const ownedVoteDefinitionsOpenPageAction = async (target?: ServiceVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserVoteDefinitionOwnedVoteDefinitionsRelationViewPage((target || data).__signedIdentifier));
-  };
-  const activeVoteDefinitionsGlobalVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const ownedVoteDefinitionsOpenPageAction = async (
+    target: ServiceVoteDefinition | ServiceVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserVoteDefinitionOwnedVoteDefinitionsRelationViewPage(
+          ((target as ServiceVoteDefinitionStored) || data).__signedIdentifier,
+        ),
+      );
     }
   };
-  const activeVoteDefinitionsInActivityCitiesVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsGlobalVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInActivityCountiesVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCitiesVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInActivityDistrictsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCountiesVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCityVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityDistrictsVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCountyVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCityVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentDistrictVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCountyVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedVoteDefinitionsVoteRatingAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentDistrictVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+  const ownedVoteDefinitionsVoteRatingAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const activeVoteDefinitionsGlobalVoteSelectAnswerAction = async () => {
@@ -551,7 +682,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -562,7 +693,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -573,7 +704,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -584,7 +715,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -595,7 +726,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -606,7 +737,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -617,7 +748,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
@@ -628,122 +759,200 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       );
     if (result === 'submit') {
       if (!editMode) {
-        await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
     }
   };
-  const activeVoteDefinitionsGlobalVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activeVoteDefinitionsInActivityCitiesVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activeVoteDefinitionsInActivityCountiesVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
-    const { result, data: returnedData } =
-      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
-    }
-  };
-  const activeVoteDefinitionsInActivityDistrictsVoteYesNoAbstainAction = async (
+  const activeVoteDefinitionsGlobalVoteYesNoAbstainAction = async (
     target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
   ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCityVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCitiesVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCountyVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCountiesVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentDistrictVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityDistrictsVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedVoteDefinitionsVoteYesNoAbstainAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCityVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsGlobalVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCountyVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+  const activeVoteDefinitionsInResidentDistrictVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+  const ownedVoteDefinitionsVoteYesNoAbstainAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
+    const { result, data: returnedData } =
+      await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAbstainInputForm(target);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+  const activeVoteDefinitionsGlobalVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInActivityCitiesVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCitiesVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInActivityCountiesVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityCountiesVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInActivityDistrictsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInActivityDistrictsVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCityVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCityVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentCountyVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentCountyVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const activeVoteDefinitionsInResidentDistrictVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const activeVoteDefinitionsInResidentDistrictVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
-  const ownedVoteDefinitionsVoteYesNoAction = async (target: ServiceVoteDefinitionStored) => {
+  const ownedVoteDefinitionsVoteYesNoAction = async (
+    target: ServiceVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoInputForm(target);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
@@ -753,6 +962,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
 
   const actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions = {
+    getPageTitle,
     backAction,
     refreshAction,
     activeVoteDefinitionsGlobalFilterAction,
@@ -817,6 +1027,24 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    submit,
+    isFormUpdateable,
+    isFormDeleteable,
+  };
+
   // Effect section
   useEffect(() => {
     (async () => {
@@ -827,19 +1055,19 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
         navigate('*');
         return;
       }
-      await actions.refreshAction!(pageQueryCustomizer);
+      await actions.refreshAction!(getPageQueryCustomizer());
     })();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_mNnPsF5QEe6vsex_cZNQbQ)/AccessViewPageDefinition"
-      data-page-name="service::User::userVoteDefinitions::AccessViewPage"
-    >
+    <ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_mNnPsF5QEe6vsex_cZNQbQ)/AccessViewPageDefinition"
+          data-page-name="service::User::userVoteDefinitions::AccessViewPage"
+        />
         <PageContainerTransition>
           <ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -854,6 +1082,6 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceUserVoteDefinitionUserVoteDefinition_View_EditViewModelContext.Provider>
   );
 }

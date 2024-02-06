@@ -8,13 +8,17 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { CreateCommentInputCreateCommentInput_FormDialogActions } from '~/containers/CreateCommentInput/CreateCommentInput_Form/CreateCommentInputCreateCommentInput_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  CreateCommentInputCreateCommentInput_FormDialogActions,
+  CreateCommentInputCreateCommentInput_FormDialogProps,
+} from '~/containers/CreateCommentInput/CreateCommentInput_Form/CreateCommentInputCreateCommentInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   CreateCommentInput,
   CreateCommentInputQueryCustomizer,
@@ -23,7 +27,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type CreateCommentInputCreateCommentInput_FormDialogActionsExtended =
@@ -37,23 +41,61 @@ export type CreateCommentInputCreateCommentInput_FormDialogActionsExtended =
       data: CreateCommentInput,
       storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: CreateCommentInput,
+      res: CreateCommentInputStored,
+      onSubmit: (result?: CreateCommentInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_COMMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'CreateCommentInputCreateCommentInput_FormActionsHook';
+  'SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_COMMENT_INPUT_FORM_ACTIONS_HOOK';
 export type CreateCommentInputCreateCommentInput_FormActionsHook = (
   ownerData: any,
   data: CreateCommentInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => CreateCommentInputCreateCommentInput_FormDialogActionsExtended;
+
+export interface CreateCommentInputCreateCommentInput_FormViewModel
+  extends CreateCommentInputCreateCommentInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<CreateCommentInput>;
+  isDraft?: boolean;
+}
+
+const CreateCommentInputCreateCommentInput_FormViewModelContext =
+  createContext<CreateCommentInputCreateCommentInput_FormViewModel>({} as any);
+export const useCreateCommentInputCreateCommentInput_FormViewModel = () => {
+  const context = useContext(CreateCommentInputCreateCommentInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useCreateCommentInputCreateCommentInput_FormViewModel must be used within a(n) CreateCommentInputCreateCommentInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceIssueIssue_View_EditCreateCommentInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<CreateCommentInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: CreateCommentInput) => Promise<void>,
 ) => Promise<DialogResult<CreateCommentInputStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<CreateCommentInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: CreateCommentInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +111,19 @@ export const useServiceIssueIssue_View_EditCreateCommentInputForm = (): ((
         children: (
           <ServiceIssueIssue_View_EditCreateCommentInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async () => {
+            onSubmit={async (isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
               });
             }}
           />
@@ -104,8 +149,11 @@ const CreateCommentInputCreateCommentInput_FormDialogContainer = lazy(
 export interface ServiceIssueIssue_View_EditCreateCommentInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<CreateCommentInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: CreateCommentInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: CreateCommentInputStored) => Promise<void>;
+  onSubmit: (result?: CreateCommentInputStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationUnmappedInputPageDefinition
@@ -113,7 +161,7 @@ export interface ServiceIssueIssue_View_EditCreateCommentInputFormProps {
 export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   props: ServiceIssueIssue_View_EditCreateCommentInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceIssueServiceImpl = useMemo(() => new ServiceIssueServiceImpl(judoAxiosProvider), []);
@@ -124,6 +172,7 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -166,6 +215,15 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createCommentForIssueAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: CreateCommentInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<CreateCommentInputCreateCommentInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_COMMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -175,26 +233,22 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('CreateCommentInput.CreateCommentInput_Form', { defaultValue: 'CreateCommentInput Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createCommentForIssueAction();
-  };
-
   // Action section
+  const getPageTitle = (data: CreateCommentInput): string => {
+    return t('CreateCommentInput.CreateCommentInput_Form', { defaultValue: 'CreateCommentInput Form' });
+  };
   const backAction = async () => {
     onClose();
   };
   const createCommentForIssueAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceImpl.createComment(ownerData, payloadDiff.current);
+      await serviceIssueServiceImpl.createComment(ownerData, cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateCommentForIssueAction) {
         await customActions.postCreateCommentForIssueAction(onSubmit, onClose);
       } else {
@@ -220,6 +274,12 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof CreateCommentInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -230,10 +290,33 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   };
 
   const actions: CreateCommentInputCreateCommentInput_FormDialogActions = {
+    getPageTitle,
     backAction,
     createCommentForIssueAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: CreateCommentInputCreateCommentInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -242,15 +325,15 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
   }, []);
 
   return (
-    <div
-      id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::Issue::Issue_View_Edit::createComment::Input::Form"
-    >
+    <CreateCommentInputCreateCommentInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::Issue::Issue_View_Edit::createComment::Input::Form"
+        />
         <CreateCommentInputCreateCommentInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -262,8 +345,9 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </CreateCommentInputCreateCommentInput_FormViewModelContext.Provider>
   );
 }

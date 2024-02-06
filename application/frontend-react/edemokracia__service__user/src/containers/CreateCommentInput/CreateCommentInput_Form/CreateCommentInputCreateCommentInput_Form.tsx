@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,11 +28,12 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { CreateCommentInput, CreateCommentInputQueryCustomizer, CreateCommentInputStored } from '~/services/data-api';
 
 export const CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'CreateCommentInputCreateCommentInput_FormContainerHook';
+  'CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_FORM_CONTAINER_ACTIONS_HOOK';
 export type CreateCommentInputCreateCommentInput_FormContainerHook = (
   data: CreateCommentInputStored,
   editMode: boolean,
@@ -40,6 +41,7 @@ export type CreateCommentInputCreateCommentInput_FormContainerHook = (
 ) => CreateCommentInputCreateCommentInput_FormActionDefinitions;
 
 export interface CreateCommentInputCreateCommentInput_FormActionDefinitions {
+  getPageTitle?: (data: CreateCommentInput) => string;
   cancelAction?: () => Promise<void>;
   okAction?: () => Promise<void>;
   isCommentRequired?: (data: CreateCommentInput | CreateCommentInputStored, editMode?: boolean) => boolean;
@@ -52,10 +54,10 @@ export interface CreateCommentInputCreateCommentInput_FormActionDefinitions {
 
 export interface CreateCommentInputCreateCommentInput_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: CreateCommentInputCreateCommentInput_FormActionDefinitions;
 
   data: CreateCommentInputStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof CreateCommentInput, value: any) => void;
@@ -63,6 +65,7 @@ export interface CreateCommentInputCreateCommentInput_FormProps {
   validation: Map<keyof CreateCommentInput, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof CreateCommentInput, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -73,9 +76,10 @@ export default function CreateCommentInputCreateCommentInput_Form(
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -104,21 +108,34 @@ export default function CreateCommentInputCreateCommentInput_Form(
   const containerActions: CreateCommentInputCreateCommentInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="CreateCommentInput_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_kYYi4Ie5Ee2kLcMqsIbMgQ)/TransferObjectFormVisualElement"
+          data-name="CreateCommentInput_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="comment" xs={12} sm={12}>
             <Grid
               id="User/(esm/_QjzvsIe6Ee2kLcMqsIbMgQ)/GroupVisualElement"
+              data-name="comment"
               container
               direction="row"
               alignItems="flex-start"
@@ -130,7 +147,7 @@ export default function CreateCommentInputCreateCommentInput_Form(
                   required={actions?.isCommentRequired ? actions.isCommentRequired(data, editMode) : true}
                   name="comment"
                   id="User/(esm/_a5DsQIe6Ee2kLcMqsIbMgQ)/StringTypeTextArea"
-                  autoFocus
+                  inputRef={autoFocusInputRef}
                   label={t('CreateCommentInput.CreateCommentInput_Form.comment', { defaultValue: 'Comment' }) as string}
                   value={data.comment ?? ''}
                   className={clsx({
@@ -158,16 +175,17 @@ export default function CreateCommentInputCreateCommentInput_Form(
                     ),
                   }}
                   inputProps={{
-                    maxlength: 255,
+                    maxLength: 255,
                   }}
                 />
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="buttons" xs={12} sm={12}>
             <Grid
               id="User/(esm/_4fOhEIfUEe2u0fVmwtP5bA)/GroupVisualElement"
+              data-name="buttons"
               container
               direction="row"
               alignItems="flex-start"

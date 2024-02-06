@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
@@ -50,6 +50,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentActionDefinitions {
+  openFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -57,12 +58,20 @@ export interface ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentA
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   selectorRangeAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
+  AdditionalToolbarButtons?: (
+    data: ServiceCityStored[],
+    isLoading: boolean,
+    selectedRows: ServiceCityStored[],
+    clearSelections: () => void,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentProps {
   uniqueId: string;
   actions: ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   selectionDiff: ServiceCityStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceCityStored[]>>;
@@ -74,8 +83,17 @@ export interface ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentP
 export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
   props: ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, selectionDiff, setSelectionDiff, alreadySelected } =
-    props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
   const filterModelKey = `User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
@@ -84,7 +102,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
   const { t } = useTranslation();
   const handleError = useErrorHandler();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceCityStored>[]>([]);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'county', sort: null }]);
@@ -92,14 +110,15 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceCityQueryCustomizer>({
     _mask: '{county,name}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -116,6 +135,8 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
   const [lastItem, setLastItem] = useState<ServiceCityStored>();
   const [firstItem, setFirstItem] = useState<ServiceCityStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
   const countyColumn: GridColDef<ServiceCityStored> = {
     ...baseColumnConfig,
@@ -140,7 +161,62 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
 
   const columns = useMemo<GridColDef<ServiceCityStored>[]>(() => [countyColumn, nameColumn], []);
 
-  const rowActions: TableRowAction<ServiceCityStored>[] = [];
+  const rowActions: TableRowAction<ServiceCityStored>[] = useMemo(() => [], [actions, isLoading]);
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_a0XksH2iEe2LTNnGda5kaw)/ClassType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceCityStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceCityStored[] = () => {
+    return selectionDiff;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.AdditionalToolbarButtons
+    ? actions.AdditionalToolbarButtons(data, isLoading, getSelectedRows(), clearSelections)
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPage(0);
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceCityQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -174,7 +250,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -204,7 +280,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
@@ -215,7 +291,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: isNext ? 10 + 1 : 10,
+          limit: isNext ? rowsPerPage + 1 : rowsPerPage,
           reverse: !isNext,
           lastItem: isNext ? lastItem : firstItem,
         },
@@ -258,15 +334,18 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
 
   async function fetchData() {
     if (!isLoading) {
-      setIsLoading(true);
+      setIsInternalLoading(true);
 
       try {
-        const res = await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+        const processedQueryCustomizer = {
+          ...processQueryCustomizer(queryCustomizer),
+        };
+        const res = await actions.selectorRangeAction!(processedQueryCustomizer);
 
-        if (res.length > 10) {
+        if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
           res.pop();
-        } else if (queryCustomizer._seek?.limit === 10 + 1) {
+        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
           setIsNextButtonEnabled(false);
         }
 
@@ -277,13 +356,14 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
       } catch (error) {
         handleError(error);
       } finally {
-        setIsLoading(false);
+        setIsInternalLoading(false);
       }
     }
   }
 
   useEffect(() => {
     fetchData();
+    handleOnSelection(selectionModel);
   }, [queryCustomizer, refreshCounter]);
 
   return (
@@ -293,7 +373,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -303,19 +383,13 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_a0XksH2iEe2LTNnGda5kaw)/ClassType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
-        disableRowSelectionOnClick
+        columns={effectiveTableColumns}
         isRowSelectable={handleIsRowSelectable}
         hideFooterSelectedRowCount={!true}
         checkboxSelection
@@ -329,7 +403,7 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
-        rowCount={10}
+        rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
             <GridToolbarContainer>
@@ -361,23 +435,44 @@ export function ServiceCityCity_TableAddSelectorCity_TableAddSelectorComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.selectorRangeAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.selectorRangeAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
                   {t('service.City.City_Table.Table.Refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
+              {actions.openFormAction && true ? (
+                <Button
+                  id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTableCreateButton"
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                    };
+                    await actions.openFormAction!();
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.City.City_Table.Table.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),
           Pagination: () => (
             <CustomTablePagination
+              pageSizeOptions={pageSizeOptions}
+              setPageSize={setPageSize}
               pageChange={handlePageChange}
               isNextButtonEnabled={isNextButtonEnabled}
               page={page}
               setPage={setPage}
-              rowPerPage={10}
+              rowPerPage={rowsPerPage}
             />
           ),
         }}

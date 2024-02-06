@@ -9,17 +9,22 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueIssue_TablePageActions } from '~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_TablePageContainer';
+import type {
+  ServiceIssueIssue_TablePageActions,
+  ServiceIssueIssue_TablePageProps,
+} from '~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_TablePageContainer';
 import { useServiceIssueIssue_View_EditCloseDebateInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
 import { useServiceIssueIssue_View_EditCreateCommentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateComment/Input/Form';
 import { useServiceIssueIssue_View_EditCreateConArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateConArgument/Input/Form';
 import { useServiceIssueIssue_View_EditCreateProArgumentInputForm } from '~/dialogs/Service/Issue/Issue_View_Edit/CreateProArgument/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserAdminIssuesAccessViewPage } from '~/routes';
 import type {
   IssueScope,
@@ -33,7 +38,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminIssuesImpl } from '~/services/data-axios/UserServiceForAdminIssuesImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueIssue_TablePageActionsExtended = ServiceIssueIssue_TablePageActions & {
@@ -46,11 +51,28 @@ export type ServiceIssueIssue_TablePageActionsExtended = ServiceIssueIssue_Table
 };
 
 export const SERVICE_USER_ADMIN_ISSUES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueIssue_TableActionsHook';
+  'SERVICE_USER_ADMIN_ISSUES_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceIssueIssue_TableActionsHook = (
   data: ServiceIssueStored[],
   editMode: boolean,
 ) => ServiceIssueIssue_TablePageActionsExtended;
+
+export interface ServiceIssueIssue_TableViewModel extends ServiceIssueIssue_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceIssueIssue_TableViewModelContext = createContext<ServiceIssueIssue_TableViewModel>({} as any);
+export const useServiceIssueIssue_TableViewModel = () => {
+  const context = useContext(ServiceIssueIssue_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueIssue_TableViewModel must be used within a(n) ServiceIssueIssue_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceIssueIssue_TablePageContainer = lazy(
   () => import('~/containers/Service/Issue/Issue_Table/ServiceIssueIssue_TablePageContainer'),
@@ -68,6 +90,7 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -76,6 +99,12 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceIssueStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueIssue_TableActionsHook>(
@@ -91,13 +120,10 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
   const openServiceIssueIssue_View_EditCreateProArgumentInputForm =
     useServiceIssueIssue_View_EditCreateProArgumentInputForm();
 
-  // Calculated section
-  const title: string = t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.Issue.Issue_Table', { defaultValue: 'Issue Table' });
+  };
   const activateForIssueAction = async (target?: ServiceIssueStored) => {
     try {
       setIsLoading(true);
@@ -134,7 +160,12 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
       setIsLoading(false);
     }
   };
-  const closeDebateAction = async (target: ServiceIssueStored) => {
+  const closeDebateAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCloseDebateInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
@@ -194,23 +225,41 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
       setIsLoading(false);
     }
   };
-  const createConArgumentAction = async (target: ServiceIssueStored) => {
+  const createConArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateConArgumentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const createProArgumentAction = async (target: ServiceIssueStored) => {
+  const createProArgumentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateProArgumentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
   };
-  const createCommentAction = async (target: ServiceIssueStored) => {
+  const createCommentAction = async (
+    target: ServiceIssueStored,
+    templateDataOverride?: Partial<ServiceIssue>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
+  };
+  const backAction = async () => {
+    navigateBack();
   };
   const filterAction = async (
     id: string,
@@ -230,18 +279,22 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
       return userServiceForAdminIssuesImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceIssueStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserAdminIssuesAccessViewPage(target!.__signedIdentifier));
+  const openPageAction = async (target: ServiceIssue | ServiceIssueStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceIssueStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(routeToServiceUserAdminIssuesAccessViewPage((target as ServiceIssueStored)!.__signedIdentifier));
+    }
   };
 
   const actions: ServiceIssueIssue_TablePageActions = {
+    getPageTitle,
     activateForIssueAction,
     addToFavoritesForIssueAction,
     closeDebateAction,
@@ -251,23 +304,35 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
     createConArgumentAction,
     createProArgumentAction,
     createCommentAction,
+    backAction,
     filterAction,
     refreshAction,
     openPageAction,
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueIssue_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_iuCGQId_Ee2kLcMqsIbMgQ)/AccessTablePageDefinition"
-      data-page-name="service::User::adminIssues::AccessTablePage"
-    >
+    <ServiceIssueIssue_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_iuCGQId_Ee2kLcMqsIbMgQ)/AccessTablePageDefinition"
+          data-page-name="service::User::adminIssues::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceIssueIssue_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -275,6 +340,6 @@ export default function ServiceUserAdminIssuesAccessTablePage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceIssueIssue_TableViewModelContext.Provider>
   );
 }

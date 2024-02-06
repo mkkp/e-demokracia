@@ -36,7 +36,6 @@ export interface ServiceIssueIssue_View_EditDialogActions extends ServiceIssueIs
 
 export interface ServiceIssueIssue_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceIssueIssue_View_EditDialogActions;
   isLoading: boolean;
@@ -50,6 +49,7 @@ export interface ServiceIssueIssue_View_EditDialogProps {
   validation: Map<keyof ServiceIssue, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssue, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::Issue::Issue_View_Edit
@@ -60,7 +60,6 @@ export default function ServiceIssueIssue_View_EditDialog(props: ServiceIssueIss
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -73,16 +72,18 @@ export default function ServiceIssueIssue_View_EditDialog(props: ServiceIssueIss
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceIssueQueryCustomizer = {
-    _mask:
-      '{created,defaultVoteType,description,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},attachments{link,file,type},categories{title,description},comments{comment,created,createdByName,upVotes,downVotes},issueType{title,description},owner{representation},city{representation},county{representation},district{representation}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,defaultVoteType,description,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},attachments{file,link,type},categories{description,title},comments{comment,created,createdByName,downVotes,upVotes},issueType{description,title},owner{representation},city{representation},county{representation},district{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -102,8 +103,8 @@ export default function ServiceIssueIssue_View_EditDialog(props: ServiceIssueIss
           <ServiceIssueIssue_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -111,6 +112,7 @@ export default function ServiceIssueIssue_View_EditDialog(props: ServiceIssueIss
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

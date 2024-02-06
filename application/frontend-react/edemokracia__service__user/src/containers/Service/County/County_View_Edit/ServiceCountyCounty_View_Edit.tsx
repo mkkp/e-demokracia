@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -42,7 +42,7 @@ import type { ServiceCountyCounty_View_EditCitiesComponentActionDefinitions } fr
 import { ServiceCountyCounty_View_EditCitiesComponent } from './components/ServiceCountyCounty_View_EditCitiesComponent';
 
 export const SERVICE_COUNTY_COUNTY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_View_EditContainerHook';
+  'SERVICE_COUNTY_COUNTY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceCountyCounty_View_EditContainerHook = (
   data: ServiceCountyStored,
   editMode: boolean,
@@ -51,16 +51,18 @@ export type ServiceCountyCounty_View_EditContainerHook = (
 
 export interface ServiceCountyCounty_View_EditActionDefinitions
   extends ServiceCountyCounty_View_EditCitiesComponentActionDefinitions {
+  getPageTitle?: (data: ServiceCounty) => string;
   isNameRequired?: (data: ServiceCounty | ServiceCountyStored, editMode?: boolean) => boolean;
   isNameDisabled?: (data: ServiceCounty | ServiceCountyStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceCountyCounty_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCountyCounty_View_EditActionDefinitions;
 
   data: ServiceCountyStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCounty, value: any) => void;
@@ -68,6 +70,7 @@ export interface ServiceCountyCounty_View_EditProps {
   validation: Map<keyof ServiceCounty, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCounty, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0aoCH2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer
@@ -76,9 +79,10 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -110,9 +114,10 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="County_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_a0aoCH2iEe2LTNnGda5kaw)/TransferObjectViewVisualElement"
+          data-name="County_View_Edit"
           container
           direction="column"
           alignItems="stretch"
@@ -124,7 +129,6 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
               required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dLSNwH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-              autoFocus
               label={t('service.County.County_View_Edit.name', { defaultValue: 'County name' }) as string}
               value={data.name ?? ''}
               className={clsx({
@@ -148,14 +152,15 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="cities::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="cities::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -191,6 +196,7 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
                     isFormUpdateable={isFormUpdateable}
                     validationError={validation.get('cities')}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

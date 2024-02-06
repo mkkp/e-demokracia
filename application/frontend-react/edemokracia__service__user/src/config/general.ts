@@ -42,3 +42,5 @@ export const fadeTimeout: number = 1200;
 export const slideTimeout: number = 300;
 
 export const dialogStackCloseDelay: number = 50;
+
+export const autoFocusRefDelay: number = 200;

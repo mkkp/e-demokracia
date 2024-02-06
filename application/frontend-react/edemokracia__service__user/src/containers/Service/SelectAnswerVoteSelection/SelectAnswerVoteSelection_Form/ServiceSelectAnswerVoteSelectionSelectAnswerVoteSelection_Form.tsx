@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,6 +28,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceSelectAnswerVoteSelection,
@@ -36,7 +37,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormContainerHook';
+  'SERVICE_SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormContainerHook = (
   data: ServiceSelectAnswerVoteSelectionStored,
   editMode: boolean,
@@ -44,6 +45,7 @@ export type ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormContai
 ) => ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions;
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions {
+  getPageTitle?: (data: ServiceSelectAnswerVoteSelection) => string;
   isDescriptionRequired?: (
     data: ServiceSelectAnswerVoteSelection | ServiceSelectAnswerVoteSelectionStored,
     editMode?: boolean,
@@ -66,10 +68,10 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormA
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions;
 
   data: ServiceSelectAnswerVoteSelectionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSelectAnswerVoteSelection, value: any) => void;
@@ -77,6 +79,7 @@ export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormP
   validation: Map<keyof ServiceSelectAnswerVoteSelection, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSelectAnswerVoteSelection, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_pSKM8FtqEe6Mx9dH3yj5gQ)/TransferObjectFormPageContainer
@@ -87,9 +90,10 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -119,12 +123,24 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
   const containerActions: ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="SelectAnswerVoteSelection_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_pSKM8FtqEe6Mx9dH3yj5gQ)/TransferObjectFormVisualElement"
+          data-name="SelectAnswerVoteSelection_Form"
           container
           direction="column"
           alignItems="stretch"
@@ -136,7 +152,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_k8aEgFv1Ee6nEc5rp_Qy4A)/StringTypeTextInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={
                 t('service.SelectAnswerVoteSelection.SelectAnswerVoteSelection_Form.title', {
                   defaultValue: 'Title',
@@ -164,7 +180,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
@@ -205,7 +221,7 @@ export default function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelectio
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>

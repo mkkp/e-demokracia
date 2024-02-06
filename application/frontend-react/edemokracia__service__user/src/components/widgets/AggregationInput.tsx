@@ -54,6 +54,7 @@ interface AggregationInputProps {
   autoCompleteAttribute: string;
   onAutoCompleteSearch?: (searchText: string) => Promise<JudoStored<any>[]>;
   onAutoCompleteSelect: (target?: JudoStored<any> | null) => void;
+  isInlineCreatable?: boolean;
 }
 
 export const AggregationInput = ({
@@ -79,6 +80,7 @@ export const AggregationInput = ({
   autoCompleteAttribute,
   onAutoCompleteSearch,
   onAutoCompleteSelect,
+  isInlineCreatable,
 }: AggregationInputProps) => {
   const [options, setOptions] = useState<JudoStored<any>[]>([]);
   const [loading, setLoading] = useState(false);
@@ -179,10 +181,72 @@ export const AggregationInput = ({
                   </InputAdornment>
                 ),
                 endAdornment: (
-                  <>
-                    {loading ? <CircularProgress color="inherit" size="1rem" sx={{ mt: -2 }} /> : null}
-                    {params.InputProps.endAdornment}
-                  </>
+                  <InputAdornment position="end">
+                    <ButtonGroup
+                      ref={anchorRef}
+                      aria-label="link button group"
+                      className={clsx({
+                        AggregationInputButtonGroup: true,
+                        AggregationFilled: exists(value),
+                      })}
+                    >
+                      {loading ? (
+                        <CircularProgress color="inherit" size="1rem" className="AggregationInputLoading" />
+                      ) : null}
+                      {onSet && !exists(value) && (
+                        <IconButton
+                          className={`${name}-set`}
+                          disabled={disabled || readOnly}
+                          onClick={(event: any) => {
+                            handleDropdownClose(event);
+                            onSet();
+                          }}
+                          title={
+                            t('judo.component.AggregationInput.open-filter', {
+                              defaultValue: 'Open selector dialog',
+                            }) as string
+                          }
+                        >
+                          <MdiIcon path="magnify" />
+                        </IconButton>
+                      )}
+                      {exists(value) && onView && (
+                        <IconButton
+                          className={`${name}-view`}
+                          disabled={editMode && !isInlineCreatable}
+                          onClick={(event: any) => {
+                            handleDropdownClose(event);
+                            onView();
+                          }}
+                          title={
+                            t('judo.component.AggregationInput.navigate', {
+                              defaultValue: 'Navigate to element',
+                            }) as string
+                          }
+                        >
+                          <MdiIcon path="eye" />
+                        </IconButton>
+                      )}
+                      {!exists(value) && onCreate && (
+                        <IconButton
+                          className={`${name}-create`}
+                          disabled={disabled || readOnly || (editMode && !isInlineCreatable)}
+                          onClick={(event: any) => {
+                            handleDropdownClose(event);
+                            onCreate();
+                          }}
+                          title={t('judo.component.AggregationInput.create', { defaultValue: 'Create' }) as string}
+                        >
+                          <MdiIcon path="file_document_plus" />
+                        </IconButton>
+                      )}
+                      {exists(value) && (onEdit || onDelete || onRemove || onSet || onUnset) && !readOnly && (
+                        <IconButton className={`${name}-dropdown`} disabled={disabled} onClick={handleDropdownToggle}>
+                          <MdiIcon path="chevron-down" />
+                        </IconButton>
+                      )}
+                    </ButtonGroup>
+                  </InputAdornment>
                 ),
               }}
             />
@@ -194,52 +258,6 @@ export const AggregationInput = ({
           }}
         />
       </Box>
-      <ButtonGroup ref={anchorRef} aria-label="link button group">
-        {onSet && (
-          <IconButton
-            className={`${name}-set`}
-            disabled={disabled || readOnly}
-            onClick={(event: any) => {
-              handleDropdownClose(event);
-              onSet();
-            }}
-            title={t('judo.component.AggregationInput.open-filter', { defaultValue: 'Open search dialog' }) as string}
-          >
-            <MdiIcon path="magnify" />
-          </IconButton>
-        )}
-        {exists(value) && onView && (
-          <IconButton
-            className={`${name}-view`}
-            disabled={editMode}
-            onClick={(event: any) => {
-              handleDropdownClose(event);
-              onView();
-            }}
-            title={t('judo.component.AggregationInput.navigate', { defaultValue: 'Navigate to element' }) as string}
-          >
-            <MdiIcon path="eye" />
-          </IconButton>
-        )}
-        {!exists(value) && onCreate && (
-          <IconButton
-            className={`${name}-create`}
-            disabled={disabled || readOnly || editMode}
-            onClick={(event: any) => {
-              handleDropdownClose(event);
-              onCreate();
-            }}
-            title={t('judo.component.AggregationInput.create', { defaultValue: 'Create' }) as string}
-          >
-            <MdiIcon path="file_document_plus" />
-          </IconButton>
-        )}
-        {exists(value) && (onEdit || onDelete || onRemove || onUnset) && !readOnly && (
-          <IconButton className={`${name}-dropdown`} disabled={disabled} onClick={handleDropdownToggle}>
-            <MdiIcon path="chevron-down" />
-          </IconButton>
-        )}
-      </ButtonGroup>
       <Popper
         sx={{
           zIndex: 1,
@@ -260,6 +278,23 @@ export const AggregationInput = ({
             <Paper>
               <ClickAwayListener onClickAway={handleDropdownClose}>
                 <MenuList id={`${name}-menu`} autoFocusItem>
+                  {exists(value) && onSet && (
+                    <MenuItem
+                      className={`${name}-set`}
+                      disabled={disabled || readOnly}
+                      onClick={(event: any) => {
+                        handleDropdownClose(event);
+                        onSet();
+                      }}
+                    >
+                      <MdiIcon path="magnify" sx={{ mr: 2 }} />
+                      {
+                        t('judo.component.AggregationInput.open-filter', {
+                          defaultValue: 'Open selector dialog',
+                        }) as string
+                      }
+                    </MenuItem>
+                  )}
                   {exists(value) && onEdit && (
                     <MenuItem
                       className={`${name}-edit`}

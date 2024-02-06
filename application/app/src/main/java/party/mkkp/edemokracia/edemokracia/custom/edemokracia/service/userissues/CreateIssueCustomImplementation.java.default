@@ -69,6 +69,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.userissues
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.userissues.CreateIssue.class)
 public class CreateIssueCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.userissues.CreateIssue {
 
+    @Override
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createissueinput.CreateIssueInput input)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.userissues.CreateIssueExchangeFunctionsComponent");
     }

@@ -184,6 +184,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.initializer;
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitAreas.class)
 public class InitAreasCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.initializer.InitAreas {
 
+    @Override
     public void run()  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.initializer.InitAreasExchangeFunctionsComponent");
     }

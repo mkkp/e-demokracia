@@ -9,17 +9,20 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCountyCounty_View_EditDialogActions } from '~/containers/Service/County/County_View_Edit/ServiceCountyCounty_View_EditDialogContainer';
+import type {
+  ServiceCountyCounty_View_EditDialogActions,
+  ServiceCountyCounty_View_EditDialogProps,
+} from '~/containers/Service/County/County_View_Edit/ServiceCountyCounty_View_EditDialogContainer';
 import { useServiceCountyCitiesRelationFormPage } from '~/dialogs/Service/County/Cities/RelationFormPage';
 import { useServiceCountyCitiesRelationViewPage } from '~/dialogs/Service/County/Cities/RelationViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
   ServiceCityQueryCustomizer,
@@ -32,8 +35,8 @@ import type {
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { ServiceCountyServiceImpl } from '~/services/data-axios/ServiceCountyServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { ServiceServiceUserServiceForActivityCountiesImpl } from '~/services/data-axios/ServiceServiceUserServiceForActivityCountiesImpl';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCountyCounty_View_EditDialogActionsExtended = ServiceCountyCounty_View_EditDialogActions & {
@@ -45,20 +48,50 @@ export type ServiceCountyCounty_View_EditDialogActionsExtended = ServiceCountyCo
 };
 
 export const SERVICE_SERVICE_USER_ACTIVITY_COUNTIES_RELATION_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_View_EditActionsHook';
+  'SERVICE_SERVICE_USER_ACTIVITY_COUNTIES_RELATION_VIEW_PAGE_ACTIONS_HOOK';
 export type ServiceCountyCounty_View_EditActionsHook = (
   ownerData: any,
   data: ServiceCountyStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceCounty, value: any) => void,
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => ServiceCountyCounty_View_EditDialogActionsExtended;
+
+export interface ServiceCountyCounty_View_EditViewModel extends ServiceCountyCounty_View_EditDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceCounty>;
+  isDraft?: boolean;
+}
+
+const ServiceCountyCounty_View_EditViewModelContext = createContext<ServiceCountyCounty_View_EditViewModel>({} as any);
+export const useServiceCountyCounty_View_EditViewModel = () => {
+  const context = useContext(ServiceCountyCounty_View_EditViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceCountyCounty_View_EditViewModel must be used within a(n) ServiceCountyCounty_View_EditViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceServiceUserActivityCountiesRelationViewPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceCounty>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceCounty) => Promise<void>,
 ) => Promise<DialogResult<ServiceCountyStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceCounty>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceCounty) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -74,16 +107,19 @@ export const useServiceServiceUserActivityCountiesRelationViewPage = (): ((
         children: (
           <ServiceServiceUserActivityCountiesRelationViewPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -107,8 +143,11 @@ const ServiceCountyCounty_View_EditDialogContainer = lazy(
 export interface ServiceServiceUserActivityCountiesRelationViewPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceCounty>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_uAEOkIXnEe2kLcMqsIbMgQ)/RelationFeatureView
@@ -116,10 +155,13 @@ export interface ServiceServiceUserActivityCountiesRelationViewPageProps {
 export default function ServiceServiceUserActivityCountiesRelationViewPage(
   props: ServiceServiceUserActivityCountiesRelationViewPageProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
-  const serviceCountyServiceImpl = useMemo(() => new ServiceCountyServiceImpl(judoAxiosProvider), []);
+  const serviceServiceUserServiceForActivityCountiesImpl = useMemo(
+    () => new ServiceServiceUserServiceForActivityCountiesImpl(judoAxiosProvider),
+    [],
+  );
 
   // Hooks section
   const { t } = useTranslation();
@@ -127,6 +169,7 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -169,9 +212,22 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
     return true && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: ServiceCountyQueryCustomizer = {
-    _mask: '{name,representation,cities{name}}',
+  const getPageQueryCustomizer: () => ServiceCountyQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{name,representation,cities{name}}',
+  });
+
+  // Private actions
+  const submit = async () => {
+    await updateAction();
   };
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+
+  // Validation
+  const validate: (data: ServiceCounty) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCountyCounty_View_EditActionsHook>(
@@ -182,21 +238,18 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
     data,
     editMode,
     storeDiff,
+    refresh,
+    submit,
   );
 
   // Dialog hooks
   const openServiceCountyCitiesRelationFormPage = useServiceCountyCitiesRelationFormPage();
   const openServiceCountyCitiesRelationViewPage = useServiceCountyCitiesRelationViewPage();
 
-  // Calculated section
-  const title: string = data.representation as string;
-
-  // Private actions
-  const submit = async () => {
-    await updateAction();
-  };
-
   // Action section
+  const getPageTitle = (data: ServiceCounty): string => {
+    return data.representation as string;
+  };
   const citiesBulkDeleteAction = async (
     selectedRows: ServiceCityStored[],
   ): Promise<DialogResult<Array<ServiceCityStored>>> => {
@@ -218,7 +271,7 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
-              await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+              await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
             }
             resolve({
               result: 'submit',
@@ -234,10 +287,23 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
       });
     });
   };
-  const citiesOpenFormAction = async () => {
+  const citiesBulkRemoveAction = async (
+    selectedRows: ServiceCityStored[],
+  ): Promise<DialogResult<Array<ServiceCityStored>>> => {
+    return new Promise((resolve) => {
+      const selectedIds = selectedRows.map((r) => r.__identifier);
+      const newList = (data?.cities ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
+      storeDiff('cities', newList);
+      resolve({
+        result: 'submit',
+        data: [],
+      });
+    });
+  };
+  const citiesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
   const citiesFilterAction = async (
@@ -263,10 +329,10 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
           )
         : true;
       if (confirmed) {
-        await serviceCountyServiceImpl.deleteCities(target);
+        await serviceServiceUserServiceForActivityCountiesImpl.deleteCities(target);
         if (!silentMode) {
           showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-          refreshAction(pageQueryCustomizer);
+          refreshAction(getPageQueryCustomizer());
         }
       }
     } catch (error) {
@@ -275,10 +341,33 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
       }
     }
   };
-  const citiesOpenPageAction = async (target?: ServiceCityStored) => {
-    await openServiceCountyCitiesRelationViewPage(target!);
-    if (!editMode) {
-      await actions.refreshAction!(processQueryCustomizer(pageQueryCustomizer));
+  const citiesRemoveAction = async (target?: ServiceCityStored, silentMode?: boolean) => {
+    if (target) {
+      const newList = (data?.cities ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
+      storeDiff('cities', newList);
+    }
+  };
+  const citiesOpenPageAction = async (target: ServiceCity | ServiceCityStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCityStored).__signedIdentifier)) {
+      const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(ownerData, target, true);
+      // we might need to differentiate result handling between operation inputs and crud relation creates
+      if (result === 'submit-draft' && returnedData) {
+        const existingIndex = (payloadDiff.current.cities || []).findIndex(
+          (r: { __identifier?: string }) => r.__identifier === returnedData.__identifier,
+        );
+        if (existingIndex > -1) {
+          payloadDiff.current.cities[existingIndex] = {
+            ...returnedData,
+          };
+        }
+        storeDiff('cities', [...(payloadDiff.current.cities || [])]);
+        return;
+      }
+    } else if (!isDraft) {
+      await openServiceCountyCitiesRelationViewPage(target!);
+      if (!editMode) {
+        await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+      }
     }
   };
   const backAction = async () => {
@@ -286,14 +375,18 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
   };
   const cancelAction = async () => {
     // no need to set editMode to false, given refresh should do it implicitly
-    await refreshAction(processQueryCustomizer(pageQueryCustomizer));
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
   const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceCountyServiceImpl.refresh(ownerData, pageQueryCustomizer);
+      const result = await serviceServiceUserServiceForActivityCountiesImpl.refresh(
+        ownerData,
+        getPageQueryCustomizer(),
+      );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -307,6 +400,7 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -316,11 +410,11 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceCountyServiceImpl.update(payloadDiff.current);
+      const res = await serviceServiceUserServiceForActivityCountiesImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceCounty, string>());
-        await actions.refreshAction!(pageQueryCustomizer);
+        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
       }
     } catch (error) {
@@ -331,10 +425,13 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
   };
 
   const actions: ServiceCountyCounty_View_EditDialogActions = {
+    getPageTitle,
     citiesBulkDeleteAction,
+    citiesBulkRemoveAction,
     citiesOpenFormAction,
     citiesFilterAction,
     citiesDeleteAction,
+    citiesRemoveAction,
     citiesOpenPageAction,
     backAction,
     cancelAction,
@@ -343,21 +440,43 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceCountyCounty_View_EditViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
-    actions.refreshAction!(pageQueryCustomizer);
+    actions.refreshAction!(getPageQueryCustomizer());
   }, []);
 
   return (
-    <div
-      id="User/(esm/_uAEOkIXnEe2kLcMqsIbMgQ)/RelationFeatureView"
-      data-page-name="service::ServiceUser::activityCounties::RelationViewPage"
-    >
+    <ServiceCountyCounty_View_EditViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_uAEOkIXnEe2kLcMqsIbMgQ)/RelationFeatureView"
+          data-page-name="service::ServiceUser::activityCounties::RelationViewPage"
+        />
         <ServiceCountyCounty_View_EditDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -369,8 +488,9 @@ export default function ServiceServiceUserActivityCountiesRelationViewPage(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceCountyCounty_View_EditViewModelContext.Provider>
   );
 }

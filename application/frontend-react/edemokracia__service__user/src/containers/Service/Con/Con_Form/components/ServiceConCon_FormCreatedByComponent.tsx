@@ -19,7 +19,7 @@ import type {
 } from '~/services/data-api';
 import { processQueryCustomizer } from '~/utilities';
 export interface ServiceConCon_FormCreatedByComponentActionDefinitions {
-  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -37,12 +37,14 @@ export interface ServiceConCon_FormCreatedByComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_cIrlcIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink
 // Name: createdBy
 export function ServiceConCon_FormCreatedByComponent(props: ServiceConCon_FormCreatedByComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -68,6 +70,7 @@ export function ServiceConCon_FormCreatedByComponent(props: ServiceConCon_FormCr
       disabled={actions?.isCreatedByDisabled ? actions.isCreatedByDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'firstName'}
       onAutoCompleteSelect={(createdBy) => {
         storeDiff('createdBy', createdBy);
@@ -92,7 +95,7 @@ export function ServiceConCon_FormCreatedByComponent(props: ServiceConCon_FormCr
       onView={
         ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.createdByOpenPageAction!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!, true);
             }
           : undefined
       }

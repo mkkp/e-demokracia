@@ -23,6 +23,11 @@ export interface ServiceCityServiceForDistricts {
   ): Promise<ServiceDistrictStored>;
   getTemplate(): Promise<ServiceDistrict>;
   create(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrictStored>;
+  validateCreate(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrict>;
   delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceCity>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
 }

@@ -39,12 +39,13 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableDialogAc
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::SelectAnswerVoteEntry::SelectAnswerVoteEntry_Table
@@ -55,12 +56,12 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableD
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_mtLkMFtpEe6Mx9dH3yj5gQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -77,7 +78,12 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableD
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

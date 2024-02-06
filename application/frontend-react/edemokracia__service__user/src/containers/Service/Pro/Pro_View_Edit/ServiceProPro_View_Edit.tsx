@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -53,7 +53,8 @@ import { ServiceProPro_View_EditCreatedByComponent } from './components/ServiceP
 import type { ServiceProPro_View_EditProsComponentActionDefinitions } from './components/ServiceProPro_View_EditProsComponent';
 import { ServiceProPro_View_EditProsComponent } from './components/ServiceProPro_View_EditProsComponent';
 
-export const SERVICE_PRO_PRO_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceProPro_View_EditContainerHook';
+export const SERVICE_PRO_PRO_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_PRO_PRO_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceProPro_View_EditContainerHook = (
   data: ServiceProStored,
   editMode: boolean,
@@ -64,11 +65,12 @@ export interface ServiceProPro_View_EditActionDefinitions
   extends ServiceProPro_View_EditConsComponentActionDefinitions,
     ServiceProPro_View_EditCreatedByComponentActionDefinitions,
     ServiceProPro_View_EditProsComponentActionDefinitions {
+  getPageTitle?: (data: ServicePro) => string;
   createConArgumentAction?: () => Promise<void>;
   createProArgumentAction?: () => Promise<void>;
   voteDownForProAction?: () => Promise<void>;
   voteUpForProAction?: () => Promise<void>;
-  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  votesOpenPageAction?: (target: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
   isCreatedRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isDescriptionRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
@@ -79,14 +81,15 @@ export interface ServiceProPro_View_EditActionDefinitions
   isTitleDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isUpVotesRequired?: (data: ServicePro | ServiceProStored, editMode?: boolean) => boolean;
   isUpVotesDisabled?: (data: ServicePro | ServiceProStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceProPro_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceProPro_View_EditActionDefinitions;
 
   data: ServiceProStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServicePro, value: any) => void;
@@ -94,6 +97,7 @@ export interface ServiceProPro_View_EditProps {
   validation: Map<keyof ServicePro, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServicePro, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qLQBQGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -102,9 +106,10 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -136,19 +141,23 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Pro_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qLQBQGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="Pro_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_OUB-QIfiEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="pro::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_OUB-QIfiEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="pro::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
@@ -162,9 +171,10 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="pro" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_OUB-QIfiEe2u0fVmwtP5bA)/GroupVisualElement"
+                      data-name="pro"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -176,7 +186,6 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_3oDAcH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-                          autoFocus
                           label={t('service.Pro.Pro_View_Edit.title', { defaultValue: 'Title' }) as string}
                           value={data.title ?? ''}
                           className={clsx({
@@ -202,7 +211,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -267,6 +276,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('createdBy')}
                           actions={actions}
@@ -310,7 +320,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -329,7 +339,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           }}
                           disabled={!actions.voteUpForProAction || editMode}
                         >
-                          <span>{t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: 'Vote Up' })}</span>
+                          {t('service.Pro.Pro_View_Edit.voteUp', { defaultValue: 'Vote Up' })}
                         </LoadingButton>
                       </Grid>
 
@@ -387,7 +397,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                           }}
                           disabled={!actions.voteDownForProAction || editMode}
                         >
-                          <span>{t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: 'Vote Down' })}</span>
+                          {t('service.Pro.Pro_View_Edit.voteDown', { defaultValue: 'Vote Down' })}
                         </LoadingButton>
                       </Grid>
 
@@ -450,19 +460,23 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="Arguments" xs={12} sm={12}>
             <Grid
               id="User/(esm/_KRUbMHjvEe6cB8og8p0UuQ)/GroupVisualElement"
+              data-name="Arguments"
               container
               direction="row"
               alignItems="flex-start"
               justifyContent="flex-start"
               spacing={2}
             >
-              <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="(User/(esm/_KRUbMXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+              <Grid item data-name="pros::LabelWrapper" xs={12} sm={12} md={6.0}>
+                <Card
+                  id="(User/(esm/_KRUbMXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                  data-name="pros::LabelWrapper"
+                >
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
@@ -476,18 +490,20 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                         </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="pros" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_KRUbMXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="pros"
                           container
                           direction="row"
                           alignItems="stretch"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="actions" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_KRUbMnjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="actions"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -508,19 +524,18 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                                   }}
                                   disabled={!actions.createProArgumentAction || editMode}
                                 >
-                                  <span>
-                                    {t('service.Pro.Pro_View_Edit.createProArgument', {
-                                      defaultValue: 'Add Pro Argument',
-                                    })}
-                                  </span>
+                                  {t('service.Pro.Pro_View_Edit.createProArgument', {
+                                    defaultValue: 'Add Pro Argument',
+                                  })}
                                 </LoadingButton>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="table" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_KRUbNHjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="table"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -545,6 +560,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('pros')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
@@ -557,10 +573,13 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                 </Card>
               </Grid>
 
-              <Grid item xs={12} sm={12} md={6.0}>
-                <Card id="(User/(esm/_KRUbOXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+              <Grid item data-name="cons::LabelWrapper" xs={12} sm={12} md={6.0}>
+                <Card
+                  id="(User/(esm/_KRUbOXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                  data-name="cons::LabelWrapper"
+                >
                   <CardContent>
-                    <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
@@ -574,18 +593,20 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                         </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="cons" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_KRUbOXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="cons"
                           container
                           direction="row"
                           alignItems="stretch"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="actions" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_KRUbOnjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="actions"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -606,19 +627,18 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                                   }}
                                   disabled={!actions.createConArgumentAction || editMode}
                                 >
-                                  <span>
-                                    {t('service.Pro.Pro_View_Edit.createConArgument', {
-                                      defaultValue: 'Add Con Argument',
-                                    })}
-                                  </span>
+                                  {t('service.Pro.Pro_View_Edit.createConArgument', {
+                                    defaultValue: 'Add Con Argument',
+                                  })}
                                 </LoadingButton>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="table" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_KRUbPHjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="table"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -643,6 +663,7 @@ export default function ServiceProPro_View_Edit(props: ServiceProPro_View_EditPr
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('cons')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>

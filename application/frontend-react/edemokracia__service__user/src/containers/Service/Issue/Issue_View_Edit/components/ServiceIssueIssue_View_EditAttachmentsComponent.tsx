@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator, singleSelectColumnOperators } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceIssue,
@@ -60,6 +60,9 @@ export interface ServiceIssueIssue_View_EditAttachmentsComponentActionDefinition
   attachmentsBulkDeleteAction?: (
     selectedRows: ServiceIssueAttachmentStored[],
   ) => Promise<DialogResult<ServiceIssueAttachmentStored[]>>;
+  attachmentsBulkRemoveAction?: (
+    selectedRows: ServiceIssueAttachmentStored[],
+  ) => Promise<DialogResult<ServiceIssueAttachmentStored[]>>;
   attachmentsOpenFormAction?: () => Promise<void>;
   attachmentsFilterAction?: (
     id: string,
@@ -70,14 +73,27 @@ export interface ServiceIssueIssue_View_EditAttachmentsComponentActionDefinition
   attachmentsRefreshAction?: (
     queryCustomizer: ServiceIssueAttachmentQueryCustomizer,
   ) => Promise<ServiceIssueAttachmentStored[]>;
+  getAttachmentsMask?: () => string;
   attachmentsDeleteAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
-  attachmentsOpenPageAction?: (row: ServiceIssueAttachmentStored) => Promise<void>;
+  attachmentsRemoveAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
+  attachmentsOpenPageAction?: (row: ServiceIssueAttachmentStored, isDraft?: boolean) => Promise<void>;
+  attachmentsAdditionalToolbarButtons?: (
+    data: ServiceIssueAttachmentStored[],
+    isLoading: boolean,
+    selectedRows: ServiceIssueAttachmentStored[],
+    clearSelections: () => void,
+    ownerData: ServiceIssueStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceIssueIssue_View_EditAttachmentsComponentProps {
   uniqueId: string;
   actions: ServiceIssueIssue_View_EditAttachmentsComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceIssueStored;
   editMode: boolean;
@@ -89,7 +105,17 @@ export interface ServiceIssueIssue_View_EditAttachmentsComponentProps {
 export function ServiceIssueIssue_View_EditAttachmentsComponent(
   props: ServiceIssueIssue_View_EditAttachmentsComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -98,7 +124,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const { downloadFile, extractFileNameFromToken } = fileHandling();
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceIssueAttachmentStored>[]>(ownerData?.attachments || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'link', sort: null }]);
@@ -106,14 +132,15 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceIssueAttachmentQueryCustomizer>({
-    _mask: '{link,file,type}',
+    _mask: '{file,link,type}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -126,12 +153,14 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceIssueAttachmentStored[]>([]);
 
   const linkColumn: GridColDef<ServiceIssueAttachmentStored> = {
     ...baseColumnConfig,
     field: 'link',
-    headerName: t('service.Issue.Issue_View_Edit.link', { defaultValue: 'Link' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.attachments.link', { defaultValue: 'Link' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -141,7 +170,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const fileColumn: GridColDef<ServiceIssueAttachmentStored> = {
     ...baseColumnConfig,
     field: 'file',
-    headerName: t('service.Issue.Issue_View_Edit.file', { defaultValue: 'File' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.attachments.file', { defaultValue: 'File' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 500,
@@ -183,38 +212,123 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
   const typeColumn: GridColDef<ServiceIssueAttachmentStored> = {
     ...baseColumnConfig,
     field: 'type',
-    headerName: t('service.Issue.Issue_View_Edit.type', { defaultValue: 'Type' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.attachments.type', { defaultValue: 'Type' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
     type: 'singleSelect',
     filterable: false && true,
-    sortable: false,
     valueFormatter: ({ value }: GridValueFormatterParams<string>) => {
       if (value !== undefined && value !== null) {
         return t(`enumerations.AttachmentType.${value}`, { defaultValue: value });
       }
     },
-    description: t('judo.pages.table.column.not-sortable', { defaultValue: 'This column is not sortable.' }) as string,
   };
 
   const columns = useMemo<GridColDef<ServiceIssueAttachmentStored>[]>(() => [linkColumn, fileColumn, typeColumn], []);
 
-  const rowActions: TableRowAction<ServiceIssueAttachmentStored>[] = [
-    {
-      id: 'User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-      label: t('service.Issue.Issue_View_Edit.other.attachments.attachments.Delete', {
-        defaultValue: 'Delete',
-      }) as string,
-      icon: <MdiIcon path="delete_forever" />,
-      disabled: (row: ServiceIssueAttachmentStored) => editMode || !row.__deleteable || isLoading,
-      action: actions.attachmentsDeleteAction
-        ? async (rowData) => {
-            await actions.attachmentsDeleteAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceIssueAttachmentStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
+        label: t('service.Issue.Issue_View_Edit.other.attachments.attachments.Remove', {
+          defaultValue: 'Remove',
+        }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueAttachmentStored) => isLoading,
+        action: actions.attachmentsRemoveAction
+          ? async (rowData) => {
+              await actions.attachmentsRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
+        label: t('service.Issue.Issue_View_Edit.other.attachments.attachments.Delete', {
+          defaultValue: 'Delete',
+        }) as string,
+        icon: <MdiIcon path="delete_forever" />,
+        isCRUD: true,
+        disabled: (row: ServiceIssueAttachmentStored) =>
+          getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
+        action: actions.attachmentsDeleteAction
+          ? async (rowData) => {
+              await actions.attachmentsDeleteAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceIssueAttachmentStored, '__identifier'>) => string = (row) =>
+    row.__identifier!;
+
+  const getSelectedRows: () => ServiceIssueAttachmentStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.attachmentsAdditionalToolbarButtons
+    ? actions.attachmentsAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceIssueAttachmentQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -252,7 +366,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -285,19 +399,21 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceIssueAttachmentStored>(filters, ownerData?.attachments ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.attachments, filters]);
 
   return (
@@ -307,7 +423,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -318,29 +434,22 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.attachmentsOpenPageAction
             ? async (params: GridRowParams<ServiceIssueAttachmentStored>) =>
-                await actions.attachmentsOpenPageAction!(params.row)
+                await actions.attachmentsOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -380,7 +489,11 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.attachmentsRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getAttachmentsMask ? actions.getAttachmentsMask() : queryCustomizer._mask,
+                    };
+                    await actions.attachmentsRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -395,11 +508,37 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
                   startIcon={<MdiIcon path="note-add" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getAttachmentsMask ? actions.getAttachmentsMask() : queryCustomizer._mask,
+                    };
                     await actions.attachmentsOpenFormAction!();
                   }}
-                  disabled={editMode || isLoading}
+                  disabled={false}
                 >
                   {t('service.Issue.Issue_View_Edit.other.attachments.attachments.Create', { defaultValue: 'Create' })}
+                </Button>
+              ) : null}
+              {actions.attachmentsBulkRemoveAction && selectionModel.length > 0 ? (
+                <Button
+                  id="User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableBulkRemoveButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getAttachmentsMask ? actions.getAttachmentsMask() : queryCustomizer._mask,
+                    };
+                    const { result: bulkResult } = await actions.attachmentsBulkRemoveAction!(selectedRows.current);
+                    if (bulkResult === 'submit') {
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
+                    }
+                  }}
+                  disabled={isLoading}
+                >
+                  {t('service.Issue.Issue_View_Edit.other.attachments.attachments.BulkRemove', {
+                    defaultValue: 'Remove',
+                  })}
                 </Button>
               ) : null}
               {actions.attachmentsBulkDeleteAction && selectionModel.length > 0 ? (
@@ -408,9 +547,13 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
                   startIcon={<MdiIcon path="delete_forever" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getAttachmentsMask ? actions.getAttachmentsMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.attachmentsBulkDeleteAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
@@ -420,6 +563,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

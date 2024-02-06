@@ -8,13 +8,17 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { YesNoVoteInputYesNoVoteInput_FormDialogActions } from '~/containers/YesNoVoteInput/YesNoVoteInput_Form/YesNoVoteInputYesNoVoteInput_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  YesNoVoteInputYesNoVoteInput_FormDialogActions,
+  YesNoVoteInputYesNoVoteInput_FormDialogProps,
+} from '~/containers/YesNoVoteInput/YesNoVoteInput_Form/YesNoVoteInputYesNoVoteInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   YesNoVoteInput,
   YesNoVoteInputQueryCustomizer,
@@ -24,7 +28,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended = YesNoVoteInputYesNoVoteInput_FormDialogActions & {
@@ -37,23 +41,61 @@ export type YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended = YesNoVoteIn
     data: YesNoVoteInput,
     storeDiff: (attributeName: keyof YesNoVoteInput, value: any) => void,
   ) => Promise<void>;
+  postCreateAction?: (
+    data: YesNoVoteInput,
+    res: YesNoVoteInputStored,
+    onSubmit: (result?: YesNoVoteInputStored) => Promise<void>,
+    onClose: () => Promise<void>,
+    openCreated?: boolean,
+  ) => Promise<void>;
 };
 
 export const SERVICE_YES_NO_VOTE_DEFINITION_YES_NO_VOTE_DEFINITION_VIEW_EDIT_VOTE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'YesNoVoteInputYesNoVoteInput_FormActionsHook';
+  'SERVICE_YES_NO_VOTE_DEFINITION_YES_NO_VOTE_DEFINITION_VIEW_EDIT_VOTE_INPUT_FORM_ACTIONS_HOOK';
 export type YesNoVoteInputYesNoVoteInput_FormActionsHook = (
   ownerData: any,
   data: YesNoVoteInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof YesNoVoteInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => YesNoVoteInputYesNoVoteInput_FormDialogActionsExtended;
+
+export interface YesNoVoteInputYesNoVoteInput_FormViewModel extends YesNoVoteInputYesNoVoteInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<YesNoVoteInput>;
+  isDraft?: boolean;
+}
+
+const YesNoVoteInputYesNoVoteInput_FormViewModelContext = createContext<YesNoVoteInputYesNoVoteInput_FormViewModel>(
+  {} as any,
+);
+export const useYesNoVoteInputYesNoVoteInput_FormViewModel = () => {
+  const context = useContext(YesNoVoteInputYesNoVoteInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useYesNoVoteInputYesNoVoteInput_FormViewModel must be used within a(n) YesNoVoteInputYesNoVoteInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<YesNoVoteInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: YesNoVoteInput) => Promise<void>,
 ) => Promise<DialogResult<YesNoVoteInputStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<YesNoVoteInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: YesNoVoteInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +111,19 @@ export const useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInput
         children: (
           <ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async () => {
+            onSubmit={async (isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
               });
             }}
           />
@@ -101,8 +146,11 @@ const YesNoVoteInputYesNoVoteInput_FormDialogContainer = lazy(
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<YesNoVoteInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: YesNoVoteInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: YesNoVoteInputStored) => Promise<void>;
+  onSubmit: (result?: YesNoVoteInputStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationUnmappedInputPageDefinition
@@ -110,7 +158,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInpu
 export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceYesNoVoteDefinitionServiceImpl = useMemo(
@@ -124,6 +172,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -164,6 +213,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: YesNoVoteInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<YesNoVoteInputYesNoVoteInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_YES_NO_VOTE_DEFINITION_YES_NO_VOTE_DEFINITION_VIEW_EDIT_VOTE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -173,24 +229,22 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('YesNoVoteInput.YesNoVoteInput_Form', { defaultValue: 'YesNoVoteInput Form' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: YesNoVoteInput): string => {
+    return t('YesNoVoteInput.YesNoVoteInput_Form', { defaultValue: 'YesNoVoteInput Form' });
+  };
   const backAction = async () => {
     onClose();
   };
   const voteForYesNoVoteDefinitionAction = async () => {
     try {
       setIsLoading(true);
-      await serviceYesNoVoteDefinitionServiceImpl.vote(ownerData, payloadDiff.current);
+      await serviceYesNoVoteDefinitionServiceImpl.vote(ownerData, cleanUpPayload(payloadDiff.current));
       if (customActions?.postVoteForYesNoVoteDefinitionAction) {
         await customActions.postVoteForYesNoVoteDefinitionAction(onSubmit, onClose);
       } else {
@@ -216,6 +270,12 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof YesNoVoteInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -226,10 +286,33 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   };
 
   const actions: YesNoVoteInputYesNoVoteInput_FormDialogActions = {
+    getPageTitle,
     backAction,
     voteForYesNoVoteDefinitionAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: YesNoVoteInputYesNoVoteInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -238,15 +321,15 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
   }, []);
 
   return (
-    <div
-      id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::vote::Input::Form"
-    >
+    <YesNoVoteInputYesNoVoteInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_eMuv8FoSEe6_67aMO2jOsw)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::vote::Input::Form"
+        />
         <YesNoVoteInputYesNoVoteInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -258,8 +341,9 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditV
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </YesNoVoteInputYesNoVoteInput_FormViewModelContext.Provider>
   );
 }

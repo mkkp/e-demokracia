@@ -42,6 +42,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_WNovANu5Ee2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -49,7 +50,8 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentP
 export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -70,6 +72,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueTypeComponent(
       disabled={actions?.isIssueTypeDisabled ? actions.isIssueTypeDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(issueType) => {
         storeDiff('issueType', issueType);

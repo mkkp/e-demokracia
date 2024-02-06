@@ -23,7 +23,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -34,6 +34,7 @@ import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErr
 import { DateTimePicker } from '@mui/x-date-pickers';
 import type { DateTimeValidationError } from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceVoteDefinition,
@@ -42,7 +43,7 @@ import {
 } from '~/services/data-api';
 
 export const SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceVoteDefinitionVoteDefinition_FormContainerHook';
+  'SERVICE_VOTE_DEFINITION_VOTE_DEFINITION_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceVoteDefinitionVoteDefinition_FormContainerHook = (
   data: ServiceVoteDefinitionStored,
   editMode: boolean,
@@ -50,6 +51,7 @@ export type ServiceVoteDefinitionVoteDefinition_FormContainerHook = (
 ) => ServiceVoteDefinitionVoteDefinition_FormActionDefinitions;
 
 export interface ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {
+  getPageTitle?: (data: ServiceVoteDefinition) => string;
   isCloseAtRequired?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
   isCloseAtDisabled?: (
     data: ServiceVoteDefinition | ServiceVoteDefinitionStored,
@@ -114,10 +116,10 @@ export interface ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {
 
 export interface ServiceVoteDefinitionVoteDefinition_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceVoteDefinitionVoteDefinition_FormActionDefinitions;
 
   data: ServiceVoteDefinitionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceVoteDefinition, value: any) => void;
@@ -125,6 +127,7 @@ export interface ServiceVoteDefinitionVoteDefinition_FormProps {
   validation: Map<keyof ServiceVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-gL5wH4XEe2cB7_PsKXsHQ)/TransferObjectFormPageContainer
@@ -133,9 +136,10 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -164,24 +168,36 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
   const containerActions: ServiceVoteDefinitionVoteDefinition_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="VoteDefinition_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_-gL5wH4XEe2cB7_PsKXsHQ)/TransferObjectFormVisualElement"
+          data-name="VoteDefinition_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T5VWYI4jEe29qs15q2b6yw)/StringTypeTextInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={t('service.VoteDefinition.VoteDefinition_Form.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
               className={clsx({
@@ -205,12 +221,12 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -259,7 +275,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
@@ -291,12 +307,12 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
                 ),
               }}
               inputProps={{
-                maxlength: 16384,
+                maxLength: 16384,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : true}
               name="status"
@@ -342,7 +358,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             </TextField>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <DateTimePicker
               ampm={false}
               ampmInClock={false}
@@ -391,7 +407,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <FormControl error={!!validation.get('isRatingType')}>
               <FormGroup>
                 <FormControlLabel
@@ -425,7 +441,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <FormControl error={!!validation.get('isSelectAnswerType')}>
               <FormGroup>
                 <FormControlLabel
@@ -463,7 +479,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <FormControl error={!!validation.get('isYesNoAbstainType')}>
               <FormGroup>
                 <FormControlLabel
@@ -501,7 +517,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <FormControl error={!!validation.get('isYesNoType')}>
               <FormGroup>
                 <FormControlLabel

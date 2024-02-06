@@ -36,6 +36,7 @@ export interface ServiceConService {
   refresh(target: JudoIdentifiable<ServiceCon>, queryCustomizer?: ServiceConQueryCustomizer): Promise<ServiceConStored>;
   delete(target: JudoIdentifiable<ServiceCon>): Promise<void>;
   update(target: Partial<ServiceConStored>): Promise<ServiceConStored>;
+  validateUpdate(target: Partial<ServiceConStored>): Promise<ServiceConStored>;
   listCons(
     target: JudoIdentifiable<ServiceCon>,
     queryCustomizer?: ServiceConQueryCustomizer,

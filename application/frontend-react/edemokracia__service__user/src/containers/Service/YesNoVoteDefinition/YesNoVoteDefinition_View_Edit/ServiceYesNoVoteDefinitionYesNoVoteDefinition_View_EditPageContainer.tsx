@@ -43,7 +43,6 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActi
 }
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageProps {
-  title: string;
   actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -66,7 +65,6 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -80,13 +78,14 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
     submit,
   } = props;
   const queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer = {
-    _mask:
-      '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{value,created}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{closeAt,created,description,isFavorite,isNotFavorite,isVoteNotDeletable,isVoteNotEditable,isVoteNotOpen,status,title,userHasNoVoteEntry,userHasVoteEntry,userVoteEntry{created,value}}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -184,8 +183,8 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditP
           <ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

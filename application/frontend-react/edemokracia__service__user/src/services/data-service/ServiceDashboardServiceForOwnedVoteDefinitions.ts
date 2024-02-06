@@ -51,6 +51,10 @@ export interface ServiceDashboardServiceForOwnedVoteDefinitions {
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
   ): Promise<Array<ServiceVoteDefinitionStored>>;
   update(target: Partial<ServiceVoteDefinitionStored>): Promise<ServiceVoteDefinitionStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceDashboard>,
+    target: Partial<ServiceVoteDefinitionStored>,
+  ): Promise<ServiceVoteDefinitionStored>;
   addOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,
     selected: Array<JudoIdentifiable<ServiceVoteDefinition>>,
@@ -62,6 +66,10 @@ export interface ServiceDashboardServiceForOwnedVoteDefinitions {
   getIssue(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
+  ): Promise<ServiceIssueStored>;
+  validateUpdateIssue(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: Partial<ServiceIssueStored>,
   ): Promise<ServiceIssueStored>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;

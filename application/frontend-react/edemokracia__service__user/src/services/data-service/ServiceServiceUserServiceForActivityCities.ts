@@ -29,6 +29,10 @@ export interface ServiceServiceUserServiceForActivityCities {
   ): Promise<Array<ServiceCityStored>>;
   getTemplate(): Promise<ServiceCity>;
   update(target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
@@ -49,6 +53,10 @@ export interface ServiceServiceUserServiceForActivityCities {
   createDistricts(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrictStored>;
   deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   updateDistricts(
+    owner: JudoIdentifiable<ServiceCity>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
+  validateUpdateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
   ): Promise<ServiceDistrictStored>;

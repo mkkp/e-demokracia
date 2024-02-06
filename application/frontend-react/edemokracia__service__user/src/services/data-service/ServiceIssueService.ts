@@ -56,11 +56,16 @@ export interface ServiceIssueService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
   ): Promise<ServiceIssueStored>;
   update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
+  validateUpdate(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
   getTemplateForAttachments(): Promise<ServiceIssueAttachment>;
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: JudoIdentifiable<ServiceIssueAttachment>,
   ): Promise<ServiceIssueAttachmentStored>;
+  validateCreateAttachments(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: ServiceIssueAttachment,
+  ): Promise<ServiceIssueAttachment>;
   listAttachments(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,

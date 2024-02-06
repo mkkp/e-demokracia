@@ -9,21 +9,26 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceCountyCounty_TablePageActions } from '~/containers/Service/County/County_Table/ServiceCountyCounty_TablePageContainer';
+import type {
+  ServiceCountyCounty_TablePageActions,
+  ServiceCountyCounty_TablePageProps,
+} from '~/containers/Service/County/County_Table/ServiceCountyCounty_TablePageContainer';
 import { useServiceUserAdminCountiesAccessFormPage } from '~/dialogs/Service/User/AdminCounties/AccessFormPage';
 import { useServiceUserAdminCountiesAccessViewPage } from '~/dialogs/Service/User/AdminCounties/AccessViewPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServiceForAdminCountiesImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceCountyCounty_TablePageActionsExtended = ServiceCountyCounty_TablePageActions & {
@@ -31,11 +36,28 @@ export type ServiceCountyCounty_TablePageActionsExtended = ServiceCountyCounty_T
 };
 
 export const SERVICE_USER_ADMIN_COUNTIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_TableActionsHook';
+  'SERVICE_USER_ADMIN_COUNTIES_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceCountyCounty_TableActionsHook = (
   data: ServiceCountyStored[],
   editMode: boolean,
 ) => ServiceCountyCounty_TablePageActionsExtended;
+
+export interface ServiceCountyCounty_TableViewModel extends ServiceCountyCounty_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceCountyCounty_TableViewModelContext = createContext<ServiceCountyCounty_TableViewModel>({} as any);
+export const useServiceCountyCounty_TableViewModel = () => {
+  const context = useContext(ServiceCountyCounty_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceCountyCounty_TableViewModel must be used within a(n) ServiceCountyCounty_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceCountyCounty_TablePageContainer = lazy(
   () => import('~/containers/Service/County/County_Table/ServiceCountyCounty_TablePageContainer'),
@@ -53,6 +75,7 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -61,6 +84,12 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceCountyStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableActionsHook>(
@@ -72,13 +101,13 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
   const openServiceUserAdminCountiesAccessFormPage = useServiceUserAdminCountiesAccessFormPage();
   const openServiceUserAdminCountiesAccessViewPage = useServiceUserAdminCountiesAccessViewPage();
 
-  // Calculated section
-  const title: string = t('service.County.County_Table', { defaultValue: 'County Table' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.County.County_Table', { defaultValue: 'County Table' });
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
   const bulkDeleteAction = async (
     selectedRows: ServiceCountyStored[],
   ): Promise<DialogResult<Array<ServiceCountyStored>>> => {
@@ -114,8 +143,8 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async () => {
-    const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(data);
+  const openFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+    const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
     }
@@ -162,18 +191,23 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
       return userServiceForAdminCountiesImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceCountyStored) => {
-    await openServiceUserAdminCountiesAccessViewPage(target!);
-    setRefreshCounter((prev) => prev + 1);
+  const openPageAction = async (target: ServiceCounty | ServiceCountyStored, isDraft?: boolean) => {
+    if (isDraft && (!target || !(target as ServiceCountyStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      await openServiceUserAdminCountiesAccessViewPage(target!);
+      setRefreshCounter((prev) => prev + 1);
+    }
   };
 
   const actions: ServiceCountyCounty_TablePageActions = {
+    getPageTitle,
+    backAction,
     bulkDeleteAction,
     openFormAction,
     deleteAction,
@@ -183,17 +217,28 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceCountyCounty_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessTablePageDefinition"
-      data-page-name="service::User::adminCounties::AccessTablePage"
-    >
+    <ServiceCountyCounty_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessTablePageDefinition"
+          data-page-name="service::User::adminCounties::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceCountyCounty_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -201,6 +246,6 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceCountyCounty_TableViewModelContext.Provider>
   );
 }

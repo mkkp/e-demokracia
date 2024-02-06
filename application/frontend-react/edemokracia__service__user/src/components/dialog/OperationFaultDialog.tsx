@@ -17,6 +17,24 @@ import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '../MdiIcon';
+import { useDialog } from './StackableDialogProvider';
+
+export const useFaultDialog = () => {
+  const [createDialog, closeDialog] = useDialog();
+
+  return (faultObjectKey: string, payload: any) => {
+    createDialog({
+      fullWidth: true,
+      maxWidth: 'md',
+      onClose: (event: object, reason: string) => {
+        if (reason !== 'backdropClick') {
+          closeDialog();
+        }
+      },
+      children: <OperationFaultDialog faultObjectKey={faultObjectKey} content={payload} close={closeDialog} />,
+    });
+  };
+};
 
 interface OperationFaultDialogProps {
   faultObjectKey: string;
@@ -32,7 +50,7 @@ export const OperationFaultDialog = ({ faultObjectKey, content, close }: Operati
     <>
       <DialogTitle id="fault-dialog-title" sx={{ display: 'flex', alignItems: 'center' }}>
         <MdiIcon path="alert-circle-outline" color={palette.error.main} />
-        <Typography sx={{ color: (theme) => theme.palette.error.main }} variant="h6" component="h6">
+        <Typography sx={{ ml: 1, color: (theme) => theme.palette.error.main }} variant="h6" component="h6">
           {t('judo.error.error', { defaultValue: 'Error' }) as string}
         </Typography>
       </DialogTitle>
@@ -46,7 +64,7 @@ export const OperationFaultDialog = ({ faultObjectKey, content, close }: Operati
         </DialogContentText>
         <List sx={{ listStyleType: 'disc', pl: (theme) => theme.spacing(2) }}>
           {Object.entries(content).map(([key, value]) => (
-            <ListItem id={'fault.' + faultObjectKey + '.' + key} key={key} sx={{ display: 'list-item', p: 0 }}>
+            <ListItem id={'faults.' + faultObjectKey + '.' + key} key={key} sx={{ display: 'list-item', p: 0 }}>
               <Typography>
                 <strong>{t('fault.' + faultObjectKey + '.' + key, { defaultValue: key }) as string}:</strong>{' '}
                 {value.toString()}

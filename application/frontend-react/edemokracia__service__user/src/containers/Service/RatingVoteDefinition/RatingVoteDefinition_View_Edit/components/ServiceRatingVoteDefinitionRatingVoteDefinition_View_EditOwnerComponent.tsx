@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponentActionDefinitions {
   ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
-  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -46,6 +46,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerC
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_fOODEHz5Ee6Q9LyUVjs1Qw)/TabularReferenceFieldRelationDefinedLink
@@ -53,7 +54,8 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerC
 export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponent(
   props: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -72,6 +74,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerCo
       disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {
         storeDiff('owner', owner);
@@ -96,7 +99,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditOwnerCo
       onView={
         ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.ownerOpenPageAction!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!, false);
             }
           : undefined
       }

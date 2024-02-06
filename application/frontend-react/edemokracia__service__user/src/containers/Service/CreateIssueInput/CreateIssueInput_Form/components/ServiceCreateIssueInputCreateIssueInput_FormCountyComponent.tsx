@@ -42,6 +42,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
@@ -49,7 +50,8 @@ export interface ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProp
 export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
   props: ServiceCreateIssueInputCreateIssueInput_FormCountyComponentProps,
 ) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -66,6 +68,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormCountyComponent(
       disabled={actions?.isCountyDisabled ? actions.isCountyDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(county) => {
         storeDiff('county', county);

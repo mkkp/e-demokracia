@@ -21,7 +21,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -90,7 +90,7 @@ import type { ServiceIssueIssue_View_EditProsComponentActionDefinitions } from '
 import { ServiceIssueIssue_View_EditProsComponent } from './components/ServiceIssueIssue_View_EditProsComponent';
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueIssue_View_EditContainerHook';
+  'SERVICE_ISSUE_ISSUE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueIssue_View_EditContainerHook = (
   data: ServiceIssueStored,
   editMode: boolean,
@@ -108,6 +108,7 @@ export interface ServiceIssueIssue_View_EditActionDefinitions
     ServiceIssueIssue_View_EditIssueTypeComponentActionDefinitions,
     ServiceIssueIssue_View_EditOwnerComponentActionDefinitions,
     ServiceIssueIssue_View_EditProsComponentActionDefinitions {
+  getPageTitle?: (data: ServiceIssue) => string;
   activateForIssueAction?: () => Promise<void>;
   addToFavoritesForIssueAction?: () => Promise<void>;
   closeDebateAction?: () => Promise<void>;
@@ -137,14 +138,15 @@ export interface ServiceIssueIssue_View_EditActionDefinitions
   isCloseVoteHidden?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
   isDeleteOrArchiveHidden?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
   isRemoveFromFavoritesHidden?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceIssueIssue_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueIssue_View_EditActionDefinitions;
 
   data: ServiceIssueStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssue, value: any) => void;
@@ -152,6 +154,7 @@ export interface ServiceIssueIssue_View_EditProps {
   validation: Map<keyof ServiceIssue, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssue, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -160,9 +163,10 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -194,18 +198,20 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="Issue_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="Issue_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="actions" xs={12} sm={12}>
             <Grid
               id="User/(esm/_ZAHfwFxEEe6ma86ynyYZNw)/GroupVisualElement"
+              data-name="actions"
               container
               direction="row"
               alignItems="flex-start"
@@ -213,146 +219,129 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
               spacing={2}
             >
               <Grid item xs={12}>
-                <Grid container spacing={2}>
+                <Box sx={{ display: 'flex', gap: 1 }}>
                   {!data.isFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-plus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.addToFavoritesForIssueAction
-                            ? async () => {
-                                await actions.addToFavoritesForIssueAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.Issue.Issue_View_Edit.addToFavorites', { defaultValue: 'Add to favorites' })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-plus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.addToFavoritesForIssueAction
+                          ? async () => {
+                              await actions.addToFavoritesForIssueAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.addToFavorites', { defaultValue: 'Add to favorites' })}
+                    </LoadingButton>
                   )}
                   {!data.isNotFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-minus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.removeFromFavoritesForIssueAction
-                            ? async () => {
-                                await actions.removeFromFavoritesForIssueAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.Issue.Issue_View_Edit.removeFromFavorites', {
-                            defaultValue: 'Remove from favorites',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-minus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.removeFromFavoritesForIssueAction
+                          ? async () => {
+                              await actions.removeFromFavoritesForIssueAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.removeFromFavorites', {
+                        defaultValue: 'Remove from favorites',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isIssueNotActive && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="vote" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.closeDebateAction
-                            ? async () => {
-                                await actions.closeDebateAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.Issue.Issue_View_Edit.closeDebate', {
-                            defaultValue: 'Close debate and start vote',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="vote" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.closeDebateAction
+                          ? async () => {
+                              await actions.closeDebateAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotClosable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-check" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.closeVoteForIssueAction
-                            ? async () => {
-                                await actions.closeVoteForIssueAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>{t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}</span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-check" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.closeVoteForIssueAction
+                          ? async () => {
+                              await actions.closeVoteForIssueAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}
+                    </LoadingButton>
                   )}
                   {!data.isIssueNotDraft && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-open" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.activateForIssueAction
-                            ? async () => {
-                                await actions.activateForIssueAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>{t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}</span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-open" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.activateForIssueAction
+                          ? async () => {
+                              await actions.activateForIssueAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}
+                    </LoadingButton>
                   )}
                   {!data.isIssueNotDeletable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="delete" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.deleteOrArchiveForIssueAction
-                            ? async () => {
-                                await actions.deleteOrArchiveForIssueAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>{t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}</span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="delete" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.deleteOrArchiveForIssueAction
+                          ? async () => {
+                              await actions.deleteOrArchiveForIssueAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}
+                    </LoadingButton>
                   )}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="issue::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="issue::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="clipboard" sx={{ marginRight: 1 }} />
@@ -366,9 +355,10 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="issue" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/GroupVisualElement"
+                      data-name="issue"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -382,6 +372,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('issueType')}
                           actions={actions}
@@ -398,7 +389,6 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           }
                           name="defaultVoteType"
                           id="User/(esm/_h1CAMOMdEe2Bgcx6em3jZg)/EnumerationTypeCombo"
-                          autoFocus
                           label={
                             t('service.Issue.Issue_View_Edit.defaultVoteType', {
                               defaultValue: 'Default Vote Type',
@@ -484,7 +474,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -631,7 +621,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -643,6 +633,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('owner')}
                           actions={actions}
@@ -710,19 +701,23 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                 },
               ]}
             >
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="arguments" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupVisualElement"
+                  data-name="arguments"
                   container
                   direction="row"
                   alignItems="flex-start"
                   justifyContent="flex-start"
                   spacing={2}
                 >
-                  <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="(User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+                  <Grid item data-name="cons::LabelWrapper" xs={12} sm={12} md={6.0}>
+                    <Card
+                      id="(User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                      data-name="cons::LabelWrapper"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
@@ -736,18 +731,20 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="cons" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="cons"
                               container
                               direction="row"
                               alignItems="stretch"
                               justifyContent="flex-start"
                               spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="actions" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_qJPPCnjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                                  data-name="actions"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -768,19 +765,18 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                       }}
                                       disabled={!actions.createConArgumentAction || editMode}
                                     >
-                                      <span>
-                                        {t('service.Issue.Issue_View_Edit.createConArgument', {
-                                          defaultValue: 'Add Con Argument',
-                                        })}
-                                      </span>
+                                      {t('service.Issue.Issue_View_Edit.createConArgument', {
+                                        defaultValue: 'Add Con Argument',
+                                      })}
                                     </LoadingButton>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="table" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_qJPPDHjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                                  data-name="table"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -805,6 +801,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('cons')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
@@ -817,10 +814,13 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                     </Card>
                   </Grid>
 
-                  <Grid item xs={12} sm={12} md={6.0}>
-                    <Card id="(User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper">
+                  <Grid item data-name="pros::LabelWrapper" xs={12} sm={12} md={6.0}>
+                    <Card
+                      id="(User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
+                      data-name="pros::LabelWrapper"
+                    >
                       <CardContent>
-                        <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                               <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
@@ -834,18 +834,20 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="pros" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                              data-name="pros"
                               container
                               direction="row"
                               alignItems="stretch"
                               justifyContent="flex-start"
                               spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="actions" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_qJPPAnjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                                  data-name="actions"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -866,19 +868,18 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                       }}
                                       disabled={!actions.createProArgumentAction || editMode}
                                     >
-                                      <span>
-                                        {t('service.Issue.Issue_View_Edit.createProArgument', {
-                                          defaultValue: 'Add Pro Argument',
-                                        })}
-                                      </span>
+                                      {t('service.Issue.Issue_View_Edit.createProArgument', {
+                                        defaultValue: 'Add Pro Argument',
+                                      })}
                                     </LoadingButton>
                                   </Grid>
                                 </Grid>
                               </Grid>
 
-                              <Grid item xs={12} sm={12}>
+                              <Grid item data-name="table" xs={12} sm={12}>
                                 <Grid
                                   id="User/(esm/_qJPPBHjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                                  data-name="table"
                                   container
                                   direction="row"
                                   alignItems="flex-start"
@@ -903,6 +904,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                         isFormUpdateable={isFormUpdateable}
                                         validationError={validation.get('pros')}
                                         refreshCounter={refreshCounter}
+                                        isOwnerLoading={isLoading}
                                       />
                                     </Grid>
                                   </Grid>
@@ -917,9 +919,10 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="area" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_yCDu0NvSEe2Bgcx6em3jZg)/GroupVisualElement"
+                  data-name="area"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -933,6 +936,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       ownerData={data}
                       editMode={editMode}
                       isLoading={isLoading}
+                      isDraft={isDraft}
                       storeDiff={storeDiff}
                       validationError={validation.get('county')}
                       actions={actions}
@@ -947,6 +951,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       ownerData={data}
                       editMode={editMode}
                       isLoading={isLoading}
+                      isDraft={isDraft}
                       storeDiff={storeDiff}
                       validationError={validation.get('city')}
                       actions={actions}
@@ -961,6 +966,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       ownerData={data}
                       editMode={editMode}
                       isLoading={isLoading}
+                      isDraft={isDraft}
                       storeDiff={storeDiff}
                       validationError={validation.get('district')}
                       actions={actions}
@@ -970,9 +976,10 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="attachments" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_x23N8Id8Ee2kLcMqsIbMgQ)/GroupVisualElement"
+                  data-name="attachments"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -995,15 +1002,17 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                         isFormUpdateable={isFormUpdateable}
                         validationError={validation.get('attachments')}
                         refreshCounter={refreshCounter}
+                        isOwnerLoading={isLoading}
                       />
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="categories" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_Cb01EId9Ee2kLcMqsIbMgQ)/GroupVisualElement"
+                  data-name="categories"
                   container
                   direction="row"
                   alignItems="flex-start"
@@ -1026,24 +1035,27 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                         isFormUpdateable={isFormUpdateable}
                         validationError={validation.get('categories')}
                         refreshCounter={refreshCounter}
+                        isOwnerLoading={isLoading}
                       />
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="comments" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/__yV9oIybEe2VSOmaAz6G9Q)/GroupVisualElement"
+                  data-name="comments"
                   container
                   direction="row"
                   alignItems="flex-start"
                   justifyContent="flex-start"
                   spacing={2}
                 >
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="actions" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_NSnZ0IyeEe2VSOmaAz6G9Q)/GroupVisualElement"
+                      data-name="actions"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -1064,9 +1076,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                           }}
                           disabled={!actions.createCommentAction || editMode}
                         >
-                          <span>
-                            {t('service.Issue.Issue_View_Edit.createComment', { defaultValue: 'Add comment' })}
-                          </span>
+                          {t('service.Issue.Issue_View_Edit.createComment', { defaultValue: 'Add comment' })}
                         </LoadingButton>
                       </Grid>
 
@@ -1086,6 +1096,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             isFormUpdateable={isFormUpdateable}
                             validationError={validation.get('comments')}
                             refreshCounter={refreshCounter}
+                            isOwnerLoading={isLoading}
                           />
                         </Grid>
                       </Grid>

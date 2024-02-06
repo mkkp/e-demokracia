@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditOwnerComponentActionDefinitions {
   ownerOpenSetSelectorAction?: () => Promise<ServiceServiceUserStored | undefined>;
   ownerUnsetAction?: (target: ServiceServiceUserStored) => Promise<void>;
-  ownerOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  ownerOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   ownerAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -39,12 +39,14 @@ export interface ServiceIssueIssue_View_EditOwnerComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedLink
 // Name: owner
 export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIssue_View_EditOwnerComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -61,6 +63,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
       disabled={actions?.isOwnerDisabled ? actions.isOwnerDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(owner) => {
         storeDiff('owner', owner);
@@ -85,7 +88,7 @@ export function ServiceIssueIssue_View_EditOwnerComponent(props: ServiceIssueIss
       onView={
         ownerData.owner && actions.ownerOpenPageAction
           ? async () => {
-              await actions.ownerOpenPageAction!(ownerData.owner!);
+              await actions.ownerOpenPageAction!(ownerData.owner!, false);
             }
           : undefined
       }

@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceCity,
@@ -66,14 +66,26 @@ export interface ServiceServiceUserServiceUser_View_EditActivityCitiesComponentA
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   activityCitiesRefreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored[]>;
+  getActivityCitiesMask?: () => string;
   activityCitiesRemoveAction?: (row: ServiceCityStored, silentMode?: boolean) => Promise<void>;
-  activityCitiesOpenPageAction?: (row: ServiceCityStored) => Promise<void>;
+  activityCitiesOpenPageAction?: (row: ServiceCityStored, isDraft?: boolean) => Promise<void>;
+  activityCitiesAdditionalToolbarButtons?: (
+    data: ServiceCityStored[],
+    isLoading: boolean,
+    selectedRows: ServiceCityStored[],
+    clearSelections: () => void,
+    ownerData: ServiceServiceUserStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceServiceUserServiceUser_View_EditActivityCitiesComponentProps {
   uniqueId: string;
   actions: ServiceServiceUserServiceUser_View_EditActivityCitiesComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceServiceUserStored;
   editMode: boolean;
@@ -85,7 +97,17 @@ export interface ServiceServiceUserServiceUser_View_EditActivityCitiesComponentP
 export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
   props: ServiceServiceUserServiceUser_View_EditActivityCitiesComponentProps,
 ) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -93,7 +115,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceCityStored>[]>(ownerData?.activityCities || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'representation', sort: null }]);
@@ -101,14 +123,15 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceCityQueryCustomizer>({
     _mask: '{representation}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -121,12 +144,16 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceCityStored[]>([]);
 
   const representationColumn: GridColDef<ServiceCityStored> = {
     ...baseColumnConfig,
     field: 'representation',
-    headerName: t('service.ServiceUser.ServiceUser_View_Edit.representation', { defaultValue: 'City' }) as string,
+    headerName: t('service.ServiceUser.ServiceUser_View_Edit.activityCities.representation', {
+      defaultValue: 'City',
+    }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -136,21 +163,92 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
 
   const columns = useMemo<GridColDef<ServiceCityStored>[]>(() => [representationColumn], []);
 
-  const rowActions: TableRowAction<ServiceCityStored>[] = [
-    {
-      id: 'User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-      label: t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Remove', {
-        defaultValue: 'Remove',
-      }) as string,
-      icon: <MdiIcon path="link_off" />,
-      disabled: (row: ServiceCityStored) => !isFormUpdateable() || isLoading,
-      action: actions.activityCitiesRemoveAction
-        ? async (rowData) => {
-            await actions.activityCitiesRemoveAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceCityStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
+        label: t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Remove', {
+          defaultValue: 'Remove',
+        }) as string,
+        icon: <MdiIcon path="link_off" />,
+        isCRUD: true,
+        disabled: (row: ServiceCityStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
+        action: actions.activityCitiesRemoveAction
+          ? async (rowData) => {
+              await actions.activityCitiesRemoveAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_Do9poIXoEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceCityStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceCityStored[] = () => {
+    return selectedRows.current;
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.activityCitiesAdditionalToolbarButtons
+    ? actions.activityCitiesAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceCityQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -180,7 +278,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -213,19 +311,21 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceCityStored>(filters, ownerData?.activityCities ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.activityCities, filters]);
 
   return (
@@ -235,7 +335,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
     >
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -246,29 +346,22 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_Do9poIXoEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         checkboxSelection
         rowSelectionModel={selectionModel}
-        onRowSelectionModelChange={(newRowSelectionModel) => {
-          setSelectionModel(newRowSelectionModel);
-        }}
+        onRowSelectionModelChange={handleOnSelection}
         keepNonExistentRowsSelected
         onRowClick={
           actions.activityCitiesOpenPageAction
             ? async (params: GridRowParams<ServiceCityStored>) =>
-                await actions.activityCitiesOpenPageAction!(params.row)
+                await actions.activityCitiesOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -308,7 +401,11 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.activityCitiesRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCitiesMask ? actions.getActivityCitiesMask() : queryCustomizer._mask,
+                    };
+                    await actions.activityCitiesRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -324,6 +421,10 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   startIcon={<MdiIcon path="attachment-plus" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCitiesMask ? actions.getActivityCitiesMask() : queryCustomizer._mask,
+                    };
                     await actions.activityCitiesOpenAddSelectorAction!();
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
@@ -339,7 +440,12 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCitiesMask ? actions.getActivityCitiesMask() : queryCustomizer._mask,
+                    };
                     await actions.activityCitiesClearAction!();
+                    handleOnSelection([]);
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
@@ -354,9 +460,13 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   startIcon={<MdiIcon path="link_off" />}
                   variant={'text'}
                   onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCitiesMask ? actions.getActivityCitiesMask() : queryCustomizer._mask,
+                    };
                     const { result: bulkResult } = await actions.activityCitiesBulkRemoveAction!(selectedRows.current);
                     if (bulkResult === 'submit') {
-                      setSelectionModel([]); // not resetting on refreshes because refreshes would always remove selections...
+                      handleOnSelection([]); // not resetting on refreshes because refreshes would always remove selections...
                     }
                   }}
                   disabled={isLoading}
@@ -367,6 +477,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   )}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

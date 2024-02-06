@@ -34,7 +34,6 @@ export interface ServiceDashboardDashboard_View_EditPageActions
 }
 
 export interface ServiceDashboardDashboard_View_EditPageProps {
-  title: string;
   actions: ServiceDashboardDashboard_View_EditPageActions;
   isLoading: boolean;
   editMode: boolean;
@@ -55,7 +54,6 @@ export default function ServiceDashboardDashboard_View_EditPage(props: ServiceDa
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
   const {
-    title,
     actions,
     isLoading,
     editMode,
@@ -69,12 +67,12 @@ export default function ServiceDashboardDashboard_View_EditPage(props: ServiceDa
     submit,
   } = props;
   const queryCustomizer: ServiceDashboardQueryCustomizer = {
-    _mask: '{}',
+    _mask: actions.getMask ? actions.getMask!() : '{}',
   };
 
   return (
     <>
-      <PageHeader title={title}>
+      <PageHeader title={actions?.getPageTitle ? actions?.getPageTitle(data) : ''}>
         {!editMode && actions.backAction && (
           <Grid className="page-action" item>
             <LoadingButton
@@ -162,8 +160,8 @@ export default function ServiceDashboardDashboard_View_EditPage(props: ServiceDa
           <ServiceDashboardDashboard_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}

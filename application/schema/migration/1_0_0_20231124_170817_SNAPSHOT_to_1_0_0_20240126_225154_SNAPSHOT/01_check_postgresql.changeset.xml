@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+      
+    <ns0:preConditions xmlns:ns0="http://www.liquibase.org/xml/ns/dbchangelog">
+            
+        <ns1:not xmlns:ns1="http://www.liquibase.org/xml/ns/dbchangelog">
+                  
+            <ns2:tableExists xmlns:ns2="http://www.liquibase.org/xml/ns/dbchangelog" tableName="BACKUP_T_EDEMOKRACIA_VOTEDEFINITION"/>
+                
+        </ns1:not>
+            
+        <ns3:tableExists xmlns:ns3="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns4:tableExists xmlns:ns4="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns5:tableExists xmlns:ns5="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns6:tableExists xmlns:ns6="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns7:tableExists xmlns:ns7="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns8:tableExists xmlns:ns8="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns9:tableExists xmlns:ns9="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns10:tableExists xmlns:ns10="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns11:tableExists xmlns:ns11="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns12:tableExists xmlns:ns12="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns13:tableExists xmlns:ns13="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns14:tableExists xmlns:ns14="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns15:tableExists xmlns:ns15="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns16:tableExists xmlns:ns16="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns17:tableExists xmlns:ns17="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns18:tableExists xmlns:ns18="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns19:tableExists xmlns:ns19="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns20:tableExists xmlns:ns20="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns21:tableExists xmlns:ns21="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns22:tableExists xmlns:ns22="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns23:tableExists xmlns:ns23="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns24:tableExists xmlns:ns24="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns25:tableExists xmlns:ns25="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns26:tableExists xmlns:ns26="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns27:tableExists xmlns:ns27="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns28:tableExists xmlns:ns28="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns29:tableExists xmlns:ns29="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns30:tableExists xmlns:ns30="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns31:tableExists xmlns:ns31="http://www.liquibase.org/xml/ns/dbchangelog" tableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns32:columnExists xmlns:ns32="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns33:columnExists xmlns:ns33="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns34:columnExists xmlns:ns34="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns35:columnExists xmlns:ns35="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns36:columnExists xmlns:ns36="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns37:columnExists xmlns:ns37="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns38:columnExists xmlns:ns38="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns39:columnExists xmlns:ns39="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns40:columnExists xmlns:ns40="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_USERNAME" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns41:columnExists xmlns:ns41="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EMAIL" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns42:columnExists xmlns:ns42="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_FIRSTNAME" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns43:columnExists xmlns:ns43="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_LASTNAME" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns44:columnExists xmlns:ns44="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_PHONE" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns45:columnExists xmlns:ns45="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_ISADMIN" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns46:columnExists xmlns:ns46="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns47:columnExists xmlns:ns47="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns48:columnExists xmlns:ns48="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns49:columnExists xmlns:ns49="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns50:columnExists xmlns:ns50="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns51:columnExists xmlns:ns51="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns52:columnExists xmlns:ns52="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns53:columnExists xmlns:ns53="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns54:columnExists xmlns:ns54="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns55:columnExists xmlns:ns55="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_NAME" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns56:columnExists xmlns:ns56="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns57:columnExists xmlns:ns57="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns58:columnExists xmlns:ns58="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns59:columnExists xmlns:ns59="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns60:columnExists xmlns:ns60="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns61:columnExists xmlns:ns61="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns62:columnExists xmlns:ns62="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns63:columnExists xmlns:ns63="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns64:columnExists xmlns:ns64="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_COMMENT" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns65:columnExists xmlns:ns65="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns66:columnExists xmlns:ns66="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns67:columnExists xmlns:ns67="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns68:columnExists xmlns:ns68="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns69:columnExists xmlns:ns69="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns70:columnExists xmlns:ns70="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns71:columnExists xmlns:ns71="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns72:columnExists xmlns:ns72="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns73:columnExists xmlns:ns73="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns74:columnExists xmlns:ns74="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns75:columnExists xmlns:ns75="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns76:columnExists xmlns:ns76="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns77:columnExists xmlns:ns77="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns78:columnExists xmlns:ns78="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns79:columnExists xmlns:ns79="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns80:columnExists xmlns:ns80="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns81:columnExists xmlns:ns81="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns82:columnExists xmlns:ns82="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns83:columnExists xmlns:ns83="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns84:columnExists xmlns:ns84="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns85:columnExists xmlns:ns85="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_NAME" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns86:columnExists xmlns:ns86="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns87:columnExists xmlns:ns87="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns88:columnExists xmlns:ns88="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns89:columnExists xmlns:ns89="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns90:columnExists xmlns:ns90="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns91:columnExists xmlns:ns91="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns92:columnExists xmlns:ns92="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns93:columnExists xmlns:ns93="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns94:columnExists xmlns:ns94="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_NAME" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns95:columnExists xmlns:ns95="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns96:columnExists xmlns:ns96="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns97:columnExists xmlns:ns97="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns98:columnExists xmlns:ns98="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns99:columnExists xmlns:ns99="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns100:columnExists xmlns:ns100="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns101:columnExists xmlns:ns101="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns102:columnExists xmlns:ns102="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns103:columnExists xmlns:ns103="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns104:columnExists xmlns:ns104="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns105:columnExists xmlns:ns105="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_STATUS" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns106:columnExists xmlns:ns106="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DEFAULTVOTETYPE" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns107:columnExists xmlns:ns107="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DEBATECLOSEAT" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns108:columnExists xmlns:ns108="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns109:columnExists xmlns:ns109="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns110:columnExists xmlns:ns110="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns111:columnExists xmlns:ns111="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns112:columnExists xmlns:ns112="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns113:columnExists xmlns:ns113="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns114:columnExists xmlns:ns114="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns115:columnExists xmlns:ns115="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns116:columnExists xmlns:ns116="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns117:columnExists xmlns:ns117="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns118:columnExists xmlns:ns118="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns119:columnExists xmlns:ns119="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DEFAULTVOTETYPE" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns120:columnExists xmlns:ns120="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns121:columnExists xmlns:ns121="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns122:columnExists xmlns:ns122="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns123:columnExists xmlns:ns123="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns124:columnExists xmlns:ns124="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns125:columnExists xmlns:ns125="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns126:columnExists xmlns:ns126="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns127:columnExists xmlns:ns127="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns128:columnExists xmlns:ns128="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns129:columnExists xmlns:ns129="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns130:columnExists xmlns:ns130="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns131:columnExists xmlns:ns131="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns132:columnExists xmlns:ns132="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns133:columnExists xmlns:ns133="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns134:columnExists xmlns:ns134="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns135:columnExists xmlns:ns135="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns136:columnExists xmlns:ns136="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns137:columnExists xmlns:ns137="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns138:columnExists xmlns:ns138="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns139:columnExists xmlns:ns139="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns140:columnExists xmlns:ns140="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns141:columnExists xmlns:ns141="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns142:columnExists xmlns:ns142="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_STATUS" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns143:columnExists xmlns:ns143="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CLOSEAT" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns144:columnExists xmlns:ns144="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns145:columnExists xmlns:ns145="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns146:columnExists xmlns:ns146="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns147:columnExists xmlns:ns147="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns148:columnExists xmlns:ns148="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns149:columnExists xmlns:ns149="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns150:columnExists xmlns:ns150="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns151:columnExists xmlns:ns151="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns152:columnExists xmlns:ns152="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns153:columnExists xmlns:ns153="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns154:columnExists xmlns:ns154="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns155:columnExists xmlns:ns155="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns156:columnExists xmlns:ns156="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns157:columnExists xmlns:ns157="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns158:columnExists xmlns:ns158="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns159:columnExists xmlns:ns159="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns160:columnExists xmlns:ns160="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns161:columnExists xmlns:ns161="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_VALUE" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns162:columnExists xmlns:ns162="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns163:columnExists xmlns:ns163="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns164:columnExists xmlns:ns164="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns165:columnExists xmlns:ns165="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns166:columnExists xmlns:ns166="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns167:columnExists xmlns:ns167="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns168:columnExists xmlns:ns168="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns169:columnExists xmlns:ns169="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns170:columnExists xmlns:ns170="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns171:columnExists xmlns:ns171="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns172:columnExists xmlns:ns172="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns173:columnExists xmlns:ns173="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns174:columnExists xmlns:ns174="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns175:columnExists xmlns:ns175="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns176:columnExists xmlns:ns176="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns177:columnExists xmlns:ns177="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns178:columnExists xmlns:ns178="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_VALUE" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns179:columnExists xmlns:ns179="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns180:columnExists xmlns:ns180="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns181:columnExists xmlns:ns181="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns182:columnExists xmlns:ns182="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns183:columnExists xmlns:ns183="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns184:columnExists xmlns:ns184="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns185:columnExists xmlns:ns185="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns186:columnExists xmlns:ns186="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns187:columnExists xmlns:ns187="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_VALUE" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns188:columnExists xmlns:ns188="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns189:columnExists xmlns:ns189="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns190:columnExists xmlns:ns190="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns191:columnExists xmlns:ns191="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns192:columnExists xmlns:ns192="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns193:columnExists xmlns:ns193="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns194:columnExists xmlns:ns194="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns195:columnExists xmlns:ns195="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns196:columnExists xmlns:ns196="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_MAXRATEVALUE" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns197:columnExists xmlns:ns197="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_MINRATEVALUE" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns198:columnExists xmlns:ns198="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns199:columnExists xmlns:ns199="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns200:columnExists xmlns:ns200="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns201:columnExists xmlns:ns201="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns202:columnExists xmlns:ns202="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns203:columnExists xmlns:ns203="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns204:columnExists xmlns:ns204="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns205:columnExists xmlns:ns205="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns206:columnExists xmlns:ns206="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns207:columnExists xmlns:ns207="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns208:columnExists xmlns:ns208="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns209:columnExists xmlns:ns209="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns210:columnExists xmlns:ns210="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns211:columnExists xmlns:ns211="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns212:columnExists xmlns:ns212="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns213:columnExists xmlns:ns213="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns214:columnExists xmlns:ns214="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATED" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns215:columnExists xmlns:ns215="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TYPE" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns216:columnExists xmlns:ns216="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns217:columnExists xmlns:ns217="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns218:columnExists xmlns:ns218="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns219:columnExists xmlns:ns219="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns220:columnExists xmlns:ns220="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns221:columnExists xmlns:ns221="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns222:columnExists xmlns:ns222="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns223:columnExists xmlns:ns223="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns224:columnExists xmlns:ns224="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns225:columnExists xmlns:ns225="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns226:columnExists xmlns:ns226="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns227:columnExists xmlns:ns227="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns228:columnExists xmlns:ns228="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns229:columnExists xmlns:ns229="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns230:columnExists xmlns:ns230="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns231:columnExists xmlns:ns231="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns232:columnExists xmlns:ns232="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns233:columnExists xmlns:ns233="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns234:columnExists xmlns:ns234="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns235:columnExists xmlns:ns235="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns236:columnExists xmlns:ns236="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns237:columnExists xmlns:ns237="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns238:columnExists xmlns:ns238="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns239:columnExists xmlns:ns239="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns240:columnExists xmlns:ns240="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns241:columnExists xmlns:ns241="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns242:columnExists xmlns:ns242="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns243:columnExists xmlns:ns243="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns244:columnExists xmlns:ns244="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns245:columnExists xmlns:ns245="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns246:columnExists xmlns:ns246="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns247:columnExists xmlns:ns247="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns248:columnExists xmlns:ns248="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns249:columnExists xmlns:ns249="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns250:columnExists xmlns:ns250="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DESCRIPTION" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns251:columnExists xmlns:ns251="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TITLE" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns252:columnExists xmlns:ns252="http://www.liquibase.org/xml/ns/dbchangelog" columnName="TYPE" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns253:columnExists xmlns:ns253="http://www.liquibase.org/xml/ns/dbchangelog" columnName="VERSION" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns254:columnExists xmlns:ns254="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns255:columnExists xmlns:ns255="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns256:columnExists xmlns:ns256="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CREATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns257:columnExists xmlns:ns257="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USERNAME" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns258:columnExists xmlns:ns258="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_USER_ID" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns259:columnExists xmlns:ns259="http://www.liquibase.org/xml/ns/dbchangelog" columnName="UPDATE_TIMESTAMP" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns260:columnExists xmlns:ns260="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_LINK" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns261:columnExists xmlns:ns261="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_FILE" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns262:columnExists xmlns:ns262="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_TYPE" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns263:columnExists xmlns:ns263="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns264:columnExists xmlns:ns264="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns265:columnExists xmlns:ns265="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns266:columnExists xmlns:ns266="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns267:columnExists xmlns:ns267="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_COUNTY"/>
+            
+        <ns268:columnExists xmlns:ns268="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns269:columnExists xmlns:ns269="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns270:columnExists xmlns:ns270="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_ISSUETYPE"/>
+            
+        <ns271:columnExists xmlns:ns271="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns272:columnExists xmlns:ns272="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns273:columnExists xmlns:ns273="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns274:columnExists xmlns:ns274="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_RATINGVOTEENTRY"/>
+            
+        <ns275:columnExists xmlns:ns275="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns276:columnExists xmlns:ns276="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_YESNOBSTINVTNTRY"/>
+            
+        <ns277:columnExists xmlns:ns277="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_YESNOVOTEENTRY"/>
+            
+        <ns278:columnExists xmlns:ns278="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_RATINGVTDFINITIN"/>
+            
+        <ns279:columnExists xmlns:ns279="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTDFNTN"/>
+            
+        <ns280:columnExists xmlns:ns280="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns281:columnExists xmlns:ns281="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_YESNBSTINVTDFNTN"/>
+            
+        <ns282:columnExists xmlns:ns282="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_YESNOVOTDFINITIN"/>
+            
+        <ns283:columnExists xmlns:ns283="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns284:columnExists xmlns:ns284="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns285:columnExists xmlns:ns285="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns286:columnExists xmlns:ns286="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns287:columnExists xmlns:ns287="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns288:columnExists xmlns:ns288="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns289:columnExists xmlns:ns289="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns290:columnExists xmlns:ns290="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns291:columnExists xmlns:ns291="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ID" tableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns292:columnExists xmlns:ns292="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_RESIDENTCOUNTY_ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns293:columnExists xmlns:ns293="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_RESIDENTCITY_ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns294:columnExists xmlns:ns294="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_RESIDENTDISTRICT_ID" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns295:columnExists xmlns:ns295="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_COUNTY_CITIES_ID" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns296:columnExists xmlns:ns296="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATEDBY_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns297:columnExists xmlns:ns297="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_CON_COMMENTS_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns298:columnExists xmlns:ns298="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_COMMENTS_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns299:columnExists xmlns:ns299="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_PRO_COMMENTS_ID" tableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns300:columnExists xmlns:ns300="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATEDBY_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns301:columnExists xmlns:ns301="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_CON_CONS_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns302:columnExists xmlns:ns302="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_CONS_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns303:columnExists xmlns:ns303="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_PRO_CONS_ID" tableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns304:columnExists xmlns:ns304="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_CITY_DISTRICTS_ID" tableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns305:columnExists xmlns:ns305="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CITY_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns306:columnExists xmlns:ns306="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_COUNTY_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns307:columnExists xmlns:ns307="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_DISTRICT_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns308:columnExists xmlns:ns308="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_ISSUETYPE_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns309:columnExists xmlns:ns309="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_OWNER_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns310:columnExists xmlns:ns310="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATEDBY_ID" tableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns311:columnExists xmlns:ns311="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATEDBY_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns312:columnExists xmlns:ns312="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_CON_PROS_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns313:columnExists xmlns:ns313="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_PROS_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns314:columnExists xmlns:ns314="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_PRO_PROS_ID" tableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns315:columnExists xmlns:ns315="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_OWNER_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns316:columnExists xmlns:ns316="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CREATEDBY_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns317:columnExists xmlns:ns317="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_DEBATEVOTE_ID" tableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns318:columnExists xmlns:ns318="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_VOTEDEFINITION_ID" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns319:columnExists xmlns:ns319="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_USER_ID" tableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns320:columnExists xmlns:ns320="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_VALUE_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns321:columnExists xmlns:ns321="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_USER_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns322:columnExists xmlns:ns322="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_COMMENT_VOTES_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns323:columnExists xmlns:ns323="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_CON_VOTES_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns324:columnExists xmlns:ns324="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_PRO_VOTES_ID" tableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns325:columnExists xmlns:ns325="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_OWNER_ID" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns326:columnExists xmlns:ns326="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUECATEGORY_SUBCATEGORIES_ID" tableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns327:columnExists xmlns:ns327="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_SELCTNSWRVTDFNTN_VOTESELECTIONS_ID" tableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns328:columnExists xmlns:ns328="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_EDEMOKRACIA_ISSUE_ATTACHMENTS_ID" tableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns329:columnExists xmlns:ns329="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_FAVORITEISSUES_ID" tableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns330:columnExists xmlns:ns330="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_USERSFAVORITEDBY_ID" tableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns331:columnExists xmlns:ns331="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_FAVRITVTDFINITNS_ID" tableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns332:columnExists xmlns:ns332="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_USERSFAVORITEDBY_ID" tableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns333:columnExists xmlns:ns333="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_ACTIVITYCOUNTIES_ID1" tableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns334:columnExists xmlns:ns334="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ACTIVITYCOUNTIES_T_EDEMOKRACIA_USER_ID2" tableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns335:columnExists xmlns:ns335="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_ACTIVITYCITIES_ID1" tableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns336:columnExists xmlns:ns336="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ACTIVITYCITIES_T_EDEMOKRACIA_USER_ID2" tableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns337:columnExists xmlns:ns337="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_ACTIVITYDISTRCTS_ID1" tableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns338:columnExists xmlns:ns338="http://www.liquibase.org/xml/ns/dbchangelog" columnName="ACTIVITYDISTRCTS_T_EDEMOKRACIA_USER_ID2" tableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns339:columnExists xmlns:ns339="http://www.liquibase.org/xml/ns/dbchangelog" columnName="C_CATEGORIES_ID1" tableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns340:columnExists xmlns:ns340="http://www.liquibase.org/xml/ns/dbchangelog" columnName="CATEGORIES_T_EDEMOKRACIA_ISSUE_ID2" tableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns341:foreignKeyConstraintExists xmlns:ns341="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_RESIDENTCOUNTY" foreignKeyTableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns342:foreignKeyConstraintExists xmlns:ns342="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_RESIDENTCITY" foreignKeyTableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns343:foreignKeyConstraintExists xmlns:ns343="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_RESIDENTDISTRICT" foreignKeyTableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns344:foreignKeyConstraintExists xmlns:ns344="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_COUNTY_CITIES" foreignKeyTableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns345:foreignKeyConstraintExists xmlns:ns345="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_COMMENT_CREATEDBY" foreignKeyTableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns346:foreignKeyConstraintExists xmlns:ns346="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_CON_COMMENTS" foreignKeyTableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns347:foreignKeyConstraintExists xmlns:ns347="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUE_COMMENTS" foreignKeyTableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns348:foreignKeyConstraintExists xmlns:ns348="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_PRO_COMMENTS" foreignKeyTableName="T_EDEMOKRACIA_COMMENT"/>
+            
+        <ns349:foreignKeyConstraintExists xmlns:ns349="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_CON_CREATEDBY" foreignKeyTableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns350:foreignKeyConstraintExists xmlns:ns350="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_CON_CONS" foreignKeyTableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns351:foreignKeyConstraintExists xmlns:ns351="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUE_CONS" foreignKeyTableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns352:foreignKeyConstraintExists xmlns:ns352="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_PRO_CONS" foreignKeyTableName="T_EDEMOKRACIA_CON"/>
+            
+        <ns353:foreignKeyConstraintExists xmlns:ns353="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_CITY_DISTRICTS" foreignKeyTableName="T_EDEMOKRACIA_DISTRICT"/>
+            
+        <ns354:foreignKeyConstraintExists xmlns:ns354="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_CITY" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns355:foreignKeyConstraintExists xmlns:ns355="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_COUNTY" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns356:foreignKeyConstraintExists xmlns:ns356="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_DISTRICT" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns357:foreignKeyConstraintExists xmlns:ns357="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_ISSUETYPE" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns358:foreignKeyConstraintExists xmlns:ns358="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_OWNER" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns359:foreignKeyConstraintExists xmlns:ns359="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_CREATEDBY" foreignKeyTableName="T_EDEMOKRACIA_ISSUE"/>
+            
+        <ns360:foreignKeyConstraintExists xmlns:ns360="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_PRO_CREATEDBY" foreignKeyTableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns361:foreignKeyConstraintExists xmlns:ns361="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_CON_PROS" foreignKeyTableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns362:foreignKeyConstraintExists xmlns:ns362="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUE_PROS" foreignKeyTableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns363:foreignKeyConstraintExists xmlns:ns363="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_PRO_PROS" foreignKeyTableName="T_EDEMOKRACIA_PRO"/>
+            
+        <ns364:foreignKeyConstraintExists xmlns:ns364="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_VOTEDEFINITION_OWNER" foreignKeyTableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns365:foreignKeyConstraintExists xmlns:ns365="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_VOTEDEFINITION_CREATEDBY" foreignKeyTableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns366:foreignKeyConstraintExists xmlns:ns366="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUE_DEBATEVOTE" foreignKeyTableName="T_EDEMOKRACIA_VOTEDEFINITION"/>
+            
+        <ns367:foreignKeyConstraintExists xmlns:ns367="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_VOTEENTRY_VOTEDEFINITION" foreignKeyTableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns368:foreignKeyConstraintExists xmlns:ns368="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_VOTEENTRY_USER" foreignKeyTableName="T_EDEMOKRACIA_VOTEENTRY"/>
+            
+        <ns369:foreignKeyConstraintExists xmlns:ns369="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_SELCTNSWRVOTNTRY_VALUE" foreignKeyTableName="T_EDEMOKRACIA_SELCTNSWRVOTNTRY"/>
+            
+        <ns370:foreignKeyConstraintExists xmlns:ns370="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_SIMPLEVOTE_USER" foreignKeyTableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns371:foreignKeyConstraintExists xmlns:ns371="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_COMMENT_VOTES" foreignKeyTableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns372:foreignKeyConstraintExists xmlns:ns372="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_CON_VOTES" foreignKeyTableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns373:foreignKeyConstraintExists xmlns:ns373="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_PRO_VOTES" foreignKeyTableName="T_EDEMOKRACIA_SIMPLEVOTE"/>
+            
+        <ns374:foreignKeyConstraintExists xmlns:ns374="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUECATEGORY_OWNER" foreignKeyTableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns375:foreignKeyConstraintExists xmlns:ns375="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUECATEGORY_SUBCATEGORIES" foreignKeyTableName="T_EDEMOKRACIA_ISSUECATEGORY"/>
+            
+        <ns376:foreignKeyConstraintExists xmlns:ns376="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_SELCTNSWRVTDFNTN_VOTESELECTIONS" foreignKeyTableName="T_EDEMOKRACIA_SELCTNSWRVTSLCTN"/>
+            
+        <ns377:foreignKeyConstraintExists xmlns:ns377="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_INV_EDEMOKRACIA_ISSUE_ATTACHMENTS" foreignKeyTableName="T_EDEMOKRACIA_ISSUEATTACHMENT"/>
+            
+        <ns378:foreignKeyConstraintExists xmlns:ns378="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_FAVORITEISSUES" foreignKeyTableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns379:foreignKeyConstraintExists xmlns:ns379="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_USERSFAVORITEDBY" foreignKeyTableName="T_EDMOKRACIA_ISSU_FAVORITEISSUS_EDMOKRACIA_USR_USERSFAVORITDBY"/>
+            
+        <ns380:foreignKeyConstraintExists xmlns:ns380="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_FAVRITVTDFINITNS" foreignKeyTableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns381:foreignKeyConstraintExists xmlns:ns381="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_VOTEDEFINITION_USERSFAVORITEDBY" foreignKeyTableName="T_EDMKRCI_VOTDFINITIN_FVRITVTDFINITNS_EDMKRCI_USR_USRSFVRITDBY"/>
+            
+        <ns382:foreignKeyConstraintExists xmlns:ns382="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYCOUNTIES1" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns383:foreignKeyConstraintExists xmlns:ns383="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYCOUNTIES2" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYCOUNTIES"/>
+            
+        <ns384:foreignKeyConstraintExists xmlns:ns384="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYCITIES1" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns385:foreignKeyConstraintExists xmlns:ns385="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYCITIES2" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYCITIES"/>
+            
+        <ns386:foreignKeyConstraintExists xmlns:ns386="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYDISTRCTS1" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns387:foreignKeyConstraintExists xmlns:ns387="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_USER_ACTIVITYDISTRCTS2" foreignKeyTableName="T_EDEMOKRACIA_USER_ACTIVITYDISTRCTS"/>
+            
+        <ns388:foreignKeyConstraintExists xmlns:ns388="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_CATEGORIES1" foreignKeyTableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns389:foreignKeyConstraintExists xmlns:ns389="http://www.liquibase.org/xml/ns/dbchangelog" foreignKeyName="FK_EDEMOKRACIA_ISSUE_CATEGORIES2" foreignKeyTableName="T_EDEMOKRACIA_ISSUE_CATEGORIES"/>
+            
+        <ns390:indexExists xmlns:ns390="http://www.liquibase.org/xml/ns/dbchangelog" columnNames="C_USERNAME" indexName="IDX_2aaaf3fd87da95818e6ef7de7d88226a" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns391:indexExists xmlns:ns391="http://www.liquibase.org/xml/ns/dbchangelog" columnNames="C_EMAIL" indexName="IDX_a0dff5213fcd279dd66572c10ed6a251" tableName="T_EDEMOKRACIA_USER"/>
+            
+        <ns392:indexExists xmlns:ns392="http://www.liquibase.org/xml/ns/dbchangelog" columnNames="C_NAME" indexName="IDX_f2cbfbd23af3838ae230d0154eedab82" tableName="T_EDEMOKRACIA_CITY"/>
+            
+        <ns393:indexExists xmlns:ns393="http://www.liquibase.org/xml/ns/dbchangelog" columnNames="C_NAME" indexName="IDX_469afcfd733a08065149d077229e6d27" tableName="T_EDEMOKRACIA_COUNTY"/>
+          
+    </ns0:preConditions>
+    
+</databaseChangeLog>

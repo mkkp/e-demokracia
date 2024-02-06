@@ -41,7 +41,6 @@ export interface ServiceUserProfileUserProfile_View_EditDialogActions
 
 export interface ServiceUserProfileUserProfile_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceUserProfileUserProfile_View_EditDialogActions;
   isLoading: boolean;
@@ -55,6 +54,7 @@ export interface ServiceUserProfileUserProfile_View_EditDialogProps {
   validation: Map<keyof ServiceUserProfile, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceUserProfile, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::UserProfile::UserProfile_View_Edit
@@ -67,7 +67,6 @@ export default function ServiceUserProfileUserProfile_View_EditDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -80,16 +79,18 @@ export default function ServiceUserProfileUserProfile_View_EditDialog(
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceUserProfileQueryCustomizer = {
-    _mask:
-      '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{email,firstName,lastName,phone,userName,activityCities{representation},activityDistricts{representation},activityCounties{representation},residentCity{representation},residentCounty{representation},residentDistrict{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_1QevwFvQEe6jm_SkPSYEYw)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -109,8 +110,8 @@ export default function ServiceUserProfileUserProfile_View_EditDialog(
           <ServiceUserProfileUserProfile_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -118,6 +119,7 @@ export default function ServiceUserProfileUserProfile_View_EditDialog(
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

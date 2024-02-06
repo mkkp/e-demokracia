@@ -5,10 +5,14 @@ import { decimalSeparators, thousandSeparator } from '~/l10n/separators';
 
 export function NumericInput<BaseType = InputAttributes>(props: NumericFormatProps<BaseType>) {
   const { locale: l10nLocale } = useL10N();
+  const propsExpanded: NumericFormatProps<BaseType> = {
+    decimalScale: 0,
+    ...props,
+  };
 
   return (
     <NumericFormat
-      {...props}
+      {...propsExpanded}
       decimalSeparator={decimalSeparators[l10nLocale]}
       thousandSeparator={thousandSeparator[l10nLocale]}
     />

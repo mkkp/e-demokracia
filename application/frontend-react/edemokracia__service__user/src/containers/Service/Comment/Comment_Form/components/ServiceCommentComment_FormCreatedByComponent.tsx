@@ -19,7 +19,7 @@ import type {
 } from '~/services/data-api';
 import { processQueryCustomizer } from '~/utilities';
 export interface ServiceCommentComment_FormCreatedByComponentActionDefinitions {
-  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -41,12 +41,14 @@ export interface ServiceCommentComment_FormCreatedByComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_IgYHIIfuEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink
 // Name: createdBy
 export function ServiceCommentComment_FormCreatedByComponent(props: ServiceCommentComment_FormCreatedByComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -63,6 +65,7 @@ export function ServiceCommentComment_FormCreatedByComponent(props: ServiceComme
       disabled={actions?.isCreatedByDisabled ? actions.isCreatedByDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(createdBy) => {
         storeDiff('createdBy', createdBy);
@@ -87,7 +90,7 @@ export function ServiceCommentComment_FormCreatedByComponent(props: ServiceComme
       onView={
         ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.createdByOpenPageAction!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!, true);
             }
           : undefined
       }

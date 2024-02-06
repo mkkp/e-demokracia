@@ -21,7 +21,7 @@ import { processQueryCustomizer } from '~/utilities';
 export interface ServiceIssueIssue_View_EditDistrictComponentActionDefinitions {
   districtOpenSetSelectorAction?: () => Promise<ServiceDistrictStored | undefined>;
   districtUnsetAction?: (target: ServiceDistrictStored) => Promise<void>;
-  districtOpenPageAction?: (target: ServiceDistrictStored) => Promise<void>;
+  districtOpenPageAction?: (target: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
   districtAutocompleteRangeAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ) => Promise<Array<ServiceDistrictStored>>;
@@ -39,12 +39,14 @@ export interface ServiceIssueIssue_View_EditDistrictComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldRelationDefinedLink
 // Name: district
 export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssueIssue_View_EditDistrictComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -61,6 +63,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
       disabled={actions?.isDistrictDisabled ? actions.isDistrictDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(district) => {
         storeDiff('district', district);
@@ -85,7 +88,7 @@ export function ServiceIssueIssue_View_EditDistrictComponent(props: ServiceIssue
       onView={
         ownerData.district && actions.districtOpenPageAction
           ? async () => {
-              await actions.districtOpenPageAction!(ownerData.district!);
+              await actions.districtOpenPageAction!(ownerData.district!, false);
             }
           : undefined
       }

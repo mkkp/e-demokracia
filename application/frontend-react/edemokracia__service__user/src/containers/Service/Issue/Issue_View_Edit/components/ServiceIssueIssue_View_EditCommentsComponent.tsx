@@ -28,7 +28,7 @@ import type {
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MouseEvent } from 'react';
+import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -42,7 +42,7 @@ import {
   numericColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -71,15 +71,27 @@ export interface ServiceIssueIssue_View_EditCommentsComponentActionDefinitions {
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   commentsRefreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<ServiceCommentStored[]>;
-  commentsOpenPageAction?: (row: ServiceCommentStored) => Promise<void>;
+  getCommentsMask?: () => string;
+  commentsOpenPageAction?: (row: ServiceCommentStored, isDraft?: boolean) => Promise<void>;
   commentsVoteDownForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
   commentsVoteUpForCommentAction?: (row: ServiceCommentStored) => Promise<void>;
+  commentsAdditionalToolbarButtons?: (
+    data: ServiceCommentStored[],
+    isLoading: boolean,
+    selectedRows: ServiceCommentStored[],
+    clearSelections: () => void,
+    ownerData: ServiceIssueStored,
+    editMode: boolean,
+    isFormUpdateable: () => boolean,
+  ) => Record<string, ElementType>;
 }
 
 export interface ServiceIssueIssue_View_EditCommentsComponentProps {
   uniqueId: string;
   actions: ServiceIssueIssue_View_EditCommentsComponentActionDefinitions;
   refreshCounter: number;
+  isOwnerLoading?: boolean;
+  isDraft?: boolean;
   validationError?: string;
   ownerData: ServiceIssueStored;
   editMode: boolean;
@@ -89,7 +101,17 @@ export interface ServiceIssueIssue_View_EditCommentsComponentProps {
 // XMIID: User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable
 // Name: comments
 export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssueIssue_View_EditCommentsComponentProps) {
-  const { uniqueId, actions, refreshCounter, validationError, ownerData, editMode, isFormUpdateable } = props;
+  const {
+    uniqueId,
+    actions,
+    refreshCounter,
+    isOwnerLoading,
+    isDraft,
+    validationError,
+    ownerData,
+    editMode,
+    isFormUpdateable,
+  } = props;
   const filterModelKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -98,7 +120,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const { locale: l10nLocale } = useL10N();
   const { t } = useTranslation();
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isInternalLoading, setIsInternalLoading] = useState<boolean>(false);
   const [data, setData] = useState<GridRowModel<ServiceCommentStored>[]>(ownerData?.comments || []);
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>([]);
   const [sortModel, setSortModel] = useState<GridSortModel>([{ field: 'comment', sort: null }]);
@@ -106,14 +128,15 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 10,
+    pageSize: rowsPerPage,
     page: 0,
   });
   const [queryCustomizer, setQueryCustomizer] = useState<ServiceCommentQueryCustomizer>({
-    _mask: '{comment,created,createdByName,upVotes,downVotes}',
+    _mask: '{comment,created,createdByName,downVotes,upVotes}',
     _seek: {
-      limit: 10 + 1,
+      limit: rowsPerPage + 1,
     },
     _orderBy: sortModel.length
       ? [
@@ -126,12 +149,14 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
 
+  const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
+
   const selectedRows = useRef<ServiceCommentStored[]>([]);
 
   const commentColumn: GridColDef<ServiceCommentStored> = {
     ...baseColumnConfig,
     field: 'comment',
-    headerName: t('service.Issue.Issue_View_Edit.comment', { defaultValue: 'Comment' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.comments.comment', { defaultValue: 'Comment' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -141,7 +166,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const createdColumn: GridColDef<ServiceCommentStored> = {
     ...baseColumnConfig,
     field: 'created',
-    headerName: t('service.Issue.Issue_View_Edit.created', { defaultValue: 'Created' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.comments.created', { defaultValue: 'Created' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 170,
@@ -166,7 +191,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const createdByNameColumn: GridColDef<ServiceCommentStored> = {
     ...baseColumnConfig,
     field: 'createdByName',
-    headerName: t('service.Issue.Issue_View_Edit.createdByName', { defaultValue: 'CreatedByName' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.comments.createdByName', { defaultValue: 'CreatedByName' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 230,
@@ -176,7 +201,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const upVotesColumn: GridColDef<ServiceCommentStored> = {
     ...baseColumnConfig,
     field: 'upVotes',
-    headerName: t('service.Issue.Issue_View_Edit.upVotes', { defaultValue: 'up' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.comments.upVotes', { defaultValue: 'up' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -189,7 +214,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const downVotesColumn: GridColDef<ServiceCommentStored> = {
     ...baseColumnConfig,
     field: 'downVotes',
-    headerName: t('service.Issue.Issue_View_Edit.downVotes', { defaultValue: 'down' }) as string,
+    headerName: t('service.Issue.Issue_View_Edit.comments.downVotes', { defaultValue: 'down' }) as string,
     headerClassName: 'data-grid-column-header',
 
     width: 100,
@@ -205,30 +230,100 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     [l10nLocale],
   );
 
-  const rowActions: TableRowAction<ServiceCommentStored>[] = [
-    {
-      id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
-      icon: <MdiIcon path="thumb-down" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.commentsVoteDownForCommentAction
-        ? async (rowData) => {
-            await actions.commentsVoteDownForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-    {
-      id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
-      label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
-      icon: <MdiIcon path="thumb-up" />,
-      disabled: (row: ServiceCommentStored) => editMode || isLoading,
-      action: actions.commentsVoteUpForCommentAction
-        ? async (rowData) => {
-            await actions.commentsVoteUpForCommentAction!(rowData);
-          }
-        : undefined,
-    },
-  ];
+  const rowActions: TableRowAction<ServiceCommentStored>[] = useMemo(
+    () => [
+      {
+        id: 'User/(esm/_3lHoQH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Issue.Issue_View_Edit.voteDown', { defaultValue: 'voteDown' }) as string,
+        icon: <MdiIcon path="thumb-down" />,
+        disabled: (row: ServiceCommentStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.commentsVoteDownForCommentAction
+          ? async (rowData) => {
+              await actions.commentsVoteDownForCommentAction!(rowData);
+            }
+          : undefined,
+      },
+      {
+        id: 'User/(esm/_3lCIsH4bEe2j59SYy0JH0Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceTableRowButtonGroup)',
+        label: t('service.Issue.Issue_View_Edit.voteUp', { defaultValue: 'voteUp' }) as string,
+        icon: <MdiIcon path="thumb-up" />,
+        disabled: (row: ServiceCommentStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        action: actions.commentsVoteUpForCommentAction
+          ? async (rowData) => {
+              await actions.commentsVoteUpForCommentAction!(rowData);
+            }
+          : undefined,
+      },
+    ],
+    [actions, isLoading],
+  );
+
+  const effectiveTableColumns = useMemo(
+    () => [
+      ...columns,
+      ...columnsActionCalculator('User/(esm/_UjefsIybEe2VSOmaAz6G9Q)/RelationType', rowActions, t, {
+        crudOperationsDisplayed: 1,
+        transferOperationsDisplayed: 0,
+      }),
+    ],
+    [columns, rowActions],
+  );
+
+  const getRowIdentifier: (row: Pick<ServiceCommentStored, '__identifier'>) => string = (row) => row.__identifier!;
+
+  const getSelectedRows: () => ServiceCommentStored[] = () => {
+    return [];
+  };
+
+  const clearSelections = () => {
+    handleOnSelection([]);
+  };
+
+  const additionalToolbarActions: Record<string, ElementType> = actions?.commentsAdditionalToolbarButtons
+    ? actions.commentsAdditionalToolbarButtons(
+        data,
+        isLoading,
+        getSelectedRows(),
+        clearSelections,
+        ownerData,
+        editMode,
+        isFormUpdateable,
+      )
+    : {};
+  const AdditionalToolbarActions = () => {
+    return (
+      <>
+        {Object.keys(additionalToolbarActions).map((key) => {
+          const AdditionalButton = additionalToolbarActions[key];
+          return <AdditionalButton key={key} />;
+        })}
+      </>
+    );
+  };
+
+  const pageSizeOptions = useMemo(() => {
+    const opts: Set<number> = new Set([rowsPerPage, ...basePageSizeOptions]);
+    return Array.from(opts.values()).sort((a, b) => a - b);
+  }, [rowsPerPage]);
+
+  const setPageSize = useCallback((newValue: number) => {
+    setRowsPerPage(newValue);
+    setPaginationModel((prevState) => ({
+      ...prevState,
+      pageSize: newValue,
+      page: 0,
+    }));
+
+    setQueryCustomizer((prevQueryCustomizer: ServiceCommentQueryCustomizer) => {
+      // we need to reset _seek so that previous configuration is erased
+      return {
+        ...prevQueryCustomizer,
+        _seek: {
+          limit: newValue + 1,
+        },
+      };
+    });
+  }, []);
 
   const filterOptions = useMemo<FilterOption[]>(
     () => [
@@ -286,7 +381,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
       return {
         ...prevQueryCustomizer,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
         ...mapAllFiltersToQueryCustomizerProperties(newFilters),
       };
@@ -319,26 +414,28 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
         ...strippedQueryCustomizer,
         _orderBy,
         _seek: {
-          limit: 10 + 1,
+          limit: rowsPerPage + 1,
         },
       };
     });
   }
 
-  useEffect(() => {
-    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, selectionModel);
-  }, [selectionModel]);
+  const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
+    selectedRows.current = getUpdatedRowsSelected(selectedRows, data, newSelectionModel);
+    setSelectionModel(selectedRows.current.map(getRowIdentifier));
+  };
 
   useEffect(() => {
     const newData = applyInMemoryFilters<ServiceCommentStored>(filters, ownerData?.comments ?? []);
     setData(newData);
+    handleOnSelection(selectionModel);
   }, [ownerData?.comments, filters]);
 
   return (
     <div id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable" data-table-name="comments">
       <StripedDataGrid
         {...baseTableConfig}
-        pageSizeOptions={[paginationModel.pageSize]}
+        pageSizeOptions={pageSizeOptions}
         sx={{
           // overflow: 'hidden',
           display: 'grid',
@@ -349,23 +446,19 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
             logicOperators: [GridLogicOperator.And],
           },
         }}
-        getRowId={(row: { __identifier: string }) => row.__identifier}
+        getRowId={getRowIdentifier}
         loading={isLoading}
         rows={data}
         getRowClassName={(params: GridRowClassNameParams) => {
           return params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd';
         }}
-        columns={[
-          ...columns,
-          ...columnsActionCalculator('User/(esm/_UjefsIybEe2VSOmaAz6G9Q)/RelationType', rowActions, t, {
-            shownActions: 2,
-          }),
-        ]}
+        columns={effectiveTableColumns}
         disableRowSelectionOnClick
         keepNonExistentRowsSelected
         onRowClick={
           actions.commentsOpenPageAction
-            ? async (params: GridRowParams<ServiceCommentStored>) => await actions.commentsOpenPageAction!(params.row)
+            ? async (params: GridRowParams<ServiceCommentStored>) =>
+                await actions.commentsOpenPageAction!(params.row, false)
             : undefined
         }
         sortModel={sortModel}
@@ -405,7 +498,11 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
                   startIcon={<MdiIcon path="refresh" />}
                   variant={'text'}
                   onClick={async () => {
-                    await actions.commentsRefreshAction!(processQueryCustomizer(queryCustomizer));
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getCommentsMask ? actions.getCommentsMask() : queryCustomizer._mask,
+                    };
+                    await actions.commentsRefreshAction!(processedQueryCustomizer);
                   }}
                   disabled={isLoading}
                 >
@@ -414,6 +511,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
                   })}
                 </Button>
               ) : null}
+              {<AdditionalToolbarActions />}
               <div>{/* Placeholder */}</div>
             </GridToolbarContainer>
           ),

@@ -21,7 +21,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -54,7 +54,7 @@ import type { ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_E
 import { ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponent } from './components/ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponent';
 
 export const SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditContainerHook';
+  'SERVICE_YES_NO_ABSTAIN_VOTE_DEFINITION_YES_NO_ABSTAIN_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditContainerHook = (
   data: ServiceYesNoAbstainVoteDefinitionStored,
   editMode: boolean,
@@ -65,7 +65,8 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   extends ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditOwnerComponentActionDefinitions,
     ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponentActionDefinitions,
     ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
-  issueOpenPageAction?: (target?: ServiceIssueStored) => Promise<void>;
+  getPageTitle?: (data: ServiceYesNoAbstainVoteDefinition) => string;
+  issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
   activateForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
   addToFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
@@ -147,14 +148,15 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
     data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
     editMode?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionDefinitions;
 
   data: ServiceYesNoAbstainVoteDefinitionStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceYesNoAbstainVoteDefinition, value: any) => void;
@@ -162,6 +164,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   validation: Map<keyof ServiceYesNoAbstainVoteDefinition, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceYesNoAbstainVoteDefinition, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_-awAIH4XEe2cB7_PsKXsHQ)/TransferObjectViewPageContainer
@@ -172,9 +175,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -207,18 +211,20 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="YesNoAbstainVoteDefinition_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_-awAIH4XEe2cB7_PsKXsHQ)/TransferObjectViewVisualElement"
+          data-name="YesNoAbstainVoteDefinition_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="actions" xs={12} sm={12}>
             <Grid
               id="User/(esm/_9jf_AHsCEe6bP4FWw7fjQA)/GroupVisualElement"
+              data-name="actions"
               container
               direction="row"
               alignItems="flex-start"
@@ -226,138 +232,120 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
               spacing={2}
             >
               <Grid item xs={12}>
-                <Grid container spacing={2}>
+                <Box sx={{ display: 'flex', gap: 1 }}>
                   {!data.isNotFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-plus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.addToFavoritesForYesNoAbstainVoteDefinitionAction
-                            ? async () => {
-                                await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.addToFavorites', {
-                            defaultValue: 'Add to favorites',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-plus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.addToFavoritesForYesNoAbstainVoteDefinitionAction
+                          ? async () => {
+                              await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.addToFavorites', {
+                        defaultValue: 'Add to favorites',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isFavorite && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="star-minus" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction
-                            ? async () => {
-                                await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t(
-                            'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.removeFromFavorites',
-                            { defaultValue: 'Remove from favorites' },
-                          )}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="star-minus" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction
+                          ? async () => {
+                              await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t(
+                        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.removeFromFavorites',
+                        { defaultValue: 'Remove from favorites' },
+                      )}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotOpen && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_9jf_BHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-check" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.closeVoteForYesNoAbstainVoteDefinitionAction
-                            ? async () => {
-                                await actions.closeVoteForYesNoAbstainVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.closeVote', {
-                            defaultValue: 'Close Vote',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_9jf_BHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-check" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.closeVoteForYesNoAbstainVoteDefinitionAction
+                          ? async () => {
+                              await actions.closeVoteForYesNoAbstainVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.closeVote', {
+                        defaultValue: 'Close Vote',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotEditable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="lock-open" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.activateForYesNoAbstainVoteDefinitionAction
-                            ? async () => {
-                                await actions.activateForYesNoAbstainVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.activate', {
-                            defaultValue: 'Activate',
-                          })}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="lock-open" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.activateForYesNoAbstainVoteDefinitionAction
+                          ? async () => {
+                              await actions.activateForYesNoAbstainVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.activate', {
+                        defaultValue: 'Activate',
+                      })}
+                    </LoadingButton>
                   )}
                   {!data.isVoteNotDeletable && (
-                    <Grid item>
-                      <LoadingButton
-                        id="User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                        loading={isLoading}
-                        startIcon={<MdiIcon path="delete" />}
-                        loadingPosition="start"
-                        onClick={
-                          actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
-                            ? async () => {
-                                await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!();
-                              }
-                            : undefined
-                        }
-                        disabled={editMode}
-                      >
-                        <span>
-                          {t(
-                            'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.deleteOrArchive',
-                            { defaultValue: 'Delete' },
-                          )}
-                        </span>
-                      </LoadingButton>
-                    </Grid>
+                    <LoadingButton
+                      id="User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                      loading={isLoading}
+                      startIcon={<MdiIcon path="delete" />}
+                      loadingPosition="start"
+                      onClick={
+                        actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
+                          ? async () => {
+                              await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!();
+                            }
+                          : undefined
+                      }
+                      disabled={editMode}
+                    >
+                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.deleteOrArchive', {
+                        defaultValue: 'Delete',
+                      })}
+                    </LoadingButton>
                   )}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="userVoteEntryGroup::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <Typography
@@ -373,9 +361,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="userVoteEntryGroup" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                      data-name="userVoteEntryGroup"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -383,20 +372,22 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       spacing={2}
                     >
                       {(actions?.isUserVoteHidden
-                        ? actions?.isUserVoteHidden(data, editMode)
+                        ? !actions?.isUserVoteHidden(data, editMode)
                         : !data.userHasNoVoteEntry) && (
-                        <Grid item xs={12} sm={12}>
+                        <Grid item data-name="userVote" xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_7M-INVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                            data-name="userVote"
                             container
                             direction="row"
                             alignItems="flex-start"
                             justifyContent="flex-start"
                             spacing={2}
                           >
-                            <Grid item xs={12} sm={12}>
+                            <Grid item data-name="VirtualForUserVote" xs={12} sm={12}>
                               <Grid
                                 id="User/(esm/_7M-INlsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                                data-name="VirtualForUserVote"
                                 container
                                 direction="row"
                                 alignItems="flex-start"
@@ -421,12 +412,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                                       editMode
                                     }
                                   >
-                                    <span>
-                                      {t(
-                                        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.takeBackVote',
-                                        { defaultValue: 'TakeBackVote' },
-                                      )}
-                                    </span>
+                                    {t(
+                                      'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.takeBackVote',
+                                      { defaultValue: 'TakeBackVote' },
+                                    )}
                                   </LoadingButton>
                                 </Grid>
 
@@ -437,6 +426,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                                     ownerData={data}
                                     editMode={editMode}
                                     isLoading={isLoading}
+                                    isDraft={isDraft}
                                     storeDiff={storeDiff}
                                     validationError={validation.get('userVoteEntry')}
                                     actions={actions}
@@ -450,11 +440,12 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                       )}
 
                       {(actions?.isTakeVoteHidden
-                        ? actions?.isTakeVoteHidden(data, editMode)
+                        ? !actions?.isTakeVoteHidden(data, editMode)
                         : !data.userHasVoteEntry) && (
-                        <Grid item xs={12} sm={12}>
+                        <Grid item data-name="TakeVote" xs={12} sm={12}>
                           <Grid
                             id="User/(esm/_7M-IO1snEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                            data-name="TakeVote"
                             container
                             direction="row"
                             alignItems="flex-start"
@@ -475,11 +466,9 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                                 }}
                                 disabled={!actions.voteAction || !data.userHasNoVoteEntry || editMode}
                               >
-                                <span>
-                                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.vote', {
-                                    defaultValue: 'Take a vote',
-                                  })}
-                                </span>
+                                {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.vote', {
+                                  defaultValue: 'Take a vote',
+                                })}
                               </LoadingButton>
                             </Grid>
                           </Grid>
@@ -492,13 +481,14 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="User/(esm/_7M-IIFsnEe6Mx9dH3yj5gQ)/GroupVisualElement">
+          <Grid item data-name="VoteEntryBase" xs={12} sm={12}>
+            <Card id="User/(esm/_7M-IIFsnEe6Mx9dH3yj5gQ)/GroupVisualElement" data-name="VoteEntryBase">
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item data-name="virtual" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_7M-IIVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                      data-name="virtual"
                       container
                       direction="row"
                       alignItems="flex-start"
@@ -510,7 +500,6 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                           required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                           name="title"
                           id="User/(esm/_7M-IIlsnEe6Mx9dH3yj5gQ)/StringTypeTextInput"
-                          autoFocus
                           label={
                             t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.title', {
                               defaultValue: 'Title',
@@ -540,7 +529,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -734,6 +723,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                           ownerData={data}
                           editMode={editMode}
                           isLoading={isLoading}
+                          isDraft={isDraft}
                           storeDiff={storeDiff}
                           validationError={validation.get('owner')}
                           actions={actions}
@@ -781,7 +771,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                             ),
                           }}
                           inputProps={{
-                            maxlength: 16384,
+                            maxLength: 16384,
                           }}
                         />
                       </Grid>
@@ -792,9 +782,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="entries::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="entries::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -815,9 +806,10 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                 </Grid>
               </Grid>
 
-              <Grid item xs={12} sm={12}>
+              <Grid item data-name="entries" xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                  data-name="entries"
                   container
                   direction="row"
                   alignItems="stretch"
@@ -840,6 +832,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                         isFormUpdateable={isFormUpdateable}
                         validationError={validation.get('voteEntries')}
                         refreshCounter={refreshCounter}
+                        isOwnerLoading={isLoading}
                       />
                     </Grid>
                   </Grid>

@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,21 +28,27 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceProPro_TablePro_TableComponentActionDefinitions } from './components/ServiceProPro_TablePro_TableComponent';
 import { ServiceProPro_TablePro_TableComponent } from './components/ServiceProPro_TablePro_TableComponent';
 
-export const SERVICE_PRO_PRO_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY = 'ServiceProPro_TableContainerHook';
+export const SERVICE_PRO_PRO_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
+  'SERVICE_PRO_PRO_TABLE_CONTAINER_ACTIONS_HOOK';
 export type ServiceProPro_TableContainerHook = () => ServiceProPro_TableActionDefinitions;
 
-export interface ServiceProPro_TableActionDefinitions extends ServiceProPro_TablePro_TableComponentActionDefinitions {}
+export interface ServiceProPro_TableActionDefinitions extends ServiceProPro_TablePro_TableComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceProPro_TableProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceProPro_TableActionDefinitions;
+
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTablePageContainer
 // Name: service::Pro::Pro_Table
 export default function ServiceProPro_Table(props: ServiceProPro_TableProps) {
   // Container props
-  const { refreshCounter, actions: pageActions } = props;
+  const { refreshCounter, isLoading, isDraft, actions: pageActions } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -59,10 +65,10 @@ export default function ServiceProPro_Table(props: ServiceProPro_TableProps) {
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableVisualElement">
+      <Grid item data-name="Pro_Table" xs={12} sm={12} md={36.0}>
+        <Card id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableVisualElement" data-name="Pro_Table">
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable"
@@ -75,6 +81,7 @@ export default function ServiceProPro_Table(props: ServiceProPro_TableProps) {
                     uniqueId={'User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable'}
                     actions={actions}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

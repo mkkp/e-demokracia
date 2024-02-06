@@ -28,6 +28,10 @@ export interface ServiceServiceUserServiceForResidentDistrict {
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplate(): Promise<ServiceDistrict>;
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,

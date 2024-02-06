@@ -39,12 +39,13 @@ export interface ServiceCreateIssueInputCreateIssueInput_TableDialogActions
 
 export interface ServiceCreateIssueInputCreateIssueInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceCreateIssueInputCreateIssueInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::CreateIssueInput::CreateIssueInput_Table
@@ -55,12 +56,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -77,7 +78,12 @@ export default function ServiceCreateIssueInputCreateIssueInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceCreateIssueInputCreateIssueInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceCreateIssueInputCreateIssueInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

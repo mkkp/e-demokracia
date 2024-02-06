@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -28,6 +28,7 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import {
   ServiceIssueCategory,
@@ -41,7 +42,7 @@ import type { ServiceIssueCategoryIssueCategory_FormOwnerComponentActionDefiniti
 import { ServiceIssueCategoryIssueCategory_FormOwnerComponent } from './components/ServiceIssueCategoryIssueCategory_FormOwnerComponent';
 
 export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueCategoryIssueCategory_FormContainerHook';
+  'SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueCategoryIssueCategory_FormContainerHook = (
   data: ServiceIssueCategoryStored,
   editMode: boolean,
@@ -50,6 +51,7 @@ export type ServiceIssueCategoryIssueCategory_FormContainerHook = (
 
 export interface ServiceIssueCategoryIssueCategory_FormActionDefinitions
   extends ServiceIssueCategoryIssueCategory_FormOwnerComponentActionDefinitions {
+  getPageTitle?: (data: ServiceIssueCategory) => string;
   isDescriptionRequired?: (data: ServiceIssueCategory | ServiceIssueCategoryStored, editMode?: boolean) => boolean;
   isDescriptionDisabled?: (
     data: ServiceIssueCategory | ServiceIssueCategoryStored,
@@ -66,10 +68,10 @@ export interface ServiceIssueCategoryIssueCategory_FormActionDefinitions
 
 export interface ServiceIssueCategoryIssueCategory_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueCategoryIssueCategory_FormActionDefinitions;
 
   data: ServiceIssueCategoryStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void;
@@ -77,6 +79,7 @@ export interface ServiceIssueCategoryIssueCategory_FormProps {
   validation: Map<keyof ServiceIssueCategory, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueCategory, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_qJLksGksEe25ONJ3V89cVA)/TransferObjectFormPageContainer
@@ -85,9 +88,10 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -116,24 +120,36 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
   const containerActions: ServiceIssueCategoryIssueCategory_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="IssueCategory_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_qJLksGksEe25ONJ3V89cVA)/TransferObjectFormVisualElement"
+          data-name="IssueCategory_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
               name="title"
               id="User/(esm/_T0LtQG49Ee2Q6M99rsfqSQ)/StringTypeTextInput"
-              autoFocus
+              inputRef={autoFocusInputRef}
               label={t('service.IssueCategory.IssueCategory_Form.title', { defaultValue: 'Title' }) as string}
               value={data.title ?? ''}
               className={clsx({
@@ -157,12 +173,12 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
               name="description"
@@ -194,7 +210,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
                 ),
               }}
               inputProps={{
-                maxlength: 16384,
+                maxLength: 16384,
               }}
             />
           </Grid>
@@ -206,6 +222,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
               ownerData={data}
               editMode={editMode}
               isLoading={isLoading}
+              isDraft={isDraft}
               storeDiff={storeDiff}
               validationError={validation.get('owner')}
               actions={actions}

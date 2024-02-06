@@ -9,14 +9,19 @@
 import type { GridFilterModel } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useMemo, useState } from 'react';
+import { Suspense, createContext, lazy, useContext, useMemo, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions } from '~/containers/Service/YesNoVoteDefinition/YesNoVoteDefinition_Table/ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageContainer';
+import type {
+  ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions,
+  ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageProps,
+} from '~/containers/Service/YesNoVoteDefinition/YesNoVoteDefinition_Table/ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageContainer';
 import { useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm } from '~/dialogs/Service/YesNoVoteDefinition/YesNoVoteDefinition_View_Edit/Vote/Input/Form';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import { routeToServiceUserYesNoVoteDefinitionsAccessViewPage } from '~/routes';
 import type {
   ServiceYesNoVoteDefinition,
@@ -28,7 +33,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActionsExtended =
@@ -43,11 +48,30 @@ export type ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActionsExtend
   };
 
 export const SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableActionsHook';
+  'SERVICE_USER_YES_NO_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK';
 export type ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableActionsHook = (
   data: ServiceYesNoVoteDefinitionStored[],
   editMode: boolean,
 ) => ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActionsExtended;
+
+export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModel
+  extends ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModelContext =
+  createContext<ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModel>({} as any);
+export const useServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModel = () => {
+  const context = useContext(ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModel must be used within a(n) ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModelProvider',
+    );
+  }
+  return context;
+};
 
 const ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageContainer = lazy(
   () =>
@@ -71,6 +95,7 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -79,6 +104,12 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [refreshCounter, setRefreshCounter] = useState<number>(0);
   const [data, setData] = useState<ServiceYesNoVoteDefinitionStored[]>([]);
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    setRefreshCounter((prev) => prev + 1);
+  };
 
   // Pandino Action overrides
   const { service: customActionsHook } =
@@ -92,15 +123,13 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
   const openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm =
     useServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm();
 
-  // Calculated section
-  const title: string = t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table', {
-    defaultValue: 'YesNoVoteDefinition Table',
-  });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (): string => {
+    return t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table', { defaultValue: 'YesNoVoteDefinition Table' });
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
   const filterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -121,15 +150,25 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
       return userServiceForYesNoVoteDefinitionsImpl.list(undefined, queryCustomizer);
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
-      setRefreshCounter((prevCounter) => prevCounter + 1);
     }
   };
-  const openPageAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
-    // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
-    navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(target!.__signedIdentifier));
+  const openPageAction = async (
+    target: ServiceYesNoVoteDefinition | ServiceYesNoVoteDefinitionStored,
+    isDraft?: boolean,
+  ) => {
+    if (isDraft && (!target || !(target as ServiceYesNoVoteDefinitionStored).__signedIdentifier)) {
+    } else if (!isDraft) {
+      // if the `target` is missing we are likely navigating to a relation table page, in which case we need the owner's id
+      navigate(
+        routeToServiceUserYesNoVoteDefinitionsAccessViewPage(
+          (target as ServiceYesNoVoteDefinitionStored)!.__signedIdentifier,
+        ),
+      );
+    }
   };
   const activateForYesNoVoteDefinitionAction = async (target?: ServiceYesNoVoteDefinitionStored) => {
     try {
@@ -221,7 +260,12 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
       setIsLoading(false);
     }
   };
-  const voteAction = async (target: ServiceYesNoVoteDefinitionStored) => {
+  const voteAction = async (
+    target: ServiceYesNoVoteDefinitionStored,
+    templateDataOverride?: Partial<ServiceYesNoVoteDefinition>,
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteInputForm(target);
     if (result === 'submit') {
@@ -248,6 +292,8 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
   };
 
   const actions: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageActions = {
+    getPageTitle,
+    backAction,
     filterAction,
     refreshAction,
     openPageAction,
@@ -261,17 +307,28 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModel = {
+    actions,
+    isLoading,
+    setIsLoading,
+    refreshCounter,
+    editMode,
+    setEditMode,
+    refresh,
+  };
+
   // Effect section
 
   return (
-    <div
-      id="User/(esm/_zCZh0FoTEe6_67aMO2jOsw)/AccessTablePageDefinition"
-      data-page-name="service::User::yesNoVoteDefinitions::AccessTablePage"
-    >
+    <ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_zCZh0FoTEe6_67aMO2jOsw)/AccessTablePageDefinition"
+          data-page-name="service::User::yesNoVoteDefinitions::AccessTablePage"
+        />
         <PageContainerTransition>
           <ServiceYesNoVoteDefinitionYesNoVoteDefinition_TablePageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -279,6 +336,6 @@ export default function ServiceUserYesNoVoteDefinitionsAccessTablePage() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableViewModelContext.Provider>
   );
 }

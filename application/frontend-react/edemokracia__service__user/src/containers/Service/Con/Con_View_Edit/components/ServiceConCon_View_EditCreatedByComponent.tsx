@@ -19,7 +19,7 @@ import type {
 } from '~/services/data-api';
 import { processQueryCustomizer } from '~/utilities';
 export interface ServiceConCon_View_EditCreatedByComponentActionDefinitions {
-  createdByOpenPageAction?: (target: ServiceServiceUserStored) => Promise<void>;
+  createdByOpenPageAction?: (target: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   createdByAutocompleteRangeAction?: (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ) => Promise<Array<ServiceServiceUserStored>>;
@@ -37,12 +37,14 @@ export interface ServiceConCon_View_EditCreatedByComponentProps {
   readOnly?: boolean;
   editMode?: boolean;
   isLoading?: boolean;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_WifZAIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedLink
 // Name: createdBy
 export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_View_EditCreatedByComponentProps) {
-  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading } = props;
+  const { ownerData, actions, storeDiff, submit, validationError, disabled, readOnly, editMode, isLoading, isDraft } =
+    props;
   const { t } = useTranslation();
 
   return (
@@ -59,6 +61,7 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
       disabled={actions?.isCreatedByDisabled ? actions.isCreatedByDisabled(ownerData, editMode, isLoading) : disabled}
       readOnly={readOnly}
       editMode={editMode}
+      isInlineCreatable={false && !isDraft}
       autoCompleteAttribute={'representation'}
       onAutoCompleteSelect={(createdBy) => {
         storeDiff('createdBy', createdBy);
@@ -83,7 +86,7 @@ export function ServiceConCon_View_EditCreatedByComponent(props: ServiceConCon_V
       onView={
         ownerData.createdBy && actions.createdByOpenPageAction
           ? async () => {
-              await actions.createdByOpenPageAction!(ownerData.createdBy!);
+              await actions.createdByOpenPageAction!(ownerData.createdBy!, false);
             }
           : undefined
       }

@@ -34,7 +34,6 @@ export interface ServiceProPro_View_EditDialogActions extends ServiceProPro_View
 
 export interface ServiceProPro_View_EditDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceProPro_View_EditDialogActions;
   isLoading: boolean;
@@ -48,6 +47,7 @@ export interface ServiceProPro_View_EditDialogProps {
   validation: Map<keyof ServicePro, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServicePro, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // Name: service::Pro::Pro_View_Edit
@@ -58,7 +58,6 @@ export default function ServiceProPro_View_EditDialog(props: ServiceProPro_View_
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -71,16 +70,18 @@ export default function ServiceProPro_View_EditDialog(props: ServiceProPro_View_
     validation,
     setValidation,
     submit,
+    isDraft,
   } = props;
   const queryCustomizer: ServiceProQueryCustomizer = {
-    _mask:
-      '{created,description,downVotes,title,upVotes,cons{title,upVotes,downVotes},pros{title,upVotes,downVotes},createdBy{representation}}',
+    _mask: actions.getMask
+      ? actions.getMask!()
+      : '{created,description,downVotes,title,upVotes,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},createdBy{representation}}',
   };
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle(data) : ''}
         <IconButton
           id="User/(esm/_qLQBQGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -100,8 +101,8 @@ export default function ServiceProPro_View_EditDialog(props: ServiceProPro_View_
           <ServiceProPro_View_Edit
             actions={actions}
             refreshCounter={refreshCounter}
-            data={data}
             isLoading={isLoading}
+            data={data}
             editMode={editMode}
             storeDiff={storeDiff}
             isFormUpdateable={isFormUpdateable}
@@ -109,6 +110,7 @@ export default function ServiceProPro_View_EditDialog(props: ServiceProPro_View_
             validation={validation}
             setValidation={setValidation}
             submit={submit}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

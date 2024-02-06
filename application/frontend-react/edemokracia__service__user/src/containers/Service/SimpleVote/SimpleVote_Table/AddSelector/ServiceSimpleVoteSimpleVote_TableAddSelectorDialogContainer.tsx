@@ -34,7 +34,6 @@ export interface ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions
 
 export interface ServiceSimpleVoteSimpleVote_TableAddSelectorDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceSimpleVoteSimpleVote_TableAddSelectorDialogActions;
   isLoading: boolean;
@@ -43,6 +42,7 @@ export interface ServiceSimpleVoteSimpleVote_TableAddSelectorDialogProps {
   alreadySelected: ServiceSimpleVoteStored[];
   selectionDiff: ServiceSimpleVoteStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceSimpleVoteStored[]>>;
+  isDraft?: boolean;
 }
 
 // Name: service::SimpleVote::SimpleVote_Table::AddSelector
@@ -55,7 +55,6 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelectorDialog(
   const { navigate, back } = useJudoNavigation();
   const {
     ownerData,
-    title,
     onClose,
     actions,
     isLoading,
@@ -64,12 +63,13 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelectorDialog(
     selectionDiff,
     setSelectionDiff,
     alreadySelected,
+    isDraft,
   } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorPageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -89,9 +89,11 @@ export default function ServiceSimpleVoteSimpleVote_TableAddSelectorDialog(
           <ServiceSimpleVoteSimpleVote_TableAddSelector
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
             selectionDiff={selectionDiff}
             setSelectionDiff={setSelectionDiff}
             alreadySelected={alreadySelected}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -33,7 +33,7 @@ import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 
 export const SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceSimpleVoteSimpleVote_View_EditContainerHook';
+  'SERVICE_SIMPLE_VOTE_SIMPLE_VOTE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceSimpleVoteSimpleVote_View_EditContainerHook = (
   data: ServiceSimpleVoteStored,
   editMode: boolean,
@@ -41,6 +41,7 @@ export type ServiceSimpleVoteSimpleVote_View_EditContainerHook = (
 ) => ServiceSimpleVoteSimpleVote_View_EditActionDefinitions;
 
 export interface ServiceSimpleVoteSimpleVote_View_EditActionDefinitions {
+  getPageTitle?: (data: ServiceSimpleVote) => string;
   isCreatedRequired?: (data: ServiceSimpleVote | ServiceSimpleVoteStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (
     data: ServiceSimpleVote | ServiceSimpleVoteStored,
@@ -53,14 +54,15 @@ export interface ServiceSimpleVoteSimpleVote_View_EditActionDefinitions {
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceSimpleVoteSimpleVote_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceSimpleVoteSimpleVote_View_EditActionDefinitions;
 
   data: ServiceSimpleVoteStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceSimpleVote, value: any) => void;
@@ -68,6 +70,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditProps {
   validation: Map<keyof ServiceSimpleVote, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceSimpleVote, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -76,9 +79,10 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -110,18 +114,20 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="SimpleVote_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p81x0GksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="SimpleVote_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group" xs={12} sm={12}>
             <Grid
               id="User/(esm/_GLaiwG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group"
               container
               direction="row"
               alignItems="flex-start"
@@ -136,7 +142,6 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': true,
                   })}
-                  autoFocus
                   slotProps={{
                     textField: {
                       id: 'User/(esm/_VQQiIGk5Ee25ONJ3V89cVA)/TimestampTypeDateTimeInput',
@@ -219,9 +224,10 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
             </Grid>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="group_2" xs={12} sm={12}>
             <Grid
               id="User/(esm/_QqUxoG5DEe2Q6M99rsfqSQ)/GroupVisualElement"
+              data-name="group_2"
               container
               direction="row"
               alignItems="flex-start"

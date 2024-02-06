@@ -12,7 +12,7 @@ export function RowHighlightLegend(props: { rowStylings: RowStylerConfigured<any
         <div key={s.name}>
           <Box sx={{ mt: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <MdiIcon path="record" sx={{ mr: 1, ml: idx > 0 ? 3 : 0, color: s.backgroundColor }} />
-            <Typography variant="body1">
+            <Typography variant="body1" sx={s.fontColor ? { color: s.fontColor } : {}}>
               {t(`table-custom-row-style-${s.name}`, { defaultValue: s.label }) as string}
             </Typography>
           </Box>

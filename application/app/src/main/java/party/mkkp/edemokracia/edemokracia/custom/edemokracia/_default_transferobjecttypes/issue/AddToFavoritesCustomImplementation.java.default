@@ -27,6 +27,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia._default_transfero
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.AddToFavorites.class)
 public class AddToFavoritesCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia._default_transferobjecttypes.issue.AddToFavorites {
 
+    @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue _this)  {
         throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia._default_transferobjecttypes.issue.AddToFavoritesExchangeFunctionsComponent");
     }

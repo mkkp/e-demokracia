@@ -39,12 +39,13 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: CloseDebateOutputVoteDefinitionReference::CloseDebateOutputVoteDefinitionReference_Table
@@ -55,12 +56,12 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -80,6 +81,8 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Table
             actions={actions}
             refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
           />
         </Suspense>
       </DialogContent>

@@ -8,13 +8,17 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { CreateArgumentInputCreateArgumentInput_FormDialogActions } from '~/containers/CreateArgumentInput/CreateArgumentInput_Form/CreateArgumentInputCreateArgumentInput_FormDialogContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  CreateArgumentInputCreateArgumentInput_FormDialogActions,
+  CreateArgumentInputCreateArgumentInput_FormDialogProps,
+} from '~/containers/CreateArgumentInput/CreateArgumentInput_Form/CreateArgumentInputCreateArgumentInput_FormDialogContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   CreateArgumentInput,
   CreateArgumentInputQueryCustomizer,
@@ -23,7 +27,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
@@ -37,23 +41,61 @@ export type CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended =
       data: CreateArgumentInput,
       storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: CreateArgumentInput,
+      res: CreateArgumentInputStored,
+      onSubmit: (result?: CreateArgumentInputStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY =
-  'CreateArgumentInputCreateArgumentInput_FormActionsHook';
+  'SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK';
 export type CreateArgumentInputCreateArgumentInput_FormActionsHook = (
   ownerData: any,
   data: CreateArgumentInputStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof CreateArgumentInput, value: any) => void,
+  submit: () => Promise<void>,
 ) => CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended;
+
+export interface CreateArgumentInputCreateArgumentInput_FormViewModel
+  extends CreateArgumentInputCreateArgumentInput_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<CreateArgumentInput>;
+  isDraft?: boolean;
+}
+
+const CreateArgumentInputCreateArgumentInput_FormViewModelContext =
+  createContext<CreateArgumentInputCreateArgumentInput_FormViewModel>({} as any);
+export const useCreateArgumentInputCreateArgumentInput_FormViewModel = () => {
+  const context = useContext(CreateArgumentInputCreateArgumentInput_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useCreateArgumentInputCreateArgumentInput_FormViewModel must be used within a(n) CreateArgumentInputCreateArgumentInput_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceIssueIssue_View_EditCreateConArgumentInputForm = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<CreateArgumentInput>,
+  isDraft?: boolean,
+  ownerValidation?: (data: CreateArgumentInput) => Promise<void>,
 ) => Promise<DialogResult<CreateArgumentInputStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<CreateArgumentInput>,
+    isDraft?: boolean,
+    ownerValidation?: (data: CreateArgumentInput) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +111,19 @@ export const useServiceIssueIssue_View_EditCreateConArgumentInputForm = (): ((
         children: (
           <ServiceIssueIssue_View_EditCreateConArgumentInputForm
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async () => {
+            onSubmit={async (isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
               });
             }}
           />
@@ -104,8 +149,11 @@ const CreateArgumentInputCreateArgumentInput_FormDialogContainer = lazy(
 export interface ServiceIssueIssue_View_EditCreateConArgumentInputFormProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<CreateArgumentInput>;
+  isDraft?: boolean;
+  ownerValidation?: (data: CreateArgumentInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: CreateArgumentInputStored) => Promise<void>;
+  onSubmit: (result?: CreateArgumentInputStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition
@@ -113,7 +161,7 @@ export interface ServiceIssueIssue_View_EditCreateConArgumentInputFormProps {
 export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   props: ServiceIssueIssue_View_EditCreateConArgumentInputFormProps,
 ) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const serviceIssueServiceImpl = useMemo(() => new ServiceIssueServiceImpl(judoAxiosProvider), []);
@@ -124,6 +172,7 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -166,29 +215,33 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: CreateArgumentInput) => Promise<void> = async (data) => {};
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<CreateArgumentInputCreateArgumentInput_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CREATE_CON_ARGUMENT_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const customActions: CreateArgumentInputCreateArgumentInput_FormDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, storeDiff);
+    customActionsHook?.(ownerData, data, editMode, storeDiff, submit);
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: CreateArgumentInput): string => {
+    return t('CreateArgumentInput.CreateArgumentInput_Form', { defaultValue: 'CreateArgumentInput Form' });
+  };
   const backAction = async () => {
     onClose();
   };
   const createConArgumentForIssueAction = async () => {
     try {
       setIsLoading(true);
-      await serviceIssueServiceImpl.createConArgument(ownerData, payloadDiff.current);
+      await serviceIssueServiceImpl.createConArgument(ownerData, cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateConArgumentForIssueAction) {
         await customActions.postCreateConArgumentForIssueAction(onSubmit, onClose);
       } else {
@@ -214,6 +267,12 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof CreateArgumentInputStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -224,10 +283,33 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   };
 
   const actions: CreateArgumentInputCreateArgumentInput_FormDialogActions = {
+    getPageTitle,
     backAction,
     createConArgumentForIssueAction,
     getTemplateAction,
     ...(customActions ?? {}),
+  };
+
+  // ViewModel setup
+  const viewModel: CreateArgumentInputCreateArgumentInput_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
   };
 
   // Effect section
@@ -236,15 +318,15 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
   }, []);
 
   return (
-    <div
-      id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
-      data-page-name="service::Issue::Issue_View_Edit::createConArgument::Input::Form"
-    >
+    <CreateArgumentInputCreateArgumentInput_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition"
+          data-page-name="service::Issue::Issue_View_Edit::createConArgument::Input::Form"
+        />
         <CreateArgumentInputCreateArgumentInput_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -256,8 +338,9 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </CreateArgumentInputCreateArgumentInput_FormViewModelContext.Provider>
   );
 }

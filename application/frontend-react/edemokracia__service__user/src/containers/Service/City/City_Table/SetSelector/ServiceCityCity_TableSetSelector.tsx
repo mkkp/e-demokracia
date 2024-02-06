@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,25 +29,37 @@ import type { ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponentActi
 import { ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponent } from './components/ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponent';
 
 export const SERVICE_CITY_CITY_TABLE_SET_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCityCity_TableSetSelectorContainerHook';
+  'SERVICE_CITY_CITY_TABLE_SET_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceCityCity_TableSetSelectorContainerHook = () => ServiceCityCity_TableSetSelectorActionDefinitions;
 
 export interface ServiceCityCity_TableSetSelectorActionDefinitions
-  extends ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponentActionDefinitions {}
+  extends ServiceCityCity_TableSetSelectorCity_TableSetSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceCityCity_TableSetSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCityCity_TableSetSelectorActionDefinitions;
   selectionDiff: ServiceCityStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceCityStored[]>>;
   alreadySelected: ServiceCityStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorPageContainer
 // Name: service::City::City_Table::SetSelector
 export default function ServiceCityCity_TableSetSelector(props: ServiceCityCity_TableSetSelectorProps) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -64,10 +76,13 @@ export default function ServiceCityCity_TableSetSelector(props: ServiceCityCity_
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorVisualElement">
+      <Grid item data-name="City_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorVisualElement"
+          data-name="City_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_a0Xkt32iEe2LTNnGda5kaw)/TransferObjectTableSetSelectorTable"
@@ -83,6 +98,7 @@ export default function ServiceCityCity_TableSetSelector(props: ServiceCityCity_
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

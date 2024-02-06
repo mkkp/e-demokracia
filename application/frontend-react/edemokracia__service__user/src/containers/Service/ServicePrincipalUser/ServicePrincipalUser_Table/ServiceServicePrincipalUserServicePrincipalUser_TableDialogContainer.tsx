@@ -39,12 +39,13 @@ export interface ServiceServicePrincipalUserServicePrincipalUser_TableDialogActi
 
 export interface ServiceServicePrincipalUserServicePrincipalUser_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: ServiceServicePrincipalUserServicePrincipalUser_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: service::ServicePrincipalUser::ServicePrincipalUser_Table
@@ -55,12 +56,12 @@ export default function ServiceServicePrincipalUserServicePrincipalUser_TableDia
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_ndKGgGkwEe25ONJ3V89cVA)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -77,7 +78,12 @@ export default function ServiceServicePrincipalUserServicePrincipalUser_TableDia
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <ServiceServicePrincipalUserServicePrincipalUser_Table actions={actions} refreshCounter={refreshCounter} />
+          <ServiceServicePrincipalUserServicePrincipalUser_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

@@ -17,7 +17,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -29,26 +29,38 @@ import type { ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorCompone
 import { ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorComponent } from './components/ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorComponent';
 
 export const SERVICE_COUNTY_COUNTY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCountyCounty_TableAddSelectorContainerHook';
+  'SERVICE_COUNTY_COUNTY_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK';
 export type ServiceCountyCounty_TableAddSelectorContainerHook =
   () => ServiceCountyCounty_TableAddSelectorActionDefinitions;
 
 export interface ServiceCountyCounty_TableAddSelectorActionDefinitions
-  extends ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorComponentActionDefinitions {}
+  extends ServiceCountyCounty_TableAddSelectorCounty_TableAddSelectorComponentActionDefinitions {
+  getPageTitle?: () => string;
+}
 
 export interface ServiceCountyCounty_TableAddSelectorProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCountyCounty_TableAddSelectorActionDefinitions;
   selectionDiff: ServiceCountyStored[];
   setSelectionDiff: Dispatch<SetStateAction<ServiceCountyStored[]>>;
   alreadySelected: ServiceCountyStored[];
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorPageContainer
 // Name: service::County::County_Table::AddSelector
 export default function ServiceCountyCounty_TableAddSelector(props: ServiceCountyCounty_TableAddSelectorProps) {
   // Container props
-  const { refreshCounter, actions: pageActions, selectionDiff, setSelectionDiff, alreadySelected } = props;
+  const {
+    refreshCounter,
+    isLoading,
+    isDraft,
+    actions: pageActions,
+    selectionDiff,
+    setSelectionDiff,
+    alreadySelected,
+  } = props;
 
   // Container hooks
   const { t } = useTranslation();
@@ -65,10 +77,13 @@ export default function ServiceCountyCounty_TableAddSelector(props: ServiceCount
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
-        <Card id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorVisualElement">
+      <Grid item data-name="County_Table" xs={12} sm={12} md={36.0}>
+        <Card
+          id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorVisualElement"
+          data-name="County_Table"
+        >
           <CardContent>
-            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableAddSelectorTable"
@@ -84,6 +99,7 @@ export default function ServiceCountyCounty_TableAddSelector(props: ServiceCount
                     setSelectionDiff={setSelectionDiff}
                     alreadySelected={alreadySelected}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

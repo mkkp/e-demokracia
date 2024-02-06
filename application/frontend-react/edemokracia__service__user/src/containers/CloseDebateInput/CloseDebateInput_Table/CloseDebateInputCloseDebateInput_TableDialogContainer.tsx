@@ -32,12 +32,13 @@ export interface CloseDebateInputCloseDebateInput_TableDialogActions
 
 export interface CloseDebateInputCloseDebateInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CloseDebateInputCloseDebateInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: CloseDebateInput::CloseDebateInput_Table
@@ -48,12 +49,12 @@ export default function CloseDebateInputCloseDebateInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -70,7 +71,12 @@ export default function CloseDebateInputCloseDebateInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <CloseDebateInputCloseDebateInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <CloseDebateInputCloseDebateInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

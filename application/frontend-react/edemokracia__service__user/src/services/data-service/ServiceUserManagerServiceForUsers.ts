@@ -39,6 +39,10 @@ export interface ServiceUserManagerServiceForUsers {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored>;
   update(target: Partial<ServiceServiceUserStored>): Promise<ServiceServiceUserStored>;
+  validateUpdate(
+    owner: JudoIdentifiable<ServiceUserManager>,
+    target: Partial<ServiceServiceUserStored>,
+  ): Promise<ServiceServiceUserStored>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -49,6 +53,10 @@ export interface ServiceUserManagerServiceForUsers {
   ): Promise<Array<ServiceCityStored>>;
   getTemplateForActivityCities(): Promise<ServiceCity>;
   updateActivityCities(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
+  validateUpdateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
   ): Promise<ServiceCityStored>;
@@ -77,6 +85,10 @@ export interface ServiceUserManagerServiceForUsers {
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
   ): Promise<ServiceCountyStored>;
+  validateUpdateActivityCounties(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
@@ -99,6 +111,10 @@ export interface ServiceUserManagerServiceForUsers {
   ): Promise<Array<ServiceDistrictStored>>;
   getTemplateForActivityDistricts(): Promise<ServiceDistrict>;
   updateActivityDistricts(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
+  validateUpdateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
   ): Promise<ServiceDistrictStored>;
@@ -127,6 +143,10 @@ export interface ServiceUserManagerServiceForUsers {
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
   ): Promise<ServiceCityStored>;
+  validateUpdateResidentCity(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<ServiceCityStored>;
   setResidentCity(owner: JudoIdentifiable<ServiceServiceUser>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
   unsetResidentCity(owner: JudoIdentifiable<ServiceServiceUser>, target: JudoIdentifiable<ServiceCity>): Promise<void>;
   getResidentCounty(
@@ -139,6 +159,10 @@ export interface ServiceUserManagerServiceForUsers {
   ): Promise<Array<ServiceCountyStored>>;
   getTemplateForResidentCounty(): Promise<ServiceCounty>;
   updateResidentCounty(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<ServiceCountyStored>;
+  validateUpdateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
   ): Promise<ServiceCountyStored>;
@@ -163,6 +187,10 @@ export interface ServiceUserManagerServiceForUsers {
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
   ): Promise<ServiceDistrictStored>;
+  validateUpdateResidentDistrict(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<ServiceDistrictStored>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,
@@ -179,6 +207,10 @@ export interface ServiceUserManagerServiceForUsers {
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceSimpleVoteQueryCustomizer,
   ): Promise<Array<ServiceSimpleVoteStored>>;
+  validateUpdateVotes(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: Partial<ServiceSimpleVoteStored>,
+  ): Promise<ServiceSimpleVoteStored>;
   setVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,

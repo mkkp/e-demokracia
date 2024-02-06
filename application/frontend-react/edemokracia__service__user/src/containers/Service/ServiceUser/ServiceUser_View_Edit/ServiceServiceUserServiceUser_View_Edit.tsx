@@ -26,7 +26,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -68,7 +68,7 @@ import type { ServiceServiceUserServiceUser_View_EditResidentDistrictComponentAc
 import { ServiceServiceUserServiceUser_View_EditResidentDistrictComponent } from './components/ServiceServiceUserServiceUser_View_EditResidentDistrictComponent';
 
 export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceServiceUserServiceUser_View_EditContainerHook';
+  'SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceServiceUserServiceUser_View_EditContainerHook = (
   data: ServiceServiceUserStored,
   editMode: boolean,
@@ -82,7 +82,8 @@ export interface ServiceServiceUserServiceUser_View_EditActionDefinitions
     ServiceServiceUserServiceUser_View_EditResidentCityComponentActionDefinitions,
     ServiceServiceUserServiceUser_View_EditResidentCountyComponentActionDefinitions,
     ServiceServiceUserServiceUser_View_EditResidentDistrictComponentActionDefinitions {
-  votesOpenPageAction?: (target?: ServiceSimpleVoteStored) => Promise<void>;
+  getPageTitle?: (data: ServiceServiceUser) => string;
+  votesOpenPageAction?: (target: ServiceSimpleVoteStored, isDraft?: boolean) => Promise<void>;
   isCreatedRequired?: (data: ServiceServiceUser | ServiceServiceUserStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (
     data: ServiceServiceUser | ServiceServiceUserStored,
@@ -125,14 +126,15 @@ export interface ServiceServiceUserServiceUser_View_EditActionDefinitions
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceServiceUserServiceUser_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceServiceUserServiceUser_View_EditActionDefinitions;
 
   data: ServiceServiceUserStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceServiceUser, value: any) => void;
@@ -140,6 +142,7 @@ export interface ServiceServiceUserServiceUser_View_EditProps {
   validation: Map<keyof ServiceServiceUser, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceServiceUser, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_p1nIcGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer
@@ -148,9 +151,10 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -182,19 +186,23 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="ServiceUser_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_p1nIcGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement"
+          data-name="ServiceUser_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_oUYE0IXsEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="Security::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_oUYE0IXsEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="Security::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="security" sx={{ marginRight: 1 }} />
@@ -208,9 +216,10 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="Security" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_oUYE0IXsEe2kLcMqsIbMgQ)/GroupVisualElement"
+                      data-name="Security"
                       container
                       direction="row"
                       alignItems="stretch"
@@ -222,7 +231,6 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                           required={actions?.isUserNameRequired ? actions.isUserNameRequired(data, editMode) : true}
                           name="userName"
                           id="User/(esm/_erlrQH4NEe2cB7_PsKXsHQ)/StringTypeTextInput"
-                          autoFocus
                           label={
                             t('service.ServiceUser.ServiceUser_View_Edit.userName', {
                               defaultValue: 'Username',
@@ -254,7 +262,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                             ),
                           }}
                           inputProps={{
-                            maxlength: 255,
+                            maxLength: 255,
                           }}
                         />
                       </Grid>
@@ -359,10 +367,13 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_M0pnwGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="personal::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_M0pnwGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="personal::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="card-account-details" sx={{ marginRight: 1 }} />
@@ -376,18 +387,20 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="personal" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_M0pnwGk5Ee25ONJ3V89cVA)/GroupVisualElement"
+                      data-name="personal"
                       container
                       direction="row"
                       alignItems="stretch"
                       justifyContent="flex-start"
                       spacing={2}
                     >
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="name" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_-zSJUGk5Ee25ONJ3V89cVA)/GroupVisualElement"
+                          data-name="name"
                           container
                           direction="row"
                           alignItems="stretch"
@@ -432,7 +445,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
@@ -473,16 +486,17 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
                         </Grid>
                       </Grid>
 
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="contact" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_R-hPIGk6Ee25ONJ3V89cVA)/GroupVisualElement"
+                          data-name="contact"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -525,7 +539,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 255,
+                                maxLength: 255,
                               }}
                             />
                           </Grid>
@@ -566,7 +580,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                 ),
                               }}
                               inputProps={{
-                                maxlength: 20,
+                                maxLength: 20,
                               }}
                             />
                           </Grid>
@@ -592,10 +606,13 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
             </Card>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Card id="(User/(esm/_vzaQsGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper">
+          <Grid item data-name="Areas::LabelWrapper" xs={12} sm={12}>
+            <Card
+              id="(User/(esm/_vzaQsGk5Ee25ONJ3V89cVA)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="Areas::LabelWrapper"
+            >
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="map" sx={{ marginRight: 1 }} />
@@ -609,18 +626,20 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                     </Grid>
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item data-name="Areas" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_vzaQsGk5Ee25ONJ3V89cVA)/GroupVisualElement"
+                      data-name="Areas"
                       container
                       direction="row"
                       alignItems="stretch"
                       justifyContent="center"
                       spacing={2}
                     >
-                      <Grid item xs={12} sm={12}>
+                      <Grid item data-name="Residency" xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_C6EUkIXuEe2kLcMqsIbMgQ)/GroupVisualElement"
+                          data-name="Residency"
                           container
                           direction="row"
                           alignItems="flex-start"
@@ -634,6 +653,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               ownerData={data}
                               editMode={editMode}
                               isLoading={isLoading}
+                              isDraft={isDraft}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentCounty')}
                               actions={actions}
@@ -648,6 +668,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               ownerData={data}
                               editMode={editMode}
                               isLoading={isLoading}
+                              isDraft={isDraft}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentCity')}
                               actions={actions}
@@ -662,6 +683,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                               ownerData={data}
                               editMode={editMode}
                               isLoading={isLoading}
+                              isDraft={isDraft}
                               storeDiff={storeDiff}
                               validationError={validation.get('residentDistrict')}
                               actions={actions}
@@ -713,9 +735,10 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                             },
                           ]}
                         >
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="tab_activity_counties" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_mk-zYIdjEe2kLcMqsIbMgQ)/GroupVisualElement"
+                              data-name="tab_activity_counties"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -740,22 +763,24 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('activityCounties')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12} md={4.0}>
+                          <Grid item data-name="activity_cities" xs={12} sm={12} md={4.0}>
                             <Grid
                               id="User/(esm/_yYmycIdjEe2kLcMqsIbMgQ)/GroupVisualElement"
+                              data-name="activity_cities"
                               container
                               direction="row"
                               alignItems="flex-start"
                               justifyContent="flex-start"
                               spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
+                              <Grid item xs={12} sm={12} md={36.0}>
                                 <Grid
                                   id="User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
                                   container
@@ -773,15 +798,17 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('activityCities')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
 
-                          <Grid item xs={12} sm={12}>
+                          <Grid item data-name="activity_districts" xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_4jHz8IdjEe2kLcMqsIbMgQ)/GroupVisualElement"
+                              data-name="activity_districts"
                               container
                               direction="row"
                               alignItems="flex-start"
@@ -806,6 +833,7 @@ export default function ServiceServiceUserServiceUser_View_Edit(props: ServiceSe
                                     isFormUpdateable={isFormUpdateable}
                                     validationError={validation.get('activityDistricts')}
                                     refreshCounter={refreshCounter}
+                                    isOwnerLoading={isLoading}
                                   />
                                 </Grid>
                               </Grid>

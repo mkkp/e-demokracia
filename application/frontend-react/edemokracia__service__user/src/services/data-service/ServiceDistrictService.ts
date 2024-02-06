@@ -20,4 +20,5 @@ export interface ServiceDistrictService {
   ): Promise<ServiceDistrictStored>;
   delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
   update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+  validateUpdate(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
 }

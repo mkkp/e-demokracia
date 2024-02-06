@@ -8,14 +8,18 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useFilterDialog } from '~/components/dialog';
-import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions } from '~/containers/CloseDebateOutputVoteDefinitionReference/CloseDebateOutputVoteDefinitionReference_View_Edit/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import type {
+  CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions,
+  CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageProps,
+} from '~/containers/CloseDebateOutputVoteDefinitionReference/CloseDebateOutputVoteDefinitionReference_View_Edit/CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   CloseDebateOutputVoteDefinitionReference,
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
@@ -25,7 +29,7 @@ import type { JudoIdentifiable } from '~/services/data-api/common';
 import { CloseDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { PageContainerTransition } from '~/theme/animations';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended =
@@ -38,12 +42,39 @@ export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinit
   };
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_OUTPUT_VIEW_ACTIONS_HOOK_INTERFACE_KEY =
-  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook';
+  'SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_OUTPUT_VIEW_ACTIONS_HOOK';
 export type CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditActionsHook = (
   data: CloseDebateOutputVoteDefinitionReferenceStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof CloseDebateOutputVoteDefinitionReference, value: any) => void,
+
+  refresh: () => Promise<void>,
+  submit: () => Promise<void>,
 ) => CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended;
+
+export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModel
+  extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+}
+
+const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModelContext =
+  createContext<CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModel>(
+    {} as any,
+  );
+export const useCloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModel =
+  () => {
+    const context = useContext(
+      CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModelContext,
+    );
+    if (!context) {
+      throw new Error(
+        'useCloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModel must be used within a(n) CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModelProvider',
+      );
+    }
+    return context;
+  };
 
 export const convertServiceIssueIssue_View_EditCloseDebateOutputViewPayload = (
   attributeName: keyof CloseDebateOutputVoteDefinitionReference,
@@ -77,6 +108,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
 
@@ -120,8 +152,16 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
   }, [data]);
 
-  const pageQueryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = {
-    _mask: '{context}',
+  const getPageQueryCustomizer: () => CloseDebateOutputVoteDefinitionReferenceQueryCustomizer = () => ({
+    _mask: actions.getMask ? actions.getMask!() : '{context}',
+  });
+
+  // Private actions
+  const submit = async () => {};
+  const refresh = async () => {
+    if (actions.refreshAction) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
   };
 
   // Pandino Action overrides
@@ -131,20 +171,19 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
     );
   const customActions:
     | CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActionsExtended
-    | undefined = customActionsHook?.(data, editMode, storeDiff);
+    | undefined = customActionsHook?.(data, editMode, storeDiff, refresh, submit);
 
   // Dialog hooks
 
-  // Calculated section
-  const title: string = t(
-    'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit',
-    { defaultValue: 'CloseDebateOutputVoteDefinitionReference View / Edit' },
-  );
-
-  // Private actions
-  const submit = async () => {};
-
   // Action section
+  const getPageTitle = (data: CloseDebateOutputVoteDefinitionReference): string => {
+    return t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_View_Edit', {
+      defaultValue: 'CloseDebateOutputVoteDefinitionReference View / Edit',
+    });
+  };
+  const backAction = async () => {
+    navigateBack();
+  };
   const refreshAction = async (
     queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> => {
@@ -153,9 +192,10 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
       setEditMode(false);
       const result = await closeDebateOutputVoteDefinitionReferenceServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
-        pageQueryCustomizer,
+        getPageQueryCustomizer(),
       );
       setData(result);
+      setLatestViewData(result);
       // re-set payloadDiff
       payloadDiff.current = {
         __identifier: result.__identifier,
@@ -169,6 +209,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
       return result;
     } catch (error) {
       handleError(error);
+      setLatestViewData(null);
       return Promise.reject(error);
     } finally {
       setIsLoading(false);
@@ -178,26 +219,49 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
 
   const actions: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageActions =
     {
+      getPageTitle,
+      backAction,
       refreshAction,
       ...(customActions ?? {}),
+    };
+
+  // ViewModel setup
+  const viewModel: CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModel =
+    {
+      actions,
+      isLoading,
+      setIsLoading,
+      refreshCounter,
+      editMode,
+      setEditMode,
+      refresh,
+      data,
+      validation,
+      setValidation,
+      storeDiff,
+      submit,
+      isFormUpdateable,
+      isFormDeleteable,
     };
 
   // Effect section
   useEffect(() => {
     (async () => {
-      await actions.refreshAction!(pageQueryCustomizer);
+      await actions.refreshAction!(getPageQueryCustomizer());
     })();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationOutputPageDefinition"
-      data-page-name="service::Issue::Issue_View_Edit::closeDebate::Output::View"
+    <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModelContext.Provider
+      value={viewModel}
     >
       <Suspense>
+        <div
+          id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationOutputPageDefinition"
+          data-page-name="service::Issue::Issue_View_Edit::closeDebate::Output::View"
+        />
         <PageContainerTransition>
           <CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditPageContainer
-            title={title}
             actions={actions}
             isLoading={isLoading}
             editMode={editMode}
@@ -212,6 +276,6 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
           />
         </PageContainerTransition>
       </Suspense>
-    </div>
+    </CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_View_EditViewModelContext.Provider>
   );
 }

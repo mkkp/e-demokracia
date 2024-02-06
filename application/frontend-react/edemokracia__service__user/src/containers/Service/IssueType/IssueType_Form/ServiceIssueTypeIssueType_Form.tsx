@@ -20,7 +20,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -31,11 +31,12 @@ import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import {} from '@mui/x-date-pickers';
 import type {} from '@mui/x-date-pickers';
 import {} from '~/components/widgets';
+import { autoFocusRefDelay } from '~/config';
 import { useConfirmationBeforeChange } from '~/hooks';
 import { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
 
 export const SERVICE_ISSUE_TYPE_ISSUE_TYPE_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueTypeIssueType_FormContainerHook';
+  'SERVICE_ISSUE_TYPE_ISSUE_TYPE_FORM_CONTAINER_ACTIONS_HOOK';
 export type ServiceIssueTypeIssueType_FormContainerHook = (
   data: ServiceIssueTypeStored,
   editMode: boolean,
@@ -43,6 +44,7 @@ export type ServiceIssueTypeIssueType_FormContainerHook = (
 ) => ServiceIssueTypeIssueType_FormActionDefinitions;
 
 export interface ServiceIssueTypeIssueType_FormActionDefinitions {
+  getPageTitle?: (data: ServiceIssueType) => string;
   isDescriptionRequired?: (data: ServiceIssueType | ServiceIssueTypeStored, editMode?: boolean) => boolean;
   isDescriptionDisabled?: (
     data: ServiceIssueType | ServiceIssueTypeStored,
@@ -65,10 +67,10 @@ export interface ServiceIssueTypeIssueType_FormActionDefinitions {
 
 export interface ServiceIssueTypeIssueType_FormProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceIssueTypeIssueType_FormActionDefinitions;
 
   data: ServiceIssueTypeStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceIssueType, value: any) => void;
@@ -76,6 +78,7 @@ export interface ServiceIssueTypeIssueType_FormProps {
   validation: Map<keyof ServiceIssueType, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceIssueType, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormPageContainer
@@ -84,9 +87,10 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -115,28 +119,40 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
   const containerActions: ServiceIssueTypeIssueType_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
   const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const autoFocusInputRef = useRef<any>(null);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (typeof autoFocusInputRef?.current?.focus === 'function') {
+        autoFocusInputRef.current.focus();
+      }
+    }, autoFocusRefDelay);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="IssueType_Form" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_J4WCwNu4Ee2Bgcx6em3jZg)/TransferObjectFormVisualElement"
+          data-name="IssueType_Form"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
-            <Card id="User/(esm/_19au8NvDEe2Bgcx6em3jZg)/GroupVisualElement">
+          <Grid item data-name="group" xs={12} sm={12}>
+            <Card id="User/(esm/_19au8NvDEe2Bgcx6em3jZg)/GroupVisualElement" data-name="group">
               <CardContent>
-                <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
                       name="title"
                       id="User/(esm/_03iE8dvDEe2Bgcx6em3jZg)/StringTypeTextInput"
-                      autoFocus
+                      inputRef={autoFocusInputRef}
                       label={t('service.IssueType.IssueType_Form.title', { defaultValue: 'Title' }) as string}
                       value={data.title ?? ''}
                       className={clsx({
@@ -162,12 +178,12 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
                         ),
                       }}
                       inputProps={{
-                        maxlength: 255,
+                        maxLength: 255,
                       }}
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={12}>
+                  <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={actions?.isVoteTypeRequired ? actions.isVoteTypeRequired(data, editMode) : false}
                       name="voteType"
@@ -251,7 +267,7 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
                         ),
                       }}
                       inputProps={{
-                        maxlength: 16384,
+                        maxLength: 16384,
                       }}
                     />
                   </Grid>

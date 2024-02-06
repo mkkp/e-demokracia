@@ -10,13 +10,14 @@ import type { ReactNode } from 'react';
 
 export interface TableRowAction<R> {
   id: string;
-  label: string;
+  label?: string;
   action?: (row: R) => Promise<void>;
   icon?: ReactNode;
   disabled?: (row: R) => boolean;
+  isCRUD?: boolean;
 }
 
 export interface ColumnsActionsOptions {
-  shownActions?: number;
-  showLabel?: boolean;
+  crudOperationsDisplayed?: number;
+  transferOperationsDisplayed?: number;
 }

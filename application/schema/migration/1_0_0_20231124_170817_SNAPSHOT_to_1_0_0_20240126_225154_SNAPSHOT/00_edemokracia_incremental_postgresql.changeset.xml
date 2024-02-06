@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+      
+    <ns0:include xmlns:ns0="http://www.liquibase.org/xml/ns/dbchangelog" file="01_check_postgresql.changeset.xml"/>
+      
+    <ns1:include xmlns:ns1="http://www.liquibase.org/xml/ns/dbchangelog" file="02_backup_postgresql.changeset.xml"/>
+      
+    <ns2:include xmlns:ns2="http://www.liquibase.org/xml/ns/dbchangelog" file="03_beforeIncremental_postgresql.changeset.xml"/>
+      
+    <ns3:include xmlns:ns3="http://www.liquibase.org/xml/ns/dbchangelog" file="04_updateDataBeforeIncremental_postgresql.changeset.xml"/>
+      
+    <ns4:include xmlns:ns4="http://www.liquibase.org/xml/ns/dbchangelog" file="05_incremental_postgresql.changeset.xml"/>
+      
+    <ns5:include xmlns:ns5="http://www.liquibase.org/xml/ns/dbchangelog" file="06_updateDataAfterIncremental_postgresql.changeset.xml"/>
+      
+    <ns6:include xmlns:ns6="http://www.liquibase.org/xml/ns/dbchangelog" file="07_aferIncremental_postgresql.changeset.xml"/>
+    
+</databaseChangeLog>

@@ -37,12 +37,13 @@ export interface CreateArgumentInputCreateArgumentInput_TableDialogActions
 
 export interface CreateArgumentInputCreateArgumentInput_TableDialogProps {
   ownerData: any;
-  title: string;
   onClose: () => Promise<void>;
   actions: CreateArgumentInputCreateArgumentInput_TableDialogActions;
   isLoading: boolean;
   editMode: boolean;
   refreshCounter: number;
+
+  isDraft?: boolean;
 }
 
 // Name: CreateArgumentInput::CreateArgumentInput_Table
@@ -53,12 +54,12 @@ export default function CreateArgumentInputCreateArgumentInput_TableDialog(
 
   const { t } = useTranslation();
   const { navigate, back } = useJudoNavigation();
-  const { ownerData, title, onClose, actions, isLoading, editMode, refreshCounter } = props;
+  const { ownerData, onClose, actions, isLoading, editMode, refreshCounter, isDraft } = props;
 
   return (
     <>
       <DialogTitle>
-        {title}
+        {isDraft ? t('judo') : actions.getPageTitle ? actions.getPageTitle() : ''}
         <IconButton
           id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTablePageContainer-dialog-close-wrapper"
           aria-label="close"
@@ -75,7 +76,12 @@ export default function CreateArgumentInputCreateArgumentInput_TableDialog(
       </DialogTitle>
       <DialogContent dividers>
         <Suspense>
-          <CreateArgumentInputCreateArgumentInput_Table actions={actions} refreshCounter={refreshCounter} />
+          <CreateArgumentInputCreateArgumentInput_Table
+            actions={actions}
+            refreshCounter={refreshCounter}
+            isLoading={isLoading}
+            isDraft={isDraft}
+          />
         </Suspense>
       </DialogContent>
       <DialogActions>

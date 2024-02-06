@@ -8,14 +8,19 @@
 
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
+import { Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import type { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { v4 as uuidv4 } from 'uuid';
 import { useJudoNavigation } from '~/components';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
-import type { ServiceIssueCategoryIssueCategory_FormDialogActions } from '~/containers/Service/IssueCategory/IssueCategory_Form/ServiceIssueCategoryIssueCategory_FormDialogContainer';
+import type {
+  ServiceIssueCategoryIssueCategory_FormDialogActions,
+  ServiceIssueCategoryIssueCategory_FormDialogProps,
+} from '~/containers/Service/IssueCategory/IssueCategory_Form/ServiceIssueCategoryIssueCategory_FormDialogContainer';
 import { useServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage } from '~/dialogs/Service/IssueCategory/IssueCategory_Form/Owner/LinkSetSelectorPage';
-import { useCRUDDialog, useSnacks } from '~/hooks';
+import { useServiceUserAdminCategoriesAccessViewPage } from '~/dialogs/Service/User/AdminCategories/AccessViewPage';
+import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueCategory,
   ServiceIssueCategoryQueryCustomizer,
@@ -27,7 +32,7 @@ import type {
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
-import { processQueryCustomizer, useErrorHandler } from '~/utilities';
+import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
 export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
@@ -37,23 +42,61 @@ export type ServiceIssueCategoryIssueCategory_FormDialogActionsExtended =
       data: ServiceIssueCategory,
       storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
     ) => Promise<void>;
+    postCreateAction?: (
+      data: ServiceIssueCategory,
+      res: ServiceIssueCategoryStored,
+      onSubmit: (result?: ServiceIssueCategoryStored) => Promise<void>,
+      onClose: () => Promise<void>,
+      openCreated?: boolean,
+    ) => Promise<void>;
   };
 
 export const SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceIssueCategoryIssueCategory_FormActionsHook';
+  'SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK';
 export type ServiceIssueCategoryIssueCategory_FormActionsHook = (
   ownerData: any,
   data: ServiceIssueCategoryStored,
   editMode: boolean,
   storeDiff: (attributeName: keyof ServiceIssueCategory, value: any) => void,
+  submit: () => Promise<void>,
 ) => ServiceIssueCategoryIssueCategory_FormDialogActionsExtended;
+
+export interface ServiceIssueCategoryIssueCategory_FormViewModel
+  extends ServiceIssueCategoryIssueCategory_FormDialogProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setEditMode: Dispatch<SetStateAction<boolean>>;
+  refresh: () => Promise<void>;
+  submit: () => Promise<void>;
+  templateDataOverride?: Partial<ServiceIssueCategory>;
+  isDraft?: boolean;
+}
+
+const ServiceIssueCategoryIssueCategory_FormViewModelContext =
+  createContext<ServiceIssueCategoryIssueCategory_FormViewModel>({} as any);
+export const useServiceIssueCategoryIssueCategory_FormViewModel = () => {
+  const context = useContext(ServiceIssueCategoryIssueCategory_FormViewModelContext);
+  if (!context) {
+    throw new Error(
+      'useServiceIssueCategoryIssueCategory_FormViewModel must be used within a(n) ServiceIssueCategoryIssueCategory_FormViewModelProvider',
+    );
+  }
+  return context;
+};
 
 export const useServiceUserAdminCategoriesAccessFormPage = (): ((
   ownerData: any,
+  templateDataOverride?: Partial<ServiceIssueCategory>,
+  isDraft?: boolean,
+  ownerValidation?: (data: ServiceIssueCategory) => Promise<void>,
 ) => Promise<DialogResult<ServiceIssueCategoryStored>>) => {
   const [createDialog, closeDialog] = useDialog();
 
-  return (ownerData: any) =>
+  return (
+    ownerData: any,
+    templateDataOverride?: Partial<ServiceIssueCategory>,
+    isDraft?: boolean,
+    ownerValidation?: (data: ServiceIssueCategory) => Promise<void>,
+  ) =>
     new Promise((resolve) => {
       createDialog({
         fullWidth: true,
@@ -69,16 +112,19 @@ export const useServiceUserAdminCategoriesAccessFormPage = (): ((
         children: (
           <ServiceUserAdminCategoriesAccessFormPage
             ownerData={ownerData}
+            templateDataOverride={templateDataOverride}
+            isDraft={isDraft}
+            ownerValidation={ownerValidation}
             onClose={async () => {
               await closeDialog();
               resolve({
                 result: 'close',
               });
             }}
-            onSubmit={async (result) => {
+            onSubmit={async (result, isDraft) => {
               await closeDialog();
               resolve({
-                result: 'submit',
+                result: isDraft ? 'submit-draft' : 'submit',
                 data: result,
               });
             }}
@@ -105,14 +151,17 @@ const ServiceIssueCategoryIssueCategory_FormDialogContainer = lazy(
 export interface ServiceUserAdminCategoriesAccessFormPageProps {
   ownerData: any;
 
+  templateDataOverride?: Partial<ServiceIssueCategory>;
+  isDraft?: boolean;
+  ownerValidation?: (data: ServiceIssueCategory) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueCategoryStored) => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessFormPageDefinition
 // Name: service::User::adminCategories::AccessFormPage
 export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceUserAdminCategoriesAccessFormPageProps) {
-  const { ownerData, onClose, onSubmit } = props;
+  const { ownerData, templateDataOverride, onClose, onSubmit, isDraft, ownerValidation } = props;
 
   // Services
   const userServiceForAdminCategoriesImpl = useMemo(() => new UserServiceForAdminCategoriesImpl(judoAxiosProvider), []);
@@ -123,6 +172,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   const { navigate, back: navigateBack } = useJudoNavigation();
   const { openFilterDialog } = useFilterDialog();
   const { openConfirmDialog } = useConfirmDialog();
+  const { setLatestViewData } = useViewData();
   const handleError = useErrorHandler();
   const openCRUDDialog = useCRUDDialog();
   const [createDialog, closeDialog] = useDialog();
@@ -165,6 +215,27 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     return false;
   }, [data]);
 
+  // Private actions
+  const submit = async () => {
+    await createAction();
+  };
+  const refresh = async () => {};
+
+  // Validation
+  const validate: (data: ServiceIssueCategory) => Promise<void> = async (data) => {
+    try {
+      if (ownerValidation) {
+        await ownerValidation(data);
+      } else {
+        await userServiceForAdminCategoriesImpl.validateCreate(data);
+      }
+    } catch (error: any) {
+      if (isDraft && isErrorNestedValidationError(error, 'adminCategories')) {
+        throw error;
+      }
+    }
+  };
+
   // Pandino Action overrides
   const { service: customActionsHook } = useTrackService<ServiceIssueCategoryIssueCategory_FormActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_USER_ADMIN_CATEGORIES_ACCESS_FORM_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
@@ -174,26 +245,23 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     data,
     editMode,
     storeDiff,
+    submit,
   );
 
   // Dialog hooks
   const openServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage =
     useServiceIssueCategoryIssueCategory_FormOwnerLinkSetSelectorPage();
-
-  // Calculated section
-  const title: string = t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
-
-  // Private actions
-  const submit = async () => {
-    await createAction();
-  };
+  const openServiceUserAdminCategoriesAccessViewPage = useServiceUserAdminCategoriesAccessViewPage();
 
   // Action section
+  const getPageTitle = (data: ServiceIssueCategory): string => {
+    return t('service.IssueCategory.IssueCategory_Form', { defaultValue: 'IssueCategory Form' });
+  };
   const ownerAutocompleteRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForAdminCategoriesImpl.getRangeForOwner(data, queryCustomizer);
+      return userServiceForAdminCategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
     } catch (error) {
       handleError(error);
       return Promise.resolve([]);
@@ -212,18 +280,26 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     }
     return undefined;
   };
-  const ownerUnsetAction = async (target: ServiceServiceUserStored) => {
+  const ownerUnsetAction = async (target: ServiceServiceUser | ServiceServiceUserStored) => {
     storeDiff('owner', null);
   };
   const backAction = async () => {
     onClose();
   };
-  const createAction = async () => {
+  const createAction = async (openCreated?: boolean) => {
     try {
       setIsLoading(true);
-      const res = await userServiceForAdminCategoriesImpl.create(payloadDiff.current);
-      showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-      onSubmit(res);
+      const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
+      const res = await userServiceForAdminCategoriesImpl.create(payload);
+      if (customActions?.postCreateAction) {
+        await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
+      } else {
+        showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
+        await onSubmit(res);
+        if (openCreated) {
+          await openServiceUserAdminCategoriesAccessViewPage(res!);
+        }
+      }
     } catch (error) {
       handleError<ServiceIssueCategory>(error, { setValidation }, data);
     } finally {
@@ -241,6 +317,12 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       if (customActions?.postGetTemplateAction) {
         await customActions.postGetTemplateAction(ownerData, result, storeDiff);
       }
+      if (templateDataOverride) {
+        setData((prevData) => ({ ...prevData, ...templateDataOverride }));
+        payloadDiff.current = {
+          ...(templateDataOverride as Record<keyof ServiceIssueCategoryStored, any>),
+        };
+      }
       return result;
     } catch (error) {
       handleError(error);
@@ -251,6 +333,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
   };
 
   const actions: ServiceIssueCategoryIssueCategory_FormDialogActions = {
+    getPageTitle,
     ownerAutocompleteRangeAction,
     ownerOpenSetSelectorAction,
     ownerUnsetAction,
@@ -260,21 +343,43 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     ...(customActions ?? {}),
   };
 
+  // ViewModel setup
+  const viewModel: ServiceIssueCategoryIssueCategory_FormViewModel = {
+    onClose,
+    actions,
+    ownerData,
+    isLoading,
+    setIsLoading,
+    editMode,
+    setEditMode,
+    refresh,
+    refreshCounter,
+    submit,
+    data,
+    validation,
+    setValidation,
+    storeDiff,
+    isFormUpdateable,
+    isFormDeleteable,
+    templateDataOverride,
+    isDraft,
+  };
+
   // Effect section
   useEffect(() => {
     actions.getTemplateAction!();
   }, []);
 
   return (
-    <div
-      id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessFormPageDefinition"
-      data-page-name="service::User::adminCategories::AccessFormPage"
-    >
+    <ServiceIssueCategoryIssueCategory_FormViewModelContext.Provider value={viewModel}>
       <Suspense>
+        <div
+          id="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessFormPageDefinition"
+          data-page-name="service::User::adminCategories::AccessFormPage"
+        />
         <ServiceIssueCategoryIssueCategory_FormDialogContainer
           ownerData={ownerData}
           onClose={onClose}
-          title={title}
           actions={actions}
           isLoading={isLoading}
           editMode={editMode}
@@ -286,8 +391,9 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
           validation={validation}
           setValidation={setValidation}
           submit={submit}
+          isDraft={isDraft}
         />
       </Suspense>
-    </div>
+    </ServiceIssueCategoryIssueCategory_FormViewModelContext.Provider>
   );
 }

@@ -18,7 +18,7 @@ import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
 import type { Dispatch, FC, SetStateAction } from 'react';
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
@@ -42,7 +42,7 @@ import type { ServiceCityCity_View_EditDistrictsComponentActionDefinitions } fro
 import { ServiceCityCity_View_EditDistrictsComponent } from './components/ServiceCityCity_View_EditDistrictsComponent';
 
 export const SERVICE_CITY_CITY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
-  'ServiceCityCity_View_EditContainerHook';
+  'SERVICE_CITY_CITY_VIEW_EDIT_CONTAINER_ACTIONS_HOOK';
 export type ServiceCityCity_View_EditContainerHook = (
   data: ServiceCityStored,
   editMode: boolean,
@@ -51,16 +51,18 @@ export type ServiceCityCity_View_EditContainerHook = (
 
 export interface ServiceCityCity_View_EditActionDefinitions
   extends ServiceCityCity_View_EditDistrictsComponentActionDefinitions {
+  getPageTitle?: (data: ServiceCity) => string;
   isNameRequired?: (data: ServiceCity | ServiceCityStored, editMode?: boolean) => boolean;
   isNameDisabled?: (data: ServiceCity | ServiceCityStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getMask?: () => string;
 }
 
 export interface ServiceCityCity_View_EditProps {
   refreshCounter: number;
+  isLoading: boolean;
   actions: ServiceCityCity_View_EditActionDefinitions;
 
   data: ServiceCityStored;
-  isLoading: boolean;
   isFormUpdateable: () => boolean;
   isFormDeleteable: () => boolean;
   storeDiff: (attributeName: keyof ServiceCity, value: any) => void;
@@ -68,6 +70,7 @@ export interface ServiceCityCity_View_EditProps {
   validation: Map<keyof ServiceCity, string>;
   setValidation: Dispatch<SetStateAction<Map<keyof ServiceCity, string>>>;
   submit: () => Promise<void>;
+  isDraft?: boolean;
 }
 
 // XMIID: User/(esm/_a0XkuH2iEe2LTNnGda5kaw)/TransferObjectViewPageContainer
@@ -76,9 +79,10 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
   // Container props
   const {
     refreshCounter,
+    isLoading,
+    isDraft,
     actions: pageActions,
     data,
-    isLoading,
     isFormUpdateable,
     isFormDeleteable,
     storeDiff,
@@ -110,21 +114,21 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
 
   return (
     <Grid container>
-      <Grid item xs={12} sm={12}>
+      <Grid item data-name="City_View_Edit" xs={12} sm={12} md={36.0}>
         <Grid
           id="User/(esm/_a0XkuH2iEe2LTNnGda5kaw)/TransferObjectViewVisualElement"
+          data-name="City_View_Edit"
           container
           direction="column"
           alignItems="stretch"
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12} sm={12}>
+          <Grid item xs={12} sm={12} md={4.0}>
             <TextField
               required={actions?.isNameRequired ? actions.isNameRequired(data, editMode) : true}
               name="name"
               id="User/(esm/_dL1nYH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-              autoFocus
               label={t('service.City.City_View_Edit.name', { defaultValue: 'City name' }) as string}
               value={data.name ?? ''}
               className={clsx({
@@ -148,14 +152,15 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
                 ),
               }}
               inputProps={{
-                maxlength: 255,
+                maxLength: 255,
               }}
             />
           </Grid>
 
-          <Grid item xs={12} sm={12}>
+          <Grid item data-name="districts::LabelWrapper" xs={12} sm={12}>
             <Grid
               id="(User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
+              data-name="districts::LabelWrapper"
               container
               direction="column"
               alignItems="stretch"
@@ -191,6 +196,7 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
                     isFormUpdateable={isFormUpdateable}
                     validationError={validation.get('districts')}
                     refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
                   />
                 </Grid>
               </Grid>

@@ -10,6 +10,7 @@ import { useTrackService } from '@pandino/react-hooks';
 import type { OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack';
 import type { Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFaultDialog } from '~/components/dialog';
 import { useSnacks } from '~/hooks';
 import { toastConfig } from '../config';
 import { exists } from './helper';
@@ -28,7 +29,7 @@ export interface ServerError<T> {
   code: string;
   level: string;
   details: ServerErrorDetails;
-  location: keyof T;
+  location: string;
 }
 
 export interface ServerErrorDetails {
@@ -49,8 +50,9 @@ export interface ErrorProcessResult<T> {
 export const useErrorHandler = () => {
   const { t } = useTranslation();
   const { showErrorSnack } = useSnacks();
+  const openFaultDialog = useFaultDialog();
 
-  return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T) => {
+  return <T>(error: any, options?: ErrorHandlingOption<T>, payload?: T, relationName?: string) => {
     console.error(error);
     const errorResults: ErrorProcessResult<T> = {
       errorToastConfig: {
@@ -104,12 +106,9 @@ export const useErrorHandler = () => {
             }) as string;
             break;
           case 422:
-            errorResults.toastMessage = t('judo.error.business-fault', {
-              defaultValue: 'An error occurred while processing your request.',
-              error: error.response?.data as ServerError<T>,
-              payload,
-            }) as string;
-            break;
+            const key = Object.keys(error.response.data)[0];
+            openFaultDialog(key, error.response.data[key]);
+            return;
           case 400:
             const errorList = response.data as ServerError<T>[];
             errorResults.errorToastConfig = {
@@ -124,16 +123,13 @@ export const useErrorHandler = () => {
             if (exists(errorList[0].location)) {
               errorResults.validation = new Map<keyof T, string>();
               if (typeof options?.setValidation === 'function') {
-                errorList.forEach((error) =>
-                  errorResults.validation!.set(
-                    error.location,
-                    t(`judo.error.validation-failed.${error.code}`, {
-                      defaultValue: error.code,
-                      error,
-                      payload,
-                    }) as string,
-                  ),
-                );
+                const errorRelations: Record<string, Array<string>> = {};
+
+                if (relationName) {
+                  validateRelationErrors(errorList, relationName, errorResults.validation, t);
+                } else {
+                  validateWithNestedErrors(errorList, errorResults.validation, t);
+                }
               }
             }
             break;
@@ -155,6 +151,74 @@ export const useErrorHandler = () => {
   };
 };
 
+function validateRelationErrors<T>(
+  errorList: ServerError<T>[],
+  relationName: string,
+  validation: Map<keyof T, string>,
+  t: any,
+): void {
+  errorList.forEach((error) => {
+    if (error.location.startsWith(relationName + '.') || error.location.startsWith(relationName + '[')) {
+      const idx = error.location.startsWith(relationName + '.')
+        ? error.location.indexOf('.') + 1
+        : error.location.lastIndexOf(']') + 2;
+      validation.set(
+        error.location.substring(idx) as keyof T,
+        t(`judo.error.validation-failed.${error.code}`, {
+          defaultValue: error.code,
+          relation: relationName,
+          error,
+        }) as string,
+      );
+    }
+  });
+}
+
+function validateWithNestedErrors<T>(errorList: ServerError<T>[], validation: Map<keyof T, string>, t: any): void {
+  const errorRelations: Record<string, Array<string>> = {};
+
+  errorList.forEach((error) => {
+    const split = error.location.split(/\[|\./).filter((e) => e.length);
+    const relationKey: keyof T | undefined = split.length > 1 ? (split[0] as keyof T) : undefined;
+    if (relationKey) {
+      if (!Array.isArray(errorRelations[relationKey as string])) {
+        errorRelations[relationKey as string] = [];
+      }
+      errorRelations[relationKey as string].push(
+        t(`judo.error.validation-failed.${error.code}`, {
+          defaultValue: error.code,
+          error,
+        }) as string,
+      );
+    } else {
+      validation!.set(
+        error.location as keyof T,
+        t(`judo.error.validation-failed.${error.code}`, {
+          defaultValue: error.code,
+          error,
+        }) as string,
+      );
+    }
+  });
+
+  for (const key in errorRelations) {
+    if (Array.isArray(errorRelations[key]) && errorRelations[key].length) {
+      validation!.set(key as keyof T, errorRelations[key].join(', '));
+    }
+  }
+}
+
 export const isErrorOperationFault = (error: any): boolean => {
   return error?.response?.status === 422;
+};
+
+export const isErrorNestedValidationError = (error: any, relation: string): boolean => {
+  const { response } = error;
+  return (
+    response &&
+    response.status === 400 &&
+    Array.isArray(response.data) &&
+    response.data.length &&
+    response.data.some((e: any) => e.location.startsWith(relation + '.') || e.location.startsWith(relation + '['))
+  );
 };

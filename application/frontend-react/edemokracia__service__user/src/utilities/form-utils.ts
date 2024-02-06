@@ -6,7 +6,7 @@
 // Template name: actor/src/utilities/form-utils.ts
 // Template file: actor/src/utilities/form-utils.ts.hbs
 
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import type { TFunction } from 'i18next';
 import type { Dispatch, SetStateAction } from 'react';
 
@@ -31,18 +31,14 @@ export const uiTimeToServiceTime = (time?: any | null): string | null => {
   if (time === undefined || time === null) {
     return null;
   }
-  const resolved: Date = typeof time === 'string' ? new Date(time) : time;
-  return (
-    resolved.getUTCHours().toString().padStart(2, '0') + ':' + resolved.getUTCMinutes().toString().padStart(2, '0')
-  );
+  // const resolved: Date = typeof time === 'string' ? new Date(time) : time;
+  // return resolved.getUTCHours().toString().padStart(2, '0') + ':' + resolved.getUTCMinutes().toString().padStart(2, '0');
+  return format(time, 'HH:mm:ss');
 };
 
 export const serviceTimeToUiTime = (timeStr?: any) => {
   if (typeof timeStr === 'string') {
-    let splittedTime = timeStr.split(':');
-    let date: Date = new Date();
-    date.setHours(Number(splittedTime[0]) - date.getTimezoneOffset() / 60, Number(splittedTime[1]));
-    return date;
+    return parse(timeStr, 'HH:mm:ss', new Date());
   }
   return timeStr;
 };
@@ -75,4 +71,29 @@ export function passesLocalValidation<T>(
     return false;
   }
   return true;
+}
+
+export function cleanUpPayload(input: any): any {
+  const prefix = 'draft:';
+  const payload: Record<string | symbol, any> = {};
+  for (const key in input) {
+    const value = input[key];
+    if (Array.isArray(value)) {
+      payload[key] = value.map((r) => {
+        if (r.__identifier && r.__identifier.startsWith(prefix)) {
+          const newRow = { ...r };
+          delete newRow.__identifier;
+          return newRow;
+        }
+        return r;
+      });
+    } else if (value && value.__identifier && value.__identifier.startsWith(prefix)) {
+      const newItem = { ...value };
+      delete newItem.__identifier;
+      payload[key] = newItem;
+    } else if (key !== '__identifier' || !value.startsWith(prefix)) {
+      payload[key] = value;
+    }
+  }
+  return payload;
 }
