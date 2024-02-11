@@ -6,7 +6,7 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { Initializer, InitializerQueryCustomizer, InitializerStored } from '../data-api';
+import { Initializer, InitializerQueryCustomizer, InitializerStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,9 +16,10 @@ export interface InitializerService {
   refresh(
     target: JudoIdentifiable<Initializer>,
     queryCustomizer?: InitializerQueryCustomizer,
-  ): Promise<InitializerStored>;
-  initAreas(): Promise<void>;
-  initCategories(): Promise<void>;
-  initIssueTypes(): Promise<void>;
-  initUsers(): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<InitializerStored>>;
+  initAreas(): Promise<JudoRestResponse<void>>;
+  initCategories(): Promise<JudoRestResponse<void>>;
+  initIssueTypes(): Promise<JudoRestResponse<void>>;
+  initUsers(): Promise<JudoRestResponse<void>>;
 }

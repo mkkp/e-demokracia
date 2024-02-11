@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceSelectAnswerVoteEntry,
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
@@ -21,15 +22,17 @@ export interface ServiceSelectAnswerVoteEntryServiceForValue {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
   getRangeForValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
-  getTemplate(): Promise<ServiceSelectAnswerVoteSelection>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSelectAnswerVoteSelectionStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>>;
   setValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     selected: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
-  ): Promise<void>;
-  unsetValue(owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
+  unsetValue(owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>): Promise<JudoRestResponse<void>>;
 }

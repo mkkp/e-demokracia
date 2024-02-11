@@ -6,12 +6,12 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { CloseDebateInput, CloseDebateInputStored } from '../data-api';
+import { CloseDebateInput, CloseDebateInputStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for CloseDebateInput
  */
 export interface CloseDebateInputService {
-  getTemplate(): Promise<CloseDebateInput>;
+  getTemplate(): Promise<JudoRestResponse<CloseDebateInput>>;
 }

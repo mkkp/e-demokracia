@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceDashboard, ServiceDashboardQueryCustomizer, ServiceDashboardStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceDashboardDashboard_TableActionDefinitions } from './ServiceDashboardDashboard_Table';
 
 const ServiceDashboardDashboard_Table = lazy(

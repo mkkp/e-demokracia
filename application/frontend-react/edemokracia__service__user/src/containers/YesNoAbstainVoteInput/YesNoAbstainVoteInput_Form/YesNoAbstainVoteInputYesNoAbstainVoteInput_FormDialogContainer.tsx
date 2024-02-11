@@ -30,6 +30,7 @@ import type {
   YesNoAbstainVoteInputQueryCustomizer,
   YesNoAbstainVoteInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions } from './YesNoAbstainVoteInputYesNoAbstainVoteInput_Form';
 
@@ -42,7 +43,7 @@ const YesNoAbstainVoteInputYesNoAbstainVoteInput_Form = lazy(
 
 export interface YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialogActions
   extends YesNoAbstainVoteInputYesNoAbstainVoteInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<YesNoAbstainVoteInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<YesNoAbstainVoteInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   voteYesNoAbstainForVoteDefinitionAction?: () => Promise<void>;

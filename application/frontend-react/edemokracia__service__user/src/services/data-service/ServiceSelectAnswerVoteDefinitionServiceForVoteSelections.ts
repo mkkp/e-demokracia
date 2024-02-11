@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
@@ -21,24 +22,28 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForVoteSelections {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSelectAnswerVoteSelectionStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
-  getTemplate(): Promise<ServiceSelectAnswerVoteSelection>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>>;
   create(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: ServiceSelectAnswerVoteSelection,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
   validateCreate(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: ServiceSelectAnswerVoteSelection,
-  ): Promise<ServiceSelectAnswerVoteSelection>;
-  delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void>;
-  update(target: Partial<ServiceSelectAnswerVoteSelectionStored>): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>>;
+  delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<JudoRestResponse<void>>;
+  update(
+    target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
 }

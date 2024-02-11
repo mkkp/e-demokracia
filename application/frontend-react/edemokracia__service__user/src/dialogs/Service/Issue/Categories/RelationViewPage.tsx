@@ -36,6 +36,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForCategoriesImpl } from '~/services/data-axios/ServiceIssueServiceForCategoriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -255,11 +256,12 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
   };
   const refreshAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored> => {
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueServiceForCategoriesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceIssueServiceForCategoriesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -272,7 +274,7 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -286,8 +288,12 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceIssueServiceForCategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceIssueServiceForCategoriesImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -357,19 +363,6 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       });
     });
   };
-  const subcategoriesBulkRemoveAction = async (
-    selectedRows: ServiceIssueCategoryStored[],
-  ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.subcategories ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
-      storeDiff('subcategories', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
   const subcategoriesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -409,12 +402,6 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
       if (!silentMode) {
         handleError<ServiceIssueCategory>(error, undefined, target);
       }
-    }
-  };
-  const subcategoriesRemoveAction = async (target?: ServiceIssueCategoryStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.subcategories ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
-      storeDiff('subcategories', newList);
     }
   };
   const subcategoriesOpenPageAction = async (
@@ -457,11 +444,9 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
     ownerUnsetAction,
     ownerOpenPageAction,
     subcategoriesBulkDeleteAction,
-    subcategoriesBulkRemoveAction,
     subcategoriesOpenFormAction,
     subcategoriesFilterAction,
     subcategoriesDeleteAction,
-    subcategoriesRemoveAction,
     subcategoriesOpenPageAction,
     ...(customActions ?? {}),
   };

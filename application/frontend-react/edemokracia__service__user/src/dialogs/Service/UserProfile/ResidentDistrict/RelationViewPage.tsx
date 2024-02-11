@@ -27,6 +27,7 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserProfileServiceForResidentDistrictImpl } from '~/services/data-axios/ServiceUserProfileServiceForResidentDistrictImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -244,14 +245,17 @@ export default function ServiceUserProfileResidentDistrictRelationViewPage(
   const backAction = async () => {
     onClose();
   };
-  const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserProfileServiceForResidentDistrictImpl.refresh(
+      const response = await serviceUserProfileServiceForResidentDistrictImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -264,7 +268,7 @@ export default function ServiceUserProfileResidentDistrictRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

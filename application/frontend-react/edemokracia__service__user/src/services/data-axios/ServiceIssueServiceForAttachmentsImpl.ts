@@ -7,12 +7,14 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceIssue,
   ServiceIssueAttachment,
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceIssueServiceForAttachments } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -30,21 +32,23 @@ export class ServiceIssueServiceForAttachmentsImpl
   async list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<Array<ServiceIssueAttachmentStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueAttachmentStored>>> {
     const path = '/service/Issue/attachments/~list';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -54,32 +58,32 @@ export class ServiceIssueServiceForAttachmentsImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<ServiceIssueAttachmentStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
    * From: relation.target.isTemplateable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceIssueAttachment> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceIssueAttachment>> {
     const path = '/service/IssueAttachment/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -89,15 +93,13 @@ export class ServiceIssueServiceForAttachmentsImpl
   async create(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
-  ): Promise<ServiceIssueAttachmentStored> {
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/Issue/~update/attachments/~create';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -107,26 +109,24 @@ export class ServiceIssueServiceForAttachmentsImpl
   async validateCreate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
-  ): Promise<ServiceIssueAttachment> {
+  ): Promise<JudoRestResponse<ServiceIssueAttachment>> {
     const path = '/service/Issue/~update/attachments/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
    * From: relation.isDeletable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void> {
+  async delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>> {
     const path = '/service/IssueAttachment/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
   }
@@ -135,15 +135,13 @@ export class ServiceIssueServiceForAttachmentsImpl
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored> {
+  async update(target: Partial<ServiceIssueAttachmentStored>): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -153,14 +151,12 @@ export class ServiceIssueServiceForAttachmentsImpl
   async validateUpdate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
-  ): Promise<ServiceIssueAttachmentStored> {
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 }

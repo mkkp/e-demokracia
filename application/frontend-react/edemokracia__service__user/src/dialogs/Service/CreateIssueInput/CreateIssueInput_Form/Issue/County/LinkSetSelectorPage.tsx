@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceCountyCounty_TableSetSelectorDialogActions,
-  ServiceCountyCounty_TableSetSelectorDialogProps,
-} from '~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer';
+  ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActions,
+  ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogProps,
+} from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/SetSelector/ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCounty,
@@ -29,25 +29,27 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCreateIssueInputServiceForCountyImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForCountyImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
-  ServiceCountyCounty_TableSetSelectorDialogActions & {};
+export type ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActionsExtended =
+  ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActions & {};
 
 export const SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceCountyCounty_TableSetSelectorActionsHook = (
+export type ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorActionsHook = (
   ownerData: any,
   data: ServiceCountyStored[],
   editMode: boolean,
   selectionDiff: ServiceCountyStored[],
   submit: () => Promise<void>,
-) => ServiceCountyCounty_TableSetSelectorDialogActionsExtended;
+) => ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActionsExtended;
 
-export interface ServiceCountyCounty_TableSetSelectorViewModel extends ServiceCountyCounty_TableSetSelectorDialogProps {
+export interface ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModel
+  extends ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -55,13 +57,13 @@ export interface ServiceCountyCounty_TableSetSelectorViewModel extends ServiceCo
   isDraft?: boolean;
 }
 
-const ServiceCountyCounty_TableSetSelectorViewModelContext =
-  createContext<ServiceCountyCounty_TableSetSelectorViewModel>({} as any);
-export const useServiceCountyCounty_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceCountyCounty_TableSetSelectorViewModelContext);
+const ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModelContext =
+  createContext<ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModel>({} as any);
+export const useServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModel = () => {
+  const context = useContext(ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceCountyCounty_TableSetSelectorViewModel must be used within a(n) ServiceCountyCounty_TableSetSelectorViewModelProvider',
+      'useServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModel must be used within a(n) ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModelProvider',
     );
   }
   return context;
@@ -111,9 +113,11 @@ export const useServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSe
     });
 };
 
-const ServiceCountyCounty_TableSetSelectorDialogContainer = lazy(
+const ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogContainer = lazy(
   () =>
-    import('~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer'),
+    import(
+      '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/Issue/County/SetSelector/ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogContainer'
+    ),
 );
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueCountyLinkSetSelectorPageProps {
@@ -168,22 +172,19 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
   const validate: (data: ServiceCounty) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceCountyCounty_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_ISSUE_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
+    return t('service.CreateIssueInput.CreateIssueInput_Form.issue.county.SetSelector', { defaultValue: 'County' });
   };
   const backAction = async () => {
     onClose();
@@ -202,16 +203,18 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored[]>> => {
     try {
       return serviceCreateIssueInputServiceForCountyImpl.getRangeForCounty(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
+  const actions: ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -221,7 +224,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
   };
 
   // ViewModel setup
-  const viewModel: ServiceCountyCounty_TableSetSelectorViewModel = {
+  const viewModel: ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -241,13 +244,13 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
   // Effect section
 
   return (
-    <ServiceCountyCounty_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::CreateIssueInput::CreateIssueInput_Form::issue::county::LinkSetSelectorPage"
         />
-        <ServiceCountyCounty_TableSetSelectorDialogContainer
+        <ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -260,6 +263,6 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueCountyL
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceCountyCounty_TableSetSelectorViewModelContext.Provider>
+    </ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorViewModelContext.Provider>
   );
 }

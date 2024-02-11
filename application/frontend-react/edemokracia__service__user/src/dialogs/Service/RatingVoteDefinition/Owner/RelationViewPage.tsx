@@ -54,6 +54,7 @@ import type {
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceRatingVoteDefinitionServiceForOwnerImpl } from '~/services/data-axios/ServiceRatingVoteDefinitionServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -304,11 +305,15 @@ export default function ServiceRatingVoteDefinitionOwnerRelationViewPage(
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceRatingVoteDefinitionServiceForOwnerImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceRatingVoteDefinitionServiceForOwnerImpl.refresh(
+        ownerData,
+        getPageQueryCustomizer(),
+      );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -321,7 +326,7 @@ export default function ServiceRatingVoteDefinitionOwnerRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -335,11 +340,12 @@ export default function ServiceRatingVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentCity(
+      const { data: result } = await serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentCity(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -374,11 +380,12 @@ export default function ServiceRatingVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentCounty(
+      const { data: result } = await serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentCounty(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -413,11 +420,12 @@ export default function ServiceRatingVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentDistrict(
+      const { data: result } = await serviceRatingVoteDefinitionServiceForOwnerImpl.getRangeForResidentDistrict(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

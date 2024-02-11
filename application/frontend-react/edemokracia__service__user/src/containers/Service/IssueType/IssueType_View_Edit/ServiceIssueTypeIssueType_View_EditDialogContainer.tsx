@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueTypeIssueType_View_EditActionDefinitions } from './ServiceIssueTypeIssueType_View_Edit';
 
@@ -31,7 +32,9 @@ export interface ServiceIssueTypeIssueType_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceIssueTypeQueryCustomizer) => Promise<ServiceIssueTypeStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueTypeStored>>;
   updateAction?: () => Promise<void>;
 }
 

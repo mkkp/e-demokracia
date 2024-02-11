@@ -34,6 +34,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -266,8 +267,12 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForAdminCategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForAdminCategoriesImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -337,19 +342,6 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       });
     });
   };
-  const subcategoriesBulkRemoveAction = async (
-    selectedRows: ServiceIssueCategoryStored[],
-  ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.subcategories ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
-      storeDiff('subcategories', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
   const subcategoriesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -389,12 +381,6 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       if (!silentMode) {
         handleError<ServiceIssueCategory>(error, undefined, target);
       }
-    }
-  };
-  const subcategoriesRemoveAction = async (target?: ServiceIssueCategoryStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.subcategories ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
-      storeDiff('subcategories', newList);
     }
   };
   const subcategoriesOpenPageAction = async (
@@ -454,11 +440,12 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   };
   const refreshAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored> => {
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminCategoriesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await userServiceForAdminCategoriesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -471,7 +458,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -484,12 +471,12 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await userServiceForAdminCategoriesImpl.update(payloadDiff.current);
+      const { data: res } = await userServiceForAdminCategoriesImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceIssueCategory, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceIssueCategory>(error, { setValidation }, data);
@@ -505,11 +492,9 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     ownerUnsetAction,
     ownerOpenPageAction,
     subcategoriesBulkDeleteAction,
-    subcategoriesBulkRemoveAction,
     subcategoriesOpenFormAction,
     subcategoriesFilterAction,
     subcategoriesDeleteAction,
-    subcategoriesRemoveAction,
     subcategoriesOpenPageAction,
     backAction,
     cancelAction,

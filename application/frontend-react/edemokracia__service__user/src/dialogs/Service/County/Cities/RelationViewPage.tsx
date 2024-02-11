@@ -34,6 +34,7 @@ import type {
   ServiceDistrictStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCountyServiceForCitiesImpl } from '~/services/data-axios/ServiceCountyServiceForCitiesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -289,19 +290,6 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
       });
     });
   };
-  const districtsBulkRemoveAction = async (
-    selectedRows: ServiceDistrictStored[],
-  ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.districts ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
-      storeDiff('districts', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
   const districtsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceCityDistrictsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -341,12 +329,6 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
       if (!silentMode) {
         handleError<ServiceDistrict>(error, undefined, target);
       }
-    }
-  };
-  const districtsRemoveAction = async (target?: ServiceDistrictStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.districts ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
-      storeDiff('districts', newList);
     }
   };
   const districtsOpenPageAction = async (target: ServiceDistrict | ServiceDistrictStored, isDraft?: boolean) => {
@@ -397,11 +379,14 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
       handleError(error, undefined, data);
     }
   };
-  const refreshAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCityStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceCountyServiceForCitiesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceCountyServiceForCitiesImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -414,7 +399,7 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -427,12 +412,12 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceCountyServiceForCitiesImpl.update(payloadDiff.current);
+      const { data: res } = await serviceCountyServiceForCitiesImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceCity, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceCity>(error, { setValidation }, data);
@@ -444,11 +429,9 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
   const actions: ServiceCityCity_View_EditDialogActions = {
     getPageTitle,
     districtsBulkDeleteAction,
-    districtsBulkRemoveAction,
     districtsOpenFormAction,
     districtsFilterAction,
     districtsDeleteAction,
-    districtsRemoveAction,
     districtsOpenPageAction,
     backAction,
     cancelAction,

@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceCountyCounty_TableSetSelectorDialogActions,
-  ServiceCountyCounty_TableSetSelectorDialogProps,
-} from '~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer';
+  ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActions,
+  ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogProps,
+} from '~/containers/Service/Issue/Issue_View_Edit/Other/Area/County/SetSelector/ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCounty,
@@ -29,25 +29,27 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForCountyImpl } from '~/services/data-axios/ServiceIssueServiceForCountyImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCountyCounty_TableSetSelectorDialogActionsExtended =
-  ServiceCountyCounty_TableSetSelectorDialogActions & {};
+export type ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActionsExtended =
+  ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceCountyCounty_TableSetSelectorActionsHook = (
+export type ServiceIssueIssue_View_EditOtherAreaCountySetSelectorActionsHook = (
   ownerData: any,
   data: ServiceCountyStored[],
   editMode: boolean,
   selectionDiff: ServiceCountyStored[],
   submit: () => Promise<void>,
-) => ServiceCountyCounty_TableSetSelectorDialogActionsExtended;
+) => ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActionsExtended;
 
-export interface ServiceCountyCounty_TableSetSelectorViewModel extends ServiceCountyCounty_TableSetSelectorDialogProps {
+export interface ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModel
+  extends ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -55,13 +57,13 @@ export interface ServiceCountyCounty_TableSetSelectorViewModel extends ServiceCo
   isDraft?: boolean;
 }
 
-const ServiceCountyCounty_TableSetSelectorViewModelContext =
-  createContext<ServiceCountyCounty_TableSetSelectorViewModel>({} as any);
-export const useServiceCountyCounty_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceCountyCounty_TableSetSelectorViewModelContext);
+const ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModelContext =
+  createContext<ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModel>({} as any);
+export const useServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceCountyCounty_TableSetSelectorViewModel must be used within a(n) ServiceCountyCounty_TableSetSelectorViewModelProvider',
+      'useServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModel must be used within a(n) ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModelProvider',
     );
   }
   return context;
@@ -111,9 +113,11 @@ export const useServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPage = 
     });
 };
 
-const ServiceCountyCounty_TableSetSelectorDialogContainer = lazy(
+const ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogContainer = lazy(
   () =>
-    import('~/containers/Service/County/County_Table/SetSelector/ServiceCountyCounty_TableSetSelectorDialogContainer'),
+    import(
+      '~/containers/Service/Issue/Issue_View_Edit/Other/Area/County/SetSelector/ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogContainer'
+    ),
 );
 
 export interface ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPageProps {
@@ -165,22 +169,18 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   const validate: (data: ServiceCounty) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceCountyCounty_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceIssueIssue_View_EditOtherAreaCountySetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_COUNTY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.County.County_Table.SetSelector', { defaultValue: 'County Table' });
+    return t('service.Issue.Issue_View_Edit.other.area.county.SetSelector', { defaultValue: 'County' });
   };
   const backAction = async () => {
     onClose();
@@ -199,16 +199,18 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored[]>> => {
     try {
       return serviceIssueServiceForCountyImpl.getRangeForCounty(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceCountyCounty_TableSetSelectorDialogActions = {
+  const actions: ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -218,7 +220,7 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   };
 
   // ViewModel setup
-  const viewModel: ServiceCountyCounty_TableSetSelectorViewModel = {
+  const viewModel: ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -238,13 +240,13 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
   // Effect section
 
   return (
-    <ServiceCountyCounty_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::Issue::Issue_View_Edit::other::area::county::LinkSetSelectorPage"
         />
-        <ServiceCountyCounty_TableSetSelectorDialogContainer
+        <ServiceIssueIssue_View_EditOtherAreaCountySetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -257,6 +259,6 @@ export default function ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelecto
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceCountyCounty_TableSetSelectorViewModelContext.Provider>
+    </ServiceIssueIssue_View_EditOtherAreaCountySetSelectorViewModelContext.Provider>
   );
 }

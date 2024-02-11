@@ -7,6 +7,7 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceCommentStored,
@@ -18,6 +19,7 @@ import type {
   ServiceSimpleVoteStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceCommentService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -31,15 +33,15 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
   async refresh(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<ServiceCommentStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCommentStored>> {
     const path = '/service/Comment/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -48,15 +50,15 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
   async getCreatedBy(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/Comment/createdBy/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -65,14 +67,14 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
   async getRangeForCreatedBy(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/Comment/createdBy/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      { owner: owner ?? {}, queryCustomizer: queryCustomizer ?? {} },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
@@ -81,15 +83,15 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
   async listVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>> {
     const path = '/service/Comment/votes/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -98,25 +100,25 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
   async getRangeForVotes(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>> {
     const path = '/service/Comment/votes/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      { owner: owner ?? {}, queryCustomizer: queryCustomizer ?? {} },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+  async voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>> {
     const path = '/service/Comment/voteDown';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -125,11 +127,11 @@ export class ServiceCommentServiceImpl extends JudoAxiosService implements Servi
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void> {
+  async voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>> {
     const path = '/service/Comment/voteUp';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }

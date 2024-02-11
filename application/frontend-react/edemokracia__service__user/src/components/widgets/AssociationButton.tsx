@@ -11,6 +11,7 @@ import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 
 export interface AssociationBaseProps {
   id: string;
@@ -21,7 +22,7 @@ export interface AssociationBaseProps {
 
 export interface AssociationButtonProps extends AssociationBaseProps {
   refreshCounter: number;
-  fetchCall?: () => Promise<JudoIdentifiable<any>>;
+  fetchCall?: () => Promise<JudoRestResponse<JudoIdentifiable<any>>>;
   navigateAction?: (target?: JudoIdentifiable<any> | any) => Promise<void>;
   children?: ReactNode;
 }
@@ -45,7 +46,7 @@ export function AssociationButton({
       if (refreshCounter > 0 && !editMode && fetchCall) {
         try {
           setIsLoading(true);
-          const res = await fetchCall();
+          const { data: res } = await fetchCall();
 
           setData(res);
         } catch (e) {

@@ -23,6 +23,7 @@ import type {
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableActionDefinitions } from './ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_Table';
 
 const ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_Table = lazy(

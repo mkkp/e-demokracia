@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceComment, ServiceCommentQueryCustomizer, ServiceCommentStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCommentComment_FormActionDefinitions } from './ServiceCommentComment_Form';
 
@@ -34,7 +35,7 @@ const ServiceCommentComment_Form = lazy(
 );
 
 export interface ServiceCommentComment_FormDialogActions extends ServiceCommentComment_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceComment>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceComment>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

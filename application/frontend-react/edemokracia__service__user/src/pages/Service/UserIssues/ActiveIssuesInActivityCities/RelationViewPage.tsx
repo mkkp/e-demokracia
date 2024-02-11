@@ -84,6 +84,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceForActiveIssuesInActivityCitiesImpl } from '~/services/data-axios/ServiceUserIssuesServiceForActiveIssuesInActivityCitiesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -376,11 +377,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForIssueType(
+      const { data: result } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForIssueType(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -414,11 +416,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForOwner(
+      const { data: result } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForOwner(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -452,11 +455,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForCity(
+      const { data: result } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForCity(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -490,11 +494,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForCounty(
+      const { data: result } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForCounty(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -528,11 +533,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForDistrict(
+      const { data: result } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.getRangeForDistrict(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -779,19 +785,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       });
     });
   };
-  const attachmentsBulkRemoveAction = async (
-    selectedRows: ServiceIssueAttachmentStored[],
-  ): Promise<DialogResult<Array<ServiceIssueAttachmentStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.attachments ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
-      storeDiff('attachments', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
   const attachmentsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -831,12 +824,6 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       if (!silentMode) {
         handleError<ServiceIssueAttachment>(error, undefined, target);
       }
-    }
-  };
-  const attachmentsRemoveAction = async (target?: ServiceIssueAttachmentStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.attachments ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
-      storeDiff('attachments', newList);
     }
   };
   const attachmentsOpenPageAction = async (
@@ -957,14 +944,17 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.refresh(
+      const response = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -977,7 +967,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -990,12 +980,14 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.update(payloadDiff.current);
+      const { data: res } = await serviceUserIssuesServiceForActiveIssuesInActivityCitiesImpl.update(
+        payloadDiff.current,
+      );
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceIssue, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceIssue>(error, { setValidation }, data);
@@ -1043,11 +1035,9 @@ export default function ServiceUserIssuesActiveIssuesInActivityCitiesRelationVie
     prosDeleteAction,
     prosOpenPageAction,
     attachmentsBulkDeleteAction,
-    attachmentsBulkRemoveAction,
     attachmentsOpenFormAction,
     attachmentsFilterAction,
     attachmentsDeleteAction,
-    attachmentsRemoveAction,
     attachmentsOpenPageAction,
     categoriesOpenAddSelectorAction,
     categoriesBulkRemoveAction,

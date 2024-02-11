@@ -6,8 +6,9 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { ServiceCreateUserInput, ServiceCreateUserInputStored } from '../data-api';
+import type { JudoRestResponse, ServiceCreateUserInput, ServiceCreateUserInputStored } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceCreateUserInputService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -18,10 +19,8 @@ export class ServiceCreateUserInputServiceImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceCreateUserInput> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceCreateUserInput>> {
     const path = '/service/CreateUserInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 }

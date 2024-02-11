@@ -44,6 +44,7 @@ import type {
   ServiceIssueTypeStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceImpl } from '~/services/data-axios/ServiceUserIssuesServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -274,8 +275,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -301,8 +306,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceImpl.getRangeOnCreateIssueForCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -328,8 +337,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceImpl.getRangeOnCreateIssueForDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -355,8 +368,12 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceImpl.getRangeOnCreateIssueForIssueType(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -384,7 +401,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
   const createIssueForUserIssuesAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserIssuesServiceImpl.createIssue(cleanUpPayload(payloadDiff.current));
+      const { data: result } = await serviceUserIssuesServiceImpl.createIssue(cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateIssueForUserIssuesAction) {
         await customActions.postCreateIssueForUserIssuesAction(result, onSubmit, onClose);
       } else {
@@ -404,10 +421,11 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceCreateIssueInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceCreateIssueInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceUserIssuesServiceImpl.getTemplateOnCreateIssue();
+      const response = await serviceUserIssuesServiceImpl.getTemplateOnCreateIssue();
+      const { data: result } = response;
       setData(result as ServiceCreateIssueInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceCreateIssueInputStored, any>),
@@ -421,7 +439,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
           ...(templateDataOverride as Record<keyof ServiceCreateIssueInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

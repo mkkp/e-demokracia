@@ -23,6 +23,7 @@ import type {
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceRatingVoteEntryRatingVoteEntry_TableActionDefinitions } from './ServiceRatingVoteEntryRatingVoteEntry_Table';
 
 const ServiceRatingVoteEntryRatingVoteEntry_Table = lazy(

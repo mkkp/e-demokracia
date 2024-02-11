@@ -30,6 +30,7 @@ import type {
   CreateArgumentInputQueryCustomizer,
   CreateArgumentInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { CreateArgumentInputCreateArgumentInput_FormActionDefinitions } from './CreateArgumentInputCreateArgumentInput_Form';
 
@@ -39,7 +40,7 @@ const CreateArgumentInputCreateArgumentInput_Form = lazy(
 
 export interface CreateArgumentInputCreateArgumentInput_FormDialogActions
   extends CreateArgumentInputCreateArgumentInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<CreateArgumentInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<CreateArgumentInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   createConArgumentForConAction?: () => Promise<void>;

@@ -22,11 +22,28 @@ export type FileHandlingHook = () => {
   downloadFile: (data: any, attributeName: string, disposition: 'inline' | 'attachment') => Promise<void>;
   extractFileNameFromToken: (token?: string | null, fallbackText?: string) => string;
   uploadFile: (data: any, attributeName: string, files: any[], path: string) => Promise<any | void>;
+  exportFile: (response: any) => void;
 };
 
 export const fileHandling: FileHandlingHook = () => {
   const { t } = useTranslation();
   const [createDialog, closeDialog] = useDialog();
+
+  const exportFile = (response: any) => {
+    if (response && response.status === 200) {
+      const fileName = response.headers['content-disposition'].match(/filename=\"(.*)\"/)[1];
+      const fileType = response.headers['content-type'];
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: fileType }));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      throw new Error('Error processing download response: ' + response);
+    }
+  };
 
   const downloadFile = async (data: any, attributeName: string, disposition: 'inline' | 'attachment') => {
     const response = await accessServiceImpl.downloadFile(data[attributeName], disposition);
@@ -118,6 +135,7 @@ export const fileHandling: FileHandlingHook = () => {
   };
 
   return {
+    exportFile,
     downloadFile,
     extractFileNameFromToken,
     uploadFile,

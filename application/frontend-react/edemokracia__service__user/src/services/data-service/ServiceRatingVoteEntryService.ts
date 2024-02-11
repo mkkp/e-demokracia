@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceRatingVoteEntry,
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
@@ -23,18 +24,21 @@ export interface ServiceRatingVoteEntryService {
   refresh(
     target: JudoIdentifiable<ServiceRatingVoteEntry>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
-  ): Promise<ServiceRatingVoteEntryStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceRatingVoteEntryStored>>;
   getOwner(
     target: JudoIdentifiable<ServiceRatingVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForOwner(
     owner?: JudoIdentifiable<ServiceRatingVoteEntry> | ServiceRatingVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
   setOwner(
     owner: JudoIdentifiable<ServiceRatingVoteEntry>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void>;
-  unsetOwner(owner: JudoIdentifiable<ServiceRatingVoteEntry>): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
+  unsetOwner(owner: JudoIdentifiable<ServiceRatingVoteEntry>): Promise<JudoRestResponse<void>>;
 }

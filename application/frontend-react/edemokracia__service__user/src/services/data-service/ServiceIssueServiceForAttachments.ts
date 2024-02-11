@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceIssue,
   ServiceIssueAttachment,
   ServiceIssueAttachmentQueryCustomizer,
@@ -21,21 +22,26 @@ export interface ServiceIssueServiceForAttachments {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<Array<ServiceIssueAttachmentStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueAttachmentStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<ServiceIssueAttachmentStored>;
-  getTemplate(): Promise<ServiceIssueAttachment>;
-  create(owner: JudoIdentifiable<ServiceIssue>, target: ServiceIssueAttachment): Promise<ServiceIssueAttachmentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceIssueAttachment>>;
+  create(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: ServiceIssueAttachment,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateCreate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
-  ): Promise<ServiceIssueAttachment>;
-  delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
-  update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
+  ): Promise<JudoRestResponse<ServiceIssueAttachment>>;
+  delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
+  update(target: Partial<ServiceIssueAttachmentStored>): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
-  ): Promise<ServiceIssueAttachmentStored>;
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
 }

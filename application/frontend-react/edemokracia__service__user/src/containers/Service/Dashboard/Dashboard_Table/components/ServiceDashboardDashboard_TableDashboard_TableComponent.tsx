@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -40,6 +40,7 @@ import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config
 import { useDataStore } from '~/hooks';
 import type { ServiceDashboard, ServiceDashboardQueryCustomizer, ServiceDashboardStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -62,7 +63,9 @@ export interface ServiceDashboardDashboard_TableDashboard_TableComponentActionDe
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceDashboardQueryCustomizer) => Promise<ServiceDashboardStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceDashboardQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceDashboardStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceDashboardStored, silentMode?: boolean) => Promise<void>;
@@ -90,6 +93,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   props: ServiceDashboardDashboard_TableDashboard_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -179,16 +183,16 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceDashboardStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -324,7 +328,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -353,6 +357,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
   return (
     <div id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable" data-table-name="Dashboard_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -440,6 +445,7 @@ export function ServiceDashboardDashboard_TableDashboard_TableComponent(
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

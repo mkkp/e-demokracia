@@ -51,7 +51,7 @@ const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCrea
         await onClose();
 
         // 3. Open view page in access
-        navigate(routeToServiceUserIssuesAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserIssuesAccessViewPage(res.data[0].__signedIdentifier));
       },
     };
   };

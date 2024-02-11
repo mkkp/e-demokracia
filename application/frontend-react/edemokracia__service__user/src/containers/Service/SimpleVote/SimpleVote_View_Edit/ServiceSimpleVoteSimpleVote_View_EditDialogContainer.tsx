@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceSimpleVoteSimpleVote_View_EditActionDefinitions } from './ServiceSimpleVoteSimpleVote_View_Edit';
 
@@ -31,7 +32,9 @@ export interface ServiceSimpleVoteSimpleVote_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<ServiceSimpleVoteStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceSimpleVoteStored>>;
   updateAction?: () => Promise<void>;
 }
 

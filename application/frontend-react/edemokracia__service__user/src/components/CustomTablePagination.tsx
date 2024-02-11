@@ -17,6 +17,7 @@ export interface CustomTablePaginationProps {
   page: number;
   rowPerPage: number;
   setPage: Dispatch<SetStateAction<number>>;
+  totalCount?: number;
 }
 
 export const CustomTablePagination = (props: CustomTablePaginationProps) => {
@@ -38,7 +39,7 @@ export const CustomTablePagination = (props: CustomTablePaginationProps) => {
   return (
     <TablePagination
       component="div"
-      count={-1}
+      count={props.totalCount ?? -1}
       page={props.page}
       onPageChange={handleChangePage}
       rowsPerPage={props.rowPerPage}

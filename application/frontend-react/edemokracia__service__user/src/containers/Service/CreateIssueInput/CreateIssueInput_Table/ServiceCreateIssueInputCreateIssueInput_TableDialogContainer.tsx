@@ -23,6 +23,7 @@ import type {
   ServiceCreateIssueInputQueryCustomizer,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceCreateIssueInputCreateIssueInput_TableActionDefinitions } from './ServiceCreateIssueInputCreateIssueInput_Table';
 
 const ServiceCreateIssueInputCreateIssueInput_Table = lazy(

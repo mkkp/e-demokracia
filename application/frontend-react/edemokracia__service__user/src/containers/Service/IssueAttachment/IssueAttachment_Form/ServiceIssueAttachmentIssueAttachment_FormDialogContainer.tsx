@@ -30,6 +30,7 @@ import type {
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueAttachmentIssueAttachment_FormActionDefinitions } from './ServiceIssueAttachmentIssueAttachment_Form';
 
@@ -39,7 +40,7 @@ const ServiceIssueAttachmentIssueAttachment_Form = lazy(
 
 export interface ServiceIssueAttachmentIssueAttachment_FormDialogActions
   extends ServiceIssueAttachmentIssueAttachment_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceIssueAttachment>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceIssueAttachment>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

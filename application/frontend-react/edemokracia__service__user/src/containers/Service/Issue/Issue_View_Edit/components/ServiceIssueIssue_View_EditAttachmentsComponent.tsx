@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -46,6 +46,7 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
@@ -72,7 +73,7 @@ export interface ServiceIssueIssue_View_EditAttachmentsComponentActionDefinition
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   attachmentsRefreshAction?: (
     queryCustomizer: ServiceIssueAttachmentQueryCustomizer,
-  ) => Promise<ServiceIssueAttachmentStored[]>;
+  ) => Promise<JudoRestResponse<ServiceIssueAttachmentStored[]>>;
   getAttachmentsMask?: () => string;
   attachmentsDeleteAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
   attachmentsRemoveAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
@@ -116,6 +117,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -262,16 +264,16 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceIssueAttachmentStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -422,6 +424,7 @@ export function ServiceIssueIssue_View_EditAttachmentsComponent(
       data-table-name="attachments"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

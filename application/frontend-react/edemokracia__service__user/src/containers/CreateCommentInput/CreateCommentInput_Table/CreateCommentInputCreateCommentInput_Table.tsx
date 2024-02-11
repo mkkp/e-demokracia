@@ -25,6 +25,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { CreateCommentInput, CreateCommentInputQueryCustomizer, CreateCommentInputStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const CREATE_COMMENT_INPUT_CREATE_COMMENT_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =

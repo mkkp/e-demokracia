@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceConCon_TableActionDefinitions } from './ServiceConCon_Table';
 
 const ServiceConCon_Table = lazy(() => import('~/containers/Service/Con/Con_Table/ServiceConCon_Table'));

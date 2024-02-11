@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceIssueTypeIssueType_TableActionDefinitions } from './ServiceIssueTypeIssueType_Table';
 
 const ServiceIssueTypeIssueType_Table = lazy(

@@ -28,6 +28,7 @@ import type {
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -287,7 +288,10 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
       }
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.create(ownerData, payload);
+      const { data: res } = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.create(
+        ownerData,
+        payload,
+      );
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -303,10 +307,11 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceSelectAnswerVoteSelection> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>> => {
     try {
       setIsLoading(true);
-      const result = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.getTemplate();
+      const response = await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceSelectAnswerVoteSelectionStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>),
@@ -320,7 +325,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
           ...(templateDataOverride as Record<keyof ServiceSelectAnswerVoteSelectionStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

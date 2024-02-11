@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -53,6 +53,7 @@ import type {
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -72,7 +73,7 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   voteEntriesRefreshAction?: (
     queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ) => Promise<ServiceYesNoAbstainVoteEntryStored[]>;
+  ) => Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored[]>>;
   getVoteEntriesMask?: () => string;
   voteEntriesOpenPageAction?: (row: ServiceYesNoAbstainVoteEntryStored, isDraft?: boolean) => Promise<void>;
   voteEntriesAdditionalToolbarButtons?: (
@@ -114,6 +115,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -225,16 +227,16 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
 
   const rowActions: TableRowAction<ServiceYesNoAbstainVoteEntryStored>[] = useMemo(() => [], [actions, isLoading]);
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_-O5k4FsjEe6Mx9dH3yj5gQ)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceYesNoAbstainVoteEntryStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -400,7 +402,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
         };
-        const res = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -432,6 +434,7 @@ export function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View
       data-table-name="voteEntries"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

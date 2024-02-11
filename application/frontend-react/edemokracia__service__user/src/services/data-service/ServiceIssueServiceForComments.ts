@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceCommentStored,
@@ -27,19 +28,23 @@ export interface ServiceIssueServiceForComments {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<Array<ServiceCommentStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCommentStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<ServiceCommentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCommentStored>>;
   getCreatedBy(
     owner: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   listVotes(
     owner: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
+  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
 }

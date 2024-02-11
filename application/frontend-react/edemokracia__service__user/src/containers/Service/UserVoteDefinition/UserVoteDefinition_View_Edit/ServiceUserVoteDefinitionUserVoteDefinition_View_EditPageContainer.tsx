@@ -20,6 +20,7 @@ import type {
   ServiceUserVoteDefinitionQueryCustomizer,
   ServiceUserVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions } from './ServiceUserVoteDefinitionUserVoteDefinition_View_Edit';
@@ -38,7 +39,7 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageAction
   deleteAction?: () => Promise<void>;
   refreshAction?: (
     queryCustomizer: ServiceUserVoteDefinitionQueryCustomizer,
-  ) => Promise<ServiceUserVoteDefinitionStored>;
+  ) => Promise<JudoRestResponse<ServiceUserVoteDefinitionStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -92,6 +93,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -108,6 +110,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -126,6 +129,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -144,6 +148,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -162,6 +167,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditPag
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

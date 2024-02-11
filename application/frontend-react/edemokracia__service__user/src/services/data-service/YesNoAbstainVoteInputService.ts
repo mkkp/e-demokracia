@@ -6,12 +6,12 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { YesNoAbstainVoteInput, YesNoAbstainVoteInputStored } from '../data-api';
+import { JudoRestResponse, YesNoAbstainVoteInput, YesNoAbstainVoteInputStored } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for YesNoAbstainVoteInput
  */
 export interface YesNoAbstainVoteInputService {
-  getTemplate(): Promise<YesNoAbstainVoteInput>;
+  getTemplate(): Promise<JudoRestResponse<YesNoAbstainVoteInput>>;
 }

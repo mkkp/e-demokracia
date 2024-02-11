@@ -20,6 +20,7 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueCategoryIssueCategory_View_EditActionDefinitions } from './ServiceIssueCategoryIssueCategory_View_Edit';
@@ -34,7 +35,9 @@ export interface ServiceIssueCategoryIssueCategory_View_EditPageActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceIssueCategoryQueryCustomizer) => Promise<ServiceIssueCategoryStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceIssueCategoryQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -90,6 +93,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -106,6 +110,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -122,6 +127,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -138,6 +144,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -154,6 +161,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

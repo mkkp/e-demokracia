@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions,
-  ServiceServiceUserServiceUser_TableSetSelectorDialogProps,
-} from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
+  ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActions,
+  ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogProps,
+} from '~/containers/Service/IssueCategory/IssueCategory_View_Edit/Owner/SetSelector/ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssueCategory,
@@ -29,26 +29,27 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceForOwnerImpl } from '~/services/data-axios/ServiceIssueCategoryServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
+export type ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActionsExtended =
+  ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
+export type ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceServiceUserStored[],
   editMode: boolean,
   selectionDiff: ServiceServiceUserStored[],
   submit: () => Promise<void>,
-) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
+) => ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActionsExtended;
 
-export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
-  extends ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
+export interface ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModel
+  extends ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,13 +57,13 @@ export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceServiceUserServiceUser_TableSetSelectorViewModelContext =
-  createContext<ServiceServiceUserServiceUser_TableSetSelectorViewModel>({} as any);
-export const useServiceServiceUserServiceUser_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceServiceUserServiceUser_TableSetSelectorViewModelContext);
+const ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModelContext =
+  createContext<ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModel>({} as any);
+export const useServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceServiceUserServiceUser_TableSetSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_TableSetSelectorViewModelProvider',
+      'useServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModel must be used within a(n) ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModelProvider',
     );
   }
   return context;
@@ -112,10 +113,10 @@ export const useServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetSelectorP
     });
 };
 
-const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
+const ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer'
+      '~/containers/Service/IssueCategory/IssueCategory_View_Edit/Owner/SetSelector/ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogContainer'
     ),
 );
 
@@ -171,17 +172,18 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
+  const { service: customActionsHook } =
+    useTrackService<ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_VIEW_EDIT_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActionsExtended | undefined =
     customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+    return t('service.IssueCategory.IssueCategory_View_Edit.owner.SetSelector', { defaultValue: 'Owner' });
   };
   const backAction = async () => {
     onClose();
@@ -202,16 +204,16 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     try {
       return serviceIssueCategoryServiceForOwnerImpl.getRangeForOwner(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
+  const actions: ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -221,7 +223,7 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   };
 
   // ViewModel setup
-  const viewModel: ServiceServiceUserServiceUser_TableSetSelectorViewModel = {
+  const viewModel: ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -241,13 +243,13 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
   // Effect section
 
   return (
-    <ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_8sinwIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::IssueCategory::IssueCategory_View_Edit::owner::LinkSetSelectorPage"
         />
-        <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
+        <ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -260,6 +262,6 @@ export default function ServiceIssueCategoryIssueCategory_View_EditOwnerLinkSetS
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider>
+    </ServiceIssueCategoryIssueCategory_View_EditOwnerSetSelectorViewModelContext.Provider>
   );
 }

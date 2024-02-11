@@ -7,6 +7,7 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceCreateUserInput,
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -16,6 +17,7 @@ import type {
   ServiceUserManagerStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceUserManagerService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -29,42 +31,38 @@ export class ServiceUserManagerServiceImpl extends JudoAxiosService implements S
   async refresh(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
-  ): Promise<ServiceUserManagerStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>> {
     const path = '/service/UserManager/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored> {
+  async update(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>> {
     const path = '/service/UserManager/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored> {
+  async validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>> {
     const path = '/service/UserManager/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -73,15 +71,15 @@ export class ServiceUserManagerServiceImpl extends JudoAxiosService implements S
   async listUsers(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/UserManager/users/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -90,31 +88,27 @@ export class ServiceUserManagerServiceImpl extends JudoAxiosService implements S
   async getRangeForUsers(
     owner?: JudoIdentifiable<ServiceUserManager> | ServiceUserManager,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/UserManager/users/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      { owner: owner ?? {}, queryCustomizer: queryCustomizer ?? {} },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createUser(target: ServiceCreateUserInput): Promise<ServiceServiceUserStored> {
+  async createUser(target: ServiceCreateUserInput): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/UserManager/createUser';
-    const response = await this.axios.post(this.getPathForActor(path), target);
-
-    return response.data;
+    return this.axios.post(this.getPathForActor(path), target);
   }
 
-  async getTemplateOnCreateUser(): Promise<ServiceCreateUserInput> {
+  async getTemplateOnCreateUser(): Promise<JudoRestResponse<ServiceCreateUserInput>> {
     const path = '/service/CreateUserInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 }

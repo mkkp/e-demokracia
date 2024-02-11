@@ -7,6 +7,7 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
@@ -16,6 +17,7 @@ import type {
   ServiceYesNoVoteEntryStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceYesNoVoteDefinitionServiceForVoteEntries } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -33,21 +35,23 @@ export class ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl
   async list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceYesNoVoteEntryStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceYesNoVoteEntryStored>>> {
     const path = '/service/YesNoVoteDefinition/voteEntries/~list';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -57,35 +61,35 @@ export class ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoVoteEntryQueryCustomizer,
-  ): Promise<ServiceYesNoVoteEntryStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> {
     const path = '/service/YesNoVoteEntry/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   async getOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/YesNoVoteEntry/owner/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -95,14 +99,17 @@ export class ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl
   async getRangeForOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteEntry> | ServiceYesNoVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/YesNoVoteEntry/owner/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner,
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      {
+        owner: owner,
+        queryCustomizer: queryCustomizer ?? {},
+      },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
@@ -112,11 +119,11 @@ export class ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl
   async setOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteEntry>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void> {
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoVoteEntry/~update/owner/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
+    return this.axios.post(this.getPathForActor(path), selected, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }
@@ -125,11 +132,11 @@ export class ServiceYesNoVoteDefinitionServiceForVoteEntriesImpl
    * From: targetRelation.isUnsetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoVoteEntry>): Promise<void> {
+  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoVoteEntry>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoVoteEntry/~update/owner/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }

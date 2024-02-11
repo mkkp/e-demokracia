@@ -30,6 +30,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoAbstainVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -154,7 +155,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessTablePage() 
   };
   const refreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceYesNoAbstainVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

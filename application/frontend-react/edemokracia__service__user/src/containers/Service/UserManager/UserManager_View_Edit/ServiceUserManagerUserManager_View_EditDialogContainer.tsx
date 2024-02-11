@@ -23,6 +23,7 @@ import type {
   ServiceUserManagerQueryCustomizer,
   ServiceUserManagerStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceUserManagerUserManager_View_EditActionDefinitions } from './ServiceUserManagerUserManager_View_Edit';
 
@@ -35,7 +36,9 @@ export interface ServiceUserManagerUserManager_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceUserManagerQueryCustomizer) => Promise<ServiceUserManagerStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceUserManagerQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceUserManagerStored>>;
   updateAction?: () => Promise<void>;
 }
 

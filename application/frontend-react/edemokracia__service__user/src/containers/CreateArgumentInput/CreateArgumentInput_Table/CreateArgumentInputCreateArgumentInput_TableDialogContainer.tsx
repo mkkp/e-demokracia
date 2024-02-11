@@ -23,6 +23,7 @@ import type {
   CreateArgumentInputQueryCustomizer,
   CreateArgumentInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { CreateArgumentInputCreateArgumentInput_TableActionDefinitions } from './CreateArgumentInputCreateArgumentInput_Table';
 
 const CreateArgumentInputCreateArgumentInput_Table = lazy(

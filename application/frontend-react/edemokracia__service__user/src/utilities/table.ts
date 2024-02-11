@@ -11,6 +11,12 @@ import type { MutableRefObject } from 'react';
 import type { JudoStored } from '~/services/data-api/common';
 import type { Filter } from '../components-api';
 
+export interface PersistedColumnInfo {
+  field: string;
+  index: number;
+  width?: number;
+}
+
 export interface PersistedTableData {
   sortModel?: GridSortModel;
   filterModel?: GridFilterModel;

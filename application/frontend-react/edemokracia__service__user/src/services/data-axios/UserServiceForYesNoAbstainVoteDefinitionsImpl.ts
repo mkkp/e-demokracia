@@ -15,6 +15,7 @@ import type {
   CreateArgumentInputStored,
   CreateCommentInput,
   CreateCommentInputStored,
+  JudoRestResponse,
   ServiceIssue,
   ServiceIssueQueryCustomizer,
   ServiceIssueStored,
@@ -31,6 +32,7 @@ import type {
   YesNoAbstainVoteInputStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { UserServiceForYesNoAbstainVoteDefinitions } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -48,21 +50,23 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ): Promise<Array<ServiceYesNoAbstainVoteDefinitionStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceYesNoAbstainVoteDefinitionStored>>> {
     const path = '/service/User/yesNoAbstainVoteDefinitions/~list';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -72,21 +76,23 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceYesNoAbstainVoteDefinitionStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -95,15 +101,13 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    */
   async update(
     target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
-  ): Promise<ServiceYesNoAbstainVoteDefinitionStored> {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -112,43 +116,37 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    */
   async validateUpdate(
     target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
-  ): Promise<ServiceYesNoAbstainVoteDefinitionStored> {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   async getIssue(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored> {
+  ): Promise<JudoRestResponse<ServiceIssueStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/issue/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   async validateUpdateIssue(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     target: Partial<ServiceIssueStored>,
-  ): Promise<ServiceIssueStored> {
+  ): Promise<JudoRestResponse<ServiceIssueStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/issue/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -156,11 +154,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+  async activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/activate';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -170,11 +168,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+  async addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/addToFavorites';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -187,22 +185,18 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async closeDebateForIssue(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> {
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>> {
     const path = '/service/Issue/closeDebate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
 
-  async getTemplateOnCloseDebateForIssue(): Promise<CloseDebateInput> {
+  async getTemplateOnCloseDebateForIssue(): Promise<JudoRestResponse<CloseDebateInput>> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -210,11 +204,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+  async closeVoteForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -224,20 +218,21 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createCommentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void> {
+  async createCommentForIssue(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateCommentInput,
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/createComment';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
 
-  async getTemplateOnCreateCommentForIssue(): Promise<CreateCommentInput> {
+  async getTemplateOnCreateCommentForIssue(): Promise<JudoRestResponse<CreateCommentInput>> {
     const path = '/CreateCommentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -245,20 +240,21 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createConArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void> {
+  async createConArgumentForIssue(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/createConArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
 
-  async getTemplateOnCreateConArgumentForIssue(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateConArgumentForIssue(): Promise<JudoRestResponse<CreateArgumentInput>> {
     const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -266,20 +262,21 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async createProArgumentForIssue(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void> {
+  async createProArgumentForIssue(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/createProArgument';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
 
-  async getTemplateOnCreateProArgumentForIssue(): Promise<CreateArgumentInput> {
+  async getTemplateOnCreateProArgumentForIssue(): Promise<JudoRestResponse<CreateArgumentInput>> {
     const path = '/CreateArgumentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -287,11 +284,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+  async deleteOrArchiveForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/deleteOrArchive';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -301,11 +298,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<void> {
+  async removeFromFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>> {
     const path = '/service/Issue/removeFromFavorites';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -313,15 +310,13 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async getOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/owner/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -331,28 +326,29 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async getRangeForOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition> | ServiceYesNoAbstainVoteDefinition,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/YesNoAbstainVoteDefinition/owner/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner,
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      {
+        owner: owner,
+        queryCustomizer: queryCustomizer ?? {},
+      },
+      headers ? { headers } : undefined,
+    );
   }
 
   async validateUpdateOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     target: Partial<ServiceServiceUserStored>,
-  ): Promise<ServiceServiceUserStored> {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/owner/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -362,11 +358,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async setOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void> {
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/owner/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
+    return this.axios.post(this.getPathForActor(path), selected, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }
@@ -375,11 +371,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * From: targetRelation.isUnsetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async unsetOwner(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/owner/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }
@@ -387,57 +383,51 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
   async getUserVoteEntry(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ): Promise<ServiceYesNoAbstainVoteEntryStored> {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/userVoteEntry/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   async validateUpdateUserVoteEntry(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     target: Partial<ServiceYesNoAbstainVoteEntryStored>,
-  ): Promise<ServiceYesNoAbstainVoteEntryStored> {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/userVoteEntry/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   async listVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceYesNoAbstainVoteEntryStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceYesNoAbstainVoteEntryStored>>> {
     const path = '/service/YesNoAbstainVoteDefinition/voteEntries/~list';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   async validateUpdateVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
     target: Partial<ServiceYesNoAbstainVoteEntryStored>,
-  ): Promise<ServiceYesNoAbstainVoteEntryStored> {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update/voteEntries/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -445,11 +435,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async activate(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async activate(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/activate';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -459,11 +449,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async addToFavorites(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async addToFavorites(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/addToFavorites';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -473,11 +463,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async closeVote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async closeVote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/closeVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -487,11 +477,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async deleteOrArchive(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async deleteOrArchive(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/deleteOrArchive';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -501,11 +491,13 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async removeFromFavorites(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async removeFromFavorites(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/removeFromFavorites';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -515,11 +507,11 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async takeBackVote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<void> {
+  async takeBackVote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/takeBackVote';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -529,19 +521,20 @@ export class UserServiceForYesNoAbstainVoteDefinitionsImpl
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async vote(owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>, target: YesNoAbstainVoteInput): Promise<void> {
+  async vote(
+    owner: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,
+    target: YesNoAbstainVoteInput,
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/YesNoAbstainVoteDefinition/vote';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
 
-  async getTemplateOnVote(): Promise<YesNoAbstainVoteInput> {
+  async getTemplateOnVote(): Promise<JudoRestResponse<YesNoAbstainVoteInput>> {
     const path = '/YesNoAbstainVoteInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 }

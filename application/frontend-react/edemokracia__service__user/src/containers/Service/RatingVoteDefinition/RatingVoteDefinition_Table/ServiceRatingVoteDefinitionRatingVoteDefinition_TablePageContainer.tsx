@@ -20,6 +20,7 @@ import type {
   ServiceRatingVoteDefinitionQueryCustomizer,
   ServiceRatingVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import type { ServiceRatingVoteDefinitionRatingVoteDefinition_TableActionDefinitions } from './ServiceRatingVoteDefinitionRatingVoteDefinition_Table';
 
@@ -63,6 +64,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_TablePag
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}

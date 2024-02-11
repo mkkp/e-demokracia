@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   RatingVoteInput,
   RatingVoteInputStored,
   SelectAnswerVoteSelection,
@@ -33,31 +34,41 @@ export interface ServiceDashboardServiceForUserVoteEntries {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceVoteEntryStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceVoteEntryStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceVoteEntryQueryCustomizer,
-  ): Promise<ServiceVoteEntryStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceVoteEntryStored>>;
   getVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteEntry>,
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored>;
-  voteRatingForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: RatingVoteInput): Promise<void>;
-  getTemplateOnVoteRatingForVoteDefinition(): Promise<RatingVoteInput>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>>;
+  voteRatingForVoteDefinition(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: RatingVoteInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnVoteRatingForVoteDefinition(): Promise<JudoRestResponse<RatingVoteInput>>;
   voteSelectAnswerForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: SelectAnswerVoteSelection,
-  ): Promise<void>;
-  getTemplateOnVoteSelectAnswerForVoteDefinition(): Promise<SelectAnswerVoteSelection>;
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnVoteSelectAnswerForVoteDefinition(): Promise<JudoRestResponse<SelectAnswerVoteSelection>>;
   getRangeOnVoteSelectAnswerForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition> | ServiceVoteDefinition,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<Array<SelectAnswerVoteSelectionStored>>;
-  voteYesNoForVoteDefinition(owner: JudoIdentifiable<ServiceVoteDefinition>, target: YesNoVoteInput): Promise<void>;
-  getTemplateOnVoteYesNoForVoteDefinition(): Promise<YesNoVoteInput>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<SelectAnswerVoteSelectionStored>>>;
+  voteYesNoForVoteDefinition(
+    owner: JudoIdentifiable<ServiceVoteDefinition>,
+    target: YesNoVoteInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnVoteYesNoForVoteDefinition(): Promise<JudoRestResponse<YesNoVoteInput>>;
   voteYesNoAbstainForVoteDefinition(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: YesNoAbstainVoteInput,
-  ): Promise<void>;
-  getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<YesNoAbstainVoteInput>;
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<JudoRestResponse<YesNoAbstainVoteInput>>;
 }

@@ -6,7 +6,12 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { ServiceProParent, ServiceProParentQueryCustomizer, ServiceProParentStored } from '../data-api';
+import {
+  JudoRestResponse,
+  ServiceProParent,
+  ServiceProParentQueryCustomizer,
+  ServiceProParentStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,5 +21,6 @@ export interface ServiceProParentService {
   refresh(
     target: JudoIdentifiable<ServiceProParent>,
     queryCustomizer?: ServiceProParentQueryCustomizer,
-  ): Promise<ServiceProParentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceProParentStored>>;
 }

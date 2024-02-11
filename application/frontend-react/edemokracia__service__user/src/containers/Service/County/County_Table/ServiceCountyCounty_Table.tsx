@@ -24,6 +24,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceCountyCounty_TableCounty_TableComponentActionDefinitions } from './components/ServiceCountyCounty_TableCounty_TableComponent';
 import { ServiceCountyCounty_TableCounty_TableComponent } from './components/ServiceCountyCounty_TableCounty_TableComponent';

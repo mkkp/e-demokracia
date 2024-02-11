@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceProPro_View_EditActionDefinitions } from './ServiceProPro_View_Edit';
 
@@ -28,7 +29,7 @@ export interface ServiceProPro_View_EditDialogActions extends ServiceProPro_View
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<ServiceProStored>;
+  refreshAction?: (queryCustomizer: ServiceProQueryCustomizer) => Promise<JudoRestResponse<ServiceProStored>>;
   updateAction?: () => Promise<void>;
 }
 

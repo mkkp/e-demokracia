@@ -6,8 +6,9 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { Initializer, InitializerQueryCustomizer, InitializerStored } from '../data-api';
+import type { Initializer, InitializerQueryCustomizer, InitializerStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { InitializerService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -21,50 +22,50 @@ export class InitializerServiceImpl extends JudoAxiosService implements Initiali
   async refresh(
     target: JudoIdentifiable<Initializer>,
     queryCustomizer?: InitializerQueryCustomizer,
-  ): Promise<InitializerStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<InitializerStored>> {
     const path = '/Initializer/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initAreas(): Promise<void> {
+  async initAreas(): Promise<JudoRestResponse<void>> {
     const path = '/Initializer/initAreas';
-    const response = await this.axios.post(this.getPathForActor(path), undefined);
+    return this.axios.post(this.getPathForActor(path), undefined);
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initCategories(): Promise<void> {
+  async initCategories(): Promise<JudoRestResponse<void>> {
     const path = '/Initializer/initCategories';
-    const response = await this.axios.post(this.getPathForActor(path), undefined);
+    return this.axios.post(this.getPathForActor(path), undefined);
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initIssueTypes(): Promise<void> {
+  async initIssueTypes(): Promise<JudoRestResponse<void>> {
     const path = '/Initializer/initIssueTypes';
-    const response = await this.axios.post(this.getPathForActor(path), undefined);
+    return this.axios.post(this.getPathForActor(path), undefined);
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async initUsers(): Promise<void> {
+  async initUsers(): Promise<JudoRestResponse<void>> {
     const path = '/Initializer/initUsers';
-    const response = await this.axios.post(this.getPathForActor(path), undefined);
+    return this.axios.post(this.getPathForActor(path), undefined);
   }
 }

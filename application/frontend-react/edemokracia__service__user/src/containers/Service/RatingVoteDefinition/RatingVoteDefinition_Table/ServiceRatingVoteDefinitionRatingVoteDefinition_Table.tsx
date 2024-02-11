@@ -28,6 +28,7 @@ import {
   ServiceRatingVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponentActionDefinitions } from './components/ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponent';
 import { ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponent } from './components/ServiceRatingVoteDefinitionRatingVoteDefinition_TableRatingVoteDefinition_TableComponent';

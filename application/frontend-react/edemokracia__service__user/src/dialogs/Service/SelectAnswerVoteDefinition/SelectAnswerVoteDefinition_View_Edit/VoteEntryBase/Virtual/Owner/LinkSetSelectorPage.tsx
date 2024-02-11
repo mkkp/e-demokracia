@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions,
-  ServiceServiceUserServiceUser_TableSetSelectorDialogProps,
-} from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActions,
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogProps,
+} from '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/SetSelector/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceSelectAnswerVoteDefinition,
@@ -29,26 +29,28 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActionsExtended =
+  ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActions & {};
 
 export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRY_BASE_VIRTUAL_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRY_BASE_VIRTUAL_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
-  ownerData: any,
-  data: ServiceServiceUserStored[],
-  editMode: boolean,
-  selectionDiff: ServiceServiceUserStored[],
-  submit: () => Promise<void>,
-) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
+export type ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorActionsHook =
+  (
+    ownerData: any,
+    data: ServiceServiceUserStored[],
+    editMode: boolean,
+    selectionDiff: ServiceServiceUserStored[],
+    submit: () => Promise<void>,
+  ) => ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActionsExtended;
 
-export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
-  extends ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
+export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModel
+  extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,17 +58,22 @@ export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceServiceUserServiceUser_TableSetSelectorViewModelContext =
-  createContext<ServiceServiceUserServiceUser_TableSetSelectorViewModel>({} as any);
-export const useServiceServiceUserServiceUser_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceServiceUserServiceUser_TableSetSelectorViewModelContext);
-  if (!context) {
-    throw new Error(
-      'useServiceServiceUserServiceUser_TableSetSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_TableSetSelectorViewModelProvider',
+const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModelContext =
+  createContext<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModel>(
+    {} as any,
+  );
+export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModel =
+  () => {
+    const context = useContext(
+      ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModelContext,
     );
-  }
-  return context;
-};
+    if (!context) {
+      throw new Error(
+        'useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModel must be used within a(n) ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModelProvider',
+      );
+    }
+    return context;
+  };
 
 export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPage =
   (): ((
@@ -113,12 +120,13 @@ export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       });
   };
 
-const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
-  () =>
-    import(
-      '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer'
-    ),
-);
+const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogContainer =
+  lazy(
+    () =>
+      import(
+        '~/containers/Service/SelectAnswerVoteDefinition/SelectAnswerVoteDefinition_View_Edit/VoteEntryBase/Virtual/Owner/SetSelector/ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogContainer'
+      ),
+  );
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerLinkSetSelectorPageProps {
   ownerData: any;
@@ -172,17 +180,22 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRY_BASE_VIRTUAL_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
+  const { service: customActionsHook } =
+    useTrackService<ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRY_BASE_VIRTUAL_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+    return t(
+      'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.owner.SetSelector',
+      { defaultValue: 'Owner' },
+    );
   };
   const backAction = async () => {
     onClose();
@@ -203,55 +216,59 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     try {
       return serviceSelectAnswerVoteDefinitionServiceForOwnerImpl.getRangeForOwner(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
-    getPageTitle,
-    backAction,
-    setAction,
-    filterAction,
-    selectorRangeAction,
-    ...(customActions ?? {}),
-  };
+  const actions: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogActions =
+    {
+      getPageTitle,
+      backAction,
+      setAction,
+      filterAction,
+      selectorRangeAction,
+      ...(customActions ?? {}),
+    };
 
   // ViewModel setup
-  const viewModel: ServiceServiceUserServiceUser_TableSetSelectorViewModel = {
-    onClose,
-    actions,
-    ownerData,
-    isLoading,
-    setIsLoading,
-    editMode,
-    setEditMode,
-    refresh,
-    refreshCounter,
-    submit,
-    alreadySelected,
-    selectionDiff,
-    setSelectionDiff,
-    isDraft,
-  };
+  const viewModel: ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModel =
+    {
+      onClose,
+      actions,
+      ownerData,
+      isLoading,
+      setIsLoading,
+      editMode,
+      setEditMode,
+      refresh,
+      refreshCounter,
+      submit,
+      alreadySelected,
+      selectionDiff,
+      setSelectionDiff,
+      isDraft,
+    };
 
   // Effect section
 
   return (
-    <ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_EKuyIHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::LinkSetSelectorPage"
         />
-        <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
+        <ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -264,6 +281,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider>
+    </ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorViewModelContext.Provider>
   );
 }

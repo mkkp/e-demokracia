@@ -29,6 +29,7 @@ import type {
   VoteTypeOnCloseDebate,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -256,7 +257,10 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
   const closeDebateForIssueAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.closeDebate(ownerData, cleanUpPayload(payloadDiff.current));
+      const { data: result } = await serviceIssueServiceImpl.closeDebate(
+        ownerData,
+        cleanUpPayload(payloadDiff.current),
+      );
       if (customActions?.postCloseDebateForIssueAction) {
         await customActions.postCloseDebateForIssueAction(result, onSubmit, onClose);
       } else {
@@ -276,10 +280,11 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<CloseDebateInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<CloseDebateInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.getTemplateOnCloseDebate();
+      const response = await serviceIssueServiceImpl.getTemplateOnCloseDebate();
+      const { data: result } = response;
       setData(result as CloseDebateInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof CloseDebateInputStored, any>),
@@ -293,7 +298,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
           ...(templateDataOverride as Record<keyof CloseDebateInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

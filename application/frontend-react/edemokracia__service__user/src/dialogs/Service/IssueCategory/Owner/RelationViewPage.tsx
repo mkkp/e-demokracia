@@ -54,6 +54,7 @@ import type {
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceForOwnerImpl } from '~/services/data-axios/ServiceIssueCategoryServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -304,11 +305,12 @@ export default function ServiceIssueCategoryOwnerRelationViewPage(
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceIssueCategoryServiceForOwnerImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceIssueCategoryServiceForOwnerImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -321,7 +323,7 @@ export default function ServiceIssueCategoryOwnerRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -335,8 +337,12 @@ export default function ServiceIssueCategoryOwnerRelationViewPage(
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -371,8 +377,12 @@ export default function ServiceIssueCategoryOwnerRelationViewPage(
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -407,8 +417,12 @@ export default function ServiceIssueCategoryOwnerRelationViewPage(
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceIssueCategoryServiceForOwnerImpl.getRangeForResidentDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

@@ -28,6 +28,7 @@ import {
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceCreateUserInputCreateUserInput_TableCreateUserInput_TableComponentActionDefinitions } from './components/ServiceCreateUserInputCreateUserInput_TableCreateUserInput_TableComponent';
 import { ServiceCreateUserInputCreateUserInput_TableCreateUserInput_TableComponent } from './components/ServiceCreateUserInputCreateUserInput_TableCreateUserInput_TableComponent';

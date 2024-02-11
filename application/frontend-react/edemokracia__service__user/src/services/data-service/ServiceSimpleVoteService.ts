@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
@@ -23,15 +24,21 @@ export interface ServiceSimpleVoteService {
   refresh(
     target: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<ServiceSimpleVoteStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSimpleVoteStored>>;
   getUser(
     target: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForUser(
     owner?: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
-  setUser(owner: JudoIdentifiable<ServiceSimpleVote>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
-  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
+  setUser(
+    owner: JudoIdentifiable<ServiceSimpleVote>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>): Promise<JudoRestResponse<void>>;
 }

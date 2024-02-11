@@ -27,6 +27,7 @@ import { DropdownButton, MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -67,7 +68,7 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
     ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
   getPageTitle?: (data: ServiceRatingVoteDefinition) => string;
   issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
-  issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<ServiceIssueStored>;
+  issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForRatingVoteDefinitionAction?: () => Promise<void>;
   addToFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
   closeVoteForRatingVoteDefinitionAction?: () => Promise<void>;

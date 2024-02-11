@@ -6,12 +6,12 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { CreateArgumentInput, CreateArgumentInputStored } from '../data-api';
+import { CreateArgumentInput, CreateArgumentInputStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for CreateArgumentInput
  */
 export interface CreateArgumentInputService {
-  getTemplate(): Promise<CreateArgumentInput>;
+  getTemplate(): Promise<JudoRestResponse<CreateArgumentInput>>;
 }

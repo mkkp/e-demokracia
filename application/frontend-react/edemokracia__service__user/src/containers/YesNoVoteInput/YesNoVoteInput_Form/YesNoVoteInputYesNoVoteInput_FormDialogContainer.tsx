@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { YesNoVoteInput, YesNoVoteInputQueryCustomizer, YesNoVoteInputStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { YesNoVoteInputYesNoVoteInput_FormActionDefinitions } from './YesNoVoteInputYesNoVoteInput_Form';
 
@@ -35,7 +36,7 @@ const YesNoVoteInputYesNoVoteInput_Form = lazy(
 
 export interface YesNoVoteInputYesNoVoteInput_FormDialogActions
   extends YesNoVoteInputYesNoVoteInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<YesNoVoteInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<YesNoVoteInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   voteYesNoForVoteDefinitionAction?: () => Promise<void>;

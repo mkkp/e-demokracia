@@ -7,6 +7,7 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceRatingVoteDefinition,
   ServiceRatingVoteEntry,
   ServiceRatingVoteEntryQueryCustomizer,
@@ -16,6 +17,7 @@ import type {
   ServiceServiceUserStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceRatingVoteDefinitionServiceForVoteEntries } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -33,21 +35,23 @@ export class ServiceRatingVoteDefinitionServiceForVoteEntriesImpl
   async list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceRatingVoteEntryStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceRatingVoteEntryStored>>> {
     const path = '/service/RatingVoteDefinition/voteEntries/~list';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -57,35 +61,35 @@ export class ServiceRatingVoteDefinitionServiceForVoteEntriesImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceRatingVoteEntryQueryCustomizer,
-  ): Promise<ServiceRatingVoteEntryStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceRatingVoteEntryStored>> {
     const path = '/service/RatingVoteEntry/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   async getOwner(
     owner: JudoIdentifiable<ServiceRatingVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> {
     const path = '/service/RatingVoteEntry/owner/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -95,14 +99,17 @@ export class ServiceRatingVoteDefinitionServiceForVoteEntriesImpl
   async getRangeForOwner(
     owner: JudoIdentifiable<ServiceRatingVoteEntry> | ServiceRatingVoteEntry,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>> {
     const path = '/service/RatingVoteEntry/owner/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner,
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      {
+        owner: owner,
+        queryCustomizer: queryCustomizer ?? {},
+      },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
@@ -112,11 +119,11 @@ export class ServiceRatingVoteDefinitionServiceForVoteEntriesImpl
   async setOwner(
     owner: JudoIdentifiable<ServiceRatingVoteEntry>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void> {
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/RatingVoteEntry/~update/owner/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
+    return this.axios.post(this.getPathForActor(path), selected, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }
@@ -125,11 +132,11 @@ export class ServiceRatingVoteDefinitionServiceForVoteEntriesImpl
    * From: targetRelation.isUnsetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async unsetOwner(owner: JudoIdentifiable<ServiceRatingVoteEntry>): Promise<void> {
+  async unsetOwner(owner: JudoIdentifiable<ServiceRatingVoteEntry>): Promise<JudoRestResponse<void>> {
     const path = '/service/RatingVoteEntry/~update/owner/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
       },
     });
   }

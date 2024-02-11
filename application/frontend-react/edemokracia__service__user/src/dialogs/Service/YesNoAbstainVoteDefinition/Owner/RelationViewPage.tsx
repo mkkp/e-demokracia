@@ -54,6 +54,7 @@ import type {
   ServiceYesNoAbstainVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl } from '~/services/data-axios/ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -303,11 +304,12 @@ export default function ServiceYesNoAbstainVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentCity(
+      const { data: result } = await serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentCity(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -342,11 +344,12 @@ export default function ServiceYesNoAbstainVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentCounty(
+      const { data: result } = await serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentCounty(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -381,11 +384,12 @@ export default function ServiceYesNoAbstainVoteDefinitionOwnerRelationViewPage(
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentDistrict(
+      const { data: result } = await serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.getRangeForResidentDistrict(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -601,14 +605,15 @@ export default function ServiceYesNoAbstainVoteDefinitionOwnerRelationViewPage(
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.refresh(
+      const response = await serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -621,7 +626,7 @@ export default function ServiceYesNoAbstainVoteDefinitionOwnerRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

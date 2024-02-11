@@ -42,6 +42,7 @@ import type {
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceConServiceForProsImpl } from '~/services/data-axios/ServiceConServiceForProsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -279,11 +280,14 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       handleError(error, undefined, data);
     }
   };
-  const refreshAction = async (queryCustomizer: ServiceProQueryCustomizer): Promise<ServiceProStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceProQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceProStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceConServiceForProsImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceConServiceForProsImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -296,7 +300,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -309,12 +313,12 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceConServiceForProsImpl.update(payloadDiff.current);
+      const { data: res } = await serviceConServiceForProsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServicePro, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServicePro>(error, { setValidation }, data);

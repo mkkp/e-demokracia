@@ -11,6 +11,7 @@ import {
   CloseDebateOutputVoteDefinitionReferenceStored,
   CreateArgumentInput,
   CreateCommentInput,
+  JudoRestResponse,
   ServiceCity,
   ServiceCityQueryCustomizer,
   ServiceCityStored,
@@ -54,164 +55,220 @@ export interface ServiceIssueService {
   refresh(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored>;
-  update(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
-  validateUpdate(target: Partial<ServiceIssueStored>): Promise<ServiceIssueStored>;
-  getTemplateForAttachments(): Promise<ServiceIssueAttachment>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueStored>>;
+  update(target: Partial<ServiceIssueStored>): Promise<JudoRestResponse<ServiceIssueStored>>;
+  validateUpdate(target: Partial<ServiceIssueStored>): Promise<JudoRestResponse<ServiceIssueStored>>;
+  getTemplateForAttachments(): Promise<JudoRestResponse<ServiceIssueAttachment>>;
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: JudoIdentifiable<ServiceIssueAttachment>,
-  ): Promise<ServiceIssueAttachmentStored>;
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateCreateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
-  ): Promise<ServiceIssueAttachment>;
+  ): Promise<JudoRestResponse<ServiceIssueAttachment>>;
   listAttachments(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<Array<ServiceIssueAttachmentStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueAttachmentStored>>>;
   getRangeForAttachments(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<Array<ServiceIssueAttachmentStored>>;
-  deleteAttachments(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
-  getTemplateForCategories(): Promise<ServiceIssueCategory>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueAttachmentStored>>>;
+  deleteAttachments(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
+  getTemplateForCategories(): Promise<JudoRestResponse<ServiceIssueCategory>>;
   listCategories(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<Array<ServiceIssueCategoryStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueCategoryStored>>>;
   getRangeForCategories(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<Array<ServiceIssueCategoryStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueCategoryStored>>>;
   setCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     selected: Array<JudoIdentifiable<ServiceIssueCategory>>,
-  ): Promise<void>;
-  getTemplateForCity(): Promise<ServiceCity>;
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateForCity(): Promise<JudoRestResponse<ServiceCity>>;
   getCity(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   getRangeForCity(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  setCity(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
-  unsetCity(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  setCity(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceCity>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetCity(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   listComments(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<Array<ServiceCommentStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCommentStored>>>;
   getRangeForComments(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<Array<ServiceCommentStored>>;
-  voteDownForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-  voteUpForComments(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCommentStored>>>;
+  voteDownForComments(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
+  voteUpForComments(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
   listCons(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceConQueryCustomizer,
-  ): Promise<Array<ServiceConStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceConStored>>>;
   getRangeForCons(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceConQueryCustomizer,
-  ): Promise<Array<ServiceConStored>>;
-  deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<void>;
-  createConArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgumentForCons(): Promise<CreateArgumentInput>;
-  createProArgumentForCons(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgumentForCons(): Promise<CreateArgumentInput>;
-  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
-  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<void>;
-  getTemplateForCounty(): Promise<ServiceCounty>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceConStored>>>;
+  deleteCons(target: JudoIdentifiable<ServiceCon>): Promise<JudoRestResponse<void>>;
+  createConArgumentForCons(
+    owner: JudoIdentifiable<ServiceCon>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateConArgumentForCons(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  createProArgumentForCons(
+    owner: JudoIdentifiable<ServiceCon>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateProArgumentForCons(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  voteDownForCons(owner: JudoIdentifiable<ServiceCon>): Promise<JudoRestResponse<void>>;
+  voteUpForCons(owner: JudoIdentifiable<ServiceCon>): Promise<JudoRestResponse<void>>;
+  getTemplateForCounty(): Promise<JudoRestResponse<ServiceCounty>>;
   getCounty(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   getRangeForCounty(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  setCounty(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceCounty>): Promise<void>;
-  unsetCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
+  setCounty(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceCounty>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   getCreatedBy(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForCreatedBy(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
-  getTemplateForDistrict(): Promise<ServiceDistrict>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
+  getTemplateForDistrict(): Promise<JudoRestResponse<ServiceDistrict>>;
   getDistrict(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForDistrict(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  setDistrict(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-  unsetDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  getTemplateForIssueType(): Promise<ServiceIssueType>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  setDistrict(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceDistrict>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
+  getTemplateForIssueType(): Promise<JudoRestResponse<ServiceIssueType>>;
   getIssueType(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
   getRangeForIssueType(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<Array<ServiceIssueTypeStored>>;
-  setIssueType(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-  unsetIssueType(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueTypeStored>>>;
+  setIssueType(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceIssueType>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetIssueType(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   getOwner(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForOwner(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
-  setOwner(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
-  unsetOwner(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
+  setOwner(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetOwner(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   listPros(
     target: JudoIdentifiable<ServiceIssue>,
     queryCustomizer?: ServiceProQueryCustomizer,
-  ): Promise<Array<ServiceProStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceProStored>>>;
   getRangeForPros(
     owner?: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceProQueryCustomizer,
-  ): Promise<Array<ServiceProStored>>;
-  deletePros(target: JudoIdentifiable<ServicePro>): Promise<void>;
-  createConArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgumentForPros(): Promise<CreateArgumentInput>;
-  createProArgumentForPros(owner: JudoIdentifiable<ServicePro>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgumentForPros(): Promise<CreateArgumentInput>;
-  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
-  voteUpForPros(owner: JudoIdentifiable<ServicePro>): Promise<void>;
-  activate(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  addToFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceProStored>>>;
+  deletePros(target: JudoIdentifiable<ServicePro>): Promise<JudoRestResponse<void>>;
+  createConArgumentForPros(
+    owner: JudoIdentifiable<ServicePro>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateConArgumentForPros(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  createProArgumentForPros(
+    owner: JudoIdentifiable<ServicePro>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateProArgumentForPros(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  voteDownForPros(owner: JudoIdentifiable<ServicePro>): Promise<JudoRestResponse<void>>;
+  voteUpForPros(owner: JudoIdentifiable<ServicePro>): Promise<JudoRestResponse<void>>;
+  activate(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
+  addToFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   closeDebate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: CloseDebateInput,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
-  getTemplateOnCloseDebate(): Promise<CloseDebateInput>;
-  closeVote(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  createComment(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<void>;
-  getTemplateOnCreateComment(): Promise<CreateCommentInput>;
-  createConArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
-  createProArgument(owner: JudoIdentifiable<ServiceIssue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
-  deleteOrArchive(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
-  removeFromFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>>;
+  getTemplateOnCloseDebate(): Promise<JudoRestResponse<CloseDebateInput>>;
+  closeVote(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
+  createComment(owner: JudoIdentifiable<ServiceIssue>, target: CreateCommentInput): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateComment(): Promise<JudoRestResponse<CreateCommentInput>>;
+  createConArgument(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateConArgument(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  createProArgument(
+    owner: JudoIdentifiable<ServiceIssue>,
+    target: CreateArgumentInput,
+  ): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateProArgument(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  deleteOrArchive(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
+  removeFromFavorites(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
 }

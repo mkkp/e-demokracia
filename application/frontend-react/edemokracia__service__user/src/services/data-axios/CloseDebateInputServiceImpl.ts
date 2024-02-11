@@ -6,8 +6,9 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { CloseDebateInput, CloseDebateInputStored } from '../data-api';
+import type { CloseDebateInput, CloseDebateInputStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { CloseDebateInputService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -18,10 +19,8 @@ export class CloseDebateInputServiceImpl extends JudoAxiosService implements Clo
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<CloseDebateInput> {
+  async getTemplate(): Promise<JudoRestResponse<CloseDebateInput>> {
     const path = '/CloseDebateInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 }

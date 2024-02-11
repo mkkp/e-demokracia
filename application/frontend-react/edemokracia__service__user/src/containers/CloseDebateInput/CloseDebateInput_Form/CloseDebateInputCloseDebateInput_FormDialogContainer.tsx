@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_FormActionDefinitions } from './CloseDebateInputCloseDebateInput_Form';
 
@@ -35,7 +36,7 @@ const CloseDebateInputCloseDebateInput_Form = lazy(
 
 export interface CloseDebateInputCloseDebateInput_FormDialogActions
   extends CloseDebateInputCloseDebateInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<CloseDebateInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<CloseDebateInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   closeDebateForIssueAction?: () => Promise<void>;

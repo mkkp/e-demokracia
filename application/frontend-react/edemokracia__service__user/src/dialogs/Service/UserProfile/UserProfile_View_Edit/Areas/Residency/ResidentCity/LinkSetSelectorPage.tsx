@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceCityCity_TableSetSelectorDialogActions,
-  ServiceCityCity_TableSetSelectorDialogProps,
-} from '~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer';
+  ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActions,
+  ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogProps,
+} from '~/containers/Service/UserProfile/UserProfile_View_Edit/Areas/Residency/ResidentCity/SetSelector/ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
@@ -29,24 +29,27 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserProfileServiceForResidentCityImpl } from '~/services/data-axios/ServiceUserProfileServiceForResidentCityImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
+export type ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActionsExtended =
+  ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActions & {};
 
 export const SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceCityCity_TableSetSelectorActionsHook = (
+export type ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorActionsHook = (
   ownerData: any,
   data: ServiceCityStored[],
   editMode: boolean,
   selectionDiff: ServiceCityStored[],
   submit: () => Promise<void>,
-) => ServiceCityCity_TableSetSelectorDialogActionsExtended;
+) => ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActionsExtended;
 
-export interface ServiceCityCity_TableSetSelectorViewModel extends ServiceCityCity_TableSetSelectorDialogProps {
+export interface ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModel
+  extends ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -54,14 +57,15 @@ export interface ServiceCityCity_TableSetSelectorViewModel extends ServiceCityCi
   isDraft?: boolean;
 }
 
-const ServiceCityCity_TableSetSelectorViewModelContext = createContext<ServiceCityCity_TableSetSelectorViewModel>(
-  {} as any,
-);
-export const useServiceCityCity_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceCityCity_TableSetSelectorViewModelContext);
+const ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModelContext =
+  createContext<ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModel>({} as any);
+export const useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModel = () => {
+  const context = useContext(
+    ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModelContext,
+  );
   if (!context) {
     throw new Error(
-      'useServiceCityCity_TableSetSelectorViewModel must be used within a(n) ServiceCityCity_TableSetSelectorViewModelProvider',
+      'useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModel must be used within a(n) ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModelProvider',
     );
   }
   return context;
@@ -111,8 +115,11 @@ export const useServiceUserProfileUserProfile_View_EditAreasResidencyResidentCit
     });
 };
 
-const ServiceCityCity_TableSetSelectorDialogContainer = lazy(
-  () => import('~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer'),
+const ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogContainer = lazy(
+  () =>
+    import(
+      '~/containers/Service/UserProfile/UserProfile_View_Edit/Areas/Residency/ResidentCity/SetSelector/ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogContainer'
+    ),
 );
 
 export interface ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCityLinkSetSelectorPageProps {
@@ -167,22 +174,21 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   const validate: (data: ServiceCity) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceCityCity_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceCityCity_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_RESIDENCY_RESIDENT_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
+    return t('service.UserProfile.UserProfile_View_Edit.Areas.Residency.residentCity.SetSelector', {
+      defaultValue: 'Resident city',
+    });
   };
   const backAction = async () => {
     onClose();
@@ -201,19 +207,21 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCityStored[]>> => {
     try {
       return serviceUserProfileServiceForResidentCityImpl.getRangeForResidentCity(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceCityCity_TableSetSelectorDialogActions = {
+  const actions: ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -223,7 +231,7 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   };
 
   // ViewModel setup
-  const viewModel: ServiceCityCity_TableSetSelectorViewModel = {
+  const viewModel: ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -243,13 +251,15 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
   // Effect section
 
   return (
-    <ServiceCityCity_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_fsW_pFvTEe6jm_SkPSYEYw)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::UserProfile::UserProfile_View_Edit::Areas::Residency::residentCity::LinkSetSelectorPage"
         />
-        <ServiceCityCity_TableSetSelectorDialogContainer
+        <ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -262,6 +272,6 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceCityCity_TableSetSelectorViewModelContext.Provider>
+    </ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCitySetSelectorViewModelContext.Provider>
   );
 }

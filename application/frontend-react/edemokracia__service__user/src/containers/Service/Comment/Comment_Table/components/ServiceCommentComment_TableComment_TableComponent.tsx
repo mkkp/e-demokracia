@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -47,6 +47,7 @@ import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceComment, ServiceCommentQueryCustomizer, ServiceCommentStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -71,7 +72,7 @@ export interface ServiceCommentComment_TableComment_TableComponentActionDefiniti
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<ServiceCommentStored[]>;
+  refreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<JudoRestResponse<ServiceCommentStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceCommentStored, silentMode?: boolean) => Promise<void>;
@@ -101,6 +102,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
   props: ServiceCommentComment_TableComment_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -277,16 +279,16 @@ export function ServiceCommentComment_TableComment_TableComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_p-1882ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceCommentStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -450,7 +452,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -479,6 +481,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
   return (
     <div id="User/(esm/_p_So4GksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Comment_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -566,6 +569,7 @@ export function ServiceCommentComment_TableComment_TableComponent(
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

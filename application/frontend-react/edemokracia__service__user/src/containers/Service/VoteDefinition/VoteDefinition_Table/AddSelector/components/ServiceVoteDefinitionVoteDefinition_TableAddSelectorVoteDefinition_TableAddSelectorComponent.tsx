@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -52,6 +52,7 @@ import type {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   isRowSelectable,
@@ -72,7 +73,7 @@ export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinit
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   selectorRangeAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ) => Promise<ServiceVoteDefinitionStored[]>;
+  ) => Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>>;
   AdditionalToolbarButtons?: (
     data: ServiceVoteDefinitionStored[],
     isLoading: boolean,
@@ -109,6 +110,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
     setSelectionDiff,
     alreadySelected,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
@@ -295,16 +297,16 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
 
   const rowActions: TableRowAction<ServiceVoteDefinitionStored>[] = useMemo(() => [], [actions, isLoading]);
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_-f-eY34XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceVoteDefinitionStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -525,7 +527,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
         const processedQueryCustomizer = {
           ...processQueryCustomizer(queryCustomizer),
         };
-        const res = await actions.selectorRangeAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -557,6 +559,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
       data-table-name="VoteDefinition_Table::Add::Selector"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

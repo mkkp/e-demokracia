@@ -10,8 +10,10 @@ import type {
   CloseDebateOutputVoteDefinitionReference,
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
+  JudoRestResponse,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { CloseDebateOutputVoteDefinitionReferenceService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -28,14 +30,14 @@ export class CloseDebateOutputVoteDefinitionReferenceServiceImpl
   async refresh(
     target: JudoIdentifiable<CloseDebateOutputVoteDefinitionReference>,
     queryCustomizer?: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>> {
     const path = '/CloseDebateOutputVoteDefinitionReference/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 }

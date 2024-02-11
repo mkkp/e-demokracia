@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -53,6 +53,7 @@ import type {
   ServiceYesNoVoteEntryStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -72,7 +73,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntr
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   voteEntriesRefreshAction?: (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
-  ) => Promise<ServiceYesNoVoteEntryStored[]>;
+  ) => Promise<JudoRestResponse<ServiceYesNoVoteEntryStored[]>>;
   getVoteEntriesMask?: () => string;
   voteEntriesOpenPageAction?: (row: ServiceYesNoVoteEntryStored, isDraft?: boolean) => Promise<void>;
   voteEntriesAdditionalToolbarButtons?: (
@@ -114,6 +115,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -225,16 +227,16 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
 
   const rowActions: TableRowAction<ServiceYesNoVoteEntryStored>[] = useMemo(() => [], [actions, isLoading]);
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_j_gXIFojEe6_67aMO2jOsw)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceYesNoVoteEntryStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -400,7 +402,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getVoteEntriesMask ? actions.getVoteEntriesMask() : queryCustomizer._mask,
         };
-        const res = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.voteEntriesRefreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -432,6 +434,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
       data-table-name="voteEntries"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions,
-  ServiceIssueCategoryIssueCategory_TableAddSelectorDialogProps,
-} from '~/containers/Service/IssueCategory/IssueCategory_Table/AddSelector/ServiceIssueCategoryIssueCategory_TableAddSelectorDialogContainer';
+  ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActions,
+  ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogProps,
+} from '~/containers/Service/Issue/Issue_View_Edit/Other/Categories/Categories/AddSelector/ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssue,
@@ -29,26 +29,27 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForCategoriesImpl } from '~/services/data-axios/ServiceIssueServiceForCategoriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActionsExtended =
-  ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions & {};
+export type ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActionsExtended =
+  ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_CATEGORIES_CATEGORIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_CATEGORIES_CATEGORIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceIssueCategoryIssueCategory_TableAddSelectorActionsHook = (
+export type ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorActionsHook = (
   ownerData: any,
   data: ServiceIssueCategoryStored[],
   editMode: boolean,
   selectionDiff: ServiceIssueCategoryStored[],
   submit: () => Promise<void>,
-) => ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActionsExtended;
+) => ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActionsExtended;
 
-export interface ServiceIssueCategoryIssueCategory_TableAddSelectorViewModel
-  extends ServiceIssueCategoryIssueCategory_TableAddSelectorDialogProps {
+export interface ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModel
+  extends ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,13 +57,13 @@ export interface ServiceIssueCategoryIssueCategory_TableAddSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceIssueCategoryIssueCategory_TableAddSelectorViewModelContext =
-  createContext<ServiceIssueCategoryIssueCategory_TableAddSelectorViewModel>({} as any);
-export const useServiceIssueCategoryIssueCategory_TableAddSelectorViewModel = () => {
-  const context = useContext(ServiceIssueCategoryIssueCategory_TableAddSelectorViewModelContext);
+const ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModelContext =
+  createContext<ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModel>({} as any);
+export const useServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModel = () => {
+  const context = useContext(ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceIssueCategoryIssueCategory_TableAddSelectorViewModel must be used within a(n) ServiceIssueCategoryIssueCategory_TableAddSelectorViewModelProvider',
+      'useServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModel must be used within a(n) ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModelProvider',
     );
   }
   return context;
@@ -112,10 +113,10 @@ export const useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSele
     });
 };
 
-const ServiceIssueCategoryIssueCategory_TableAddSelectorDialogContainer = lazy(
+const ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/IssueCategory/IssueCategory_Table/AddSelector/ServiceIssueCategoryIssueCategory_TableAddSelectorDialogContainer'
+      '~/containers/Service/Issue/Issue_View_Edit/Other/Categories/Categories/AddSelector/ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogContainer'
     ),
 );
 
@@ -171,17 +172,19 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
   const validate: (data: ServiceIssueCategory) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceIssueCategoryIssueCategory_TableAddSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_CATEGORIES_CATEGORIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
+  const { service: customActionsHook } =
+    useTrackService<ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_CATEGORIES_CATEGORIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.IssueCategory.IssueCategory_Table.AddSelector', { defaultValue: 'IssueCategory Table' });
+    return t('service.Issue.Issue_View_Edit.other.categories.categories.AddSelector', { defaultValue: '' });
   };
   const addAction = async (selected: ServiceIssueCategoryStored[]) => {
     onSubmit(selected);
@@ -202,16 +205,16 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored[]>> => {
     try {
       return serviceIssueServiceForCategoriesImpl.getRangeForCategories(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceIssueCategoryIssueCategory_TableAddSelectorDialogActions = {
+  const actions: ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogActions = {
     getPageTitle,
     addAction,
     backAction,
@@ -221,7 +224,7 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
   };
 
   // ViewModel setup
-  const viewModel: ServiceIssueCategoryIssueCategory_TableAddSelectorViewModel = {
+  const viewModel: ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -241,13 +244,13 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
   // Effect section
 
   return (
-    <ServiceIssueCategoryIssueCategory_TableAddSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorPageDefinition"
           data-page-name="service::Issue::Issue_View_Edit::other::categories::categories::TableAddSelectorPage"
         />
-        <ServiceIssueCategoryIssueCategory_TableAddSelectorDialogContainer
+        <ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -260,6 +263,6 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesTabl
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceIssueCategoryIssueCategory_TableAddSelectorViewModelContext.Provider>
+    </ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorViewModelContext.Provider>
   );
 }

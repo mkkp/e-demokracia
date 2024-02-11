@@ -23,6 +23,7 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableActionDefinitions } from './CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Table';
 
 const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Table = lazy(

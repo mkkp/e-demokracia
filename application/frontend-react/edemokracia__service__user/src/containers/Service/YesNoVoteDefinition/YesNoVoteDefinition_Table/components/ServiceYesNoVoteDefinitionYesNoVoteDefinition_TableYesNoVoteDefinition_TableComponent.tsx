@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -51,6 +51,7 @@ import type {
   ServiceYesNoVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -80,7 +81,7 @@ export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDef
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   refreshAction?: (
     queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer,
-  ) => Promise<ServiceYesNoVoteDefinitionStored[]>;
+  ) => Promise<JudoRestResponse<ServiceYesNoVoteDefinitionStored[]>>;
   getMask?: () => string;
   activateForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
   addToFavoritesForYesNoVoteDefinitionAction?: (row: ServiceYesNoVoteDefinitionStored) => Promise<void>;
@@ -115,6 +116,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   props: ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefinition_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -381,16 +383,16 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_-Ze00H4XEe2cB7_PsKXsHQ)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceYesNoVoteDefinitionStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -562,7 +564,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -591,6 +593,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   return (
     <div id="User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable" data-table-name="YesNoVoteDefinition_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -683,6 +686,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

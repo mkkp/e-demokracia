@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -54,6 +54,7 @@ import type {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -73,7 +74,7 @@ export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   activeVoteDefinitionsInResidentCountyRefreshAction?: (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ) => Promise<ServiceVoteDefinitionStored[]>;
+  ) => Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>>;
   getActiveVoteDefinitionsInResidentCountyMask?: () => string;
   activeVoteDefinitionsInResidentCountyOpenPageAction?: (
     row: ServiceVoteDefinitionStored,
@@ -122,6 +123,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -379,16 +381,16 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_yd4FQF5BEe6vsex_cZNQbQ)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceVoteDefinitionStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -592,7 +594,8 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
             ? actions.getActiveVoteDefinitionsInResidentCountyMask()
             : queryCustomizer._mask,
         };
-        const res = await actions.activeVoteDefinitionsInResidentCountyRefreshAction!(processedQueryCustomizer);
+        const { data: res, headers } =
+          await actions.activeVoteDefinitionsInResidentCountyRefreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -624,6 +627,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteD
       data-table-name="activeVoteDefinitionsInResidentCounty"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

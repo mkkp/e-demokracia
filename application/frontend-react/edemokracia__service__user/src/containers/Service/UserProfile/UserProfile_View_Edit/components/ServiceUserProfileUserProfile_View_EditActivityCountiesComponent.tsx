@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -46,6 +46,7 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
@@ -66,7 +67,9 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  activityCountiesRefreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored[]>;
+  activityCountiesRefreshAction?: (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceCountyStored[]>>;
   getActivityCountiesMask?: () => string;
   activityCountiesRemoveAction?: (row: ServiceCountyStored, silentMode?: boolean) => Promise<void>;
   activityCountiesOpenPageAction?: (row: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
@@ -109,6 +112,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -185,16 +189,16 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_gu_zQFvREe6jm_SkPSYEYw)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceCountyStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -336,6 +340,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
       data-table-name="activityCounties"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCity,
   ServiceCityQueryCustomizer,
   ServiceCityStored,
@@ -21,43 +22,56 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Relation Service for ServiceServiceUser.activityCities
  */
 export interface ServiceServiceUserServiceForActivityCities {
-  list(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCityQueryCustomizer): Promise<Array<ServiceCityStored>>;
-  refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCityQueryCustomizer): Promise<ServiceCityStored>;
+  list(
+    owner?: JudoIdentifiable<any>,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  refresh(
+    owner?: JudoIdentifiable<any>,
+    queryCustomizer?: ServiceCityQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   getRangeForActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  getTemplate(): Promise<ServiceCity>;
-  update(target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceCity>>;
+  update(target: Partial<ServiceCityStored>): Promise<JudoRestResponse<ServiceCityStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
-  ): Promise<ServiceCityStored>;
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   listDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplateForDistricts(): Promise<ServiceDistrict>;
-  createDistricts(owner: JudoIdentifiable<ServiceCity>, target: ServiceDistrict): Promise<ServiceDistrictStored>;
-  deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplateForDistricts(): Promise<JudoRestResponse<ServiceDistrict>>;
+  createDistricts(
+    owner: JudoIdentifiable<ServiceCity>,
+    target: ServiceDistrict,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
+  deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<JudoRestResponse<void>>;
   updateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored>;
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored>;
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
 }

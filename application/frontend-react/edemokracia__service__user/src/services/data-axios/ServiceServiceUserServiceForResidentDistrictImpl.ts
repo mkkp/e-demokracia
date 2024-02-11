@@ -7,12 +7,14 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
   ServiceServiceUser,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceServiceUserServiceForResidentDistrict } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -30,21 +32,23 @@ export class ServiceServiceUserServiceForResidentDistrictImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -54,40 +58,39 @@ export class ServiceServiceUserServiceForResidentDistrictImpl
   async getRangeForResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>> {
     const path = '/service/ServiceUser/residentDistrict/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      {
+        owner: owner ?? {},
+        queryCustomizer: queryCustomizer ?? {},
+      },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
    * From: relation.target.isTemplateable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceDistrict> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceDistrict>> {
     const path = '/service/District/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored> {
+  async update(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -97,15 +100,13 @@ export class ServiceServiceUserServiceForResidentDistrictImpl
   async validateUpdate(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored> {
+  ): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
-
-    return response.data;
   }
 
   /**
@@ -115,11 +116,11 @@ export class ServiceServiceUserServiceForResidentDistrictImpl
   async setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,
-  ): Promise<void> {
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/ServiceUser/~update/residentDistrict/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
+    return this.axios.post(this.getPathForActor(path), selected, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -128,11 +129,11 @@ export class ServiceServiceUserServiceForResidentDistrictImpl
    * From: relation.isUnsetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async unsetResidentDistrict(owner: JudoIdentifiable<ServiceServiceUser>): Promise<void> {
+  async unsetResidentDistrict(owner: JudoIdentifiable<ServiceServiceUser>): Promise<JudoRestResponse<void>> {
     const path = '/service/ServiceUser/~update/residentDistrict/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }

@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
@@ -21,20 +22,22 @@ export interface ServiceServiceUserServiceForResidentDistrict {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplate(): Promise<ServiceDistrict>;
-  update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
+  update(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored>;
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,
-  ): Promise<void>;
-  unsetResidentDistrict(owner: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
+  unsetResidentDistrict(owner: JudoIdentifiable<ServiceServiceUser>): Promise<JudoRestResponse<void>>;
 }

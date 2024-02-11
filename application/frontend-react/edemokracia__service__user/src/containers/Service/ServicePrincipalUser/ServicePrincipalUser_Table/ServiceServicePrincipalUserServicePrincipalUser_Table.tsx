@@ -29,6 +29,7 @@ import {
   ServiceServicePrincipalUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_SERVICE_PRINCIPAL_USER_SERVICE_PRINCIPAL_USER_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =

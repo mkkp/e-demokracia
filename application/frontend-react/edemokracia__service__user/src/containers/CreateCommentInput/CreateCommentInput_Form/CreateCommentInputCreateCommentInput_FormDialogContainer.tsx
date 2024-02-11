@@ -30,6 +30,7 @@ import type {
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { CreateCommentInputCreateCommentInput_FormActionDefinitions } from './CreateCommentInputCreateCommentInput_Form';
 
@@ -39,7 +40,7 @@ const CreateCommentInputCreateCommentInput_Form = lazy(
 
 export interface CreateCommentInputCreateCommentInput_FormDialogActions
   extends CreateCommentInputCreateCommentInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<CreateCommentInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<CreateCommentInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   createCommentForIssueAction?: () => Promise<void>;

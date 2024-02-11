@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -40,6 +40,7 @@ import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config
 import { useDataStore } from '~/hooks';
 import type { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -63,7 +64,9 @@ export interface CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableCom
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: CloseDebateInputQueryCustomizer) => Promise<CloseDebateInputStored[]>;
+  refreshAction?: (
+    queryCustomizer: CloseDebateInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<CloseDebateInputStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: CloseDebateInputStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: CloseDebateInputStored, silentMode?: boolean) => Promise<void>;
@@ -91,6 +94,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
   props: CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -187,16 +191,16 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_NGvTUG6JEe2wNaja8kBvcQ)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<CloseDebateInputStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -322,7 +326,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -351,6 +355,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
   return (
     <div id="User/(esm/_NHAZEG6JEe2wNaja8kBvcQ)/TransferObjectTableTable" data-table-name="CloseDebateInput_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -438,6 +443,7 @@ export function CloseDebateInputCloseDebateInput_TableCloseDebateInput_TableComp
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

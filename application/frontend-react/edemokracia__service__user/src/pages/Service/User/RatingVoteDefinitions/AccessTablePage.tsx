@@ -30,6 +30,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -263,7 +264,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessTablePage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceRatingVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceRatingVoteDefinitionStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

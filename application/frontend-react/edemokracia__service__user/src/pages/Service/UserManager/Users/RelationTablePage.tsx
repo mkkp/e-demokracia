@@ -31,6 +31,7 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceForUsersImpl } from '~/services/data-axios/ServiceUserManagerServiceForUsersImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -137,7 +138,7 @@ export default function ServiceUserManagerUsersRelationTablePage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

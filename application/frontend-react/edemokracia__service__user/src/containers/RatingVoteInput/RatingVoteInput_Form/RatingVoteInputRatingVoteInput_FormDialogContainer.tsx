@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { RatingVoteInputRatingVoteInput_FormActionDefinitions } from './RatingVoteInputRatingVoteInput_Form';
 
@@ -35,7 +36,7 @@ const RatingVoteInputRatingVoteInput_Form = lazy(
 
 export interface RatingVoteInputRatingVoteInput_FormDialogActions
   extends RatingVoteInputRatingVoteInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<RatingVoteInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<RatingVoteInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   voteForRatingVoteDefinitionAction?: () => Promise<void>;

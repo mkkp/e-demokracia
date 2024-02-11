@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCon,
   ServiceServiceUser,
   ServiceServiceUserQueryCustomizer,
@@ -24,19 +25,29 @@ export interface ServiceConServiceForVotes {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<ServiceSimpleVoteStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSimpleVoteStored>>;
   getUser(
     owner: JudoIdentifiable<ServiceSimpleVote>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForUser(
     owner: JudoIdentifiable<ServiceSimpleVote> | ServiceSimpleVote,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
-  setUser(owner: JudoIdentifiable<ServiceSimpleVote>, selected: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
-  unsetUser(owner: JudoIdentifiable<ServiceSimpleVote>, target: JudoIdentifiable<ServiceServiceUser>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
+  setUser(
+    owner: JudoIdentifiable<ServiceSimpleVote>,
+    selected: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetUser(
+    owner: JudoIdentifiable<ServiceSimpleVote>,
+    target: JudoIdentifiable<ServiceServiceUser>,
+  ): Promise<JudoRestResponse<void>>;
 }

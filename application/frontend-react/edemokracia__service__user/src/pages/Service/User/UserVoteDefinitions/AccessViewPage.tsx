@@ -43,6 +43,7 @@ import type {
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -203,14 +204,15 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceUserVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceUserVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceUserVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserVoteDefinitionsImpl.refresh(
+      const response = await userServiceForUserVoteDefinitionsImpl.refresh(
         singletonHost.current,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -223,7 +225,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -246,7 +248,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsGlobalRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsGlobal(
       singletonHost.current,
       queryCustomizer,
@@ -279,7 +281,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInActivityCitiesRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInActivityCities(
       singletonHost.current,
       queryCustomizer,
@@ -312,7 +314,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInActivityCountiesRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInActivityCounties(
       singletonHost.current,
       queryCustomizer,
@@ -345,7 +347,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInActivityDistrictsRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInActivityDistricts(
       singletonHost.current,
       queryCustomizer,
@@ -378,7 +380,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInResidentCityRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInResidentCity(
       singletonHost.current,
       queryCustomizer,
@@ -411,7 +413,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInResidentCountyRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInResidentCounty(
       singletonHost.current,
       queryCustomizer,
@@ -444,7 +446,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const activeVoteDefinitionsInResidentDistrictRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listActiveVoteDefinitionsInResidentDistrict(
       singletonHost.current,
       queryCustomizer,
@@ -539,7 +541,7 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
   };
   const ownedVoteDefinitionsRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForUserVoteDefinitionsImpl.listOwnedVoteDefinitions(singletonHost.current, queryCustomizer);
   };
   const ownedVoteDefinitionsRemoveAction = async (target?: ServiceVoteDefinitionStored, silentMode?: boolean) => {
@@ -956,9 +958,10 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
-    return await userServiceForUserVoteDefinitionsImpl.refreshForUserVoteDefinitions({
+    const { data: sp } = await userServiceForUserVoteDefinitionsImpl.refreshForUserVoteDefinitions({
       _mask: '{}',
     });
+    return sp;
   };
 
   const actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditPageActions = {

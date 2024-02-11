@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -44,6 +44,7 @@ import type {
   CreateArgumentInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -67,7 +68,9 @@ export interface CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: CreateArgumentInputQueryCustomizer) => Promise<CreateArgumentInputStored[]>;
+  refreshAction?: (
+    queryCustomizer: CreateArgumentInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<CreateArgumentInputStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: CreateArgumentInputStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: CreateArgumentInputStored, silentMode?: boolean) => Promise<void>;
@@ -95,6 +98,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
   props: CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -200,16 +204,16 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_GaaTIHW5Ee2LTNnGda5kaw)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<CreateArgumentInputStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -335,7 +339,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -364,6 +368,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
   return (
     <div id="User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="CreateArgumentInput_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -452,6 +457,7 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

@@ -24,6 +24,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceDistrictDistrict_TableDistrict_TableComponentActionDefinitions } from './components/ServiceDistrictDistrict_TableDistrict_TableComponent';
 import { ServiceDistrictDistrict_TableDistrict_TableComponent } from './components/ServiceDistrictDistrict_TableDistrict_TableComponent';

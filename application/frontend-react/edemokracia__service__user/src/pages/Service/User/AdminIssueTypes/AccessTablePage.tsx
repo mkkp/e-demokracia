@@ -30,6 +30,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminIssueTypesImpl } from '~/services/data-axios/UserServiceForAdminIssueTypesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -194,7 +195,9 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       filters: newFilters,
     };
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored[]> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

@@ -79,6 +79,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>2.2.19</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <outputFileName>openapi</outputFileName>
+                            <outputPath>${project.build.directory}/api-documentation-swagger</outputPath>
+                            <outputFormat>JSONANDYAML</outputFormat>
+                            <resourcePackages>
+                                <package>hu.blackbelt.judo.tatami.itests.edemokracia</package>
+                            </resourcePackages>
+                            <prettyPrint>TRUE</prettyPrint>
+                        </configuration>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -135,6 +157,12 @@
             <groupId>hu.blackbelt.judo.generator</groupId>
             <artifactId>judo-psm-generator-jaxrs-osgi</artifactId>
             <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>2.2.19</version>
         </dependency>
 
     </dependencies>

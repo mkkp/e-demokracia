@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceCityCity_TableSetSelectorDialogActions,
-  ServiceCityCity_TableSetSelectorDialogProps,
-} from '~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer';
+  ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActions,
+  ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogProps,
+} from '~/containers/Service/Issue/Issue_View_Edit/Other/Area/City/SetSelector/ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCity,
@@ -29,24 +29,27 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForCityImpl } from '~/services/data-axios/ServiceIssueServiceForCityImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCityCity_TableSetSelectorDialogActionsExtended = ServiceCityCity_TableSetSelectorDialogActions & {};
+export type ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActionsExtended =
+  ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceCityCity_TableSetSelectorActionsHook = (
+export type ServiceIssueIssue_View_EditOtherAreaCitySetSelectorActionsHook = (
   ownerData: any,
   data: ServiceCityStored[],
   editMode: boolean,
   selectionDiff: ServiceCityStored[],
   submit: () => Promise<void>,
-) => ServiceCityCity_TableSetSelectorDialogActionsExtended;
+) => ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActionsExtended;
 
-export interface ServiceCityCity_TableSetSelectorViewModel extends ServiceCityCity_TableSetSelectorDialogProps {
+export interface ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModel
+  extends ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -54,14 +57,13 @@ export interface ServiceCityCity_TableSetSelectorViewModel extends ServiceCityCi
   isDraft?: boolean;
 }
 
-const ServiceCityCity_TableSetSelectorViewModelContext = createContext<ServiceCityCity_TableSetSelectorViewModel>(
-  {} as any,
-);
-export const useServiceCityCity_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceCityCity_TableSetSelectorViewModelContext);
+const ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModelContext =
+  createContext<ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModel>({} as any);
+export const useServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceCityCity_TableSetSelectorViewModel must be used within a(n) ServiceCityCity_TableSetSelectorViewModelProvider',
+      'useServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModel must be used within a(n) ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModelProvider',
     );
   }
   return context;
@@ -111,8 +113,11 @@ export const useServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPage = ()
     });
 };
 
-const ServiceCityCity_TableSetSelectorDialogContainer = lazy(
-  () => import('~/containers/Service/City/City_Table/SetSelector/ServiceCityCity_TableSetSelectorDialogContainer'),
+const ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogContainer = lazy(
+  () =>
+    import(
+      '~/containers/Service/Issue/Issue_View_Edit/Other/Area/City/SetSelector/ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogContainer'
+    ),
 );
 
 export interface ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorPageProps {
@@ -164,22 +169,18 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   const validate: (data: ServiceCity) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceCityCity_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceCityCity_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceIssueIssue_View_EditOtherAreaCitySetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_CITY_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.City.City_Table.SetSelector', { defaultValue: 'City Table' });
+    return t('service.Issue.Issue_View_Edit.other.area.city.SetSelector', { defaultValue: 'City' });
   };
   const backAction = async () => {
     onClose();
@@ -198,16 +199,18 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceCityQueryCustomizer): Promise<ServiceCityStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceCityQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCityStored[]>> => {
     try {
       return serviceIssueServiceForCityImpl.getRangeForCity(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceCityCity_TableSetSelectorDialogActions = {
+  const actions: ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -217,7 +220,7 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   };
 
   // ViewModel setup
-  const viewModel: ServiceCityCity_TableSetSelectorViewModel = {
+  const viewModel: ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -237,13 +240,13 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
   // Effect section
 
   return (
-    <ServiceCityCity_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_pPQKgNvUEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::Issue::Issue_View_Edit::other::area::city::LinkSetSelectorPage"
         />
-        <ServiceCityCity_TableSetSelectorDialogContainer
+        <ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -256,6 +259,6 @@ export default function ServiceIssueIssue_View_EditOtherAreaCityLinkSetSelectorP
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceCityCity_TableSetSelectorViewModelContext.Provider>
+    </ServiceIssueIssue_View_EditOtherAreaCitySetSelectorViewModelContext.Provider>
   );
 }

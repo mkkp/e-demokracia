@@ -30,6 +30,7 @@ import type {
   ServiceCreateUserInputQueryCustomizer,
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCreateUserInputCreateUserInput_FormActionDefinitions } from './ServiceCreateUserInputCreateUserInput_Form';
 
@@ -39,7 +40,7 @@ const ServiceCreateUserInputCreateUserInput_Form = lazy(
 
 export interface ServiceCreateUserInputCreateUserInput_FormDialogActions
   extends ServiceCreateUserInputCreateUserInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceCreateUserInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceCreateUserInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   createUserForUserManagerAction?: () => Promise<void>;

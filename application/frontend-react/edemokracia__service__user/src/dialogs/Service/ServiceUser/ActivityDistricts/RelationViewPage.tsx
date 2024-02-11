@@ -27,6 +27,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceServiceUserServiceForActivityDistrictsImpl } from '~/services/data-axios/ServiceServiceUserServiceForActivityDistrictsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -250,14 +251,17 @@ export default function ServiceServiceUserActivityDistrictsRelationViewPage(
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
-  const refreshAction = async (queryCustomizer: ServiceDistrictQueryCustomizer): Promise<ServiceDistrictStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceServiceUserServiceForActivityDistrictsImpl.refresh(
+      const response = await serviceServiceUserServiceForActivityDistrictsImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -270,7 +274,7 @@ export default function ServiceServiceUserActivityDistrictsRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -283,12 +287,12 @@ export default function ServiceServiceUserActivityDistrictsRelationViewPage(
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceServiceUserServiceForActivityDistrictsImpl.update(payloadDiff.current);
+      const { data: res } = await serviceServiceUserServiceForActivityDistrictsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceDistrict, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceDistrict>(error, { setValidation }, data);

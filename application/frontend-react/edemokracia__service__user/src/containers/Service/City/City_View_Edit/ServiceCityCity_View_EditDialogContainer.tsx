@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCityCity_View_EditActionDefinitions } from './ServiceCityCity_View_Edit';
 
@@ -30,7 +31,7 @@ export interface ServiceCityCity_View_EditDialogActions extends ServiceCityCity_
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored>;
+  refreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<JudoRestResponse<ServiceCityStored>>;
   updateAction?: () => Promise<void>;
 }
 

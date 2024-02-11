@@ -27,6 +27,7 @@ import { DropdownButton, MdiIcon, ModeledTabs, useJudoNavigation } from '~/compo
 import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -271,7 +272,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             }
                           : undefined
                       }
-                      disabled={editMode}
+                      disabled={!data.isIssueActive || editMode}
                     >
                       {t('service.Issue.Issue_View_Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
                     </LoadingButton>
@@ -289,7 +290,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             }
                           : undefined
                       }
-                      disabled={editMode}
+                      disabled={!data.isVoteClosable || editMode}
                     >
                       {t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}
                     </LoadingButton>
@@ -307,7 +308,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             }
                           : undefined
                       }
-                      disabled={editMode}
+                      disabled={!data.isIssueDraft || editMode}
                     >
                       {t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}
                     </LoadingButton>
@@ -325,7 +326,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                             }
                           : undefined
                       }
-                      disabled={editMode}
+                      disabled={!data.isIssueDeletable || editMode}
                     >
                       {t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}
                     </LoadingButton>

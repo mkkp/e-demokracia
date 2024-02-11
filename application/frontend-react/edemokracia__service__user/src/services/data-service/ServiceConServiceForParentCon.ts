@@ -6,7 +6,13 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import { ServiceCon, ServiceConParent, ServiceConParentQueryCustomizer, ServiceConParentStored } from '../data-api';
+import {
+  JudoRestResponse,
+  ServiceCon,
+  ServiceConParent,
+  ServiceConParentQueryCustomizer,
+  ServiceConParentStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,5 +22,6 @@ export interface ServiceConServiceForParentCon {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceConParentQueryCustomizer,
-  ): Promise<ServiceConParentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceConParentStored>>;
 }

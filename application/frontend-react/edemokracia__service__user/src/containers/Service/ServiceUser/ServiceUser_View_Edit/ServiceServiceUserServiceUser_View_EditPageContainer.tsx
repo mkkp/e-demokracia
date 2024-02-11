@@ -20,6 +20,7 @@ import type {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceServiceUserServiceUser_View_EditActionDefinitions } from './ServiceServiceUserServiceUser_View_Edit';
@@ -33,7 +34,9 @@ export interface ServiceServiceUserServiceUser_View_EditPageActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceServiceUserQueryCustomizer) => Promise<ServiceServiceUserStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceServiceUserStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -89,6 +92,7 @@ export default function ServiceServiceUserServiceUser_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -105,6 +109,7 @@ export default function ServiceServiceUserServiceUser_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -121,6 +126,7 @@ export default function ServiceServiceUserServiceUser_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -137,6 +143,7 @@ export default function ServiceServiceUserServiceUser_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -153,6 +160,7 @@ export default function ServiceServiceUserServiceUser_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

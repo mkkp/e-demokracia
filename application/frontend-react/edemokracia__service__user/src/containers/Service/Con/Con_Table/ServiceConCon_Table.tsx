@@ -24,6 +24,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceConCon_TableCon_TableComponentActionDefinitions } from './components/ServiceConCon_TableCon_TableComponent';
 import { ServiceConCon_TableCon_TableComponent } from './components/ServiceConCon_TableCon_TableComponent';

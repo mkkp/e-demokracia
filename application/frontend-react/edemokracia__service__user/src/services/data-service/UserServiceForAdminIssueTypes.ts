@@ -6,7 +6,12 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '../data-api';
+import {
+  JudoRestResponse,
+  ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,15 +21,17 @@ export interface UserServiceForAdminIssueTypes {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<Array<ServiceIssueTypeStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueTypeStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored>;
-  getTemplate(): Promise<ServiceIssueType>;
-  create(target: ServiceIssueType): Promise<ServiceIssueTypeStored>;
-  validateCreate(target: ServiceIssueType): Promise<ServiceIssueType>;
-  delete(target: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-  update(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
-  validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<ServiceIssueTypeStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceIssueType>>;
+  create(target: ServiceIssueType): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  validateCreate(target: ServiceIssueType): Promise<JudoRestResponse<ServiceIssueType>>;
+  delete(target: JudoIdentifiable<ServiceIssueType>): Promise<JudoRestResponse<void>>;
+  update(target: Partial<ServiceIssueTypeStored>): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
 }

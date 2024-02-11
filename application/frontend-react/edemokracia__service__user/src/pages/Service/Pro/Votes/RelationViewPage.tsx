@@ -29,6 +29,7 @@ import type {
   SimpleVoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceProServiceForVotesImpl } from '~/services/data-axios/ServiceProServiceForVotesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -178,14 +179,17 @@ export default function ServiceProVotesRelationViewPage() {
   const backAction = async () => {
     navigateBack();
   };
-  const refreshAction = async (queryCustomizer: ServiceSimpleVoteQueryCustomizer): Promise<ServiceSimpleVoteStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceSimpleVoteStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceProServiceForVotesImpl.refresh(
+      const response = await serviceProServiceForVotesImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -198,7 +202,7 @@ export default function ServiceProVotesRelationViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

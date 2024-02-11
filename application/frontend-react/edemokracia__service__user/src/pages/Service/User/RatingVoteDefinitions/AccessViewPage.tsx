@@ -44,6 +44,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -231,7 +232,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return userServiceForRatingVoteDefinitionsImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {
@@ -243,8 +244,12 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForRatingVoteDefinitionsImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForRatingVoteDefinitionsImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -388,7 +393,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
   };
   const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
-  ): Promise<ServiceRatingVoteEntryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceRatingVoteEntryStored[]>> => {
     return userServiceForRatingVoteDefinitionsImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,
@@ -454,14 +459,15 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceRatingVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceRatingVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceRatingVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForRatingVoteDefinitionsImpl.refresh(
+      const response = await userServiceForRatingVoteDefinitionsImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -474,7 +480,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -487,12 +493,12 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await userServiceForRatingVoteDefinitionsImpl.update(payloadDiff.current);
+      const { data: res } = await userServiceForRatingVoteDefinitionsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceRatingVoteDefinition, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);

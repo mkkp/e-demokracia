@@ -117,3 +117,5 @@ export * from './FilterBytypesText';
 export * from './FilterBytypesTimestamp';
 export * from './FilterBytypesURL';
 export * from './MaskBuilder';
+export * from './headers';
+export * from './requestResponse';

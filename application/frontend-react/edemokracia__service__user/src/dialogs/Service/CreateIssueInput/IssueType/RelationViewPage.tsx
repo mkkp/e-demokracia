@@ -28,6 +28,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCreateIssueInputServiceForIssueTypeImpl } from '~/services/data-axios/ServiceCreateIssueInputServiceForIssueTypeImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -246,11 +247,17 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
   const backAction = async () => {
     onClose();
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueTypeQueryCustomizer): Promise<ServiceIssueTypeStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueTypeQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceCreateIssueInputServiceForIssueTypeImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceCreateIssueInputServiceForIssueTypeImpl.refresh(
+        ownerData,
+        getPageQueryCustomizer(),
+      );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -263,7 +270,7 @@ export default function ServiceCreateIssueInputIssueTypeRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

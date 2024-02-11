@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceComment, ServiceCommentQueryCustomizer, ServiceCommentStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCommentComment_View_EditActionDefinitions } from './ServiceCommentComment_View_Edit';
 
@@ -30,7 +31,7 @@ export interface ServiceCommentComment_View_EditDialogActions extends ServiceCom
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<ServiceCommentStored>;
+  refreshAction?: (queryCustomizer: ServiceCommentQueryCustomizer) => Promise<JudoRestResponse<ServiceCommentStored>>;
   updateAction?: () => Promise<void>;
 }
 

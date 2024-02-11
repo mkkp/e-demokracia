@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions,
-  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps,
-} from '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer';
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActions,
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogProps,
+} from '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/Root/TabBar/OwnedVoteDefinitionsGroup/OwnedVoteDefinitions/AddSelector/ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   IssueScope,
@@ -32,26 +32,28 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl } from '~/services/data-axios/ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended =
-  ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions & {};
+export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActionsExtended =
+  ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActions & {};
 
 export const SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_ROOT_TAB_BAR_OWNED_VOTE_DEFINITIONS_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_ROOT_TAB_BAR_OWNED_VOTE_DEFINITIONS_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook = (
-  ownerData: any,
-  data: ServiceVoteDefinitionStored[],
-  editMode: boolean,
-  selectionDiff: ServiceVoteDefinitionStored[],
-  submit: () => Promise<void>,
-) => ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended;
+export type ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorActionsHook =
+  (
+    ownerData: any,
+    data: ServiceVoteDefinitionStored[],
+    editMode: boolean,
+    selectionDiff: ServiceVoteDefinitionStored[],
+    submit: () => Promise<void>,
+  ) => ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActionsExtended;
 
-export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel
-  extends ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogProps {
+export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModel
+  extends ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -59,17 +61,22 @@ export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext =
-  createContext<ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel>({} as any);
-export const useServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel = () => {
-  const context = useContext(ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext);
-  if (!context) {
-    throw new Error(
-      'useServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel must be used within a(n) ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelProvider',
+const ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModelContext =
+  createContext<ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModel>(
+    {} as any,
+  );
+export const useServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModel =
+  () => {
+    const context = useContext(
+      ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModelContext,
     );
-  }
-  return context;
-};
+    if (!context) {
+      throw new Error(
+        'useServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModel must be used within a(n) ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModelProvider',
+      );
+    }
+    return context;
+  };
 
 export const useServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsTableAddSelectorPage =
   (): ((
@@ -116,12 +123,13 @@ export const useServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarO
       });
   };
 
-const ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer = lazy(
-  () =>
-    import(
-      '~/containers/Service/VoteDefinition/VoteDefinition_Table/AddSelector/ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer'
-    ),
-);
+const ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogContainer =
+  lazy(
+    () =>
+      import(
+        '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/Root/TabBar/OwnedVoteDefinitionsGroup/OwnedVoteDefinitions/AddSelector/ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogContainer'
+      ),
+  );
 
 export interface ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsTableAddSelectorPageProps {
   ownerData: any;
@@ -176,17 +184,21 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditRoo
 
   // Pandino Action overrides
   const { service: customActionsHook } =
-    useTrackService<ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionsHook>(
+    useTrackService<ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorActionsHook>(
       `(${OBJECTCLASS}=${SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_ROOT_TAB_BAR_OWNED_VOTE_DEFINITIONS_GROUP_OWNED_VOTE_DEFINITIONS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
     );
-  const customActions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActionsExtended | undefined =
-    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
+  const customActions:
+    | ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.VoteDefinition.VoteDefinition_Table.AddSelector', { defaultValue: 'VoteDefinition Table' });
+    return t(
+      'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.AddSelector',
+      { defaultValue: '' },
+    );
   };
   const addAction = async (selected: ServiceVoteDefinitionStored[]) => {
     onSubmit(selected);
@@ -207,55 +219,59 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditRoo
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     try {
       return serviceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl.getRangeForOwnedVoteDefinitions(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogActions = {
-    getPageTitle,
-    addAction,
-    backAction,
-    filterAction,
-    selectorRangeAction,
-    ...(customActions ?? {}),
-  };
+  const actions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogActions =
+    {
+      getPageTitle,
+      addAction,
+      backAction,
+      filterAction,
+      selectorRangeAction,
+      ...(customActions ?? {}),
+    };
 
   // ViewModel setup
-  const viewModel: ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModel = {
-    onClose,
-    actions,
-    ownerData,
-    isLoading,
-    setIsLoading,
-    editMode,
-    setEditMode,
-    refresh,
-    refreshCounter,
-    submit,
-    alreadySelected,
-    selectionDiff,
-    setSelectionDiff,
-    isDraft,
-  };
+  const viewModel: ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModel =
+    {
+      onClose,
+      actions,
+      ownerData,
+      isLoading,
+      setIsLoading,
+      editMode,
+      setEditMode,
+      refresh,
+      refreshCounter,
+      submit,
+      alreadySelected,
+      selectionDiff,
+      setSelectionDiff,
+      isDraft,
+    };
 
   // Effect section
 
   return (
-    <ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldTableAddSelectorPageDefinition"
           data-page-name="service::UserVoteDefinition::UserVoteDefinition_View_Edit::root::tabBar::OwnedVoteDefinitionsGroup::ownedVoteDefinitions::TableAddSelectorPage"
         />
-        <ServiceVoteDefinitionVoteDefinition_TableAddSelectorDialogContainer
+        <ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -268,6 +284,6 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditRoo
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceVoteDefinitionVoteDefinition_TableAddSelectorViewModelContext.Provider>
+    </ServiceUserVoteDefinitionUserVoteDefinition_View_EditRootTabBarOwnedVoteDefinitionsGroupOwnedVoteDefinitionsAddSelectorViewModelContext.Provider>
   );
 }

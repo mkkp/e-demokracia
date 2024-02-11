@@ -31,6 +31,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceDashboardServiceForUserVoteEntriesImpl } from '~/services/data-axios/ServiceDashboardServiceForUserVoteEntriesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -134,7 +135,9 @@ export default function ServiceDashboardUserVoteEntriesRelationTablePage() {
       filters: newFilters,
     };
   };
-  const refreshAction = async (queryCustomizer: ServiceVoteEntryQueryCustomizer): Promise<ServiceVoteEntryStored[]> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceVoteEntryQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceVoteEntryStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

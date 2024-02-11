@@ -6,14 +6,18 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { Comment, CommentQueryCustomizer, CommentStored } from '../data-api';
+import { Comment, CommentQueryCustomizer, CommentStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for Comment
  */
 export interface CommentService {
-  refresh(target: JudoIdentifiable<Comment>, queryCustomizer?: CommentQueryCustomizer): Promise<CommentStored>;
-  voteDown(owner: JudoIdentifiable<Comment>): Promise<void>;
-  voteUp(owner: JudoIdentifiable<Comment>): Promise<void>;
+  refresh(
+    target: JudoIdentifiable<Comment>,
+    queryCustomizer?: CommentQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<CommentStored>>;
+  voteDown(owner: JudoIdentifiable<Comment>): Promise<JudoRestResponse<void>>;
+  voteUp(owner: JudoIdentifiable<Comment>): Promise<JudoRestResponse<void>>;
 }

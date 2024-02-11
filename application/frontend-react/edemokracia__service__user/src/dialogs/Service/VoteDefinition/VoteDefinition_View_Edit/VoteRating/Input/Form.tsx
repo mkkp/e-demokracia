@@ -21,6 +21,7 @@ import type {
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type { RatingVoteInput, RatingVoteInputQueryCustomizer, RatingVoteInputStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -254,10 +255,11 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<RatingVoteInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<RatingVoteInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteRating();
+      const response = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteRating();
+      const { data: result } = response;
       setData(result as RatingVoteInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof RatingVoteInputStored, any>),
@@ -271,7 +273,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingI
           ...(templateDataOverride as Record<keyof RatingVoteInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

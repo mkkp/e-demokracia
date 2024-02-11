@@ -54,6 +54,7 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceForUsersImpl } from '~/services/data-axios/ServiceUserManagerServiceForUsersImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -300,8 +301,12 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserManagerServiceForUsersImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserManagerServiceForUsersImpl.getRangeForResidentCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -336,8 +341,12 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserManagerServiceForUsersImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserManagerServiceForUsersImpl.getRangeForResidentCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -372,8 +381,12 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceUserManagerServiceForUsersImpl.getRangeForResidentDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserManagerServiceForUsersImpl.getRangeForResidentDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -593,11 +606,12 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserManagerServiceForUsersImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceUserManagerServiceForUsersImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -610,7 +624,7 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -623,12 +637,12 @@ export default function ServiceUserManagerUsersRelationViewPage(props: ServiceUs
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceUserManagerServiceForUsersImpl.update(payloadDiff.current);
+      const { data: res } = await serviceUserManagerServiceForUsersImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceServiceUser, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceServiceUser>(error, { setValidation }, data);

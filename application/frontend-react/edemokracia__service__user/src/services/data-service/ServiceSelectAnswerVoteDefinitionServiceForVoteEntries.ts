@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceSelectAnswerVoteDefinition,
   ServiceSelectAnswerVoteEntry,
   ServiceSelectAnswerVoteEntryQueryCustomizer,
@@ -27,42 +28,48 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForVoteEntries {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteEntryStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSelectAnswerVoteEntryStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   getOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
   setOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   unsetOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     target: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   getValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
   getRangeForValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry> | ServiceSelectAnswerVoteEntry,
     queryCustomizer: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<Array<ServiceSelectAnswerVoteSelectionStored>>;
-  getTemplateForValue(): Promise<ServiceSelectAnswerVoteSelection>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSelectAnswerVoteSelectionStored>>>;
+  getTemplateForValue(): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>>;
   setValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     selected: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   unsetValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
 }

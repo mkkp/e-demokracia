@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
@@ -21,22 +22,25 @@ export interface ServiceUserProfileServiceForActivityDistricts {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile> | ServiceUserProfile,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplate(): Promise<ServiceDistrict>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
 }

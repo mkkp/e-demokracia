@@ -30,6 +30,7 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions } from './CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_Form';
 
@@ -42,7 +43,7 @@ const CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionRef
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormDialogActions
   extends CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_FormActionDefinitions {
-  getTemplateAction?: () => Promise<CloseDebateOutputVoteDefinitionReference>;
+  getTemplateAction?: () => Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReference>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

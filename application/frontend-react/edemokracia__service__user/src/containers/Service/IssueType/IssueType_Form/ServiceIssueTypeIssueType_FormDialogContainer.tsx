@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueTypeIssueType_FormActionDefinitions } from './ServiceIssueTypeIssueType_Form';
 
@@ -34,7 +35,7 @@ const ServiceIssueTypeIssueType_Form = lazy(
 );
 
 export interface ServiceIssueTypeIssueType_FormDialogActions extends ServiceIssueTypeIssueType_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceIssueType>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceIssueType>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

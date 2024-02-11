@@ -44,6 +44,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoAbstainVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -231,14 +232,15 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceYesNoAbstainVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForYesNoAbstainVoteDefinitionsImpl.refresh(
+      const response = await userServiceForYesNoAbstainVoteDefinitionsImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -251,7 +253,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -264,12 +266,12 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.update(payloadDiff.current);
+      const { data: res } = await userServiceForYesNoAbstainVoteDefinitionsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceYesNoAbstainVoteDefinition, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceYesNoAbstainVoteDefinition>(error, { setValidation }, data);
@@ -288,7 +290,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return userServiceForYesNoAbstainVoteDefinitionsImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {
@@ -300,8 +302,12 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForYesNoAbstainVoteDefinitionsImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForYesNoAbstainVoteDefinitionsImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -445,7 +451,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
   };
   const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ): Promise<ServiceYesNoAbstainVoteEntryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored[]>> => {
     return userServiceForYesNoAbstainVoteDefinitionsImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,

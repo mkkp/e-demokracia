@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -47,6 +47,7 @@ import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceIssue, ServiceIssueQueryCustomizer, ServiceIssueStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   isRowSelectable,
@@ -65,7 +66,9 @@ export interface ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorCompone
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  selectorRangeAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  selectorRangeAction?: (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueStored[]>>;
   AdditionalToolbarButtons?: (
     data: ServiceIssueStored[],
     isLoading: boolean,
@@ -102,6 +105,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
     setSelectionDiff,
     alreadySelected,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
 
@@ -230,16 +234,16 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
 
   const rowActions: TableRowAction<ServiceIssueStored>[] = useMemo(() => [], [actions, isLoading]);
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -430,7 +434,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
         const processedQueryCustomizer = {
           ...processQueryCustomizer(queryCustomizer),
         };
-        const res = await actions.selectorRangeAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -462,6 +466,7 @@ export function ServiceIssueIssue_TableAddSelectorIssue_TableAddSelectorComponen
       data-table-name="Issue_Table::Add::Selector"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

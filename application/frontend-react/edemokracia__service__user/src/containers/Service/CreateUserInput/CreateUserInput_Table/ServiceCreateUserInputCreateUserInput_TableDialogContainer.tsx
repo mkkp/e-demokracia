@@ -23,6 +23,7 @@ import type {
   ServiceCreateUserInputQueryCustomizer,
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceCreateUserInputCreateUserInput_TableActionDefinitions } from './ServiceCreateUserInputCreateUserInput_Table';
 
 const ServiceCreateUserInputCreateUserInput_Table = lazy(

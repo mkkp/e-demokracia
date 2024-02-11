@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceIssueCategory,
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
@@ -23,61 +24,66 @@ export interface UserServiceForAdminCategories {
   list(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<Array<ServiceIssueCategoryStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueCategoryStored>>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored>;
-  getTemplate(): Promise<ServiceIssueCategory>;
-  create(target: ServiceIssueCategory): Promise<ServiceIssueCategoryStored>;
-  validateCreate(target: ServiceIssueCategory): Promise<ServiceIssueCategory>;
-  delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
-  update(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
-  validateUpdate(target: Partial<ServiceIssueCategoryStored>): Promise<ServiceIssueCategoryStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceIssueCategory>>;
+  create(target: ServiceIssueCategory): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  validateCreate(target: ServiceIssueCategory): Promise<JudoRestResponse<ServiceIssueCategory>>;
+  delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<JudoRestResponse<void>>;
+  update(target: Partial<ServiceIssueCategoryStored>): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  validateUpdate(target: Partial<ServiceIssueCategoryStored>): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   getOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForOwner(
     owner: JudoIdentifiable<ServiceIssueCategory> | ServiceIssueCategory,
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
   validateCreateOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceServiceUser,
-  ): Promise<ServiceServiceUser>;
+  ): Promise<JudoRestResponse<ServiceServiceUser>>;
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceServiceUserStored>,
-  ): Promise<ServiceServiceUserStored>;
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     selected: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   unsetOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: JudoIdentifiable<ServiceServiceUser>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   listSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<Array<ServiceIssueCategoryStored>>;
-  getTemplateForSubcategories(): Promise<ServiceIssueCategory>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueCategoryStored>>>;
+  getTemplateForSubcategories(): Promise<JudoRestResponse<ServiceIssueCategory>>;
   createSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
-  ): Promise<ServiceIssueCategoryStored>;
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   validateCreateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
-  ): Promise<ServiceIssueCategory>;
-  deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<void>;
+  ): Promise<JudoRestResponse<ServiceIssueCategory>>;
+  deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<JudoRestResponse<void>>;
   updateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
-  ): Promise<ServiceIssueCategoryStored>;
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   validateUpdateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
-  ): Promise<ServiceIssueCategoryStored>;
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
 }

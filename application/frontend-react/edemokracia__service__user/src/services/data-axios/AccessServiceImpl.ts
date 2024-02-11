@@ -8,6 +8,7 @@
 
 import type { AxiosResponse } from 'axios';
 import {
+  JudoRestResponse,
   ServiceCountyStored,
   ServiceDashboardStored,
   ServiceIssueCategoryStored,
@@ -34,19 +35,16 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    * @return {Promise<ServiceServicePrincipalUser>}
    */
-  async getPrincipal(): Promise<ServiceServicePrincipalUserStored> {
-    const response = await this.axios.get(this.getPathForActor('service/User/~principal'));
-
-    return response.data;
+  async getPrincipal(): Promise<JudoRestResponse<ServiceServicePrincipalUserStored>> {
+    return this.axios.get(this.getPathForActor('service/User/~principal'));
   }
 
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    * @return {Promise<JudoMetaData>}
    */
-  async getMetaData(): Promise<JudoMetaData> {
-    const response = await this.axios.get(this.getPathForActor('service/User/~meta'));
-    return response.data;
+  async getMetaData(): Promise<JudoRestResponse<JudoMetaData>> {
+    return this.axios.get(this.getPathForActor('service/User/~meta'));
   }
 
   /**

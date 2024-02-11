@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions,
-  ServiceServiceUserServiceUser_TableSetSelectorDialogProps,
-} from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActions,
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogProps,
+} from '~/containers/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/User/SetSelector/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceServiceUser,
@@ -29,26 +29,27 @@ import type {
   ServiceYesNoVoteEntryStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteEntryServiceForOwnerImpl } from '~/services/data-axios/ServiceYesNoVoteEntryServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
+export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActionsExtended =
+  ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActions & {};
 
 export const SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_USER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_USER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
+export type ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceServiceUserStored[],
   editMode: boolean,
   selectionDiff: ServiceServiceUserStored[],
   submit: () => Promise<void>,
-) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
+) => ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActionsExtended;
 
-export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
-  extends ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
+export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModel
+  extends ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,13 +57,13 @@ export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceServiceUserServiceUser_TableSetSelectorViewModelContext =
-  createContext<ServiceServiceUserServiceUser_TableSetSelectorViewModel>({} as any);
-export const useServiceServiceUserServiceUser_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceServiceUserServiceUser_TableSetSelectorViewModelContext);
+const ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModelContext =
+  createContext<ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModel>({} as any);
+export const useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModel = () => {
+  const context = useContext(ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceServiceUserServiceUser_TableSetSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_TableSetSelectorViewModelProvider',
+      'useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModel must be used within a(n) ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModelProvider',
     );
   }
   return context;
@@ -112,10 +113,10 @@ export const useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelector
     });
 };
 
-const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
+const ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer'
+      '~/containers/Service/YesNoVoteEntry/YesNoVoteEntry_View_Edit/User/SetSelector/ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogContainer'
     ),
 );
 
@@ -171,17 +172,18 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSet
   const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_USER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
+  const { service: customActionsHook } =
+    useTrackService<ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_YES_NO_VOTE_ENTRY_YES_NO_VOTE_ENTRY_VIEW_EDIT_USER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActionsExtended | undefined =
     customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+    return t('service.YesNoVoteEntry.YesNoVoteEntry_View_Edit.user.SetSelector', { defaultValue: 'User' });
   };
   const backAction = async () => {
     onClose();
@@ -202,16 +204,16 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSet
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     try {
       return serviceYesNoVoteEntryServiceForOwnerImpl.getRangeForOwner(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
+  const actions: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -221,7 +223,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSet
   };
 
   // ViewModel setup
-  const viewModel: ServiceServiceUserServiceUser_TableSetSelectorViewModel = {
+  const viewModel: ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -241,13 +243,13 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSet
   // Effect section
 
   return (
-    <ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_88iwkFowEe6_67aMO2jOsw)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::YesNoVoteEntry::YesNoVoteEntry_View_Edit::user::LinkSetSelectorPage"
         />
-        <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
+        <ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -260,6 +262,6 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSet
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider>
+    </ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserSetSelectorViewModelContext.Provider>
   );
 }

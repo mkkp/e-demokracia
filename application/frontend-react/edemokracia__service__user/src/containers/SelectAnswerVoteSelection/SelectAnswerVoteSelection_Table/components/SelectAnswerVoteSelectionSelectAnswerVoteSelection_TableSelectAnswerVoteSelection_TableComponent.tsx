@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -44,6 +44,7 @@ import type {
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -73,7 +74,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectA
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   refreshAction?: (
     queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
-  ) => Promise<SelectAnswerVoteSelectionStored[]>;
+  ) => Promise<JudoRestResponse<SelectAnswerVoteSelectionStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: SelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: SelectAnswerVoteSelectionStored, silentMode?: boolean) => Promise<void>;
@@ -101,6 +102,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
   props: SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAnswerVoteSelection_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_Xwy9EG6bEe2wNaja8kBvcQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -209,16 +211,16 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_Xwdl4G6bEe2wNaja8kBvcQ)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<SelectAnswerVoteSelectionStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -366,7 +368,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -398,6 +400,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
       data-table-name="SelectAnswerVoteSelection_Table"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -490,6 +493,7 @@ export function SelectAnswerVoteSelectionSelectAnswerVoteSelection_TableSelectAn
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

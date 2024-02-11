@@ -7,12 +7,14 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceCreateIssueInput,
   ServiceIssueType,
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceCreateIssueInputServiceForIssueType } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -30,21 +32,23 @@ export class ServiceCreateIssueInputServiceForIssueTypeImpl
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>> {
     const path = '/service/IssueType/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 
   /**
@@ -54,25 +58,26 @@ export class ServiceCreateIssueInputServiceForIssueTypeImpl
   async getRangeForIssueType(
     owner: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<Array<ServiceIssueTypeStored>> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueTypeStored>>> {
     const path = '/service/CreateIssueInput/issueType/~range';
-    const response = await this.axios.post(this.getPathForActor(path), {
-      owner: owner ?? {},
-      queryCustomizer: queryCustomizer ?? {},
-    });
-
-    return response.data;
+    return this.axios.post(
+      this.getPathForActor(path),
+      {
+        owner: owner ?? {},
+        queryCustomizer: queryCustomizer ?? {},
+      },
+      headers ? { headers } : undefined,
+    );
   }
 
   /**
    * From: relation.target.isTemplateable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceIssueType> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceIssueType>> {
     const path = '/service/IssueType/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -82,11 +87,11 @@ export class ServiceCreateIssueInputServiceForIssueTypeImpl
   async setIssueType(
     owner: JudoIdentifiable<ServiceCreateIssueInput>,
     selected: JudoIdentifiable<ServiceIssueType>,
-  ): Promise<void> {
+  ): Promise<JudoRestResponse<void>> {
     const path = '/service/CreateIssueInput/~update/issueType/~set';
-    await this.axios.post(this.getPathForActor(path), selected, {
+    return this.axios.post(this.getPathForActor(path), selected, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -95,11 +100,11 @@ export class ServiceCreateIssueInputServiceForIssueTypeImpl
    * From: relation.isUnsetable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async unsetIssueType(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void> {
+  async unsetIssueType(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<JudoRestResponse<void>> {
     const path = '/service/CreateIssueInput/~update/issueType/~unset';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }

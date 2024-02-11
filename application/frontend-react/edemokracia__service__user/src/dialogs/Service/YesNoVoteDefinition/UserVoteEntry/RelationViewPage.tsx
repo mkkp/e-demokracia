@@ -33,6 +33,7 @@ import type {
   YesNoVoteValue,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl } from '~/services/data-axios/ServiceYesNoVoteDefinitionServiceForUserVoteEntryImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -257,14 +258,15 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
   };
   const refreshAction = async (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
-  ): Promise<ServiceYesNoVoteEntryStored> => {
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.refresh(
+      const response = await serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -277,7 +279,7 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -291,11 +293,12 @@ export default function ServiceYesNoVoteDefinitionUserVoteEntryRelationViewPage(
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
+      const { data: result } = await serviceYesNoVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

@@ -9,13 +9,11 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import Toolbar from '@mui/material/Toolbar';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { usePrincipal } from '~/auth';
-import { CustomBreadcrumb } from '~/components/CustomBreadcrumb';
 import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
 import { Drawer } from './Drawer';
@@ -49,7 +47,6 @@ export const Layout = () => {
       {!isHorizontal ? <Drawer /> : <HorizontalBar />}
 
       <Box component="main" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-        <Toolbar sx={{ mt: isHorizontal ? 8 : 'inherit' }} />
         <Container
           maxWidth={container ? 'xl' : false}
           sx={{
@@ -58,9 +55,9 @@ export const Layout = () => {
             minHeight: 'calc(100vh - 110px)',
             display: 'flex',
             flexDirection: 'column',
+            mt: 12,
           }}
         >
-          <CustomBreadcrumb />
           <Outlet />
           <Footer />
         </Container>

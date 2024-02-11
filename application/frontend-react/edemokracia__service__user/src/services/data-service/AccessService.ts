@@ -7,6 +7,7 @@
 // Template file: data-service/accessService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCountyStored,
   ServiceDashboardStored,
   ServiceIssueCategoryStored,
@@ -27,9 +28,9 @@ import {
 import type { JudoDownloadFile, JudoMetaData } from '../data-api/common';
 
 export interface AccessService {
-  getPrincipal(): Promise<ServiceServicePrincipalUserStored>;
+  getPrincipal(): Promise<JudoRestResponse<ServiceServicePrincipalUserStored>>;
 
-  getMetaData(): Promise<JudoMetaData>;
+  getMetaData(): Promise<JudoRestResponse<JudoMetaData>>;
 
   uploadFile(attributePath: string, file: File): Promise<string>;
 

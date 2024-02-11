@@ -6,8 +6,14 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '../data-api';
+import type {
+  JudoRestResponse,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceDistrictService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -18,11 +24,9 @@ export class ServiceDistrictServiceImpl extends JudoAxiosService implements Serv
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceDistrict> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceDistrict>> {
     const path = '/service/District/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -31,25 +35,25 @@ export class ServiceDistrictServiceImpl extends JudoAxiosService implements Serv
   async refresh(
     target: JudoIdentifiable<ServiceDistrict>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void> {
+  async delete(target: JudoIdentifiable<ServiceDistrict>): Promise<JudoRestResponse<void>> {
     const path = '/service/District/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
   }
@@ -57,27 +61,23 @@ export class ServiceDistrictServiceImpl extends JudoAxiosService implements Serv
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored> {
+  async update(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async validateUpdate(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored> {
+  async validateUpdate(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/District/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
 }

@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -47,6 +47,7 @@ import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -71,7 +72,9 @@ export interface ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActio
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceSimpleVoteQueryCustomizer) => Promise<ServiceSimpleVoteStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceSimpleVoteQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceSimpleVoteStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceSimpleVoteStored, silentMode?: boolean) => Promise<void>;
@@ -99,6 +102,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   props: ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -219,16 +223,16 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_p8pkkWksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceSimpleVoteStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -372,7 +376,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -401,6 +405,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
   return (
     <div id="User/(esm/_p9JT0GksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="SimpleVote_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -488,6 +493,7 @@ export function ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent(
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

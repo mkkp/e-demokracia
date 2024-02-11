@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions,
-  ServiceServiceUserServiceUser_TableSetSelectorDialogProps,
-} from '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer';
+  ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActions,
+  ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogProps,
+} from '~/containers/Service/Issue/Issue_View_Edit/Issue/Owner/SetSelector/ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceIssue,
@@ -29,26 +29,27 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForOwnerImpl } from '~/services/data-axios/ServiceIssueServiceForOwnerImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended =
-  ServiceServiceUserServiceUser_TableSetSelectorDialogActions & {};
+export type ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActionsExtended =
+  ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_ISSUE_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_ISSUE_VIEW_EDIT_ISSUE_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceServiceUserServiceUser_TableSetSelectorActionsHook = (
+export type ServiceIssueIssue_View_EditIssueOwnerSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceServiceUserStored[],
   editMode: boolean,
   selectionDiff: ServiceServiceUserStored[],
   submit: () => Promise<void>,
-) => ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended;
+) => ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActionsExtended;
 
-export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
-  extends ServiceServiceUserServiceUser_TableSetSelectorDialogProps {
+export interface ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModel
+  extends ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,13 +57,13 @@ export interface ServiceServiceUserServiceUser_TableSetSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceServiceUserServiceUser_TableSetSelectorViewModelContext =
-  createContext<ServiceServiceUserServiceUser_TableSetSelectorViewModel>({} as any);
-export const useServiceServiceUserServiceUser_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceServiceUserServiceUser_TableSetSelectorViewModelContext);
+const ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModelContext =
+  createContext<ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModel>({} as any);
+export const useServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceServiceUserServiceUser_TableSetSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_TableSetSelectorViewModelProvider',
+      'useServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModel must be used within a(n) ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModelProvider',
     );
   }
   return context;
@@ -112,10 +113,10 @@ export const useServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage = (): (
     });
 };
 
-const ServiceServiceUserServiceUser_TableSetSelectorDialogContainer = lazy(
+const ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/ServiceUser/ServiceUser_Table/SetSelector/ServiceServiceUserServiceUser_TableSetSelectorDialogContainer'
+      '~/containers/Service/Issue/Issue_View_Edit/Issue/Owner/SetSelector/ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogContainer'
     ),
 );
 
@@ -168,17 +169,17 @@ export default function ServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage
   const validate: (data: ServiceServiceUser) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceServiceUserServiceUser_TableSetSelectorActionsHook>(
+  const { service: customActionsHook } = useTrackService<ServiceIssueIssue_View_EditIssueOwnerSetSelectorActionsHook>(
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_ISSUE_OWNER_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
-  const customActions: ServiceServiceUserServiceUser_TableSetSelectorDialogActionsExtended | undefined =
+  const customActions: ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActionsExtended | undefined =
     customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.ServiceUser.ServiceUser_Table.SetSelector', { defaultValue: 'ServiceUser Table' });
+    return t('service.Issue.Issue_View_Edit.issue.owner.SetSelector', { defaultValue: 'Owner' });
   };
   const backAction = async () => {
     onClose();
@@ -199,16 +200,16 @@ export default function ServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     try {
       return serviceIssueServiceForOwnerImpl.getRangeForOwner(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceServiceUserServiceUser_TableSetSelectorDialogActions = {
+  const actions: ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -218,7 +219,7 @@ export default function ServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage
   };
 
   // ViewModel setup
-  const viewModel: ServiceServiceUserServiceUser_TableSetSelectorViewModel = {
+  const viewModel: ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -238,13 +239,13 @@ export default function ServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage
   // Effect section
 
   return (
-    <ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_plsB8Id8Ee2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::Issue::Issue_View_Edit::issue::owner::LinkSetSelectorPage"
         />
-        <ServiceServiceUserServiceUser_TableSetSelectorDialogContainer
+        <ServiceIssueIssue_View_EditIssueOwnerSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -257,6 +258,6 @@ export default function ServiceIssueIssue_View_EditIssueOwnerLinkSetSelectorPage
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceServiceUserServiceUser_TableSetSelectorViewModelContext.Provider>
+    </ServiceIssueIssue_View_EditIssueOwnerSetSelectorViewModelContext.Provider>
   );
 }

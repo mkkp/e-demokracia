@@ -26,13 +26,14 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCityCity_FormActionDefinitions } from './ServiceCityCity_Form';
 
 const ServiceCityCity_Form = lazy(() => import('~/containers/Service/City/City_Form/ServiceCityCity_Form'));
 
 export interface ServiceCityCity_FormDialogActions extends ServiceCityCity_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceCity>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceCity>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

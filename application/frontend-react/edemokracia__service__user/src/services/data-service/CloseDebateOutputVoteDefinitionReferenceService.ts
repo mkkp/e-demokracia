@@ -10,6 +10,7 @@ import {
   CloseDebateOutputVoteDefinitionReference,
   CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
   CloseDebateOutputVoteDefinitionReferenceStored,
+  JudoRestResponse,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
@@ -20,5 +21,6 @@ export interface CloseDebateOutputVoteDefinitionReferenceService {
   refresh(
     target: JudoIdentifiable<CloseDebateOutputVoteDefinitionReference>,
     queryCustomizer?: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>>;
 }

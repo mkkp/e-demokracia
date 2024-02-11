@@ -6,7 +6,13 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored, ServiceIssue } from '../data-api';
+import {
+  JudoRestResponse,
+  ServiceDistrict,
+  ServiceDistrictQueryCustomizer,
+  ServiceDistrictStored,
+  ServiceIssue,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,12 +22,17 @@ export interface ServiceIssueServiceForDistrict {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForDistrict(
     owner: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplate(): Promise<ServiceDistrict>;
-  setDistrict(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-  unsetDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
+  setDistrict(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceDistrict>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
 }

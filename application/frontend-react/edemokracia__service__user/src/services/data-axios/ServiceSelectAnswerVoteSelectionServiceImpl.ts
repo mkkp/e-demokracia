@@ -7,11 +7,13 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceSelectAnswerVoteSelection,
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceSelectAnswerVoteSelectionService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -25,11 +27,9 @@ export class ServiceSelectAnswerVoteSelectionServiceImpl
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceSelectAnswerVoteSelection> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>> {
     const path = '/service/SelectAnswerVoteSelection/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -38,25 +38,25 @@ export class ServiceSelectAnswerVoteSelectionServiceImpl
   async refresh(
     target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>,
     queryCustomizer?: ServiceSelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteSelection/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<void> {
+  async delete(target: JudoIdentifiable<ServiceSelectAnswerVoteSelection>): Promise<JudoRestResponse<void>> {
     const path = '/service/SelectAnswerVoteSelection/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
   }
@@ -66,29 +66,25 @@ export class ServiceSelectAnswerVoteSelectionServiceImpl
    */
   async update(
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored> {
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteSelection/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
   async validateUpdate(
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
-  ): Promise<ServiceSelectAnswerVoteSelectionStored> {
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteSelection/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
 }

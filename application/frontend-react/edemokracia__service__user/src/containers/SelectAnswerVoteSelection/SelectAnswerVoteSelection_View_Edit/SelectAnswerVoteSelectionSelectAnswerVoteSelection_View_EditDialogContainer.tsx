@@ -23,6 +23,7 @@ import type {
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditActionDefinitions } from './SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_Edit';
 
@@ -40,7 +41,7 @@ export interface SelectAnswerVoteSelectionSelectAnswerVoteSelection_View_EditDia
   deleteAction?: () => Promise<void>;
   refreshAction?: (
     queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
-  ) => Promise<SelectAnswerVoteSelectionStored>;
+  ) => Promise<JudoRestResponse<SelectAnswerVoteSelectionStored>>;
   updateAction?: () => Promise<void>;
 }
 

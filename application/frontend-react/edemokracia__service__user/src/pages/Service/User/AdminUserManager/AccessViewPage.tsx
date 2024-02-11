@@ -32,6 +32,7 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminUserManagerImpl } from '~/services/data-axios/UserServiceForAdminUserManagerImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -193,11 +194,15 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceUserManagerQueryCustomizer,
-  ): Promise<ServiceUserManagerStored> => {
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForAdminUserManagerImpl.refresh(singletonHost.current, getPageQueryCustomizer());
+      const response = await userServiceForAdminUserManagerImpl.refresh(
+        singletonHost.current,
+        getPageQueryCustomizer(),
+      );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -210,7 +215,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -223,12 +228,12 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await userServiceForAdminUserManagerImpl.update(payloadDiff.current);
+      const { data: res } = await userServiceForAdminUserManagerImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceUserManager, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceUserManager>(error, { setValidation }, data);
@@ -255,7 +260,7 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
   };
   const usersRefreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored[]> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored[]>> => {
     return userServiceForAdminUserManagerImpl.listUsers(singletonHost.current, queryCustomizer);
   };
   const usersOpenPageAction = async (target: ServiceServiceUser | ServiceServiceUserStored, isDraft?: boolean) => {
@@ -268,9 +273,10 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
-    return await userServiceForAdminUserManagerImpl.refreshForAdminUserManager({
+    const { data: sp } = await userServiceForAdminUserManagerImpl.refreshForAdminUserManager({
       _mask: '{}',
     });
+    return sp;
   };
 
   const actions: ServiceUserManagerUserManager_View_EditPageActions = {

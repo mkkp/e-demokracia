@@ -84,6 +84,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceForOwnedIssuesImpl } from '~/services/data-axios/ServiceUserIssuesServiceForOwnedIssuesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -376,8 +377,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     queryCustomizer: ServiceIssueTypeQueryCustomizer,
   ): Promise<ServiceIssueTypeStored[]> => {
     try {
-      return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForIssueType(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForIssueType(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -411,8 +416,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -446,8 +455,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -481,8 +494,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -516,8 +533,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -764,19 +785,6 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
       });
     });
   };
-  const attachmentsBulkRemoveAction = async (
-    selectedRows: ServiceIssueAttachmentStored[],
-  ): Promise<DialogResult<Array<ServiceIssueAttachmentStored>>> => {
-    return new Promise((resolve) => {
-      const selectedIds = selectedRows.map((r) => r.__identifier);
-      const newList = (data?.attachments ?? []).filter((c: any) => !selectedIds.includes(c.__identifier));
-      storeDiff('attachments', newList);
-      resolve({
-        result: 'submit',
-        data: [],
-      });
-    });
-  };
   const attachmentsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -816,12 +824,6 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
       if (!silentMode) {
         handleError<ServiceIssueAttachment>(error, undefined, target);
       }
-    }
-  };
-  const attachmentsRemoveAction = async (target?: ServiceIssueAttachmentStored, silentMode?: boolean) => {
-    if (target) {
-      const newList = (data?.attachments ?? []).filter((c: any) => c.__identifier !== target!.__identifier);
-      storeDiff('attachments', newList);
     }
   };
   const attachmentsOpenPageAction = async (
@@ -942,14 +944,17 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     // no need to set editMode to false, given refresh should do it implicitly
     await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserIssuesServiceForOwnedIssuesImpl.refresh(
+      const response = await serviceUserIssuesServiceForOwnedIssuesImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -962,7 +967,7 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -975,12 +980,12 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceUserIssuesServiceForOwnedIssuesImpl.update(payloadDiff.current);
+      const { data: res } = await serviceUserIssuesServiceForOwnedIssuesImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceIssue, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceIssue>(error, { setValidation }, data);
@@ -1028,11 +1033,9 @@ export default function ServiceUserIssuesOwnedIssuesRelationViewPage() {
     prosDeleteAction,
     prosOpenPageAction,
     attachmentsBulkDeleteAction,
-    attachmentsBulkRemoveAction,
     attachmentsOpenFormAction,
     attachmentsFilterAction,
     attachmentsDeleteAction,
-    attachmentsRemoveAction,
     attachmentsOpenPageAction,
     categoriesOpenAddSelectorAction,
     categoriesBulkRemoveAction,

@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCity,
   ServiceCityQueryCustomizer,
   ServiceCityStored,
@@ -33,157 +34,178 @@ export interface ServiceIssueServiceForCreatedBy {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
   getRangeForActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  getTemplateForActivityCities(): Promise<ServiceCity>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  getTemplateForActivityCities(): Promise<JudoRestResponse<ServiceCity>>;
   updateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
-  ): Promise<ServiceCityStored>;
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   listActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
   getRangeForActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  getTemplateForActivityCounties(): Promise<ServiceCounty>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
+  getTemplateForActivityCounties(): Promise<JudoRestResponse<ServiceCounty>>;
   updateActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
-  ): Promise<ServiceCountyStored>;
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   listActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   getRangeForActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplateForActivityDistricts(): Promise<ServiceDistrict>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplateForActivityDistricts(): Promise<JudoRestResponse<ServiceDistrict>>;
   updateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored>;
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   getResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<ServiceCityStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   getRangeForResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  getTemplateForResidentCity(): Promise<ServiceCity>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  getTemplateForResidentCity(): Promise<JudoRestResponse<ServiceCity>>;
   updateResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
-  ): Promise<ServiceCityStored>;
-  setResidentCity(owner: JudoIdentifiable<ServiceServiceUser>, selected: JudoIdentifiable<ServiceCity>): Promise<void>;
-  unsetResidentCity(owner: JudoIdentifiable<ServiceServiceUser>, target: JudoIdentifiable<ServiceCity>): Promise<void>;
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
+  setResidentCity(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    selected: JudoIdentifiable<ServiceCity>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetResidentCity(
+    owner: JudoIdentifiable<ServiceServiceUser>,
+    target: JudoIdentifiable<ServiceCity>,
+  ): Promise<JudoRestResponse<void>>;
   getResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<ServiceCountyStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   getRangeForResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  getTemplateForResidentCounty(): Promise<ServiceCounty>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
+  getTemplateForResidentCounty(): Promise<JudoRestResponse<ServiceCounty>>;
   updateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
-  ): Promise<ServiceCountyStored>;
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceCounty>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   unsetResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: JudoIdentifiable<ServiceCounty>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   getResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplateForResidentDistrict(): Promise<ServiceDistrict>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplateForResidentDistrict(): Promise<JudoRestResponse<ServiceDistrict>>;
   updateResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
-  ): Promise<ServiceDistrictStored>;
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: JudoIdentifiable<ServiceDistrict>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   unsetResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: JudoIdentifiable<ServiceDistrict>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   listVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
   getRangeForVotes(
     owner: JudoIdentifiable<ServiceServiceUser> | ServiceServiceUser,
     queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
   setVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   addVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
   removeVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     selected: Array<JudoIdentifiable<ServiceSimpleVote>>,
-  ): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
 }

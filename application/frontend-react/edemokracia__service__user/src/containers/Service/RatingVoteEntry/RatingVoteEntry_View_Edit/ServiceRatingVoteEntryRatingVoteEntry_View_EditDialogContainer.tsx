@@ -23,6 +23,7 @@ import type {
   ServiceRatingVoteEntryQueryCustomizer,
   ServiceRatingVoteEntryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceRatingVoteEntryRatingVoteEntry_View_EditActionDefinitions } from './ServiceRatingVoteEntryRatingVoteEntry_View_Edit';
 
@@ -38,7 +39,9 @@ export interface ServiceRatingVoteEntryRatingVoteEntry_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceRatingVoteEntryQueryCustomizer) => Promise<ServiceRatingVoteEntryStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceRatingVoteEntryQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceRatingVoteEntryStored>>;
   updateAction?: () => Promise<void>;
 }
 

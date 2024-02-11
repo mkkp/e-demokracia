@@ -66,7 +66,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
     },
   ]);
 
-  const meta = await accessServiceImpl.getMetaData();
+  const { data: meta } = await accessServiceImpl.getMetaData();
   const { clientId, name, issuer } = meta.security[0];
   storeMeta({ issuer, clientId, name });
   const oidcConfig: AuthProviderProps = {

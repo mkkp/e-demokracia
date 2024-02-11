@@ -6,19 +6,20 @@
 // Template name: classService.ts.hbs
 // Template file: data-service/classService.ts.hbs
 
-import { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '../data-api';
+import { JudoRestResponse, ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceDistrict
  */
 export interface ServiceDistrictService {
-  getTemplate(): Promise<ServiceDistrict>;
+  getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
   refresh(
     target: JudoIdentifiable<ServiceDistrict>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
-  delete(target: JudoIdentifiable<ServiceDistrict>): Promise<void>;
-  update(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
-  validateUpdate(target: Partial<ServiceDistrictStored>): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
+  delete(target: JudoIdentifiable<ServiceDistrict>): Promise<JudoRestResponse<void>>;
+  update(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>>;
+  validateUpdate(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>>;
 }

@@ -25,6 +25,7 @@ import type {
   CreateCommentInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -263,10 +264,11 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<CreateCommentInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<CreateCommentInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.getTemplateOnCreateComment();
+      const response = await serviceIssueServiceImpl.getTemplateOnCreateComment();
+      const { data: result } = response;
       setData(result as CreateCommentInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof CreateCommentInputStored, any>),
@@ -280,7 +282,7 @@ export default function ServiceIssueIssue_View_EditCreateCommentInputForm(
           ...(templateDataOverride as Record<keyof CreateCommentInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

@@ -29,6 +29,7 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForAttachmentsImpl } from '~/services/data-axios/ServiceIssueServiceForAttachmentsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -274,7 +275,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
       }
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await serviceIssueServiceForAttachmentsImpl.create(ownerData, payload);
+      const { data: res } = await serviceIssueServiceForAttachmentsImpl.create(ownerData, payload);
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -290,10 +291,11 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceIssueAttachment> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceIssueAttachment>> => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceForAttachmentsImpl.getTemplate();
+      const response = await serviceIssueServiceForAttachmentsImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceIssueAttachmentStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceIssueAttachmentStored, any>),
@@ -307,7 +309,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
           ...(templateDataOverride as Record<keyof ServiceIssueAttachmentStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

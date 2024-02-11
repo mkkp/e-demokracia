@@ -54,6 +54,7 @@ import type {
   ServiceSimpleVoteStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCommentServiceForCreatedByImpl } from '~/services/data-axios/ServiceCommentServiceForCreatedByImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -299,11 +300,12 @@ export default function ServiceCommentCreatedByRelationViewPage(props: ServiceCo
   };
   const refreshAction = async (
     queryCustomizer: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored> => {
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceCommentServiceForCreatedByImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await serviceCommentServiceForCreatedByImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -316,7 +318,7 @@ export default function ServiceCommentCreatedByRelationViewPage(props: ServiceCo
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -330,8 +332,12 @@ export default function ServiceCommentCreatedByRelationViewPage(props: ServiceCo
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return serviceCommentServiceForCreatedByImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceCommentServiceForCreatedByImpl.getRangeForResidentCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -366,8 +372,12 @@ export default function ServiceCommentCreatedByRelationViewPage(props: ServiceCo
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return serviceCommentServiceForCreatedByImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceCommentServiceForCreatedByImpl.getRangeForResidentCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -402,8 +412,12 @@ export default function ServiceCommentCreatedByRelationViewPage(props: ServiceCo
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return serviceCommentServiceForCreatedByImpl.getRangeForResidentDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceCommentServiceForCreatedByImpl.getRangeForResidentDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

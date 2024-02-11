@@ -6,7 +6,13 @@
 // Template name: relationService.ts.hbs
 // Template file: data-service/relationService.ts.hbs
 
-import { ServiceIssue, ServiceIssueType, ServiceIssueTypeQueryCustomizer, ServiceIssueTypeStored } from '../data-api';
+import {
+  JudoRestResponse,
+  ServiceIssue,
+  ServiceIssueType,
+  ServiceIssueTypeQueryCustomizer,
+  ServiceIssueTypeStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
 /**
@@ -16,12 +22,17 @@ export interface ServiceIssueServiceForIssueType {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<ServiceIssueTypeStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
   getRangeForIssueType(
     owner: JudoIdentifiable<ServiceIssue> | ServiceIssue,
     queryCustomizer?: ServiceIssueTypeQueryCustomizer,
-  ): Promise<Array<ServiceIssueTypeStored>>;
-  getTemplate(): Promise<ServiceIssueType>;
-  setIssueType(owner: JudoIdentifiable<ServiceIssue>, selected: JudoIdentifiable<ServiceIssueType>): Promise<void>;
-  unsetIssueType(owner: JudoIdentifiable<ServiceIssue>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceIssueTypeStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceIssueType>>;
+  setIssueType(
+    owner: JudoIdentifiable<ServiceIssue>,
+    selected: JudoIdentifiable<ServiceIssueType>,
+  ): Promise<JudoRestResponse<void>>;
+  unsetIssueType(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
 }

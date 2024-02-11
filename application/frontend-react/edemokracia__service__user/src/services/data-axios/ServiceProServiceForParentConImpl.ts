@@ -7,12 +7,14 @@
 // Template file: data-axios/relationServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceConParent,
   ServiceConParentQueryCustomizer,
   ServiceConParentStored,
   ServicePro,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceProServiceForParentCon } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -27,20 +29,22 @@ export class ServiceProServiceForParentConImpl extends JudoAxiosService implemen
   async refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceConParentQueryCustomizer,
-  ): Promise<ServiceConParentStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceConParentStored>> {
     const path = '/service/ConParent/~get';
-    const response = await this.axios.post(
+    return this.axios.post(
       this.getPathForActor(path),
       queryCustomizer ?? {},
       owner
         ? {
             headers: {
-              'X-Judo-SignedIdentifier': owner.__signedIdentifier,
+              [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+              ...(headers ?? {}),
             },
           }
-        : undefined,
+        : headers
+          ? { headers }
+          : undefined,
     );
-
-    return response.data;
   }
 }

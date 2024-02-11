@@ -44,6 +44,7 @@ import type {
   ServiceUserIssuesStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserIssuesImpl } from '~/services/data-axios/UserServiceForUserIssuesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -1387,11 +1388,14 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   const backAction = async () => {
     navigateBack();
   };
-  const refreshAction = async (queryCustomizer: ServiceUserIssuesQueryCustomizer): Promise<ServiceUserIssuesStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceUserIssuesQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserIssuesStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserIssuesImpl.refresh(singletonHost.current, getPageQueryCustomizer());
+      const response = await userServiceForUserIssuesImpl.refresh(singletonHost.current, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -1404,7 +1408,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -1433,7 +1437,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesGlobalRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesGlobal(singletonHost.current, queryCustomizer);
   };
   const activeIssuesGlobalOpenPageAction = async (target: ServiceIssue | ServiceIssueStored, isDraft?: boolean) => {
@@ -1460,7 +1464,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInActivityCitiesRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCities(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInActivityCitiesOpenPageAction = async (
@@ -1490,7 +1494,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInActivityCountiesRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityCounties(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInActivityCountiesOpenPageAction = async (
@@ -1520,7 +1524,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInActivityDistrictsRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInActivityDistricts(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInActivityDistrictsOpenPageAction = async (
@@ -1550,7 +1554,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInResidentCityRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCity(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInResidentCityOpenPageAction = async (
@@ -1580,7 +1584,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInResidentCountyRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentCounty(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInResidentCountyOpenPageAction = async (
@@ -1610,7 +1614,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const activeIssuesInResidentDistrictRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listActiveIssuesInResidentDistrict(singletonHost.current, queryCustomizer);
   };
   const activeIssuesInResidentDistrictOpenPageAction = async (
@@ -1701,7 +1705,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   };
   const ownedIssuesRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForUserIssuesImpl.listOwnedIssues(singletonHost.current, queryCustomizer);
   };
   const ownedIssuesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
@@ -1739,9 +1743,10 @@ export default function ServiceUserUserIssuesAccessViewPage() {
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
-    return await userServiceForUserIssuesImpl.refreshForUserIssues({
+    const { data: sp } = await userServiceForUserIssuesImpl.refreshForUserIssues({
       _mask: '{}',
     });
+    return sp;
   };
 
   const actions: ServiceUserIssuesUserIssues_View_EditPageActions = {

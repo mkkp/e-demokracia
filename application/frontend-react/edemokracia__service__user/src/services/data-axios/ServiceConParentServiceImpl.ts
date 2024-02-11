@@ -6,8 +6,14 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { ServiceConParent, ServiceConParentQueryCustomizer, ServiceConParentStored } from '../data-api';
+import type {
+  JudoRestResponse,
+  ServiceConParent,
+  ServiceConParentQueryCustomizer,
+  ServiceConParentStored,
+} from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceConParentService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -21,14 +27,14 @@ export class ServiceConParentServiceImpl extends JudoAxiosService implements Ser
   async refresh(
     target: JudoIdentifiable<ServiceConParent>,
     queryCustomizer?: ServiceConParentQueryCustomizer,
-  ): Promise<ServiceConParentStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceConParentStored>> {
     const path = '/service/ConParent/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 }

@@ -7,11 +7,13 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceServicePrincipalUser,
   ServiceServicePrincipalUserQueryCustomizer,
   ServiceServicePrincipalUserStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceServicePrincipalUserService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -28,14 +30,14 @@ export class ServiceServicePrincipalUserServiceImpl
   async refresh(
     target: JudoIdentifiable<ServiceServicePrincipalUser>,
     queryCustomizer?: ServiceServicePrincipalUserQueryCustomizer,
-  ): Promise<ServiceServicePrincipalUserStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServicePrincipalUserStored>> {
     const path = '/service/ServicePrincipalUser/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 }

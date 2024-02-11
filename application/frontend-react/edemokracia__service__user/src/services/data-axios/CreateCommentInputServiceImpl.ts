@@ -6,8 +6,9 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { CreateCommentInput, CreateCommentInputStored } from '../data-api';
+import type { CreateCommentInput, CreateCommentInputStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { CreateCommentInputService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -18,10 +19,8 @@ export class CreateCommentInputServiceImpl extends JudoAxiosService implements C
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<CreateCommentInput> {
+  async getTemplate(): Promise<JudoRestResponse<CreateCommentInput>> {
     const path = '/CreateCommentInput/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 }

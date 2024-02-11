@@ -7,11 +7,13 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { SelectAnswerVoteSelectionService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -22,11 +24,9 @@ export class SelectAnswerVoteSelectionServiceImpl extends JudoAxiosService imple
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<SelectAnswerVoteSelection> {
+  async getTemplate(): Promise<JudoRestResponse<SelectAnswerVoteSelection>> {
     const path = '/SelectAnswerVoteSelection/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -35,14 +35,14 @@ export class SelectAnswerVoteSelectionServiceImpl extends JudoAxiosService imple
   async refresh(
     target: JudoIdentifiable<SelectAnswerVoteSelection>,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<SelectAnswerVoteSelectionStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<SelectAnswerVoteSelectionStored>> {
     const path = '/SelectAnswerVoteSelection/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 }

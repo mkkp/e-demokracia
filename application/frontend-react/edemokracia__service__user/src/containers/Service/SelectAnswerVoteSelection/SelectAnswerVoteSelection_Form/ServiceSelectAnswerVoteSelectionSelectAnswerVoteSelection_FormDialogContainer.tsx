@@ -30,6 +30,7 @@ import type {
   ServiceSelectAnswerVoteSelectionQueryCustomizer,
   ServiceSelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions } from './ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Form';
 
@@ -42,7 +43,7 @@ const ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_Form = lazy(
 
 export interface ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormDialogActions
   extends ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceSelectAnswerVoteSelection>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceSelectAnswerVoteSelection>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

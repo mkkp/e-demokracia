@@ -32,6 +32,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceDashboardServiceForFavoriteIssuesImpl } from '~/services/data-axios/ServiceDashboardServiceForFavoriteIssuesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -205,15 +206,17 @@ export default function ServiceDashboardFavoriteIssuesAddSelectorPage(
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     try {
       return serviceDashboardServiceForFavoriteIssuesImpl.getRangeForFavoriteIssues(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 

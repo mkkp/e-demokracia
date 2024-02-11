@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceCountyCounty_TableAddSelectorDialogActions,
-  ServiceCountyCounty_TableAddSelectorDialogProps,
-} from '~/containers/Service/County/County_Table/AddSelector/ServiceCountyCounty_TableAddSelectorDialogContainer';
+  ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActions,
+  ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogProps,
+} from '~/containers/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Tab_activity_counties/ActivityCounties/AddSelector/ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceCounty,
@@ -29,25 +29,28 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceServiceUserServiceForActivityCountiesImpl } from '~/services/data-axios/ServiceServiceUserServiceForActivityCountiesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceCountyCounty_TableAddSelectorDialogActionsExtended =
-  ServiceCountyCounty_TableAddSelectorDialogActions & {};
+export type ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActionsExtended =
+  ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActions & {};
 
 export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceCountyCounty_TableAddSelectorActionsHook = (
-  ownerData: any,
-  data: ServiceCountyStored[],
-  editMode: boolean,
-  selectionDiff: ServiceCountyStored[],
-  submit: () => Promise<void>,
-) => ServiceCountyCounty_TableAddSelectorDialogActionsExtended;
+export type ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActionsHook =
+  (
+    ownerData: any,
+    data: ServiceCountyStored[],
+    editMode: boolean,
+    selectionDiff: ServiceCountyStored[],
+    submit: () => Promise<void>,
+  ) => ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActionsExtended;
 
-export interface ServiceCountyCounty_TableAddSelectorViewModel extends ServiceCountyCounty_TableAddSelectorDialogProps {
+export interface ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModel
+  extends ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -55,17 +58,22 @@ export interface ServiceCountyCounty_TableAddSelectorViewModel extends ServiceCo
   isDraft?: boolean;
 }
 
-const ServiceCountyCounty_TableAddSelectorViewModelContext =
-  createContext<ServiceCountyCounty_TableAddSelectorViewModel>({} as any);
-export const useServiceCountyCounty_TableAddSelectorViewModel = () => {
-  const context = useContext(ServiceCountyCounty_TableAddSelectorViewModelContext);
-  if (!context) {
-    throw new Error(
-      'useServiceCountyCounty_TableAddSelectorViewModel must be used within a(n) ServiceCountyCounty_TableAddSelectorViewModelProvider',
+const ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModelContext =
+  createContext<ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModel>(
+    {} as any,
+  );
+export const useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModel =
+  () => {
+    const context = useContext(
+      ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModelContext,
     );
-  }
-  return context;
-};
+    if (!context) {
+      throw new Error(
+        'useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModel must be used within a(n) ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModelProvider',
+      );
+    }
+    return context;
+  };
 
 export const useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPage =
   (): ((
@@ -112,10 +120,13 @@ export const useServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
       });
   };
 
-const ServiceCountyCounty_TableAddSelectorDialogContainer = lazy(
-  () =>
-    import('~/containers/Service/County/County_Table/AddSelector/ServiceCountyCounty_TableAddSelectorDialogContainer'),
-);
+const ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogContainer =
+  lazy(
+    () =>
+      import(
+        '~/containers/Service/ServiceUser/ServiceUser_View_Edit/Areas/Activity/Tab_activity_counties/ActivityCounties/AddSelector/ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogContainer'
+      ),
+  );
 
 export interface ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesTableAddSelectorPageProps {
   ownerData: any;
@@ -169,22 +180,22 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
   const validate: (data: ServiceCounty) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceCountyCounty_TableAddSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceCountyCounty_TableAddSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.County.County_Table.AddSelector', { defaultValue: 'County Table' });
+    return t(
+      'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.tab_activity_counties.activityCounties.AddSelector',
+      { defaultValue: '' },
+    );
   };
   const addAction = async (selected: ServiceCountyStored[]) => {
     onSubmit(selected);
@@ -203,55 +214,61 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored[]>> => {
     try {
       return serviceServiceUserServiceForActivityCountiesImpl.getRangeForActivityCounties(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceCountyCounty_TableAddSelectorDialogActions = {
-    getPageTitle,
-    addAction,
-    backAction,
-    filterAction,
-    selectorRangeAction,
-    ...(customActions ?? {}),
-  };
+  const actions: ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogActions =
+    {
+      getPageTitle,
+      addAction,
+      backAction,
+      filterAction,
+      selectorRangeAction,
+      ...(customActions ?? {}),
+    };
 
   // ViewModel setup
-  const viewModel: ServiceCountyCounty_TableAddSelectorViewModel = {
-    onClose,
-    actions,
-    ownerData,
-    isLoading,
-    setIsLoading,
-    editMode,
-    setEditMode,
-    refresh,
-    refreshCounter,
-    submit,
-    alreadySelected,
-    selectionDiff,
-    setSelectionDiff,
-    isDraft,
-  };
+  const viewModel: ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModel =
+    {
+      onClose,
+      actions,
+      ownerData,
+      isLoading,
+      setIsLoading,
+      editMode,
+      setEditMode,
+      refresh,
+      refreshCounter,
+      submit,
+      alreadySelected,
+      selectionDiff,
+      setSelectionDiff,
+      isDraft,
+    };
 
   // Effect section
 
   return (
-    <ServiceCountyCounty_TableAddSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorPageDefinition"
           data-page-name="service::ServiceUser::ServiceUser_View_Edit::Areas::activity::tab_activity_counties::activityCounties::TableAddSelectorPage"
         />
-        <ServiceCountyCounty_TableAddSelectorDialogContainer
+        <ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -264,6 +281,6 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceCountyCounty_TableAddSelectorViewModelContext.Provider>
+    </ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorViewModelContext.Provider>
   );
 }

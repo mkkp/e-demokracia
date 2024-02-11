@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -47,6 +47,7 @@ import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceVoteEntry, ServiceVoteEntryQueryCustomizer, ServiceVoteEntryStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -70,7 +71,9 @@ export interface ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponentActionDe
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceVoteEntryQueryCustomizer) => Promise<ServiceVoteEntryStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceVoteEntryQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceVoteEntryStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceVoteEntryStored, silentMode?: boolean) => Promise<void>;
@@ -98,6 +101,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   props: ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -251,16 +255,16 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_zJIiwORxEe2Bgcx6em3jZg)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceVoteEntryStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -425,7 +429,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -454,6 +458,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   return (
     <div id="User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable" data-table-name="VoteEntry_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -541,6 +546,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

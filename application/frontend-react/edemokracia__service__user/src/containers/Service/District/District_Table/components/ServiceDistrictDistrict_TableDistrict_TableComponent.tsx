@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -40,6 +40,7 @@ import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config
 import { useDataStore } from '~/hooks';
 import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -63,7 +64,9 @@ export interface ServiceDistrictDistrict_TableDistrict_TableComponentActionDefin
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceDistrictQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceDistrictStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
@@ -91,6 +94,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
   props: ServiceDistrictDistrict_TableDistrict_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -200,16 +204,16 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_a0UhYH2iEe2LTNnGda5kaw)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceDistrictStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -359,7 +363,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -388,6 +392,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
   return (
     <div id="User/(esm/_a0UhZX2iEe2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="District_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -475,6 +480,7 @@ export function ServiceDistrictDistrict_TableDistrict_TableComponent(
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

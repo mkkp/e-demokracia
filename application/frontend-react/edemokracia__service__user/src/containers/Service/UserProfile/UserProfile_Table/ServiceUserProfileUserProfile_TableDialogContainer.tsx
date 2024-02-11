@@ -23,6 +23,7 @@ import type {
   ServiceUserProfileQueryCustomizer,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceUserProfileUserProfile_TableActionDefinitions } from './ServiceUserProfileUserProfile_Table';
 
 const ServiceUserProfileUserProfile_Table = lazy(

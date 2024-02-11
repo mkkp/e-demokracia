@@ -23,6 +23,7 @@ import type {
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceYesNoAbstainVoteEntryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditActionDefinitions } from './ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_Edit';
 
@@ -40,7 +41,7 @@ export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditDial
   deleteAction?: () => Promise<void>;
   refreshAction?: (
     queryCustomizer: ServiceYesNoAbstainVoteEntryQueryCustomizer,
-  ) => Promise<ServiceYesNoAbstainVoteEntryStored>;
+  ) => Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
   updateAction?: () => Promise<void>;
 }
 

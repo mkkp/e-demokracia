@@ -26,13 +26,14 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceConCon_FormActionDefinitions } from './ServiceConCon_Form';
 
 const ServiceConCon_Form = lazy(() => import('~/containers/Service/Con/Con_Form/ServiceConCon_Form'));
 
 export interface ServiceConCon_FormDialogActions extends ServiceConCon_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceCon>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceCon>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

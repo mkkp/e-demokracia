@@ -30,6 +30,7 @@ import type {
   ServiceVoteDefinitionQueryCustomizer,
   ServiceVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceVoteDefinitionVoteDefinition_FormActionDefinitions } from './ServiceVoteDefinitionVoteDefinition_Form';
 
@@ -39,7 +40,7 @@ const ServiceVoteDefinitionVoteDefinition_Form = lazy(
 
 export interface ServiceVoteDefinitionVoteDefinition_FormDialogActions
   extends ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceVoteDefinition>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceVoteDefinition>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

@@ -23,6 +23,7 @@ import type {
   ServiceUserProfileQueryCustomizer,
   ServiceUserProfileStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceUserProfileUserProfile_View_EditActionDefinitions } from './ServiceUserProfileUserProfile_View_Edit';
 
@@ -35,7 +36,9 @@ export interface ServiceUserProfileUserProfile_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceUserProfileQueryCustomizer) => Promise<ServiceUserProfileStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceUserProfileQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceUserProfileStored>>;
   updateAction?: () => Promise<void>;
 }
 

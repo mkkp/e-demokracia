@@ -44,6 +44,7 @@ import type {
   VoteStatus,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -229,14 +230,15 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceYesNoVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceYesNoVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForYesNoVoteDefinitionsImpl.refresh(
+      const response = await userServiceForYesNoVoteDefinitionsImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -249,7 +251,7 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -262,12 +264,12 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await userServiceForYesNoVoteDefinitionsImpl.update(payloadDiff.current);
+      const { data: res } = await userServiceForYesNoVoteDefinitionsImpl.update(payloadDiff.current);
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceYesNoVoteDefinition, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
@@ -286,7 +288,7 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return userServiceForYesNoVoteDefinitionsImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {
@@ -298,8 +300,12 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForYesNoVoteDefinitionsImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForYesNoVoteDefinitionsImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -443,7 +449,7 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
   };
   const voteEntriesRefreshAction = async (
     queryCustomizer: ServiceYesNoVoteEntryQueryCustomizer,
-  ): Promise<ServiceYesNoVoteEntryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored[]>> => {
     return userServiceForYesNoVoteDefinitionsImpl.listVoteEntries(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       queryCustomizer,

@@ -26,6 +26,7 @@ import type {
   YesNoVoteValue,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -258,10 +259,11 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoIn
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<YesNoVoteInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<YesNoVoteInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteYesNo();
+      const response = await serviceVoteDefinitionServiceImpl.getTemplateOnVoteYesNo();
+      const { data: result } = response;
       setData(result as YesNoVoteInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof YesNoVoteInputStored, any>),
@@ -275,7 +277,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoIn
           ...(templateDataOverride as Record<keyof YesNoVoteInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

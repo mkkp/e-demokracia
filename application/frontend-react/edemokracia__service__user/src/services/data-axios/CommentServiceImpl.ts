@@ -6,8 +6,9 @@
 // Template name: classServiceImpl.ts.hbs
 // Template file: data-axios/classServiceImpl.ts.hbs
 
-import type { Comment, CommentQueryCustomizer, CommentStored } from '../data-api';
+import type { Comment, CommentQueryCustomizer, CommentStored, JudoRestResponse } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { CommentService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -18,26 +19,29 @@ export class CommentServiceImpl extends JudoAxiosService implements CommentServi
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async refresh(target: JudoIdentifiable<Comment>, queryCustomizer?: CommentQueryCustomizer): Promise<CommentStored> {
+  async refresh(
+    target: JudoIdentifiable<Comment>,
+    queryCustomizer?: CommentQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<CommentStored>> {
     const path = '/Comment/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteDown(owner: JudoIdentifiable<Comment>): Promise<void> {
+  async voteDown(owner: JudoIdentifiable<Comment>): Promise<JudoRestResponse<void>> {
     const path = '/Comment/voteDown';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }
@@ -46,11 +50,11 @@ export class CommentServiceImpl extends JudoAxiosService implements CommentServi
    * @throws {AxiosError}
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async voteUp(owner: JudoIdentifiable<Comment>): Promise<void> {
+  async voteUp(owner: JudoIdentifiable<Comment>): Promise<JudoRestResponse<void>> {
     const path = '/Comment/voteUp';
-    const response = await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': owner.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
       },
     });
   }

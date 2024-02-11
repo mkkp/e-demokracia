@@ -39,6 +39,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceDashboardServiceForFavoriteVoteDefinitionsImpl } from '~/services/data-axios/ServiceDashboardServiceForFavoriteVoteDefinitionsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -204,14 +205,15 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
   };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceDashboardServiceForFavoriteVoteDefinitionsImpl.refresh(
+      const response = await serviceDashboardServiceForFavoriteVoteDefinitionsImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -224,7 +226,7 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -243,7 +245,7 @@ export default function ServiceDashboardFavoriteVoteDefinitionsRelationViewPage(
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return serviceDashboardServiceForFavoriteVoteDefinitionsImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {

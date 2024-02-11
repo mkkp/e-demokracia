@@ -20,6 +20,7 @@ import type {
   ServiceCreateUserInputQueryCustomizer,
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import type { ServiceCreateUserInputCreateUserInput_TableActionDefinitions } from './ServiceCreateUserInputCreateUserInput_Table';
 
@@ -61,6 +62,7 @@ export default function ServiceCreateUserInputCreateUserInput_TablePage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}

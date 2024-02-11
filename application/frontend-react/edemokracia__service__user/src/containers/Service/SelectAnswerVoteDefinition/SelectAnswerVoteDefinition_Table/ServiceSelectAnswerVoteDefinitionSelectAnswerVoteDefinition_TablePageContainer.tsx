@@ -20,6 +20,7 @@ import type {
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_TableActionDefinitions } from './ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Table';
 
@@ -63,6 +64,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}

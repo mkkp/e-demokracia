@@ -30,6 +30,7 @@ import type {
   ServiceCreateIssueInputQueryCustomizer,
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions } from './ServiceCreateIssueInputCreateIssueInput_Form';
 
@@ -40,7 +41,7 @@ const ServiceCreateIssueInputCreateIssueInput_Form = lazy(
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormDialogActions
   extends ServiceCreateIssueInputCreateIssueInput_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceCreateIssueInput>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceCreateIssueInput>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
   createIssueForUserIssuesAction?: () => Promise<void>;

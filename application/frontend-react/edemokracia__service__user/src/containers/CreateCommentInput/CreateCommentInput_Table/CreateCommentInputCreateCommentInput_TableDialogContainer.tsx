@@ -23,6 +23,7 @@ import type {
   CreateCommentInputQueryCustomizer,
   CreateCommentInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { CreateCommentInputCreateCommentInput_TableActionDefinitions } from './CreateCommentInputCreateCommentInput_Table';
 
 const CreateCommentInputCreateCommentInput_Table = lazy(

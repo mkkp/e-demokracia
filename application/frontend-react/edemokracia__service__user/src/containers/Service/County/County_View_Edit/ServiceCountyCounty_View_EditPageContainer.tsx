@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCountyCounty_View_EditActionDefinitions } from './ServiceCountyCounty_View_Edit';
@@ -28,7 +29,7 @@ export interface ServiceCountyCounty_View_EditPageActions extends ServiceCountyC
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<ServiceCountyStored>;
+  refreshAction?: (queryCustomizer: ServiceCountyQueryCustomizer) => Promise<JudoRestResponse<ServiceCountyStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -80,6 +81,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -96,6 +98,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -112,6 +115,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -128,6 +132,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -144,6 +149,7 @@ export default function ServiceCountyCounty_View_EditPage(props: ServiceCountyCo
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

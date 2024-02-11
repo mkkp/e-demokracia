@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceDistrictDistrict_View_EditActionDefinitions } from './ServiceDistrictDistrict_View_Edit';
 
@@ -31,7 +32,7 @@ export interface ServiceDistrictDistrict_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored>;
+  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<JudoRestResponse<ServiceDistrictStored>>;
   updateAction?: () => Promise<void>;
 }
 

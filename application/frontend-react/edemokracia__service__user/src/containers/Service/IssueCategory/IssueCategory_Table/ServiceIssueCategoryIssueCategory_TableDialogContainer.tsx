@@ -23,6 +23,7 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceIssueCategoryIssueCategory_TableActionDefinitions } from './ServiceIssueCategoryIssueCategory_Table';
 
 const ServiceIssueCategoryIssueCategory_Table = lazy(

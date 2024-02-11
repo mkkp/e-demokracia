@@ -30,6 +30,7 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueCategoryIssueCategory_FormActionDefinitions } from './ServiceIssueCategoryIssueCategory_Form';
 
@@ -39,7 +40,7 @@ const ServiceIssueCategoryIssueCategory_Form = lazy(
 
 export interface ServiceIssueCategoryIssueCategory_FormDialogActions
   extends ServiceIssueCategoryIssueCategory_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceIssueCategory>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceIssueCategory>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

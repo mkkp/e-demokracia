@@ -78,28 +78,28 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
         // Retrieve signedIdentifier from access
         const res = await userServiceForYesNoVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
         // Open view page in access
-        navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.RatingVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForRatingVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
-        navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
       } else {
         navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(signedId));
       }

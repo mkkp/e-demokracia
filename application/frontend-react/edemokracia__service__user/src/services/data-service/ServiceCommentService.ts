@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceComment,
   ServiceCommentQueryCustomizer,
   ServiceCommentStored,
@@ -26,23 +27,28 @@ export interface ServiceCommentService {
   refresh(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceCommentQueryCustomizer,
-  ): Promise<ServiceCommentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCommentStored>>;
   getCreatedBy(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<ServiceServiceUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getRangeForCreatedBy(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
   listVotes(
     target: JudoIdentifiable<ServiceComment>,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
   getRangeForVotes(
     owner?: JudoIdentifiable<ServiceComment> | ServiceComment,
     queryCustomizer?: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<Array<ServiceSimpleVoteStored>>;
-  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
-  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<void>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceSimpleVoteStored>>>;
+  voteDown(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
+  voteUp(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
 }

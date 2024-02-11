@@ -38,6 +38,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceForActiveIssuesInActivityCountiesImpl } from '~/services/data-axios/ServiceUserIssuesServiceForActiveIssuesInActivityCountiesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -281,7 +282,9 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationT
       filters: newFilters,
     };
   };
-  const refreshAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

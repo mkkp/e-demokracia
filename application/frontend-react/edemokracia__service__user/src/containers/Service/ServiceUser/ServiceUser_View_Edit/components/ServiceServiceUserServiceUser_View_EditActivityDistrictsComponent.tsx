@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -46,6 +46,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   applyInMemoryFilters,
@@ -69,7 +70,7 @@ export interface ServiceServiceUserServiceUser_View_EditActivityDistrictsCompone
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
   activityDistrictsRefreshAction?: (
     queryCustomizer: ServiceDistrictQueryCustomizer,
-  ) => Promise<ServiceDistrictStored[]>;
+  ) => Promise<JudoRestResponse<ServiceDistrictStored[]>>;
   getActivityDistrictsMask?: () => string;
   activityDistrictsRemoveAction?: (row: ServiceDistrictStored, silentMode?: boolean) => Promise<void>;
   activityDistrictsOpenPageAction?: (row: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
@@ -112,6 +113,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_I-9zEIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -188,16 +190,16 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_c8TWIIXoEe2kLcMqsIbMgQ)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceDistrictStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -339,6 +341,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityDistrictsComponen
       data-table-name="activityDistricts"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceDistrictDistrict_TableAddSelectorDialogActions,
-  ServiceDistrictDistrict_TableAddSelectorDialogProps,
-} from '~/containers/Service/District/District_Table/AddSelector/ServiceDistrictDistrict_TableAddSelectorDialogContainer';
+  ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActions,
+  ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogProps,
+} from '~/containers/Service/UserProfile/UserProfile_View_Edit/Areas/Activity/Activity_districts/ActivityDistricts/AddSelector/ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceDistrict,
@@ -29,26 +29,28 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserProfileServiceForActivityDistrictsImpl } from '~/services/data-axios/ServiceUserProfileServiceForActivityDistrictsImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceDistrictDistrict_TableAddSelectorDialogActionsExtended =
-  ServiceDistrictDistrict_TableAddSelectorDialogActions & {};
+export type ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActionsExtended =
+  ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActions & {};
 
 export const SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_ACTIVITY_ACTIVITY_DISTRICTS_ACTIVITY_DISTRICTS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_ACTIVITY_ACTIVITY_DISTRICTS_ACTIVITY_DISTRICTS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceDistrictDistrict_TableAddSelectorActionsHook = (
-  ownerData: any,
-  data: ServiceDistrictStored[],
-  editMode: boolean,
-  selectionDiff: ServiceDistrictStored[],
-  submit: () => Promise<void>,
-) => ServiceDistrictDistrict_TableAddSelectorDialogActionsExtended;
+export type ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorActionsHook =
+  (
+    ownerData: any,
+    data: ServiceDistrictStored[],
+    editMode: boolean,
+    selectionDiff: ServiceDistrictStored[],
+    submit: () => Promise<void>,
+  ) => ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActionsExtended;
 
-export interface ServiceDistrictDistrict_TableAddSelectorViewModel
-  extends ServiceDistrictDistrict_TableAddSelectorDialogProps {
+export interface ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModel
+  extends ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,17 +58,22 @@ export interface ServiceDistrictDistrict_TableAddSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceDistrictDistrict_TableAddSelectorViewModelContext =
-  createContext<ServiceDistrictDistrict_TableAddSelectorViewModel>({} as any);
-export const useServiceDistrictDistrict_TableAddSelectorViewModel = () => {
-  const context = useContext(ServiceDistrictDistrict_TableAddSelectorViewModelContext);
-  if (!context) {
-    throw new Error(
-      'useServiceDistrictDistrict_TableAddSelectorViewModel must be used within a(n) ServiceDistrictDistrict_TableAddSelectorViewModelProvider',
+const ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModelContext =
+  createContext<ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModel>(
+    {} as any,
+  );
+export const useServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModel =
+  () => {
+    const context = useContext(
+      ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModelContext,
     );
-  }
-  return context;
-};
+    if (!context) {
+      throw new Error(
+        'useServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModel must be used within a(n) ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModelProvider',
+      );
+    }
+    return context;
+  };
 
 export const useServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPage =
   (): ((
@@ -113,12 +120,13 @@ export const useServiceUserProfileUserProfile_View_EditAreasActivityActivity_dis
       });
   };
 
-const ServiceDistrictDistrict_TableAddSelectorDialogContainer = lazy(
-  () =>
-    import(
-      '~/containers/Service/District/District_Table/AddSelector/ServiceDistrictDistrict_TableAddSelectorDialogContainer'
-    ),
-);
+const ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogContainer =
+  lazy(
+    () =>
+      import(
+        '~/containers/Service/UserProfile/UserProfile_View_Edit/Areas/Activity/Activity_districts/ActivityDistricts/AddSelector/ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogContainer'
+      ),
+  );
 
 export interface ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsTableAddSelectorPageProps {
   ownerData: any;
@@ -172,22 +180,22 @@ export default function ServiceUserProfileUserProfile_View_EditAreasActivityActi
   const validate: (data: ServiceDistrict) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceDistrictDistrict_TableAddSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_ACTIVITY_ACTIVITY_DISTRICTS_ACTIVITY_DISTRICTS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceDistrictDistrict_TableAddSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_AREAS_ACTIVITY_ACTIVITY_DISTRICTS_ACTIVITY_DISTRICTS_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.District.District_Table.AddSelector', { defaultValue: 'District Table' });
+    return t(
+      'service.UserProfile.UserProfile_View_Edit.Areas.activity.activity_districts.activityDistricts.AddSelector',
+      { defaultValue: '' },
+    );
   };
   const addAction = async (selected: ServiceDistrictStored[]) => {
     onSubmit(selected);
@@ -208,55 +216,59 @@ export default function ServiceUserProfileUserProfile_View_EditAreasActivityActi
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
+  ): Promise<JudoRestResponse<ServiceDistrictStored[]>> => {
     try {
       return serviceUserProfileServiceForActivityDistrictsImpl.getRangeForActivityDistricts(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceDistrictDistrict_TableAddSelectorDialogActions = {
-    getPageTitle,
-    addAction,
-    backAction,
-    filterAction,
-    selectorRangeAction,
-    ...(customActions ?? {}),
-  };
+  const actions: ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogActions =
+    {
+      getPageTitle,
+      addAction,
+      backAction,
+      filterAction,
+      selectorRangeAction,
+      ...(customActions ?? {}),
+    };
 
   // ViewModel setup
-  const viewModel: ServiceDistrictDistrict_TableAddSelectorViewModel = {
-    onClose,
-    actions,
-    ownerData,
-    isLoading,
-    setIsLoading,
-    editMode,
-    setEditMode,
-    refresh,
-    refreshCounter,
-    submit,
-    alreadySelected,
-    selectionDiff,
-    setSelectionDiff,
-    isDraft,
-  };
+  const viewModel: ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModel =
+    {
+      onClose,
+      actions,
+      ownerData,
+      isLoading,
+      setIsLoading,
+      editMode,
+      setEditMode,
+      refresh,
+      refreshCounter,
+      submit,
+      alreadySelected,
+      selectionDiff,
+      setSelectionDiff,
+      isDraft,
+    };
 
   // Effect section
 
   return (
-    <ServiceDistrictDistrict_TableAddSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldTableAddSelectorPageDefinition"
           data-page-name="service::UserProfile::UserProfile_View_Edit::Areas::activity::activity_districts::activityDistricts::TableAddSelectorPage"
         />
-        <ServiceDistrictDistrict_TableAddSelectorDialogContainer
+        <ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -269,6 +281,6 @@ export default function ServiceUserProfileUserProfile_View_EditAreasActivityActi
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceDistrictDistrict_TableAddSelectorViewModelContext.Provider>
+    </ServiceUserProfileUserProfile_View_EditAreasActivityActivity_districtsActivityDistrictsAddSelectorViewModelContext.Provider>
   );
 }

@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceIssueIssue_TableAddSelectorDialogActions,
-  ServiceIssueIssue_TableAddSelectorDialogProps,
-} from '~/containers/Service/Issue/Issue_Table/AddSelector/ServiceIssueIssue_TableAddSelectorDialogContainer';
+  ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActions,
+  ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogProps,
+} from '~/containers/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/OwnedIssuesGroup/OwnedIssues/AddSelector/ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   IssueScope,
@@ -32,25 +32,27 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserIssuesServiceForOwnedIssuesImpl } from '~/services/data-axios/ServiceUserIssuesServiceForOwnedIssuesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceIssueIssue_TableAddSelectorDialogActionsExtended =
-  ServiceIssueIssue_TableAddSelectorDialogActions & {};
+export type ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActionsExtended =
+  ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActions & {};
 
 export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ROOT_TAB_BAR_OWNED_ISSUES_GROUP_OWNED_ISSUES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ROOT_TAB_BAR_OWNED_ISSUES_GROUP_OWNED_ISSUES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceIssueIssue_TableAddSelectorActionsHook = (
+export type ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorActionsHook = (
   ownerData: any,
   data: ServiceIssueStored[],
   editMode: boolean,
   selectionDiff: ServiceIssueStored[],
   submit: () => Promise<void>,
-) => ServiceIssueIssue_TableAddSelectorDialogActionsExtended;
+) => ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActionsExtended;
 
-export interface ServiceIssueIssue_TableAddSelectorViewModel extends ServiceIssueIssue_TableAddSelectorDialogProps {
+export interface ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModel
+  extends ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -58,14 +60,17 @@ export interface ServiceIssueIssue_TableAddSelectorViewModel extends ServiceIssu
   isDraft?: boolean;
 }
 
-const ServiceIssueIssue_TableAddSelectorViewModelContext = createContext<ServiceIssueIssue_TableAddSelectorViewModel>(
-  {} as any,
-);
-export const useServiceIssueIssue_TableAddSelectorViewModel = () => {
-  const context = useContext(ServiceIssueIssue_TableAddSelectorViewModelContext);
+const ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModelContext =
+  createContext<ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModel>(
+    {} as any,
+  );
+export const useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModel = () => {
+  const context = useContext(
+    ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModelContext,
+  );
   if (!context) {
     throw new Error(
-      'useServiceIssueIssue_TableAddSelectorViewModel must be used within a(n) ServiceIssueIssue_TableAddSelectorViewModelProvider',
+      'useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModel must be used within a(n) ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModelProvider',
     );
   }
   return context;
@@ -115,8 +120,11 @@ export const useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupO
     });
 };
 
-const ServiceIssueIssue_TableAddSelectorDialogContainer = lazy(
-  () => import('~/containers/Service/Issue/Issue_Table/AddSelector/ServiceIssueIssue_TableAddSelectorDialogContainer'),
+const ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogContainer = lazy(
+  () =>
+    import(
+      '~/containers/Service/UserIssues/UserIssues_View_Edit/Root/TabBar/OwnedIssuesGroup/OwnedIssues/AddSelector/ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogContainer'
+    ),
 );
 
 export interface ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesTableAddSelectorPageProps {
@@ -171,22 +179,21 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
   const validate: (data: ServiceIssue) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceIssueIssue_TableAddSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ROOT_TAB_BAR_OWNED_ISSUES_GROUP_OWNED_ISSUES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceIssueIssue_TableAddSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ROOT_TAB_BAR_OWNED_ISSUES_GROUP_OWNED_ISSUES_TABLE_ADD_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions:
+    | ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActionsExtended
+    | undefined = customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.Issue.Issue_Table.AddSelector', { defaultValue: 'Issue Table' });
+    return t('service.UserIssues.UserIssues_View_Edit.root.tabBar.ownedIssuesGroup.ownedIssues.AddSelector', {
+      defaultValue: '',
+    });
   };
   const addAction = async (selected: ServiceIssueStored[]) => {
     onSubmit(selected);
@@ -205,19 +212,21 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
       filters: newFilters,
     };
   };
-  const selectorRangeAction = async (queryCustomizer: ServiceIssueQueryCustomizer): Promise<ServiceIssueStored[]> => {
+  const selectorRangeAction = async (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     try {
       return serviceUserIssuesServiceForOwnedIssuesImpl.getRangeForOwnedIssues(
         cleanUpPayload(ownerData),
         queryCustomizer,
       );
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceIssueIssue_TableAddSelectorDialogActions = {
+  const actions: ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogActions = {
     getPageTitle,
     addAction,
     backAction,
@@ -227,7 +236,7 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
   };
 
   // ViewModel setup
-  const viewModel: ServiceIssueIssue_TableAddSelectorViewModel = {
+  const viewModel: ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -247,13 +256,15 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
   // Effect section
 
   return (
-    <ServiceIssueIssue_TableAddSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModelContext.Provider
+      value={viewModel}
+    >
       <Suspense>
         <div
           id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldTableAddSelectorPageDefinition"
           data-page-name="service::UserIssues::UserIssues_View_Edit::root::tabBar::ownedIssuesGroup::ownedIssues::TableAddSelectorPage"
         />
-        <ServiceIssueIssue_TableAddSelectorDialogContainer
+        <ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -266,6 +277,6 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceIssueIssue_TableAddSelectorViewModelContext.Provider>
+    </ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupOwnedIssuesAddSelectorViewModelContext.Provider>
   );
 }

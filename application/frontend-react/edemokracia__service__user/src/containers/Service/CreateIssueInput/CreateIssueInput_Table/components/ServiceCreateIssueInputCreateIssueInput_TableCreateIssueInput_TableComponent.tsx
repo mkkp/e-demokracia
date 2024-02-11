@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -44,6 +44,7 @@ import type {
   ServiceCreateIssueInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -71,7 +72,9 @@ export interface ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_T
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceCreateIssueInputQueryCustomizer) => Promise<ServiceCreateIssueInputStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceCreateIssueInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceCreateIssueInputStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceCreateIssueInputStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceCreateIssueInputStored, silentMode?: boolean) => Promise<void>;
@@ -99,6 +102,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
   props: ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -205,16 +209,16 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_oCghgIeIEe2kLcMqsIbMgQ)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceCreateIssueInputStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -341,7 +345,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -370,6 +374,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
   return (
     <div id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable" data-table-name="CreateIssueInput_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -458,6 +463,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

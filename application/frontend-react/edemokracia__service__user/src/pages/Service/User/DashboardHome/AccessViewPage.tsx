@@ -52,6 +52,7 @@ import type {
   ServiceVoteEntryStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForDashboardHomeImpl } from '~/services/data-axios/UserServiceForDashboardHomeImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -296,7 +297,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
   const favoriteIssuesRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForDashboardHomeImpl.listFavoriteIssues(singletonHost.current, queryCustomizer);
   };
   const favoriteIssuesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
@@ -408,7 +409,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
   const ownedIssuesRefreshAction = async (
     queryCustomizer: ServiceIssueQueryCustomizer,
-  ): Promise<ServiceIssueStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueStored[]>> => {
     return userServiceForDashboardHomeImpl.listOwnedIssues(singletonHost.current, queryCustomizer);
   };
   const ownedIssuesRemoveAction = async (target?: ServiceIssueStored, silentMode?: boolean) => {
@@ -518,7 +519,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
   const favoriteVoteDefinitionsRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForDashboardHomeImpl.listFavoriteVoteDefinitions(singletonHost.current, queryCustomizer);
   };
   const favoriteVoteDefinitionsRemoveAction = async (target?: ServiceVoteDefinitionStored, silentMode?: boolean) => {
@@ -633,7 +634,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
   const ownedVoteDefinitionsRefreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     return userServiceForDashboardHomeImpl.listOwnedVoteDefinitions(singletonHost.current, queryCustomizer);
   };
   const ownedVoteDefinitionsRemoveAction = async (target?: ServiceVoteDefinitionStored, silentMode?: boolean) => {
@@ -686,7 +687,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   };
   const userVoteEntriesRefreshAction = async (
     queryCustomizer: ServiceVoteEntryQueryCustomizer,
-  ): Promise<ServiceVoteEntryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteEntryStored[]>> => {
     return userServiceForDashboardHomeImpl.listUserVoteEntries(singletonHost.current, queryCustomizer);
   };
   const favoriteIssuesActivateForIssueAction = async (target?: ServiceIssueStored) => {
@@ -980,11 +981,14 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   const backAction = async () => {
     navigateBack();
   };
-  const refreshAction = async (queryCustomizer: ServiceDashboardQueryCustomizer): Promise<ServiceDashboardStored> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceDashboardQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceDashboardStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForDashboardHomeImpl.refresh(singletonHost.current, getPageQueryCustomizer());
+      const response = await userServiceForDashboardHomeImpl.refresh(singletonHost.current, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -997,7 +1001,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -1102,9 +1106,10 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
     }
   };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
-    return await userServiceForDashboardHomeImpl.refreshForDashboardHome({
+    const { data: sp } = await userServiceForDashboardHomeImpl.refreshForDashboardHome({
       _mask: '{}',
     });
+    return sp;
   };
 
   const actions: ServiceDashboardDashboard_View_EditPageActions = {

@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<keycloak:Realm xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:keycloak="http://blackbelt.hu/judo/meta/keycloak" xmi:id="_lh1GsuUNEe25hdVDwGNTng" id="DEFAULT" realm="DEFAULT" enabled="true" loginWithEmailAllowed="true">
-  <clients xmi:id="_lh9pkOUNEe25hdVDwGNTng" clientId="edemokracia-admin-Admin" name="edemokracia-admin-Admin" enabled="true" publicClient="true" bearerOnly="false" directAccessGrantsEnabled="true">
-    <redirectUris>*</redirectUris>
-    <attributeBindings xmi:id="_liLE8OUNEe25hdVDwGNTng" attributeName="username"/>
-  </clients>
-</keycloak:Realm>

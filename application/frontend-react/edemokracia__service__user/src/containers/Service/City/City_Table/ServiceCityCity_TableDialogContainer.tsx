@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceCityCity_TableActionDefinitions } from './ServiceCityCity_Table';
 
 const ServiceCityCity_Table = lazy(() => import('~/containers/Service/City/City_Table/ServiceCityCity_Table'));

@@ -23,6 +23,7 @@ import type {
   ServiceUserManagerQueryCustomizer,
   ServiceUserManagerStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceUserManagerUserManager_TableActionDefinitions } from './ServiceUserManagerUserManager_Table';
 
 const ServiceUserManagerUserManager_Table = lazy(

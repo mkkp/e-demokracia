@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCreateUserInput,
   ServiceCreateUserInputStored,
   ServiceServiceUser,
@@ -22,25 +23,30 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Relation Service for User.adminUserManager
  */
 export interface UserServiceForAdminUserManager {
-  refreshForAdminUserManager(queryCustomizer?: ServiceUserManagerQueryCustomizer): Promise<ServiceUserManagerStored>;
+  refreshForAdminUserManager(
+    queryCustomizer?: ServiceUserManagerQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
-  ): Promise<ServiceUserManagerStored>;
-  update(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
-  validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<ServiceUserManagerStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  update(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
   listUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
-  ): Promise<Array<ServiceServiceUserStored>>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceServiceUserStored>>>;
   updateUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
-  ): Promise<ServiceServiceUserStored>;
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   validateUpdateUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
-  ): Promise<ServiceServiceUserStored>;
-  createUser(target: ServiceCreateUserInput): Promise<ServiceServiceUserStored>;
-  getTemplateOnCreateUser(): Promise<ServiceCreateUserInput>;
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
+  createUser(target: ServiceCreateUserInput): Promise<JudoRestResponse<ServiceServiceUserStored>>;
+  getTemplateOnCreateUser(): Promise<JudoRestResponse<ServiceCreateUserInput>>;
 }

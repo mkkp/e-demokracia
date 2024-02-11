@@ -28,6 +28,7 @@ import {
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_TableComponentActionDefinitions } from './components/ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_TableComponent';
 import { ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_TableComponent } from './components/ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_TableComponent';

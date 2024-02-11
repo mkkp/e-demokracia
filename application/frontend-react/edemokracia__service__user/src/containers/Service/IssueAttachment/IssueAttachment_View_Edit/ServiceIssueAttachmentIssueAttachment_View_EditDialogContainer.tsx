@@ -23,6 +23,7 @@ import type {
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueAttachmentIssueAttachment_View_EditActionDefinitions } from './ServiceIssueAttachmentIssueAttachment_View_Edit';
 
@@ -38,7 +39,9 @@ export interface ServiceIssueAttachmentIssueAttachment_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceIssueAttachmentQueryCustomizer) => Promise<ServiceIssueAttachmentStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceIssueAttachmentQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   updateAction?: () => Promise<void>;
 }
 

@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -44,6 +44,7 @@ import type {
   ServiceIssueAttachmentStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   fileHandling,
@@ -72,7 +73,9 @@ export interface ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Tabl
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  refreshAction?: (queryCustomizer: ServiceIssueAttachmentQueryCustomizer) => Promise<ServiceIssueAttachmentStored[]>;
+  refreshAction?: (
+    queryCustomizer: ServiceIssueAttachmentQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueAttachmentStored[]>>;
   getMask?: () => string;
   deleteAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
   removeAction?: (row: ServiceIssueAttachmentStored, silentMode?: boolean) => Promise<void>;
@@ -100,6 +103,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
   props: ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_TableComponentProps,
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
 
@@ -247,16 +251,16 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_p5aDVGksEe25ONJ3V89cVA)/ClassType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceIssueAttachmentStored, '__identifier'>) => string = (row) =>
     row.__identifier!;
@@ -401,7 +405,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
         };
-        const res = await actions.refreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -430,6 +434,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
   return (
     <div id="User/(esm/_p51hIGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="IssueAttachment_Table">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{
@@ -518,6 +523,7 @@ export function ServiceIssueAttachmentIssueAttachment_TableIssueAttachment_Table
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+                      _seek: undefined,
                     };
                     await actions.exportAction!(processedQueryCustomizer);
                   }}

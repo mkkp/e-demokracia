@@ -23,6 +23,7 @@ import type {
   ServiceUserVoteDefinitionQueryCustomizer,
   ServiceUserVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceUserVoteDefinitionUserVoteDefinition_TableActionDefinitions } from './ServiceUserVoteDefinitionUserVoteDefinition_Table';
 
 const ServiceUserVoteDefinitionUserVoteDefinition_Table = lazy(

@@ -26,6 +26,7 @@ import type {
   CloseDebateOutputVoteDefinitionReferenceStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { CloseDebateOutputVoteDefinitionReferenceServiceImpl } from '~/services/data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { PageContainerTransition } from '~/theme/animations';
@@ -186,14 +187,15 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
   };
   const refreshAction = async (
     queryCustomizer: CloseDebateOutputVoteDefinitionReferenceQueryCustomizer,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored> => {
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await closeDebateOutputVoteDefinitionReferenceServiceImpl.refresh(
+      const response = await closeDebateOutputVoteDefinitionReferenceServiceImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -206,7 +208,7 @@ export default function ServiceIssueIssue_View_EditCloseDebateOutputView() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

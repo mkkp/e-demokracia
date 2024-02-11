@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCreateIssueInput,
   ServiceDistrict,
   ServiceDistrictQueryCustomizer,
@@ -21,15 +22,17 @@ export interface ServiceCreateIssueInputServiceForDistrict {
   refresh(
     owner?: JudoIdentifiable<any>,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   getRangeForDistrict(
     owner: JudoIdentifiable<ServiceCreateIssueInput> | ServiceCreateIssueInput,
     queryCustomizer?: ServiceDistrictQueryCustomizer,
-  ): Promise<Array<ServiceDistrictStored>>;
-  getTemplate(): Promise<ServiceDistrict>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
   setDistrict(
     owner: JudoIdentifiable<ServiceCreateIssueInput>,
     selected: JudoIdentifiable<ServiceDistrict>,
-  ): Promise<void>;
-  unsetDistrict(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
+  unsetDistrict(owner: JudoIdentifiable<ServiceCreateIssueInput>): Promise<JudoRestResponse<void>>;
 }

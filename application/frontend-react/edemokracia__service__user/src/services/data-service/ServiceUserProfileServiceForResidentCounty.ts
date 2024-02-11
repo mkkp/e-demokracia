@@ -7,6 +7,7 @@
 // Template file: data-service/relationService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceCity,
   ServiceCityQueryCustomizer,
   ServiceCityStored,
@@ -21,23 +22,35 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Relation Service for ServiceUserProfile.residentCounty
  */
 export interface ServiceUserProfileServiceForResidentCounty {
-  refresh(owner?: JudoIdentifiable<any>, queryCustomizer?: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored>;
+  refresh(
+    owner?: JudoIdentifiable<any>,
+    queryCustomizer?: ServiceCountyQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   getRangeForResidentCounty(
     owner: JudoIdentifiable<ServiceUserProfile> | ServiceUserProfile,
     queryCustomizer?: ServiceCountyQueryCustomizer,
-  ): Promise<Array<ServiceCountyStored>>;
-  getTemplate(): Promise<ServiceCounty>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
+  getTemplate(): Promise<JudoRestResponse<ServiceCounty>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: JudoIdentifiable<ServiceCounty>,
-  ): Promise<void>;
-  unsetResidentCounty(owner: JudoIdentifiable<ServiceUserProfile>): Promise<void>;
+  ): Promise<JudoRestResponse<void>>;
+  unsetResidentCounty(owner: JudoIdentifiable<ServiceUserProfile>): Promise<JudoRestResponse<void>>;
   listCities(
     owner: JudoIdentifiable<ServiceCounty>,
     queryCustomizer?: ServiceCityQueryCustomizer,
-  ): Promise<Array<ServiceCityStored>>;
-  getTemplateForCities(): Promise<ServiceCity>;
-  createCities(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<ServiceCityStored>;
-  deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<void>;
-  updateCities(owner: JudoIdentifiable<ServiceCounty>, target: Partial<ServiceCityStored>): Promise<ServiceCityStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  getTemplateForCities(): Promise<JudoRestResponse<ServiceCity>>;
+  createCities(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: ServiceCity,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
+  deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<JudoRestResponse<void>>;
+  updateCities(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
 }

@@ -14,6 +14,7 @@ import {
   Issue,
   IssueQueryCustomizer,
   IssueStored,
+  JudoRestResponse,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
 
@@ -21,21 +22,25 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Class Service for Issue
  */
 export interface IssueService {
-  refresh(target: JudoIdentifiable<Issue>, queryCustomizer?: IssueQueryCustomizer): Promise<IssueStored>;
-  activate(owner: JudoIdentifiable<Issue>): Promise<void>;
-  addToFavorites(owner: JudoIdentifiable<Issue>): Promise<void>;
+  refresh(
+    target: JudoIdentifiable<Issue>,
+    queryCustomizer?: IssueQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<IssueStored>>;
+  activate(owner: JudoIdentifiable<Issue>): Promise<JudoRestResponse<void>>;
+  addToFavorites(owner: JudoIdentifiable<Issue>): Promise<JudoRestResponse<void>>;
   closeDebate(
     owner: JudoIdentifiable<Issue>,
     target: CloseDebateInput,
-  ): Promise<CloseDebateOutputVoteDefinitionReferenceStored>;
-  getTemplateOnCloseDebate(): Promise<CloseDebateInput>;
-  closeVote(owner: JudoIdentifiable<Issue>): Promise<void>;
-  createComment(owner: JudoIdentifiable<Issue>, target: CreateCommentInput): Promise<void>;
-  getTemplateOnCreateComment(): Promise<CreateCommentInput>;
-  createConArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateConArgument(): Promise<CreateArgumentInput>;
-  createProArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<void>;
-  getTemplateOnCreateProArgument(): Promise<CreateArgumentInput>;
-  deleteOrArchive(owner: JudoIdentifiable<Issue>): Promise<void>;
-  removeFromFavorites(owner: JudoIdentifiable<Issue>): Promise<void>;
+  ): Promise<JudoRestResponse<CloseDebateOutputVoteDefinitionReferenceStored>>;
+  getTemplateOnCloseDebate(): Promise<JudoRestResponse<CloseDebateInput>>;
+  closeVote(owner: JudoIdentifiable<Issue>): Promise<JudoRestResponse<void>>;
+  createComment(owner: JudoIdentifiable<Issue>, target: CreateCommentInput): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateComment(): Promise<JudoRestResponse<CreateCommentInput>>;
+  createConArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateConArgument(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  createProArgument(owner: JudoIdentifiable<Issue>, target: CreateArgumentInput): Promise<JudoRestResponse<void>>;
+  getTemplateOnCreateProArgument(): Promise<JudoRestResponse<CreateArgumentInput>>;
+  deleteOrArchive(owner: JudoIdentifiable<Issue>): Promise<JudoRestResponse<void>>;
+  removeFromFavorites(owner: JudoIdentifiable<Issue>): Promise<JudoRestResponse<void>>;
 }

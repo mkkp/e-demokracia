@@ -25,6 +25,7 @@ import { useServiceUserAdminCountiesAccessViewPage } from '~/dialogs/Service/Use
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServiceForAdminCountiesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -184,7 +185,9 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
       filters: newFilters,
     };
   };
-  const refreshAction = async (queryCustomizer: ServiceCountyQueryCustomizer): Promise<ServiceCountyStored[]> => {
+  const refreshAction = async (
+    queryCustomizer: ServiceCountyQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

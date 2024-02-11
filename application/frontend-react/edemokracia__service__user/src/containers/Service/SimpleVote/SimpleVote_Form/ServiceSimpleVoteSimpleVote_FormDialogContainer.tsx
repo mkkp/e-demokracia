@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceSimpleVoteSimpleVote_FormActionDefinitions } from './ServiceSimpleVoteSimpleVote_Form';
 
@@ -35,7 +36,7 @@ const ServiceSimpleVoteSimpleVote_Form = lazy(
 
 export interface ServiceSimpleVoteSimpleVote_FormDialogActions
   extends ServiceSimpleVoteSimpleVote_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceSimpleVote>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceSimpleVote>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

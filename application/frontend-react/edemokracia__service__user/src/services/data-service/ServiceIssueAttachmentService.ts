@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceIssueAttachment,
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
@@ -17,12 +18,15 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Class Service for ServiceIssueAttachment
  */
 export interface ServiceIssueAttachmentService {
-  getTemplate(): Promise<ServiceIssueAttachment>;
+  getTemplate(): Promise<JudoRestResponse<ServiceIssueAttachment>>;
   refresh(
     target: JudoIdentifiable<ServiceIssueAttachment>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<ServiceIssueAttachmentStored>;
-  delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void>;
-  update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
-  validateUpdate(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
+  delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
+  update(target: Partial<ServiceIssueAttachmentStored>): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
+  validateUpdate(
+    target: Partial<ServiceIssueAttachmentStored>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
 }

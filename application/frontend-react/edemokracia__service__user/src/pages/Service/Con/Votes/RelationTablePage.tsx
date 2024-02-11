@@ -32,6 +32,7 @@ import type {
   SimpleVoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceConServiceForVotesImpl } from '~/services/data-axios/ServiceConServiceForVotesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -134,7 +135,7 @@ export default function ServiceConVotesRelationTablePage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceSimpleVoteQueryCustomizer,
-  ): Promise<ServiceSimpleVoteStored[]> => {
+  ): Promise<JudoRestResponse<ServiceSimpleVoteStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

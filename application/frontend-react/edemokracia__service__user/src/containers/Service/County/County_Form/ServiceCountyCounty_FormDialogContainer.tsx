@@ -26,13 +26,14 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCountyCounty_FormActionDefinitions } from './ServiceCountyCounty_Form';
 
 const ServiceCountyCounty_Form = lazy(() => import('~/containers/Service/County/County_Form/ServiceCountyCounty_Form'));
 
 export interface ServiceCountyCounty_FormDialogActions extends ServiceCountyCounty_FormActionDefinitions {
-  getTemplateAction?: () => Promise<ServiceCounty>;
+  getTemplateAction?: () => Promise<JudoRestResponse<ServiceCounty>>;
   backAction?: () => Promise<void>;
   createAction?: (openCreated?: boolean) => Promise<void>;
 }

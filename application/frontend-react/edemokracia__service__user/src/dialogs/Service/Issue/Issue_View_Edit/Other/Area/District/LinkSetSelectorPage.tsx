@@ -17,9 +17,9 @@ import { useJudoNavigation } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
 import { useConfirmDialog, useDialog, useFilterDialog } from '~/components/dialog';
 import type {
-  ServiceDistrictDistrict_TableSetSelectorDialogActions,
-  ServiceDistrictDistrict_TableSetSelectorDialogProps,
-} from '~/containers/Service/District/District_Table/SetSelector/ServiceDistrictDistrict_TableSetSelectorDialogContainer';
+  ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActions,
+  ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogProps,
+} from '~/containers/Service/Issue/Issue_View_Edit/Other/Area/District/SetSelector/ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogContainer';
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type {
   ServiceDistrict,
@@ -29,26 +29,27 @@ import type {
   ServiceIssueStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceForDistrictImpl } from '~/services/data-axios/ServiceIssueServiceForDistrictImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
 import type { DialogResult } from '~/utilities';
 
-export type ServiceDistrictDistrict_TableSetSelectorDialogActionsExtended =
-  ServiceDistrictDistrict_TableSetSelectorDialogActions & {};
+export type ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActionsExtended =
+  ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActions & {};
 
 export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_DISTRICT_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY =
   'SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_DISTRICT_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK';
-export type ServiceDistrictDistrict_TableSetSelectorActionsHook = (
+export type ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorActionsHook = (
   ownerData: any,
   data: ServiceDistrictStored[],
   editMode: boolean,
   selectionDiff: ServiceDistrictStored[],
   submit: () => Promise<void>,
-) => ServiceDistrictDistrict_TableSetSelectorDialogActionsExtended;
+) => ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActionsExtended;
 
-export interface ServiceDistrictDistrict_TableSetSelectorViewModel
-  extends ServiceDistrictDistrict_TableSetSelectorDialogProps {
+export interface ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModel
+  extends ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   setEditMode: Dispatch<SetStateAction<boolean>>;
   refresh: () => Promise<void>;
@@ -56,13 +57,13 @@ export interface ServiceDistrictDistrict_TableSetSelectorViewModel
   isDraft?: boolean;
 }
 
-const ServiceDistrictDistrict_TableSetSelectorViewModelContext =
-  createContext<ServiceDistrictDistrict_TableSetSelectorViewModel>({} as any);
-export const useServiceDistrictDistrict_TableSetSelectorViewModel = () => {
-  const context = useContext(ServiceDistrictDistrict_TableSetSelectorViewModelContext);
+const ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModelContext =
+  createContext<ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModel>({} as any);
+export const useServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModel = () => {
+  const context = useContext(ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModelContext);
   if (!context) {
     throw new Error(
-      'useServiceDistrictDistrict_TableSetSelectorViewModel must be used within a(n) ServiceDistrictDistrict_TableSetSelectorViewModelProvider',
+      'useServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModel must be used within a(n) ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModelProvider',
     );
   }
   return context;
@@ -112,10 +113,10 @@ export const useServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelectorPage 
     });
 };
 
-const ServiceDistrictDistrict_TableSetSelectorDialogContainer = lazy(
+const ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogContainer = lazy(
   () =>
     import(
-      '~/containers/Service/District/District_Table/SetSelector/ServiceDistrictDistrict_TableSetSelectorDialogContainer'
+      '~/containers/Service/Issue/Issue_View_Edit/Other/Area/District/SetSelector/ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogContainer'
     ),
 );
 
@@ -171,22 +172,18 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   const validate: (data: ServiceDistrict) => Promise<void> = async (data) => {};
 
   // Pandino Action overrides
-  const { service: customActionsHook } = useTrackService<ServiceDistrictDistrict_TableSetSelectorActionsHook>(
-    `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_DISTRICT_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
-  );
-  const customActions: ServiceDistrictDistrict_TableSetSelectorDialogActionsExtended | undefined = customActionsHook?.(
-    ownerData,
-    data,
-    editMode,
-    selectionDiff,
-    submit,
-  );
+  const { service: customActionsHook } =
+    useTrackService<ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorActionsHook>(
+      `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_OTHER_AREA_DISTRICT_LINK_SET_SELECTOR_PAGE_ACTIONS_HOOK_INTERFACE_KEY})`,
+    );
+  const customActions: ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActionsExtended | undefined =
+    customActionsHook?.(ownerData, data, editMode, selectionDiff, submit);
 
   // Dialog hooks
 
   // Action section
   const getPageTitle = (): string => {
-    return t('service.District.District_Table.SetSelector', { defaultValue: 'District Table' });
+    return t('service.Issue.Issue_View_Edit.other.area.district.SetSelector', { defaultValue: 'District' });
   };
   const backAction = async () => {
     onClose();
@@ -207,16 +204,16 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   };
   const selectorRangeAction = async (
     queryCustomizer: ServiceDistrictQueryCustomizer,
-  ): Promise<ServiceDistrictStored[]> => {
+  ): Promise<JudoRestResponse<ServiceDistrictStored[]>> => {
     try {
       return serviceIssueServiceForDistrictImpl.getRangeForDistrict(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 
-  const actions: ServiceDistrictDistrict_TableSetSelectorDialogActions = {
+  const actions: ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogActions = {
     getPageTitle,
     backAction,
     setAction,
@@ -226,7 +223,7 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   };
 
   // ViewModel setup
-  const viewModel: ServiceDistrictDistrict_TableSetSelectorViewModel = {
+  const viewModel: ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModel = {
     onClose,
     actions,
     ownerData,
@@ -246,13 +243,13 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
   // Effect section
 
   return (
-    <ServiceDistrictDistrict_TableSetSelectorViewModelContext.Provider value={viewModel}>
+    <ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModelContext.Provider value={viewModel}>
       <Suspense>
         <div
           id="User/(esm/_pPRYodvUEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition"
           data-page-name="service::Issue::Issue_View_Edit::other::area::district::LinkSetSelectorPage"
         />
-        <ServiceDistrictDistrict_TableSetSelectorDialogContainer
+        <ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorDialogContainer
           ownerData={ownerData}
           onClose={onClose}
           actions={actions}
@@ -265,6 +262,6 @@ export default function ServiceIssueIssue_View_EditOtherAreaDistrictLinkSetSelec
           isDraft={isDraft}
         />
       </Suspense>
-    </ServiceDistrictDistrict_TableSetSelectorViewModelContext.Provider>
+    </ServiceIssueIssue_View_EditOtherAreaDistrictSetSelectorViewModelContext.Provider>
   );
 }

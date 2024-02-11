@@ -32,6 +32,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -257,14 +258,15 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
   };
   const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored> => {
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl.refresh(
+      const response = await serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -277,7 +279,7 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -291,11 +293,12 @@ export default function ServiceSelectAnswerVoteDefinitionUserVoteEntryRelationVi
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
+      const { data: result } = await serviceSelectAnswerVoteDefinitionServiceForUserVoteEntryImpl.getRangeForOwner(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

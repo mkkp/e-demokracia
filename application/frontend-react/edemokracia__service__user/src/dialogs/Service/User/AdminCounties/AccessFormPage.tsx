@@ -22,6 +22,7 @@ import { useServiceUserAdminCountiesAccessViewPage } from '~/dialogs/Service/Use
 import { useCRUDDialog, useSnacks, useViewData } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCountiesImpl } from '~/services/data-axios/UserServiceForAdminCountiesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -245,7 +246,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
     try {
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await userServiceForAdminCountiesImpl.create(payload);
+      const { data: res } = await userServiceForAdminCountiesImpl.create(payload);
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -261,10 +262,11 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceCounty> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceCounty>> => {
     try {
       setIsLoading(true);
-      const result = await userServiceForAdminCountiesImpl.getTemplate();
+      const response = await userServiceForAdminCountiesImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceCountyStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceCountyStored, any>),
@@ -278,7 +280,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
           ...(templateDataOverride as Record<keyof ServiceCountyStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

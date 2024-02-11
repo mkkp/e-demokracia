@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCity, ServiceCityQueryCustomizer, ServiceCityStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCityCity_View_EditActionDefinitions } from './ServiceCityCity_View_Edit';
@@ -28,7 +29,7 @@ export interface ServiceCityCity_View_EditPageActions extends ServiceCityCity_Vi
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<ServiceCityStored>;
+  refreshAction?: (queryCustomizer: ServiceCityQueryCustomizer) => Promise<JudoRestResponse<ServiceCityStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -80,6 +81,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -96,6 +98,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -112,6 +115,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -128,6 +132,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -144,6 +149,7 @@ export default function ServiceCityCity_View_EditPage(props: ServiceCityCity_Vie
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

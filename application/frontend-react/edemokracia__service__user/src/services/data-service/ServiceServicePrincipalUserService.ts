@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   ServiceServicePrincipalUser,
   ServiceServicePrincipalUserQueryCustomizer,
   ServiceServicePrincipalUserStored,
@@ -20,5 +21,6 @@ export interface ServiceServicePrincipalUserService {
   refresh(
     target: JudoIdentifiable<ServiceServicePrincipalUser>,
     queryCustomizer?: ServiceServicePrincipalUserQueryCustomizer,
-  ): Promise<ServiceServicePrincipalUserStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceServicePrincipalUserStored>>;
 }

@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_View_EditActionDefinitions } from './CloseDebateInputCloseDebateInput_View_Edit';
 
@@ -31,7 +32,9 @@ export interface CloseDebateInputCloseDebateInput_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: CloseDebateInputQueryCustomizer) => Promise<CloseDebateInputStored>;
+  refreshAction?: (
+    queryCustomizer: CloseDebateInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<CloseDebateInputStored>>;
   updateAction?: () => Promise<void>;
 }
 

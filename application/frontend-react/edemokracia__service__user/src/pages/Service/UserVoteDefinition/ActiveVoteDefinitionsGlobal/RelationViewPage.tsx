@@ -39,6 +39,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl } from '~/services/data-axios/ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -208,14 +209,15 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
   };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.refresh(
+      const response = await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -228,7 +230,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -241,12 +243,14 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
   const updateAction = async () => {
     setIsLoading(true);
     try {
-      const res = await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.update(payloadDiff.current);
+      const { data: res } = await serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.update(
+        payloadDiff.current,
+      );
       if (res) {
         showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
         setValidation(new Map<keyof ServiceVoteDefinition, string>());
-        await actions.refreshAction!(getPageQueryCustomizer());
         setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
       }
     } catch (error) {
       handleError<ServiceVoteDefinition>(error, { setValidation }, data);
@@ -263,7 +267,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsGlobalRela
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return serviceUserVoteDefinitionServiceForActiveVoteDefinitionsGlobalImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {

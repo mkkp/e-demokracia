@@ -20,6 +20,7 @@ import type {
   ServiceSelectAnswerVoteDefinitionQueryCustomizer,
   ServiceSelectAnswerVoteDefinitionStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionDefinitions } from './ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_Edit';
@@ -38,7 +39,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   deleteAction?: () => Promise<void>;
   refreshAction?: (
     queryCustomizer: ServiceSelectAnswerVoteDefinitionQueryCustomizer,
-  ) => Promise<ServiceSelectAnswerVoteDefinitionStored>;
+  ) => Promise<JudoRestResponse<ServiceSelectAnswerVoteDefinitionStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -94,6 +95,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -114,6 +116,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -134,6 +137,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -154,6 +158,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -174,6 +179,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

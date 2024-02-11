@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { CloseDebateInput, CloseDebateInputQueryCustomizer, CloseDebateInputStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { CloseDebateInputCloseDebateInput_View_EditActionDefinitions } from './CloseDebateInputCloseDebateInput_View_Edit';
@@ -29,7 +30,9 @@ export interface CloseDebateInputCloseDebateInput_View_EditPageActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: CloseDebateInputQueryCustomizer) => Promise<CloseDebateInputStored>;
+  refreshAction?: (
+    queryCustomizer: CloseDebateInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<CloseDebateInputStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -83,6 +86,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -99,6 +103,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -115,6 +120,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -131,6 +137,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditPage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -147,6 +154,7 @@ export default function CloseDebateInputCloseDebateInput_View_EditPage(
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

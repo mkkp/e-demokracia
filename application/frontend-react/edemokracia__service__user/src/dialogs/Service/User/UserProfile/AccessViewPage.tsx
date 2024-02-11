@@ -48,6 +48,7 @@ import type {
   ServiceUserProfileStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -286,11 +287,12 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   };
   const refreshAction = async (
     queryCustomizer: ServiceUserProfileQueryCustomizer,
-  ): Promise<ServiceUserProfileStored> => {
+  ): Promise<JudoRestResponse<ServiceUserProfileStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await userServiceForUserProfileImpl.refresh(ownerData, getPageQueryCustomizer());
+      const response = await userServiceForUserProfileImpl.refresh(ownerData, getPageQueryCustomizer());
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -303,7 +305,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -317,8 +319,12 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     queryCustomizer: ServiceCityQueryCustomizer,
   ): Promise<ServiceCityStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentCity(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForUserProfileImpl.getRangeForResidentCity(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -353,8 +359,12 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     queryCustomizer: ServiceCountyQueryCustomizer,
   ): Promise<ServiceCountyStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentCounty(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForUserProfileImpl.getRangeForResidentCounty(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -389,8 +399,12 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     queryCustomizer: ServiceDistrictQueryCustomizer,
   ): Promise<ServiceDistrictStored[]> => {
     try {
-      return userServiceForUserProfileImpl.getRangeForResidentDistrict(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForUserProfileImpl.getRangeForResidentDistrict(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

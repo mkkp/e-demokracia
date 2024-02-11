@@ -38,6 +38,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityDistrictsImpl } from '~/services/data-axios/ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInActivityDistrictsImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -155,7 +156,7 @@ export default function ServiceUserVoteDefinitionActiveVoteDefinitionsInActivity
   };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored[]> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

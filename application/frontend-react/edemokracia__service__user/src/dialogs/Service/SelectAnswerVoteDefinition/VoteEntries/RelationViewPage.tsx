@@ -32,6 +32,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl } from '~/services/data-axios/ServiceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -259,14 +260,15 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
   };
   const refreshAction = async (
     queryCustomizer: ServiceSelectAnswerVoteEntryQueryCustomizer,
-  ): Promise<ServiceSelectAnswerVoteEntryStored> => {
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl.refresh(
+      const response = await serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl.refresh(
         ownerData,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -279,7 +281,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);
@@ -293,11 +295,12 @@ export default function ServiceSelectAnswerVoteDefinitionVoteEntriesRelationView
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl.getRangeForOwner(
+      const { data: result } = await serviceSelectAnswerVoteDefinitionServiceForVoteEntriesImpl.getRangeForOwner(
         cleanUpPayload(data),
         queryCustomizer,
       );
-    } catch (error) {
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }

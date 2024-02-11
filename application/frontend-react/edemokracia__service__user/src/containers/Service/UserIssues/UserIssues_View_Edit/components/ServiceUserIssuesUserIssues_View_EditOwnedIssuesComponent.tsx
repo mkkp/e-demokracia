@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -53,6 +53,7 @@ import type {
   ServiceUserIssuesStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -72,7 +73,9 @@ export interface ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentAction
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  ownedIssuesRefreshAction?: (queryCustomizer: ServiceIssueQueryCustomizer) => Promise<ServiceIssueStored[]>;
+  ownedIssuesRefreshAction?: (
+    queryCustomizer: ServiceIssueQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueStored[]>>;
   getOwnedIssuesMask?: () => string;
   ownedIssuesActivateForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
   ownedIssuesAddToFavoritesForIssueAction?: (row: ServiceIssueStored) => Promise<void>;
@@ -124,6 +127,7 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -419,16 +423,16 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
     [actions, isLoading],
   );
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_jK5OoVq4Ee6_67aMO2jOsw)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceIssueStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -622,7 +626,7 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getOwnedIssuesMask ? actions.getOwnedIssuesMask() : queryCustomizer._mask,
         };
-        const res = await actions.ownedIssuesRefreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.ownedIssuesRefreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -654,6 +658,7 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
       data-table-name="ownedIssues"
     >
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

@@ -24,6 +24,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { ServiceSimpleVote, ServiceSimpleVoteQueryCustomizer, ServiceSimpleVoteStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 import type { ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponentActionDefinitions } from './components/ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent';
 import { ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent } from './components/ServiceSimpleVoteSimpleVote_TableSimpleVote_TableComponent';

@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, PageHeader, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceDistrict, ServiceDistrictQueryCustomizer, ServiceDistrictStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceDistrictDistrict_View_EditActionDefinitions } from './ServiceDistrictDistrict_View_Edit';
@@ -29,7 +30,7 @@ export interface ServiceDistrictDistrict_View_EditPageActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<ServiceDistrictStored>;
+  refreshAction?: (queryCustomizer: ServiceDistrictQueryCustomizer) => Promise<JudoRestResponse<ServiceDistrictStored>>;
   updateAction?: () => Promise<void>;
 }
 
@@ -81,6 +82,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
@@ -97,6 +99,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
@@ -113,6 +116,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
+              disabled={editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
@@ -129,6 +133,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
@@ -145,6 +150,7 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.updateAction!();
               }}

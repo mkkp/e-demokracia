@@ -39,6 +39,7 @@ import type {
   VoteType,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteEntryServiceForVoteDefinitionImpl } from '~/services/data-axios/ServiceVoteEntryServiceForVoteDefinitionImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -208,7 +209,7 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
       );
     }
   };
-  const issuePreFetchAction = async (): Promise<ServiceIssueStored> => {
+  const issuePreFetchAction = async (): Promise<JudoRestResponse<ServiceIssueStored>> => {
     return serviceVoteEntryServiceForVoteDefinitionImpl.getIssue(
       { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
       {
@@ -253,14 +254,15 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceVoteDefinitionQueryCustomizer,
-  ): Promise<ServiceVoteDefinitionStored> => {
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> => {
     try {
       setIsLoading(true);
       setEditMode(false);
-      const result = await serviceVoteEntryServiceForVoteDefinitionImpl.refresh(
+      const response = await serviceVoteEntryServiceForVoteDefinitionImpl.refresh(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         getPageQueryCustomizer(),
       );
+      const { data: result } = response;
       setData(result);
       setLatestViewData(result);
       // re-set payloadDiff
@@ -273,7 +275,7 @@ export default function ServiceVoteEntryVoteDefinitionRelationViewPage() {
       if (customActions?.postRefreshAction) {
         await customActions?.postRefreshAction(result, storeDiff, setValidation);
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       setLatestViewData(null);

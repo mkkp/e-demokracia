@@ -23,6 +23,7 @@ import type {
   ServiceIssueCategoryQueryCustomizer,
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceIssueCategoryIssueCategory_View_EditActionDefinitions } from './ServiceIssueCategoryIssueCategory_View_Edit';
 
@@ -36,7 +37,9 @@ export interface ServiceIssueCategoryIssueCategory_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceIssueCategoryQueryCustomizer) => Promise<ServiceIssueCategoryStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceIssueCategoryQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   updateAction?: () => Promise<void>;
 }
 

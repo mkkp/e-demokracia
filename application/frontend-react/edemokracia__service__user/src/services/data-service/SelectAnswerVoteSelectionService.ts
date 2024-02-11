@@ -7,6 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import {
+  JudoRestResponse,
   SelectAnswerVoteSelection,
   SelectAnswerVoteSelectionQueryCustomizer,
   SelectAnswerVoteSelectionStored,
@@ -17,9 +18,10 @@ import type { JudoIdentifiable } from '../data-api/common';
  * Class Service for SelectAnswerVoteSelection
  */
 export interface SelectAnswerVoteSelectionService {
-  getTemplate(): Promise<SelectAnswerVoteSelection>;
+  getTemplate(): Promise<JudoRestResponse<SelectAnswerVoteSelection>>;
   refresh(
     target: JudoIdentifiable<SelectAnswerVoteSelection>,
     queryCustomizer?: SelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<SelectAnswerVoteSelectionStored>;
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<SelectAnswerVoteSelectionStored>>;
 }

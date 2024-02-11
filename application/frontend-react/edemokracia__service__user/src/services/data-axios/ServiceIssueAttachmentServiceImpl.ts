@@ -7,11 +7,13 @@
 // Template file: data-axios/classServiceImpl.ts.hbs
 
 import type {
+  JudoRestResponse,
   ServiceIssueAttachment,
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
+import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceIssueAttachmentService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
 
@@ -22,11 +24,9 @@ export class ServiceIssueAttachmentServiceImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
-  async getTemplate(): Promise<ServiceIssueAttachment> {
+  async getTemplate(): Promise<JudoRestResponse<ServiceIssueAttachment>> {
     const path = '/service/IssueAttachment/~template';
-    const response = await this.axios.get(this.getPathForActor(path));
-
-    return response.data;
+    return this.axios.get(this.getPathForActor(path));
   }
 
   /**
@@ -35,25 +35,25 @@ export class ServiceIssueAttachmentServiceImpl extends JudoAxiosService implemen
   async refresh(
     target: JudoIdentifiable<ServiceIssueAttachment>,
     queryCustomizer?: ServiceIssueAttachmentQueryCustomizer,
-  ): Promise<ServiceIssueAttachmentStored> {
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~get';
-    const response = await this.axios.post(this.getPathForActor(path), queryCustomizer, {
+    return this.axios.post(this.getPathForActor(path), queryCustomizer, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        ...(headers ?? {}),
       },
     });
-
-    return response.data;
   }
 
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<void> {
+  async delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>> {
     const path = '/service/IssueAttachment/~delete';
-    await this.axios.post(this.getPathForActor(path), undefined, {
+    return this.axios.post(this.getPathForActor(path), undefined, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
       },
     });
   }
@@ -61,27 +61,25 @@ export class ServiceIssueAttachmentServiceImpl extends JudoAxiosService implemen
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored> {
+  async update(target: Partial<ServiceIssueAttachmentStored>): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~update';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async validateUpdate(target: Partial<ServiceIssueAttachmentStored>): Promise<ServiceIssueAttachmentStored> {
+  async validateUpdate(
+    target: Partial<ServiceIssueAttachmentStored>,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>> {
     const path = '/service/IssueAttachment/~validate';
-    const response = await this.axios.post(this.getPathForActor(path), target, {
+    return this.axios.post(this.getPathForActor(path), target, {
       headers: {
-        'X-Judo-SignedIdentifier': target.__signedIdentifier!,
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
       },
     });
-
-    return response.data;
   }
 }

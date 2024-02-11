@@ -23,6 +23,7 @@ import type {
   ServiceCreateUserInputQueryCustomizer,
   ServiceCreateUserInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceCreateUserInputCreateUserInput_View_EditActionDefinitions } from './ServiceCreateUserInputCreateUserInput_View_Edit';
 
@@ -38,7 +39,9 @@ export interface ServiceCreateUserInputCreateUserInput_View_EditDialogActions
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceCreateUserInputQueryCustomizer) => Promise<ServiceCreateUserInputStored>;
+  refreshAction?: (
+    queryCustomizer: ServiceCreateUserInputQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceCreateUserInputStored>>;
   updateAction?: () => Promise<void>;
 }
 

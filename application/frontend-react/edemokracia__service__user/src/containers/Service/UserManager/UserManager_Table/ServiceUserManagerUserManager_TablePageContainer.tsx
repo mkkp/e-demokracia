@@ -20,6 +20,7 @@ import type {
   ServiceUserManagerQueryCustomizer,
   ServiceUserManagerStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import type { ServiceUserManagerUserManager_TableActionDefinitions } from './ServiceUserManagerUserManager_Table';
 
@@ -58,6 +59,7 @@ export default function ServiceUserManagerUserManager_TablePage(props: ServiceUs
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}

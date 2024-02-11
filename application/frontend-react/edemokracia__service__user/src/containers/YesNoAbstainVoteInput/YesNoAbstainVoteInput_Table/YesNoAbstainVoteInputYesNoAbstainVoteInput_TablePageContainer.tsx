@@ -20,6 +20,7 @@ import type {
   YesNoAbstainVoteInputQueryCustomizer,
   YesNoAbstainVoteInputStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { mainContainerPadding } from '~/theme';
 import type { YesNoAbstainVoteInputYesNoAbstainVoteInput_TableActionDefinitions } from './YesNoAbstainVoteInputYesNoAbstainVoteInput_Table';
 
@@ -63,6 +64,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_TablePage(
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
+              disabled={editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}

@@ -23,6 +23,7 @@ import type {
   ServiceServicePrincipalUserQueryCustomizer,
   ServiceServicePrincipalUserStored,
 } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceServicePrincipalUserServicePrincipalUser_TableActionDefinitions } from './ServiceServicePrincipalUserServicePrincipalUser_Table';
 
 const ServiceServicePrincipalUserServicePrincipalUser_Table = lazy(

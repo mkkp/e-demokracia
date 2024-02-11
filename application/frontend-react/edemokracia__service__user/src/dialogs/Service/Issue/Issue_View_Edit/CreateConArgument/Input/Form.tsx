@@ -25,6 +25,7 @@ import type {
   CreateArgumentInputStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueServiceImpl } from '~/services/data-axios/ServiceIssueServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -256,10 +257,11 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<CreateArgumentInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<CreateArgumentInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueServiceImpl.getTemplateOnCreateConArgument();
+      const response = await serviceIssueServiceImpl.getTemplateOnCreateConArgument();
+      const { data: result } = response;
       setData(result as CreateArgumentInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof CreateArgumentInputStored, any>),
@@ -273,7 +275,7 @@ export default function ServiceIssueIssue_View_EditCreateConArgumentInputForm(
           ...(templateDataOverride as Record<keyof CreateArgumentInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

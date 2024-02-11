@@ -30,6 +30,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -261,8 +262,12 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return userServiceForAdminCategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await userServiceForAdminCategoriesImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -290,7 +295,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
     try {
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await userServiceForAdminCategoriesImpl.create(payload);
+      const { data: res } = await userServiceForAdminCategoriesImpl.create(payload);
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -306,10 +311,11 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceIssueCategory> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceIssueCategory>> => {
     try {
       setIsLoading(true);
-      const result = await userServiceForAdminCategoriesImpl.getTemplate();
+      const response = await userServiceForAdminCategoriesImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceIssueCategoryStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceIssueCategoryStored, any>),
@@ -323,7 +329,7 @@ export default function ServiceUserAdminCategoriesAccessFormPage(props: ServiceU
           ...(templateDataOverride as Record<keyof ServiceIssueCategoryStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

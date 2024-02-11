@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { GridLogicOperator, GridToolbarContainer } from '@mui/x-data-grid';
+import { GridLogicOperator, GridToolbarContainer, useGridApiRef } from '@mui/x-data-grid';
 import type {
   GridColDef,
   GridFilterModel,
@@ -53,6 +53,7 @@ import type {
   ServiceUserManagerStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import {
   TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY,
   getUpdatedRowsSelected,
@@ -70,7 +71,9 @@ export interface ServiceUserManagerUserManager_View_EditUsersComponentActionDefi
     model?: GridFilterModel,
     filters?: Filter[],
   ) => Promise<{ model?: GridFilterModel; filters?: Filter[] }>;
-  usersRefreshAction?: (queryCustomizer: ServiceServiceUserQueryCustomizer) => Promise<ServiceServiceUserStored[]>;
+  usersRefreshAction?: (
+    queryCustomizer: ServiceServiceUserQueryCustomizer,
+  ) => Promise<JudoRestResponse<ServiceServiceUserStored[]>>;
   getUsersMask?: () => string;
   usersOpenPageAction?: (row: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
   usersAdditionalToolbarButtons?: (
@@ -112,6 +115,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     editMode,
     isFormUpdateable,
   } = props;
+  const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
 
@@ -282,16 +286,16 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   const rowActions: TableRowAction<ServiceServiceUserStored>[] = useMemo(() => [], [actions, isLoading]);
 
-  const effectiveTableColumns = useMemo(
-    () => [
+  const effectiveTableColumns = useMemo(() => {
+    const cols = [
       ...columns,
       ...columnsActionCalculator('User/(esm/_X0EKgFvPEe6jm_SkPSYEYw)/RelationType', rowActions, t, {
         crudOperationsDisplayed: 1,
         transferOperationsDisplayed: 0,
       }),
-    ],
-    [columns, rowActions],
-  );
+    ];
+    return cols;
+  }, [columns, rowActions]);
 
   const getRowIdentifier: (row: Pick<ServiceServiceUserStored, '__identifier'>) => string = (row) => row.__identifier!;
 
@@ -486,7 +490,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
           ...processQueryCustomizer(queryCustomizer),
           _mask: actions.getUsersMask ? actions.getUsersMask() : queryCustomizer._mask,
         };
-        const res = await actions.usersRefreshAction!(processedQueryCustomizer);
+        const { data: res, headers } = await actions.usersRefreshAction!(processedQueryCustomizer);
 
         if (res.length > rowsPerPage) {
           setIsNextButtonEnabled(true);
@@ -515,6 +519,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   return (
     <div id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable" data-table-name="users">
       <StripedDataGrid
+        apiRef={apiRef}
         {...baseTableConfig}
         pageSizeOptions={pageSizeOptions}
         sx={{

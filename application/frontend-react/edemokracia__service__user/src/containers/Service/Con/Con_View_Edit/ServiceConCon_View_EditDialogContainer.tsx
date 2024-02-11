@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { processQueryCustomizer } from '~/utilities';
 import type { ServiceConCon_View_EditActionDefinitions } from './ServiceConCon_View_Edit';
 
@@ -28,7 +29,7 @@ export interface ServiceConCon_View_EditDialogActions extends ServiceConCon_View
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
-  refreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<ServiceConStored>;
+  refreshAction?: (queryCustomizer: ServiceConQueryCustomizer) => Promise<JudoRestResponse<ServiceConStored>>;
   updateAction?: () => Promise<void>;
 }
 

@@ -27,6 +27,7 @@ import type {
   SelectAnswerVoteSelectionStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceVoteDefinitionServiceImpl } from '~/services/data-axios/ServiceVoteDefinitionServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -223,12 +224,12 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
   };
   const selectorRangeAction = async (
     queryCustomizer: SelectAnswerVoteSelectionQueryCustomizer,
-  ): Promise<SelectAnswerVoteSelectionStored[]> => {
+  ): Promise<JudoRestResponse<SelectAnswerVoteSelectionStored[]>> => {
     try {
       return serviceVoteDefinitionServiceImpl.getRangeOnVoteSelectAnswer(cleanUpPayload(ownerData), queryCustomizer);
-    } catch (error) {
+    } catch (error: any) {
       handleError(error);
-      return Promise.resolve([]);
+      return Promise.resolve({ data: [], headers: error.response?.headers, status: error.response?.status });
     }
   };
 

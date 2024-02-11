@@ -28,6 +28,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceUserManagerServiceImpl } from '~/services/data-axios/ServiceUserManagerServiceImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -250,7 +251,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
   const createUserForUserManagerAction = async () => {
     try {
       setIsLoading(true);
-      const result = await serviceUserManagerServiceImpl.createUser(cleanUpPayload(payloadDiff.current));
+      const { data: result } = await serviceUserManagerServiceImpl.createUser(cleanUpPayload(payloadDiff.current));
       if (customActions?.postCreateUserForUserManagerAction) {
         await customActions.postCreateUserForUserManagerAction(result, onSubmit, onClose);
       } else {
@@ -270,10 +271,11 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceCreateUserInput> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceCreateUserInput>> => {
     try {
       setIsLoading(true);
-      const result = await serviceUserManagerServiceImpl.getTemplateOnCreateUser();
+      const response = await serviceUserManagerServiceImpl.getTemplateOnCreateUser();
+      const { data: result } = response;
       setData(result as ServiceCreateUserInputStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceCreateUserInputStored, any>),
@@ -287,7 +289,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
           ...(templateDataOverride as Record<keyof ServiceCreateUserInputStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

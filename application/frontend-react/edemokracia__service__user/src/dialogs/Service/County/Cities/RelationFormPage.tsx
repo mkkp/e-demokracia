@@ -28,6 +28,7 @@ import type {
   ServiceCountyStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceCountyServiceForCitiesImpl } from '~/services/data-axios/ServiceCountyServiceForCitiesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -265,7 +266,7 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
       }
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await serviceCountyServiceForCitiesImpl.create(ownerData, payload);
+      const { data: res } = await serviceCountyServiceForCitiesImpl.create(ownerData, payload);
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -281,10 +282,11 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceCity> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceCity>> => {
     try {
       setIsLoading(true);
-      const result = await serviceCountyServiceForCitiesImpl.getTemplate();
+      const response = await serviceCountyServiceForCitiesImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceCityStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceCityStored, any>),
@@ -298,7 +300,7 @@ export default function ServiceCountyCitiesRelationFormPage(props: ServiceCounty
           ...(templateDataOverride as Record<keyof ServiceCityStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

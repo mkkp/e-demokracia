@@ -29,6 +29,7 @@ import type {
   ServiceIssueCategoryStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForAdminCategoriesImpl } from '~/services/data-axios/UserServiceForAdminCategoriesImpl';
 import { PageContainerTransition } from '~/theme/animations';
@@ -199,7 +200,7 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
   };
   const refreshAction = async (
     queryCustomizer: ServiceIssueCategoryQueryCustomizer,
-  ): Promise<ServiceIssueCategoryStored[]> => {
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored[]>> => {
     try {
       setIsLoading(true);
       setEditMode(false);

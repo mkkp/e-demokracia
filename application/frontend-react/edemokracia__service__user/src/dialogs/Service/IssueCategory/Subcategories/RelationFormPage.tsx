@@ -30,6 +30,7 @@ import type {
   ServiceServiceUserStored,
 } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { ServiceIssueCategoryServiceForSubcategoriesImpl } from '~/services/data-axios/ServiceIssueCategoryServiceForSubcategoriesImpl';
 import { cleanUpPayload, isErrorNestedValidationError, processQueryCustomizer, useErrorHandler } from '~/utilities';
@@ -266,8 +267,12 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
     queryCustomizer: ServiceServiceUserQueryCustomizer,
   ): Promise<ServiceServiceUserStored[]> => {
     try {
-      return serviceIssueCategoryServiceForSubcategoriesImpl.getRangeForOwner(cleanUpPayload(data), queryCustomizer);
-    } catch (error) {
+      const { data: result } = await serviceIssueCategoryServiceForSubcategoriesImpl.getRangeForOwner(
+        cleanUpPayload(data),
+        queryCustomizer,
+      );
+      return result;
+    } catch (error: any) {
       handleError(error);
       return Promise.resolve([]);
     }
@@ -313,7 +318,7 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
       }
       setIsLoading(true);
       const payload: typeof payloadDiff.current = cleanUpPayload(payloadDiff.current);
-      const res = await serviceIssueCategoryServiceForSubcategoriesImpl.create(ownerData, payload);
+      const { data: res } = await serviceIssueCategoryServiceForSubcategoriesImpl.create(ownerData, payload);
       if (customActions?.postCreateAction) {
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
@@ -329,10 +334,11 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
       setIsLoading(false);
     }
   };
-  const getTemplateAction = async (): Promise<ServiceIssueCategory> => {
+  const getTemplateAction = async (): Promise<JudoRestResponse<ServiceIssueCategory>> => {
     try {
       setIsLoading(true);
-      const result = await serviceIssueCategoryServiceForSubcategoriesImpl.getTemplate();
+      const response = await serviceIssueCategoryServiceForSubcategoriesImpl.getTemplate();
+      const { data: result } = response;
       setData(result as ServiceIssueCategoryStored);
       payloadDiff.current = {
         ...(result as Record<keyof ServiceIssueCategoryStored, any>),
@@ -346,7 +352,7 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
           ...(templateDataOverride as Record<keyof ServiceIssueCategoryStored, any>),
         };
       }
-      return result;
+      return response;
     } catch (error) {
       handleError(error);
       return Promise.reject(error);

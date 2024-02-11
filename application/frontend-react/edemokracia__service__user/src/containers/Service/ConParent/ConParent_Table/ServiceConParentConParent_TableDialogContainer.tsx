@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, useJudoNavigation } from '~/components';
 import { useConfirmDialog } from '~/components/dialog';
 import type { ServiceConParent, ServiceConParentQueryCustomizer, ServiceConParentStored } from '~/services/data-api';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import type { ServiceConParentConParent_TableActionDefinitions } from './ServiceConParentConParent_Table';
 
 const ServiceConParentConParent_Table = lazy(

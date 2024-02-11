@@ -25,6 +25,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import { ServiceProParent, ServiceProParentQueryCustomizer, ServiceProParentStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
+import type { JudoRestResponse } from '~/services/data-api/rest';
 import { isErrorOperationFault, useErrorHandler } from '~/utilities';
 
 export const SERVICE_PRO_PARENT_PRO_PARENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY =
