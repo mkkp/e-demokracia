@@ -34,6 +34,11 @@ const ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_Edit = la
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditPageActions
   extends ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditActionDefinitions {
+  activateForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -192,6 +197,120 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
             </LoadingButton>
           </Grid>
         )}
+        {(actions?.isDeleteOrArchiveHidden
+          ? !actions?.isDeleteOrArchiveHidden(data, editMode)
+          : !data.isVoteNotDeletable) &&
+          actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="delete" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.deleteOrArchive', {
+                    defaultValue: 'Delete',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isActivateHidden ? !actions?.isActivateHidden(data, editMode) : !data.isVoteNotEditable) &&
+          actions.activateForSelectAnswerVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-open" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.activateForSelectAnswerVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.activate', {
+                    defaultValue: 'Activate',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseVoteHidden ? !actions?.isCloseVoteHidden(data, editMode) : !data.isVoteNotOpen) &&
+          actions.closeVoteForSelectAnswerVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-check" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.closeVoteForSelectAnswerVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.closeVote', {
+                    defaultValue: 'Close Vote',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isRemoveFromFavoritesHidden
+          ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
+          : !data.isFavorite) &&
+          actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-minus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.removeFromFavorites', {
+                    defaultValue: 'Remove from favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+          actions.addToFavoritesForSelectAnswerVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_JTH2knr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-plus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.addToFavoritesForSelectAnswerVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.addToFavorites', {
+                    defaultValue: 'Add to favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
         <div>{/* Placeholder */}</div>
       </PageHeader>
       <Suspense>

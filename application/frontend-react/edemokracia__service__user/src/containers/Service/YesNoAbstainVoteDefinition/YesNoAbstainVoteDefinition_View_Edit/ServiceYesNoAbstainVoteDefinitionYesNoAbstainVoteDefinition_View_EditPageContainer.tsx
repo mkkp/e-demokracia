@@ -34,6 +34,11 @@ const ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_Edit = la
 
 export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditPageActions
   extends ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditActionDefinitions {
+  activateForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -192,6 +197,120 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
             </LoadingButton>
           </Grid>
         )}
+        {(actions?.isDeleteOrArchiveHidden
+          ? !actions?.isDeleteOrArchiveHidden(data, editMode)
+          : !data.isVoteNotDeletable) &&
+          actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="delete" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.deleteOrArchive', {
+                    defaultValue: 'Delete',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isActivateHidden ? !actions?.isActivateHidden(data, editMode) : !data.isVoteNotEditable) &&
+          actions.activateForYesNoAbstainVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-open" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.activateForYesNoAbstainVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.activate', {
+                    defaultValue: 'Activate',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseVoteHidden ? !actions?.isCloseVoteHidden(data, editMode) : !data.isVoteNotOpen) &&
+          actions.closeVoteForYesNoAbstainVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_9jf_BHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-check" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.closeVoteForYesNoAbstainVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.closeVote', {
+                    defaultValue: 'Close Vote',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isRemoveFromFavoritesHidden
+          ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
+          : !data.isFavorite) &&
+          actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-minus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.removeFromFavorites', {
+                    defaultValue: 'Remove from favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+          actions.addToFavoritesForYesNoAbstainVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-plus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.addToFavorites', {
+                    defaultValue: 'Add to favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
         <div>{/* Placeholder */}</div>
       </PageHeader>
       <Suspense>

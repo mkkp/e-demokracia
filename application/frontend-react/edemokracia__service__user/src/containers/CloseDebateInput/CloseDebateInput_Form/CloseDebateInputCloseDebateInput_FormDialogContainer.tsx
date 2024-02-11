@@ -234,9 +234,7 @@ export default function CloseDebateInputCloseDebateInput_FormDialog(
               }}
             >
               <span>
-                {t('service.Issue.Issue_View_Edit.actions.PageActionButtons.closeDebate.OperationFormCallButton', {
-                  defaultValue: 'Submit',
-                })}
+                {t('service.Issue.Issue_View_Edit.closeDebate.OperationFormCallButton', { defaultValue: 'Submit' })}
               </span>
             </LoadingButton>
           </Grid>

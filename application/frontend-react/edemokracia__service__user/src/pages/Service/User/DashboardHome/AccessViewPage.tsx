@@ -872,46 +872,6 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const favoriteIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.removeFromFavoritesForFavoriteIssues(target!);
-      if (customActions?.postFavoriteIssuesRemoveFromFavoritesForIssueAction) {
-        await customActions.postFavoriteIssuesRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const ownedIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await userServiceForDashboardHomeImpl.removeFromFavoritesForOwnedIssues(target!);
-      if (customActions?.postOwnedIssuesRemoveFromFavoritesForIssueAction) {
-        await customActions.postOwnedIssuesRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceDashboard>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const favoriteIssuesCreateConArgumentAction = async (
     target: ServiceIssueStored,
     templateDataOverride?: Partial<ServiceIssue>,
@@ -976,6 +936,46 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
+  const favoriteIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.removeFromFavoritesForFavoriteIssues(target!);
+      if (customActions?.postFavoriteIssuesRemoveFromFavoritesForIssueAction) {
+        await customActions.postFavoriteIssuesRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const ownedIssuesRemoveFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await userServiceForDashboardHomeImpl.removeFromFavoritesForOwnedIssues(target!);
+      if (customActions?.postOwnedIssuesRemoveFromFavoritesForIssueAction) {
+        await customActions.postOwnedIssuesRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceDashboard>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const backAction = async () => {
@@ -1150,14 +1150,14 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
     ownedIssuesCloseVoteForIssueAction,
     favoriteIssuesDeleteOrArchiveForIssueAction,
     ownedIssuesDeleteOrArchiveForIssueAction,
-    favoriteIssuesRemoveFromFavoritesForIssueAction,
-    ownedIssuesRemoveFromFavoritesForIssueAction,
     favoriteIssuesCreateConArgumentAction,
     ownedIssuesCreateConArgumentAction,
     favoriteIssuesCreateProArgumentAction,
     ownedIssuesCreateProArgumentAction,
     favoriteIssuesCreateCommentAction,
     ownedIssuesCreateCommentAction,
+    favoriteIssuesRemoveFromFavoritesForIssueAction,
+    ownedIssuesRemoveFromFavoritesForIssueAction,
     backAction,
     refreshAction,
     favoriteVoteDefinitionsVoteRatingAction,

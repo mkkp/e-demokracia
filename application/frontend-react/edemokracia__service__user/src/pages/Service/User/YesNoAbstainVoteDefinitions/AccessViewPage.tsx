@@ -189,6 +189,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForYesNoAbstainVoteDefinitionAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -418,26 +419,6 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForYesNoAbstainVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await userServiceForYesNoAbstainVoteDefinitionsImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceYesNoAbstainVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -467,6 +448,26 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
       if (!editMode) {
         await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
+    }
+  };
+  const removeFromFavoritesForYesNoAbstainVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await userServiceForYesNoAbstainVoteDefinitionsImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoAbstainVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceYesNoAbstainVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const voteAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
@@ -525,10 +526,10 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
     addToFavoritesForYesNoAbstainVoteDefinitionAction,
     closeVoteForYesNoAbstainVoteDefinitionAction,
     deleteOrArchiveForYesNoAbstainVoteDefinitionAction,
-    removeFromFavoritesForYesNoAbstainVoteDefinitionAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
     voteEntriesOpenPageAction,
+    removeFromFavoritesForYesNoAbstainVoteDefinitionAction,
     voteAction,
     takeBackVoteForYesNoAbstainVoteDefinitionAction,
     userVoteEntryOpenPageAction,

@@ -212,7 +212,9 @@ export default function ServiceYesNoAbstainVoteDefinitionIssueRelationViewPage()
   });
 
   // Private actions
-  const submit = async () => {};
+  const submit = async () => {
+    await deleteOrArchiveForIssueAction();
+  };
   const refresh = async () => {
     if (actions.refreshAction) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -337,26 +339,6 @@ export default function ServiceYesNoAbstainVoteDefinitionIssueRelationViewPage()
       await serviceYesNoAbstainVoteDefinitionServiceForIssueImpl.deleteOrArchive(data);
       if (customActions?.postDeleteOrArchiveForIssueAction) {
         await customActions.postDeleteOrArchiveForIssueAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceYesNoAbstainVoteDefinitionServiceForIssueImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -935,6 +917,26 @@ export default function ServiceYesNoAbstainVoteDefinitionIssueRelationViewPage()
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
+  const removeFromFavoritesForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceYesNoAbstainVoteDefinitionServiceForIssueImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const backAction = async () => {
     navigateBack();
   };
@@ -979,7 +981,6 @@ export default function ServiceYesNoAbstainVoteDefinitionIssueRelationViewPage()
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     issueTypeAutocompleteRangeAction,
     issueTypeOpenSetSelectorAction,
     issueTypeUnsetAction,
@@ -1024,6 +1025,7 @@ export default function ServiceYesNoAbstainVoteDefinitionIssueRelationViewPage()
     commentsFilterAction,
     commentsOpenPageAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     backAction,
     refreshAction,
     ...(customActions ?? {}),

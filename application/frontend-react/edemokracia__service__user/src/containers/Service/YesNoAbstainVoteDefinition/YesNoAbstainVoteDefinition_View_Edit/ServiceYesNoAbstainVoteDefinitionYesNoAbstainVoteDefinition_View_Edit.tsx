@@ -69,11 +69,6 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   getPageTitle?: (data: ServiceYesNoAbstainVoteDefinition) => string;
   issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<JudoRestResponse<ServiceIssueStored>>;
-  activateForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
-  addToFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
-  closeVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
-  deleteOrArchiveForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
-  removeFromFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
   isCloseAtRequired?: (
@@ -121,6 +116,14 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  isTakeVoteHidden?: (
+    data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isUserVoteHidden?: (
+    data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
   isActivateHidden?: (
     data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
     editMode?: boolean,
@@ -138,14 +141,6 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
     editMode?: boolean,
   ) => boolean;
   isRemoveFromFavoritesHidden?: (
-    data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isTakeVoteHidden?: (
-    data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isUserVoteHidden?: (
     data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
     editMode?: boolean,
   ) => boolean;
@@ -222,124 +217,6 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="actions" xs={12} sm={12}>
-            <Grid
-              id="User/(esm/_9jf_AHsCEe6bP4FWw7fjQA)/GroupVisualElement"
-              data-name="actions"
-              container
-              direction="row"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  {!data.isNotFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_9jf_AnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-plus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.addToFavoritesForYesNoAbstainVoteDefinitionAction
-                          ? async () => {
-                              await actions.addToFavoritesForYesNoAbstainVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.addToFavorites', {
-                        defaultValue: 'Add to favorites',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_9jf_A3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-minus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction
-                          ? async () => {
-                              await actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t(
-                        'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.removeFromFavorites',
-                        { defaultValue: 'Remove from favorites' },
-                      )}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotOpen && (
-                    <LoadingButton
-                      id="User/(esm/_9jf_BHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-check" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.closeVoteForYesNoAbstainVoteDefinitionAction
-                          ? async () => {
-                              await actions.closeVoteForYesNoAbstainVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.closeVote', {
-                        defaultValue: 'Close Vote',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotEditable && (
-                    <LoadingButton
-                      id="User/(esm/_9jf_BXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-open" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.activateForYesNoAbstainVoteDefinitionAction
-                          ? async () => {
-                              await actions.activateForYesNoAbstainVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.activate', {
-                        defaultValue: 'Activate',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotDeletable && (
-                    <LoadingButton
-                      id="User/(esm/_9jf_BnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="delete" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction
-                          ? async () => {
-                              await actions.deleteOrArchiveForYesNoAbstainVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.deleteOrArchive', {
-                        defaultValue: 'Delete',
-                      })}
-                    </LoadingButton>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-
           <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
             <Card
               id="(User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"

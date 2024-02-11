@@ -29,6 +29,7 @@ const ServiceUserIssuesUserIssues_View_Edit = lazy(
 
 export interface ServiceUserIssuesUserIssues_View_EditDialogActions
   extends ServiceUserIssuesUserIssues_View_EditActionDefinitions {
+  createIssueAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -198,6 +199,22 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               }}
             >
               <span>{t('service.UserIssues.UserIssues_View_Edit.Update', { defaultValue: 'Save' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && actions.createIssueAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormVisualElement"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={undefined}
+              startIcon={<MdiIcon path="wechat" />}
+              onClick={async () => {
+                await actions.createIssueAction!();
+              }}
+            >
+              <span>{t('service.UserIssues.UserIssues_View_Edit.createIssue', { defaultValue: 'Create issue' })}</span>
             </LoadingButton>
           </Grid>
         )}

@@ -189,6 +189,7 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForRatingVoteDefinitionAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -360,26 +361,6 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForRatingVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await userServiceForRatingVoteDefinitionsImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -409,6 +390,26 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
       if (!editMode) {
         await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
+    }
+  };
+  const removeFromFavoritesForRatingVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await userServiceForRatingVoteDefinitionsImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForRatingVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForRatingVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceRatingVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const voteAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
@@ -519,10 +520,10 @@ export default function ServiceUserRatingVoteDefinitionsAccessViewPage() {
     addToFavoritesForRatingVoteDefinitionAction,
     closeVoteForRatingVoteDefinitionAction,
     deleteOrArchiveForRatingVoteDefinitionAction,
-    removeFromFavoritesForRatingVoteDefinitionAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
     voteEntriesOpenPageAction,
+    removeFromFavoritesForRatingVoteDefinitionAction,
     voteAction,
     takeBackVoteForRatingVoteDefinitionAction,
     userVoteEntryOpenPageAction,

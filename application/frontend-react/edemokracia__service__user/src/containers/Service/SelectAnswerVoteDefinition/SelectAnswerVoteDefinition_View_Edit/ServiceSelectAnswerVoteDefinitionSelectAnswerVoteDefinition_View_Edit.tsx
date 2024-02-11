@@ -75,11 +75,6 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   getPageTitle?: (data: ServiceSelectAnswerVoteDefinition) => string;
   issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<JudoRestResponse<ServiceIssueStored>>;
-  activateForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
-  addToFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
-  closeVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
-  deleteOrArchiveForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
-  removeFromFavoritesForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForSelectAnswerVoteDefinitionAction?: () => Promise<void>;
   isCloseAtRequired?: (
@@ -127,6 +122,18 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  isUserVoteEntryGroupHidden?: (
+    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isTakeVoteHidden?: (
+    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isUserVoteHidden?: (
+    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
   isActivateHidden?: (
     data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
     editMode?: boolean,
@@ -144,18 +151,6 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
     editMode?: boolean,
   ) => boolean;
   isRemoveFromFavoritesHidden?: (
-    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isUserVoteEntryGroupHidden?: (
-    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isTakeVoteHidden?: (
-    data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isUserVoteHidden?: (
     data: ServiceSelectAnswerVoteDefinition | ServiceSelectAnswerVoteDefinitionStored,
     editMode?: boolean,
   ) => boolean;
@@ -232,124 +227,6 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="actions" xs={12} sm={12}>
-            <Grid
-              id="User/(esm/_JTH2kHr9Ee6bP4FWw7fjQA)/GroupVisualElement"
-              data-name="actions"
-              container
-              direction="row"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  {!data.isNotFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_JTH2knr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-plus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.addToFavoritesForSelectAnswerVoteDefinitionAction
-                          ? async () => {
-                              await actions.addToFavoritesForSelectAnswerVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.addToFavorites', {
-                        defaultValue: 'Add to favorites',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_JTH2k3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-minus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction
-                          ? async () => {
-                              await actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t(
-                        'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.removeFromFavorites',
-                        { defaultValue: 'Remove from favorites' },
-                      )}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotOpen && (
-                    <LoadingButton
-                      id="User/(esm/_JTH2lXr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-check" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.closeVoteForSelectAnswerVoteDefinitionAction
-                          ? async () => {
-                              await actions.closeVoteForSelectAnswerVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.closeVote', {
-                        defaultValue: 'Close Vote',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotEditable && (
-                    <LoadingButton
-                      id="User/(esm/_JTH2lnr9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-open" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.activateForSelectAnswerVoteDefinitionAction
-                          ? async () => {
-                              await actions.activateForSelectAnswerVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.activate', {
-                        defaultValue: 'Activate',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotDeletable && (
-                    <LoadingButton
-                      id="User/(esm/_JTH2l3r9Ee6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="delete" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction
-                          ? async () => {
-                              await actions.deleteOrArchiveForSelectAnswerVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.deleteOrArchive', {
-                        defaultValue: 'Delete',
-                      })}
-                    </LoadingButton>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-
           <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
             <Card
               id="(User/(esm/_0SJy0FtuEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
