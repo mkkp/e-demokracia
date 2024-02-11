@@ -213,6 +213,7 @@ export default function ServiceUserIssuesAccessViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForIssueAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -444,26 +445,6 @@ export default function ServiceUserIssuesAccessViewPage() {
       await userServiceForIssuesImpl.deleteOrArchive(data);
       if (customActions?.postDeleteOrArchiveForIssueAction) {
         await customActions.postDeleteOrArchiveForIssueAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async () => {
-    try {
-      setIsLoading(true);
-      await userServiceForIssuesImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -1033,6 +1014,26 @@ export default function ServiceUserIssuesAccessViewPage() {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
+  const removeFromFavoritesForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await userServiceForIssuesImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const prosCreateConArgumentAction = async (
     target: ServiceProStored,
     templateDataOverride?: Partial<ServicePro>,
@@ -1165,7 +1166,6 @@ export default function ServiceUserIssuesAccessViewPage() {
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     issueTypeAutocompleteRangeAction,
     issueTypeOpenSetSelectorAction,
     issueTypeUnsetAction,
@@ -1210,6 +1210,7 @@ export default function ServiceUserIssuesAccessViewPage() {
     commentsFilterAction,
     commentsOpenPageAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     prosCreateConArgumentAction,
     prosCreateProArgumentAction,
     prosVoteDownForProAction,

@@ -36,6 +36,11 @@ const ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edit = lazy(
 
 export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditDialogActions
   extends ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditActionDefinitions {
+  activateForRatingVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForRatingVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForRatingVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -220,6 +225,115 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
             </LoadingButton>
           </Grid>
         )}
+        {(actions?.isDeleteOrArchiveHidden
+          ? !actions?.isDeleteOrArchiveHidden(data, editMode)
+          : !data.isVoteNotDeletable) &&
+          actions.deleteOrArchiveForRatingVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_Vd5qBnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="delete" />}
+                onClick={async () => {
+                  await actions.deleteOrArchiveForRatingVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.deleteOrArchive', {
+                    defaultValue: 'Delete',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isActivateHidden ? !actions?.isActivateHidden(data, editMode) : !data.isVoteNotEditable) &&
+          actions.activateForRatingVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-open" />}
+                onClick={async () => {
+                  await actions.activateForRatingVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.activate', {
+                    defaultValue: 'Activate',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseVoteHidden ? !actions?.isCloseVoteHidden(data, editMode) : !data.isVoteNotOpen) &&
+          actions.closeVoteForRatingVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-check" />}
+                onClick={async () => {
+                  await actions.closeVoteForRatingVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.closeVote', {
+                    defaultValue: 'Close Vote',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isRemoveFromFavoritesHidden
+          ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
+          : !data.isFavorite) &&
+          actions.removeFromFavoritesForRatingVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-minus" />}
+                onClick={async () => {
+                  await actions.removeFromFavoritesForRatingVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.removeFromFavorites', {
+                    defaultValue: 'Remove from favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+          actions.addToFavoritesForRatingVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-plus" />}
+                onClick={async () => {
+                  await actions.addToFavoritesForRatingVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.addToFavorites', {
+                    defaultValue: 'Add to favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
       </DialogActions>
     </>
   );

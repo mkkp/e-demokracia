@@ -189,6 +189,7 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForYesNoVoteDefinitionAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -416,26 +417,6 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForYesNoVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await userServiceForYesNoVoteDefinitionsImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForYesNoVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForYesNoVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -465,6 +446,26 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
       if (!editMode) {
         await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
+    }
+  };
+  const removeFromFavoritesForYesNoVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await userServiceForYesNoVoteDefinitionsImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForYesNoVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForYesNoVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceYesNoVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const voteAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
@@ -523,10 +524,10 @@ export default function ServiceUserYesNoVoteDefinitionsAccessViewPage() {
     addToFavoritesForYesNoVoteDefinitionAction,
     closeVoteForYesNoVoteDefinitionAction,
     deleteOrArchiveForYesNoVoteDefinitionAction,
-    removeFromFavoritesForYesNoVoteDefinitionAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
     voteEntriesOpenPageAction,
+    removeFromFavoritesForYesNoVoteDefinitionAction,
     voteAction,
     takeBackVoteForYesNoVoteDefinitionAction,
     userVoteEntryOpenPageAction,

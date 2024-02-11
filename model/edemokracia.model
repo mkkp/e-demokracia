@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20240131_150826_b8265984_develop" advanced="true" version="$MODEL_VERSION_PLACEHOLDER$">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20240209_183709_12ddf9a0_develop" advanced="true" version="$MODEL_VERSION_PLACEHOLDER$">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="service">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="User" realm="DEFAULT" principal="_ndA8kGkwEe25ONJ3V89cVA" anonymous="true" kind="HUMAN" managed="true" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png" textPrimaryColor="#17191DFF" textSecondaryColor="#434448FF" primaryColor="#3C4166FF" subtitleColor="#8C8C8C" secondaryColor="#E7501DFF" backgroundColor="#FAFAFAFF">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -709,17 +709,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_Bvkf0GkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" visible="true" sort="NONE" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_27dsIG5VEe2wNaja8kBvcQ" name="description" label="Description" iconName="text_fields" visible="true" sort="NONE" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
       </table>
-      <view xmi:id="_qCa1YGksEe25ONJ3V89cVA" name="Issue_View_Edit" label="Issue View / Edit" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:Group" xmi:id="_ZAHfwFxEEe6ma86ynyYZNw" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_4rfAUFx7Ee6ma86ynyYZNw" name="PageActionButtons" label="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-            <actions xmi:id="_knYd0FxEEe6ma86ynyYZNw" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_nERS0FxLEe6ma86ynyYZNw" onBlur="false" operation="addToFavorites"/>
-            <actions xmi:id="_knZE4FxEEe6ma86ynyYZNw" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_0Kj-MFxMEe6ma86ynyYZNw" onBlur="false" operation="removeFromFavorites"/>
-            <actions xmi:id="_8M4nYHj_Ee6cB8og8p0UuQ" name="closeDebate" label="Close debate and start vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vLG90HnpEe6IpMjJEx4KXg" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" onBlur="false" operation="closeDebate"/>
-            <actions xmi:id="_pXWdEHkFEe6cB8og8p0UuQ" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vNCQcHnpEe6IpMjJEx4KXg" enabledBy="_TBoOsHj5Ee6cB8og8p0UuQ" onBlur="false" operation="closeVote"/>
-            <actions xmi:id="_FzSAQHkIEe6cB8og8p0UuQ" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vOwHsHnpEe6IpMjJEx4KXg" enabledBy="_nVP0sHkAEe6cB8og8p0UuQ" onBlur="false" operation="activate"/>
-            <actions xmi:id="_FzSnUHkIEe6cB8og8p0UuQ" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vQa7oHnpEe6IpMjJEx4KXg" enabledBy="_Cylr4HkHEe6cB8og8p0UuQ" onBlur="false" operation="deleteOrArchive"/>
-          </components>
-        </components>
+      <view xmi:id="_qCa1YGksEe25ONJ3V89cVA" name="Issue_View_Edit" label="Issue View / Edit" iconName="wechat" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_knYd0FxEEe6ma86ynyYZNw _knZE4FxEEe6ma86ynyYZNw _8M4nYHj_Ee6cB8og8p0UuQ _pXWdEHkFEe6cB8og8p0UuQ _FzSAQHkIEe6cB8og8p0UuQ _FzSnUHkIEe6cB8og8p0UuQ" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_wB_RsG47Ee2siJt-xjHAyw" name="issue" label="Issue" iconName="clipboard" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:TabularReferenceField" xmi:id="_FHpVENvSEe2Bgcx6em3jZg" name="issueType" label="Issue Type" iconName="folder-open" col="8" stretch="NONE" row="1" fit="LOOSE" onBlur="false" relationFeature="_V_8twNu4Ee2Bgcx6em3jZg" targetDefinedTabular="false" smallTable="false" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8IdvSEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" visible="true" sort="NONE" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
@@ -736,9 +726,9 @@
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_hZfckId8Ee2kLcMqsIbMgQ" name="other" label="" col="12" stretch="NONE" row="11" fit="LOOSE">
           <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="10" fit="LOOSE">
-            <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="6" stretch="NONE" row="11" fit="LOOSE">
+            <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" performableActions="_qJPPC3jvEe6cB8og8p0UuQ" col="6" stretch="NONE" row="11" fit="LOOSE">
               <components xsi:type="ui:Group" xmi:id="_qJPPCnjvEe6cB8og8p0UuQ" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="1" fit="LOOSE">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="createConArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" actionContainer="_qJPPCXjvEe6cB8og8p0UuQ" operation="createConArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPDHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPDXjvEe6cB8og8p0UuQ" name="cons" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_gKs3kH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -748,9 +738,9 @@
                 </components>
               </components>
             </components>
-            <components xsi:type="ui:Group" xmi:id="_qJPPAXjvEe6cB8og8p0UuQ" name="pros" label="Pros" iconName="chat-plus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="6" stretch="NONE" row="11" fit="LOOSE">
+            <components xsi:type="ui:Group" xmi:id="_qJPPAXjvEe6cB8og8p0UuQ" name="pros" label="Pros" iconName="chat-plus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" performableActions="_qJPPA3jvEe6cB8og8p0UuQ" col="6" stretch="NONE" row="11" fit="LOOSE">
               <components xsi:type="ui:Group" xmi:id="_qJPPAnjvEe6cB8og8p0UuQ" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="1" fit="LOOSE">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="createProArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" stretch="NONE" row="1" fit="LOOSE" onBlur="false" actionContainer="_qJPPAXjvEe6cB8og8p0UuQ" operation="createProArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPBHjvEe6cB8og8p0UuQ" name="table" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="10" fit="LOOSE">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPBXjvEe6cB8og8p0UuQ" name="pros" label="" iconName="" col="6" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_7XpxEH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -798,6 +788,12 @@
             </components>
           </tabs>
         </components>
+        <components xsi:type="ui:OperationForm" xmi:id="_FzSnUHkIEe6cB8og8p0UuQ" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vQa7oHnpEe6IpMjJEx4KXg" enabledBy="_Cylr4HkHEe6cB8og8p0UuQ" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="deleteOrArchive"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_FzSAQHkIEe6cB8og8p0UuQ" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vOwHsHnpEe6IpMjJEx4KXg" enabledBy="_nVP0sHkAEe6cB8og8p0UuQ" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="activate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_pXWdEHkFEe6cB8og8p0UuQ" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vNCQcHnpEe6IpMjJEx4KXg" enabledBy="_TBoOsHj5Ee6cB8og8p0UuQ" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="closeVote"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_8M4nYHj_Ee6cB8og8p0UuQ" name="closeDebate" label="Close debate and start vote" iconName="vote" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vLG90HnpEe6IpMjJEx4KXg" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="closeDebate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_knZE4FxEEe6ma86ynyYZNw" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_0Kj-MFxMEe6ma86ynyYZNw" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_knYd0FxEEe6ma86ynyYZNw" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_nERS0FxLEe6ma86ynyYZNw" onBlur="false" actionContainer="_qCa1YGksEe25ONJ3V89cVA" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_p5aDVGksEe25ONJ3V89cVA" name="IssueAttachment" createable="false" updateable="false" deleteable="false">
@@ -1147,16 +1143,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_DZzr8IXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-ezZsH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZ5ykIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-e-_4H4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:Group" xmi:id="_Vd5qAHsAEe6bP4FWw7fjQA" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_Vd5qAXsAEe6bP4FWw7fjQA" name="PageActionButtons" label="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-            <actions xmi:id="_Vd5qAnsAEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lZsNwHr_Ee6bP4FWw7fjQA" onBlur="false" operation="addToFavorites"/>
-            <actions xmi:id="_Vd5qA3sAEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lXOIkHr_Ee6bP4FWw7fjQA" onBlur="false" operation="removeFromFavorites"/>
-            <actions xmi:id="_Vd5qBHsAEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lYbpgHr_Ee6bP4FWw7fjQA" onBlur="false" operation="closeVote"/>
-            <actions xmi:id="_Vd5qBXsAEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lbuOEHr_Ee6bP4FWw7fjQA" onBlur="false" operation="activate"/>
-            <actions xmi:id="_Vd5qBnsAEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_laXjMHr_Ee6bP4FWw7fjQA" onBlur="false" operation="deleteOrArchive"/>
-          </components>
-        </components>
+      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_Vd5qAnsAEe6bP4FWw7fjQA _Vd5qA3sAEe6bP4FWw7fjQA _Vd5qBHsAEe6bP4FWw7fjQA _Vd5qBXsAEe6bP4FWw7fjQA _Vd5qBnsAEe6bP4FWw7fjQA" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_NHnv0FsoEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:Group" xmi:id="_NHnv0VsoEe6Mx9dH3yj5gQ" name="userVote" label="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_YYB_AFsmEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_NHnv0lsoEe6Mx9dH3yj5gQ" name="VirtualForUserVote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -1200,6 +1187,11 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_DsA2wFuFEe6T042_LMmSdQ" name="value" label="Value" iconName="calculator" visible="true" sort="NONE" dataFeature="_ZC2TEFslEe6Mx9dH3yj5gQ"/>
           </components>
         </components>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBnsAEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_laXjMHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBXsAEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lbuOEHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="activate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBHsAEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lYbpgHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qA3sAEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lXOIkHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qAnsAEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_lZsNwHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-b_9Un4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition" createable="false" updateable="false" deleteable="false">
@@ -1297,16 +1289,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A_aGEIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-dAp8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A_rL0IXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-dMQIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:Group" xmi:id="_JTH2kHr9Ee6bP4FWw7fjQA" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_JTH2kXr9Ee6bP4FWw7fjQA" name="PageActionButtons" label="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-            <actions xmi:id="_JTH2knr9Ee6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_x1FpYHr9Ee6bP4FWw7fjQA" onBlur="false" operation="addToFavorites"/>
-            <actions xmi:id="_JTH2k3r9Ee6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_x0l6IHr9Ee6bP4FWw7fjQA" onBlur="false" operation="removeFromFavorites"/>
-            <actions xmi:id="_JTH2lXr9Ee6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA" onBlur="false" operation="closeVote"/>
-            <actions xmi:id="_JTH2lnr9Ee6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_nBGKEHr3Ee6bP4FWw7fjQA" onBlur="false" operation="activate"/>
-            <actions xmi:id="_JTH2l3r9Ee6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yBFBgHr-Ee6bP4FWw7fjQA" onBlur="false" operation="deleteOrArchive"/>
-          </components>
-        </components>
+      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_JTH2l3r9Ee6bP4FWw7fjQA _JTH2lXr9Ee6bP4FWw7fjQA _JTH2k3r9Ee6bP4FWw7fjQA _JTH2knr9Ee6bP4FWw7fjQA _JTH2lnr9Ee6bP4FWw7fjQA" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_0SJy0FtuEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA">
           <components xsi:type="ui:Group" xmi:id="_0SJy0VtuEe6Mx9dH3yj5gQ" name="userVote" label="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_jNc7sFtuEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_0SJy0ltuEe6Mx9dH3yj5gQ" name="VirtualForUserVote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -1352,6 +1335,11 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_iUuHcFtvEe6Mx9dH3yj5gQ" name="valueRepresentation" label="ValueRepresentation" iconName="format-size" visible="true" sort="NONE" dataFeature="_R5Td4FtvEe6Mx9dH3yj5gQ"/>
           </components>
         </components>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2l3r9Ee6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yBFBgHr-Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2lnr9Ee6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_nBGKEHr3Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="activate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2lXr9Ee6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2k3r9Ee6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_x0l6IHr9Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2knr9Ee6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_x1FpYHr9Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_p8pkkWksEe25ONJ3V89cVA" name="SimpleVote" createable="false" updateable="false" deleteable="false">
@@ -1751,16 +1739,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A-I6wIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A-b1sIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
-        <components xsi:type="ui:Group" xmi:id="_9jf_AHsCEe6bP4FWw7fjQA" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_9jf_AXsCEe6bP4FWw7fjQA" name="PageActionButtons" label="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-            <actions xmi:id="_9jf_AnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yMLo0Hr_Ee6bP4FWw7fjQA" onBlur="false" operation="addToFavorites"/>
-            <actions xmi:id="_9jf_A3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yJ3UoHr_Ee6bP4FWw7fjQA" onBlur="false" operation="removeFromFavorites"/>
-            <actions xmi:id="_9jf_BHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yK-H4Hr_Ee6bP4FWw7fjQA" onBlur="false" operation="closeVote"/>
-            <actions xmi:id="_9jf_BXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yOHigHr_Ee6bP4FWw7fjQA" onBlur="false" operation="activate"/>
-            <actions xmi:id="_9jf_BnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yMzT4Hr_Ee6bP4FWw7fjQA" onBlur="false" operation="deleteOrArchive"/>
-          </components>
-        </components>
+      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_9jf_BnsCEe6bP4FWw7fjQA _9jf_BXsCEe6bP4FWw7fjQA _9jf_BHsCEe6bP4FWw7fjQA _9jf_A3sCEe6bP4FWw7fjQA _9jf_AnsCEe6bP4FWw7fjQA" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_7M-INFsnEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:Group" xmi:id="_7M-INVsnEe6Mx9dH3yj5gQ" name="userVote" label="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_vqb5EFsnEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_7M-INlsnEe6Mx9dH3yj5gQ" name="VirtualForUserVote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -1802,6 +1781,11 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_7M-IQVsnEe6Mx9dH3yj5gQ" name="createdBy" label="CreatedBy" iconName="format-size" visible="true" sort="NONE" dataFeature="_p1e0sFsjEe6Mx9dH3yj5gQ"/>
           </components>
         </components>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_BnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yMzT4Hr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_BXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yOHigHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="activate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_BHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yK-H4Hr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_A3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yJ3UoHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_AnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_yMLo0Hr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-Ze00H4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition" createable="false" updateable="false" deleteable="false">
@@ -1896,16 +1880,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A8kNcIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" visible="true" sort="NONE" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A80sIIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" visible="true" sort="NONE" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL" dialogSize="LG">
-        <components xsi:type="ui:Group" xmi:id="_uXiyMHsCEe6bP4FWw7fjQA" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_uXiyMXsCEe6bP4FWw7fjQA" name="PageActionButtons" label="" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-            <actions xmi:id="_uXiyMnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sCH6UHr_Ee6bP4FWw7fjQA" onBlur="false" operation="addToFavorites"/>
-            <actions xmi:id="_uXiyM3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_r_9-MHr_Ee6bP4FWw7fjQA" onBlur="false" operation="removeFromFavorites"/>
-            <actions xmi:id="_uXiyNHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sBAgAHr_Ee6bP4FWw7fjQA" onBlur="false" operation="closeVote"/>
-            <actions xmi:id="_uXiyNXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sD5b8Hr_Ee6bP4FWw7fjQA" onBlur="false" operation="activate"/>
-            <actions xmi:id="_uXiyNnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sCtJIHr_Ee6bP4FWw7fjQA" onBlur="false" operation="deleteOrArchive"/>
-          </components>
-        </components>
+      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_uXiyNnsCEe6bP4FWw7fjQA _uXiyNXsCEe6bP4FWw7fjQA _uXiyNHsCEe6bP4FWw7fjQA _uXiyM3sCEe6bP4FWw7fjQA _uXiyMnsCEe6bP4FWw7fjQA" titleFrom="LABEL" dialogSize="LG">
         <components xsi:type="ui:Group" xmi:id="_dZi8oFscEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
           <components xsi:type="ui:Group" xmi:id="_K-cscFouEe6_67aMO2jOsw" name="userVote" label="" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_spEpcFotEe6_67aMO2jOsw">
             <components xsi:type="ui:Group" xmi:id="_8uozYFsgEe6Mx9dH3yj5gQ" name="VirtualForUserVote" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
@@ -1947,6 +1922,11 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_zorYgFowEe6_67aMO2jOsw" name="createdBy" label="CreatedBy" iconName="format-size" visible="true" sort="NONE" dataFeature="_PuqoQFowEe6_67aMO2jOsw"/>
           </components>
         </components>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyNnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sCtJIHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyNXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sD5b8Hr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="activate"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyNHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" col="4" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sBAgAHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyM3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_r_9-MHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyMnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" stretch="NONE" row="1" fit="LOOSE" hiddenBy="_sCH6UHr_Ee6bP4FWw7fjQA" onBlur="false" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_MgYf0FV5Ee6uPON95HTfyQ" name="ProParent" createable="false" updateable="false" deleteable="false">
@@ -2021,11 +2001,8 @@
       </operations>
       <form xmi:id="_jK51vVq4Ee6_67aMO2jOsw" name="UserIssues_Form" label="UserIssues Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
       <table xmi:id="_jK51vlq4Ee6_67aMO2jOsw" name="UserIssues_Table" label="UserIssues Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0"/>
-      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_jK51w1q4Ee6_67aMO2jOsw" titleFrom="LABEL">
         <components xsi:type="ui:Group" xmi:id="_AMMw8FrVEe6gN-oVBDDIOQ" name="root" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="1" fit="LOOSE">
-          <components xsi:type="ui:ActionGroup" xmi:id="_jK51wlq4Ee6_67aMO2jOsw" name="actionGroup" label="actionGroup" iconName="" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="2">
-            <actions xmi:id="_jK51w1q4Ee6_67aMO2jOsw" name="createIssue" label="Create issue" iconName="wechat" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="createIssue"/>
-          </components>
           <components xsi:type="ui:TabBar" xmi:id="_MLBlUFrTEe6_67aMO2jOsw" name="tabBar" col="12" stretch="NONE" row="20" fit="LOOSE">
             <tabs xmi:id="_jK51xlq4Ee6_67aMO2jOsw" name="ownedIssuesGroup" label="Owned issues" iconName="account-box" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_h5rm8FrPEe6_67aMO2jOsw" name="ownedIssues" label="" iconName="" col="12" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_jK5OoVq4Ee6_67aMO2jOsw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
@@ -2109,6 +2086,7 @@
               </components>
             </tabs>
           </components>
+          <components xsi:type="ui:OperationForm" xmi:id="_jK51w1q4Ee6_67aMO2jOsw" name="createIssue" label="Create issue" iconName="wechat" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" actionContainer="_jK51wFq4Ee6_67aMO2jOsw" operation="createIssue"/>
         </components>
       </view>
     </elements>

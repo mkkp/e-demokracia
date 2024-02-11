@@ -214,6 +214,7 @@ export default function ServiceDashboardOwnedIssuesRelationViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForIssueAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -395,26 +396,6 @@ export default function ServiceDashboardOwnedIssuesRelationViewPage() {
       await serviceDashboardServiceForOwnedIssuesImpl.deleteOrArchive(data);
       if (customActions?.postDeleteOrArchiveForIssueAction) {
         await customActions.postDeleteOrArchiveForIssueAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceDashboardServiceForOwnedIssuesImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -993,6 +974,26 @@ export default function ServiceDashboardOwnedIssuesRelationViewPage() {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
+  const removeFromFavoritesForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceDashboardServiceForOwnedIssuesImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceIssueIssue_View_EditPageActions = {
     getPageTitle,
@@ -1005,7 +1006,6 @@ export default function ServiceDashboardOwnedIssuesRelationViewPage() {
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     issueTypeAutocompleteRangeAction,
     issueTypeOpenSetSelectorAction,
     issueTypeUnsetAction,
@@ -1050,6 +1050,7 @@ export default function ServiceDashboardOwnedIssuesRelationViewPage() {
     commentsFilterAction,
     commentsOpenPageAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     ...(customActions ?? {}),
   };
 

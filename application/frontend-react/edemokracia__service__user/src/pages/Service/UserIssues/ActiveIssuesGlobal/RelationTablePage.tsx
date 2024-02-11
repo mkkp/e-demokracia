@@ -217,24 +217,6 @@ export default function ServiceUserIssuesActiveIssuesGlobalRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesGlobalImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const createConArgumentAction = async (
     target: ServiceIssueStored,
     templateDataOverride?: Partial<ServiceIssue>,
@@ -266,6 +248,24 @@ export default function ServiceUserIssuesActiveIssuesGlobalRelationTablePage() {
     const { result, data: returnedData } = await openServiceIssueIssue_View_EditCreateCommentInputForm(target);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
+    }
+  };
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForActiveIssuesGlobalImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
     }
   };
   const backAction = async () => {
@@ -317,10 +317,10 @@ export default function ServiceUserIssuesActiveIssuesGlobalRelationTablePage() {
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     createConArgumentAction,
     createProArgumentAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     backAction,
     filterAction,
     refreshAction,

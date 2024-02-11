@@ -74,7 +74,6 @@ export interface ServiceUserIssuesUserIssues_View_EditActionDefinitions
     ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistrictComponentActionDefinitions,
     ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponentActionDefinitions {
   getPageTitle?: (data: ServiceUserIssues) => string;
-  createIssueAction?: () => Promise<void>;
   getMask?: () => string;
 }
 
@@ -155,27 +154,6 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
               justifyContent="flex-start"
               spacing={2}
             >
-              <Grid item xs={12} sm={4.0}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  <LoadingButton
-                    id="User/(esm/_jK51w1q4Ee6_67aMO2jOsw)/OperationFormVisualElement"
-                    loading={isLoading}
-                    startIcon={<MdiIcon path="wechat" />}
-                    loadingPosition="start"
-                    onClick={
-                      actions.createIssueAction
-                        ? async () => {
-                            await actions.createIssueAction!();
-                          }
-                        : undefined
-                    }
-                    disabled={editMode}
-                  >
-                    {t('service.UserIssues.UserIssues_View_Edit.createIssue', { defaultValue: 'Create issue' })}
-                  </LoadingButton>
-                </Box>
-              </Grid>
-
               <Grid container item xs={12} sm={12}>
                 <ModeledTabs
                   id="User/(esm/_MLBlUFrTEe6_67aMO2jOsw)/TabBarVisualElement"

@@ -36,6 +36,11 @@ const ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_Edit = lazy(
 
 export interface ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditDialogActions
   extends ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditActionDefinitions {
+  activateForYesNoVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForYesNoVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForYesNoVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForYesNoVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForYesNoVoteDefinitionAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -220,6 +225,115 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
             </LoadingButton>
           </Grid>
         )}
+        {(actions?.isDeleteOrArchiveHidden
+          ? !actions?.isDeleteOrArchiveHidden(data, editMode)
+          : !data.isVoteNotDeletable) &&
+          actions.deleteOrArchiveForYesNoVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_uXiyNnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="delete" />}
+                onClick={async () => {
+                  await actions.deleteOrArchiveForYesNoVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.deleteOrArchive', {
+                    defaultValue: 'Delete',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isActivateHidden ? !actions?.isActivateHidden(data, editMode) : !data.isVoteNotEditable) &&
+          actions.activateForYesNoVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_uXiyNXsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-open" />}
+                onClick={async () => {
+                  await actions.activateForYesNoVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.activate', {
+                    defaultValue: 'Activate',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseVoteHidden ? !actions?.isCloseVoteHidden(data, editMode) : !data.isVoteNotOpen) &&
+          actions.closeVoteForYesNoVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_uXiyNHsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-check" />}
+                onClick={async () => {
+                  await actions.closeVoteForYesNoVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.closeVote', {
+                    defaultValue: 'Close Vote',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isRemoveFromFavoritesHidden
+          ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
+          : !data.isFavorite) &&
+          actions.removeFromFavoritesForYesNoVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_uXiyM3sCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-minus" />}
+                onClick={async () => {
+                  await actions.removeFromFavoritesForYesNoVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.removeFromFavorites', {
+                    defaultValue: 'Remove from favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+          actions.addToFavoritesForYesNoVoteDefinitionAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_uXiyMnsCEe6bP4FWw7fjQA)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-plus" />}
+                onClick={async () => {
+                  await actions.addToFavoritesForYesNoVoteDefinitionAction!();
+                }}
+              >
+                <span>
+                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.addToFavorites', {
+                    defaultValue: 'Add to favorites',
+                  })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
       </DialogActions>
     </>
   );

@@ -214,6 +214,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForIssueAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -339,26 +340,6 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       await serviceUserIssuesServiceForActiveIssuesInResidentCityImpl.deleteOrArchive(data);
       if (customActions?.postDeleteOrArchiveForIssueAction) {
         await customActions.postDeleteOrArchiveForIssueAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceIssue>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const removeFromFavoritesForIssueAction = async () => {
-    try {
-      setIsLoading(true);
-      await serviceUserIssuesServiceForActiveIssuesInResidentCityImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction();
       } else {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
@@ -937,6 +918,26 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
     }
   };
+  const removeFromFavoritesForIssueAction = async () => {
+    try {
+      setIsLoading(true);
+      await serviceUserIssuesServiceForActiveIssuesInResidentCityImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceIssue>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const backAction = async () => {
     navigateBack();
   };
@@ -1001,7 +1002,6 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     issueTypeAutocompleteRangeAction,
     issueTypeOpenSetSelectorAction,
     issueTypeUnsetAction,
@@ -1046,6 +1046,7 @@ export default function ServiceUserIssuesActiveIssuesInResidentCityRelationViewP
     commentsFilterAction,
     commentsOpenPageAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     backAction,
     cancelAction,
     refreshAction,

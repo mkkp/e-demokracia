@@ -69,11 +69,6 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
   getPageTitle?: (data: ServiceRatingVoteDefinition) => string;
   issueOpenPageAction?: (target: ServiceIssueStored, isDraft?: boolean) => Promise<void>;
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<JudoRestResponse<ServiceIssueStored>>;
-  activateForRatingVoteDefinitionAction?: () => Promise<void>;
-  addToFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
-  closeVoteForRatingVoteDefinitionAction?: () => Promise<void>;
-  deleteOrArchiveForRatingVoteDefinitionAction?: () => Promise<void>;
-  removeFromFavoritesForRatingVoteDefinitionAction?: () => Promise<void>;
   voteAction?: () => Promise<void>;
   takeBackVoteForRatingVoteDefinitionAction?: () => Promise<void>;
   isCloseAtRequired?: (
@@ -139,6 +134,14 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  isTakeVoteHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
+  isUserVoteHidden?: (
+    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
+    editMode?: boolean,
+  ) => boolean;
   isActivateHidden?: (
     data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
     editMode?: boolean,
@@ -156,14 +159,6 @@ export interface ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditAction
     editMode?: boolean,
   ) => boolean;
   isRemoveFromFavoritesHidden?: (
-    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isTakeVoteHidden?: (
-    data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
-    editMode?: boolean,
-  ) => boolean;
-  isUserVoteHidden?: (
     data: ServiceRatingVoteDefinition | ServiceRatingVoteDefinitionStored,
     editMode?: boolean,
   ) => boolean;
@@ -240,123 +235,6 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="actions" xs={12} sm={12}>
-            <Grid
-              id="User/(esm/_Vd5qAHsAEe6bP4FWw7fjQA)/GroupVisualElement"
-              data-name="actions"
-              container
-              direction="row"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  {!data.isNotFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_Vd5qAnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-plus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.addToFavoritesForRatingVoteDefinitionAction
-                          ? async () => {
-                              await actions.addToFavoritesForRatingVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.addToFavorites', {
-                        defaultValue: 'Add to favorites',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_Vd5qA3sAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-minus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.removeFromFavoritesForRatingVoteDefinitionAction
-                          ? async () => {
-                              await actions.removeFromFavoritesForRatingVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.removeFromFavorites', {
-                        defaultValue: 'Remove from favorites',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotOpen && (
-                    <LoadingButton
-                      id="User/(esm/_Vd5qBHsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-check" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.closeVoteForRatingVoteDefinitionAction
-                          ? async () => {
-                              await actions.closeVoteForRatingVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.closeVote', {
-                        defaultValue: 'Close Vote',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotEditable && (
-                    <LoadingButton
-                      id="User/(esm/_Vd5qBXsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-open" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.activateForRatingVoteDefinitionAction
-                          ? async () => {
-                              await actions.activateForRatingVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.activate', {
-                        defaultValue: 'Activate',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotDeletable && (
-                    <LoadingButton
-                      id="User/(esm/_Vd5qBnsAEe6bP4FWw7fjQA)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="delete" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.deleteOrArchiveForRatingVoteDefinitionAction
-                          ? async () => {
-                              await actions.deleteOrArchiveForRatingVoteDefinitionAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.deleteOrArchive', {
-                        defaultValue: 'Delete',
-                      })}
-                    </LoadingButton>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-
           <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
             <Card
               id="(User/(esm/_NHnv0FsoEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"

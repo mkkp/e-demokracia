@@ -341,24 +341,6 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
-    try {
-      setIsLoading(true);
-      await serviceDashboardServiceForFavoriteIssuesImpl.removeFromFavorites(target!);
-      if (customActions?.postRemoveFromFavoritesForIssueAction) {
-        await customActions.postRemoveFromFavoritesForIssueAction(target!);
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        setRefreshCounter((prev) => prev + 1);
-      }
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const createConArgumentAction = async (
     target: ServiceIssueStored,
     templateDataOverride?: Partial<ServiceIssue>,
@@ -392,6 +374,24 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
       setRefreshCounter((prev) => prev + 1);
     }
   };
+  const removeFromFavoritesForIssueAction = async (target?: ServiceIssueStored) => {
+    try {
+      setIsLoading(true);
+      await serviceDashboardServiceForFavoriteIssuesImpl.removeFromFavorites(target!);
+      if (customActions?.postRemoveFromFavoritesForIssueAction) {
+        await customActions.postRemoveFromFavoritesForIssueAction(target!);
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        setRefreshCounter((prev) => prev + 1);
+      }
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const actions: ServiceIssueIssue_TablePageActions = {
     getPageTitle,
@@ -407,10 +407,10 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
     closeDebateAction,
     closeVoteForIssueAction,
     deleteOrArchiveForIssueAction,
-    removeFromFavoritesForIssueAction,
     createConArgumentAction,
     createProArgumentAction,
     createCommentAction,
+    removeFromFavoritesForIssueAction,
     ...(customActions ?? {}),
   };
 

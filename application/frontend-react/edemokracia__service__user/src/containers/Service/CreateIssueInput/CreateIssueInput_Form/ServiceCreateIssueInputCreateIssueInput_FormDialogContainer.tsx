@@ -240,7 +240,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormDialog(
               }}
             >
               <span>
-                {t('service.UserIssues.UserIssues_View_Edit.root.actionGroup.createIssue.OperationFormCallButton', {
+                {t('service.UserIssues.UserIssues_View_Edit.root.createIssue.OperationFormCallButton', {
                   defaultValue: 'Submit',
                 })}
               </span>

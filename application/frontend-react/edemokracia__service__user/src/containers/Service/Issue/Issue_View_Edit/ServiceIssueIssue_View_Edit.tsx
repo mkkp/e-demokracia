@@ -110,14 +110,6 @@ export interface ServiceIssueIssue_View_EditActionDefinitions
     ServiceIssueIssue_View_EditOwnerComponentActionDefinitions,
     ServiceIssueIssue_View_EditProsComponentActionDefinitions {
   getPageTitle?: (data: ServiceIssue) => string;
-  activateForIssueAction?: () => Promise<void>;
-  addToFavoritesForIssueAction?: () => Promise<void>;
-  closeDebateAction?: () => Promise<void>;
-  closeVoteForIssueAction?: () => Promise<void>;
-  deleteOrArchiveForIssueAction?: () => Promise<void>;
-  removeFromFavoritesForIssueAction?: () => Promise<void>;
-  createConArgumentAction?: () => Promise<void>;
-  createProArgumentAction?: () => Promise<void>;
   createCommentAction?: () => Promise<void>;
   isCreatedRequired?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean) => boolean;
   isCreatedDisabled?: (data: ServiceIssue | ServiceIssueStored, editMode?: boolean, isLoading?: boolean) => boolean;
@@ -209,133 +201,6 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="actions" xs={12} sm={12}>
-            <Grid
-              id="User/(esm/_ZAHfwFxEEe6ma86ynyYZNw)/GroupVisualElement"
-              data-name="actions"
-              container
-              direction="row"
-              alignItems="flex-start"
-              justifyContent="flex-start"
-              spacing={2}
-            >
-              <Grid item xs={12}>
-                <Box sx={{ display: 'flex', gap: 1 }}>
-                  {!data.isFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-plus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.addToFavoritesForIssueAction
-                          ? async () => {
-                              await actions.addToFavoritesForIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.addToFavorites', { defaultValue: 'Add to favorites' })}
-                    </LoadingButton>
-                  )}
-                  {!data.isNotFavorite && (
-                    <LoadingButton
-                      id="User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="star-minus" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.removeFromFavoritesForIssueAction
-                          ? async () => {
-                              await actions.removeFromFavoritesForIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.removeFromFavorites', {
-                        defaultValue: 'Remove from favorites',
-                      })}
-                    </LoadingButton>
-                  )}
-                  {!data.isIssueNotActive && (
-                    <LoadingButton
-                      id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="vote" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.closeDebateAction
-                          ? async () => {
-                              await actions.closeDebateAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={!data.isIssueActive || editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
-                    </LoadingButton>
-                  )}
-                  {!data.isVoteNotClosable && (
-                    <LoadingButton
-                      id="User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-check" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.closeVoteForIssueAction
-                          ? async () => {
-                              await actions.closeVoteForIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={!data.isVoteClosable || editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}
-                    </LoadingButton>
-                  )}
-                  {!data.isIssueNotDraft && (
-                    <LoadingButton
-                      id="User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="lock-open" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.activateForIssueAction
-                          ? async () => {
-                              await actions.activateForIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={!data.isIssueDraft || editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}
-                    </LoadingButton>
-                  )}
-                  {!data.isIssueNotDeletable && (
-                    <LoadingButton
-                      id="User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                      loading={isLoading}
-                      startIcon={<MdiIcon path="delete" />}
-                      loadingPosition="start"
-                      onClick={
-                        actions.deleteOrArchiveForIssueAction
-                          ? async () => {
-                              await actions.deleteOrArchiveForIssueAction!();
-                            }
-                          : undefined
-                      }
-                      disabled={!data.isIssueDeletable || editMode}
-                    >
-                      {t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}
-                    </LoadingButton>
-                  )}
-                </Box>
-              </Grid>
-            </Grid>
-          </Grid>
-
           <Grid item data-name="issue::LabelWrapper" xs={12} sm={12}>
             <Card
               id="(User/(esm/_wB_RsG47Ee2siJt-xjHAyw)/WrapAndLabelVisualElement)/LabelWrapper"
@@ -751,27 +616,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                   alignItems="flex-start"
                                   justifyContent="flex-start"
                                   spacing={2}
-                                >
-                                  <Grid item xs={12} sm={12}>
-                                    <LoadingButton
-                                      id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                      loading={isLoading}
-                                      variant={undefined}
-                                      startIcon={<MdiIcon path="chat-minus" />}
-                                      loadingPosition="start"
-                                      onClick={async () => {
-                                        if (actions.createConArgumentAction) {
-                                          await actions.createConArgumentAction!();
-                                        }
-                                      }}
-                                      disabled={!actions.createConArgumentAction || editMode}
-                                    >
-                                      {t('service.Issue.Issue_View_Edit.createConArgument', {
-                                        defaultValue: 'Add Con Argument',
-                                      })}
-                                    </LoadingButton>
-                                  </Grid>
-                                </Grid>
+                                ></Grid>
                               </Grid>
 
                               <Grid item data-name="table" xs={12} sm={12}>
@@ -854,27 +699,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                   alignItems="flex-start"
                                   justifyContent="flex-start"
                                   spacing={2}
-                                >
-                                  <Grid item xs={12} sm={12}>
-                                    <LoadingButton
-                                      id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                      loading={isLoading}
-                                      variant={undefined}
-                                      startIcon={<MdiIcon path="chat-plus" />}
-                                      loadingPosition="start"
-                                      onClick={async () => {
-                                        if (actions.createProArgumentAction) {
-                                          await actions.createProArgumentAction!();
-                                        }
-                                      }}
-                                      disabled={!actions.createProArgumentAction || editMode}
-                                    >
-                                      {t('service.Issue.Issue_View_Edit.createProArgument', {
-                                        defaultValue: 'Add Pro Argument',
-                                      })}
-                                    </LoadingButton>
-                                  </Grid>
-                                </Grid>
+                                ></Grid>
                               </Grid>
 
                               <Grid item data-name="table" xs={12} sm={12}>

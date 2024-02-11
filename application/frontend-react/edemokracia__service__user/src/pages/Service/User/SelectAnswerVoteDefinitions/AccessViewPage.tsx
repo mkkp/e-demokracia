@@ -194,6 +194,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   // Private actions
   const submit = async () => {
     await updateAction();
+    await deleteOrArchiveForSelectAnswerVoteDefinitionAction();
   };
   const refresh = async () => {
     if (actions.refreshAction) {
@@ -483,26 +484,6 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const removeFromFavoritesForSelectAnswerVoteDefinitionAction = async () => {
-    try {
-      setIsLoading(true);
-      await userServiceForSelectAnswerVoteDefinitionsImpl.removeFromFavorites(data);
-      if (customActions?.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction) {
-        await customActions.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction();
-      } else {
-        showSuccessSnack(
-          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
-        );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
-      }
-    } catch (error) {
-      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const voteEntriesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -532,6 +513,26 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       if (!editMode) {
         await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
       }
+    }
+  };
+  const removeFromFavoritesForSelectAnswerVoteDefinitionAction = async () => {
+    try {
+      setIsLoading(true);
+      await userServiceForSelectAnswerVoteDefinitionsImpl.removeFromFavorites(data);
+      if (customActions?.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction) {
+        await customActions.postRemoveFromFavoritesForSelectAnswerVoteDefinitionAction();
+      } else {
+        showSuccessSnack(
+          t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
+        );
+        if (!editMode) {
+          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+        }
+      }
+    } catch (error) {
+      handleError<ServiceSelectAnswerVoteDefinition>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const voteAction = async () => {
@@ -651,10 +652,10 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     addToFavoritesForSelectAnswerVoteDefinitionAction,
     closeVoteForSelectAnswerVoteDefinitionAction,
     deleteOrArchiveForSelectAnswerVoteDefinitionAction,
-    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
     voteEntriesFilterAction,
     voteEntriesRefreshAction,
     voteEntriesOpenPageAction,
+    removeFromFavoritesForSelectAnswerVoteDefinitionAction,
     voteAction,
     takeBackVoteForSelectAnswerVoteDefinitionAction,
     userVoteEntryOpenPageAction,

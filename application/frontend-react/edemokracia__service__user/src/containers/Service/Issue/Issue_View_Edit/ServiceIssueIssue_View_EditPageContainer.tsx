@@ -26,6 +26,12 @@ const ServiceIssueIssue_View_Edit = lazy(
 );
 
 export interface ServiceIssueIssue_View_EditPageActions extends ServiceIssueIssue_View_EditActionDefinitions {
+  activateForIssueAction?: () => Promise<void>;
+  addToFavoritesForIssueAction?: () => Promise<void>;
+  closeDebateAction?: () => Promise<void>;
+  closeVoteForIssueAction?: () => Promise<void>;
+  deleteOrArchiveForIssueAction?: () => Promise<void>;
+  removeFromFavoritesForIssueAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -160,6 +166,122 @@ export default function ServiceIssueIssue_View_EditPage(props: ServiceIssueIssue
             </LoadingButton>
           </Grid>
         )}
+        {(actions?.isDeleteOrArchiveHidden
+          ? !actions?.isDeleteOrArchiveHidden(data, editMode)
+          : !data.isIssueNotDeletable) &&
+          actions.deleteOrArchiveForIssueAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_FzSnUHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="delete" />}
+                disabled={!data.isIssueDeletable || editMode}
+                onClick={async () => {
+                  await actions.deleteOrArchiveForIssueAction!();
+                }}
+              >
+                <span>{t('service.Issue.Issue_View_Edit.deleteOrArchive', { defaultValue: 'Delete' })}</span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isActivateHidden ? !actions?.isActivateHidden(data, editMode) : !data.isIssueNotDraft) &&
+          actions.activateForIssueAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_FzSAQHkIEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-open" />}
+                disabled={!data.isIssueDraft || editMode}
+                onClick={async () => {
+                  await actions.activateForIssueAction!();
+                }}
+              >
+                <span>{t('service.Issue.Issue_View_Edit.activate', { defaultValue: 'Activate' })}</span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseVoteHidden ? !actions?.isCloseVoteHidden(data, editMode) : !data.isVoteNotClosable) &&
+          actions.closeVoteForIssueAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_pXWdEHkFEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="lock-check" />}
+                disabled={!data.isVoteClosable || editMode}
+                onClick={async () => {
+                  await actions.closeVoteForIssueAction!();
+                }}
+              >
+                <span>{t('service.Issue.Issue_View_Edit.closeVote', { defaultValue: 'Close Vote' })}</span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isCloseDebateHidden ? !actions?.isCloseDebateHidden(data, editMode) : !data.isIssueNotActive) &&
+          actions.closeDebateAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_8M4nYHj_Ee6cB8og8p0UuQ)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="vote" />}
+                disabled={!data.isIssueActive || editMode}
+                onClick={async () => {
+                  await actions.closeDebateAction!();
+                }}
+              >
+                <span>
+                  {t('service.Issue.Issue_View_Edit.closeDebate', { defaultValue: 'Close debate and start vote' })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isRemoveFromFavoritesHidden
+          ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
+          : !data.isNotFavorite) &&
+          actions.removeFromFavoritesForIssueAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_knZE4FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-minus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.removeFromFavoritesForIssueAction!();
+                }}
+              >
+                <span>
+                  {t('service.Issue.Issue_View_Edit.removeFromFavorites', { defaultValue: 'Remove from favorites' })}
+                </span>
+              </LoadingButton>
+            </Grid>
+          )}
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isFavorite) &&
+          actions.addToFavoritesForIssueAction && (
+            <Grid className="page-action" item>
+              <LoadingButton
+                id="User/(esm/_knYd0FxEEe6ma86ynyYZNw)/OperationFormVisualElement"
+                loading={isLoading}
+                loadingPosition="start"
+                variant={undefined}
+                startIcon={<MdiIcon path="star-plus" />}
+                disabled={editMode}
+                onClick={async () => {
+                  await actions.addToFavoritesForIssueAction!();
+                }}
+              >
+                <span>{t('service.Issue.Issue_View_Edit.addToFavorites', { defaultValue: 'Add to favorites' })}</span>
+              </LoadingButton>
+            </Grid>
+          )}
         <div>{/* Placeholder */}</div>
       </PageHeader>
       <Suspense>
