@@ -63,6 +63,7 @@ export * from './ServiceUserManager';
 export * from './ServiceUserProfile';
 export * from './ServiceUserVoteDefinition';
 export * from './ServiceVoteDefinition';
+export * from './ServiceVoteDefinitionReference';
 export * from './ServiceVoteEntry';
 export * from './ServiceYesNoAbstainVoteDefinition';
 export * from './ServiceYesNoAbstainVoteEntry';

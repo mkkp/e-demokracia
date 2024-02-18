@@ -48,6 +48,7 @@ import type { ServiceUserManagerService } from '../data-service';
 import type { ServiceUserProfileService } from '../data-service';
 import type { ServiceUserVoteDefinitionService } from '../data-service';
 import type { ServiceVoteDefinitionService } from '../data-service';
+import type { ServiceVoteDefinitionReferenceService } from '../data-service';
 import type { ServiceVoteEntryService } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionService } from '../data-service';
 import type { ServiceYesNoAbstainVoteEntryService } from '../data-service';
@@ -63,13 +64,17 @@ import type { UserServiceForAdminVoteEntries } from '../data-service';
 import type { UserServiceForDashboardHome } from '../data-service';
 import type { UserServiceForIssues } from '../data-service';
 import type { UserServiceForRatingVoteDefinitions } from '../data-service';
+import type { UserServiceForRatingVoteEntries } from '../data-service';
 import type { UserServiceForSelectAnswerVoteDefinitions } from '../data-service';
+import type { UserServiceForSelectAnswerVoteEntries } from '../data-service';
 import type { UserServiceForUserIssues } from '../data-service';
 import type { UserServiceForUserProfile } from '../data-service';
 import type { UserServiceForUserVoteDefinitions } from '../data-service';
 import type { UserServiceForVoteEntries } from '../data-service';
 import type { UserServiceForYesNoAbstainVoteDefinitions } from '../data-service';
+import type { UserServiceForYesNoAbstainVoteEntries } from '../data-service';
 import type { UserServiceForYesNoVoteDefinitions } from '../data-service';
+import type { UserServiceForYesNoVoteEntries } from '../data-service';
 import type { ServiceCityServiceForDistricts } from '../data-service';
 import type { ServiceCommentServiceForCreatedBy } from '../data-service';
 import type { ServiceCommentServiceForVotes } from '../data-service';
@@ -153,6 +158,7 @@ import type { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResident
 import type { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitions } from '../data-service';
 import type { ServiceVoteDefinitionServiceForIssue } from '../data-service';
 import type { ServiceVoteEntryServiceForVoteDefinition } from '../data-service';
+import type { ServiceVoteEntryServiceForVoteDefinitionReference } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForIssue } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForOwner } from '../data-service';
 import type { ServiceYesNoAbstainVoteDefinitionServiceForUserVoteEntry } from '../data-service';
@@ -284,9 +290,11 @@ import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentCount
 import { ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentDistrictImpl } from './ServiceUserVoteDefinitionServiceForActiveVoteDefinitionsInResidentDistrictImpl';
 import { ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl } from './ServiceUserVoteDefinitionServiceForOwnedVoteDefinitionsImpl';
 import { ServiceUserVoteDefinitionServiceImpl } from './ServiceUserVoteDefinitionServiceImpl';
+import { ServiceVoteDefinitionReferenceServiceImpl } from './ServiceVoteDefinitionReferenceServiceImpl';
 import { ServiceVoteDefinitionServiceForIssueImpl } from './ServiceVoteDefinitionServiceForIssueImpl';
 import { ServiceVoteDefinitionServiceImpl } from './ServiceVoteDefinitionServiceImpl';
 import { ServiceVoteEntryServiceForVoteDefinitionImpl } from './ServiceVoteEntryServiceForVoteDefinitionImpl';
+import { ServiceVoteEntryServiceForVoteDefinitionReferenceImpl } from './ServiceVoteEntryServiceForVoteDefinitionReferenceImpl';
 import { ServiceVoteEntryServiceImpl } from './ServiceVoteEntryServiceImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl';
 import { ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl } from './ServiceYesNoAbstainVoteDefinitionServiceForOwnerImpl';
@@ -312,13 +320,17 @@ import { UserServiceForAdminVoteEntriesImpl } from './UserServiceForAdminVoteEnt
 import { UserServiceForDashboardHomeImpl } from './UserServiceForDashboardHomeImpl';
 import { UserServiceForIssuesImpl } from './UserServiceForIssuesImpl';
 import { UserServiceForRatingVoteDefinitionsImpl } from './UserServiceForRatingVoteDefinitionsImpl';
+import { UserServiceForRatingVoteEntriesImpl } from './UserServiceForRatingVoteEntriesImpl';
 import { UserServiceForSelectAnswerVoteDefinitionsImpl } from './UserServiceForSelectAnswerVoteDefinitionsImpl';
+import { UserServiceForSelectAnswerVoteEntriesImpl } from './UserServiceForSelectAnswerVoteEntriesImpl';
 import { UserServiceForUserIssuesImpl } from './UserServiceForUserIssuesImpl';
 import { UserServiceForUserProfileImpl } from './UserServiceForUserProfileImpl';
 import { UserServiceForUserVoteDefinitionsImpl } from './UserServiceForUserVoteDefinitionsImpl';
 import { UserServiceForVoteEntriesImpl } from './UserServiceForVoteEntriesImpl';
 import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from './UserServiceForYesNoAbstainVoteDefinitionsImpl';
+import { UserServiceForYesNoAbstainVoteEntriesImpl } from './UserServiceForYesNoAbstainVoteEntriesImpl';
 import { UserServiceForYesNoVoteDefinitionsImpl } from './UserServiceForYesNoVoteDefinitionsImpl';
+import { UserServiceForYesNoVoteEntriesImpl } from './UserServiceForYesNoVoteEntriesImpl';
 import { VoteDefinitionServiceImpl } from './VoteDefinitionServiceImpl';
 import { YesNoAbstainVoteInputServiceImpl } from './YesNoAbstainVoteInputServiceImpl';
 import { YesNoVoteInputServiceImpl } from './YesNoVoteInputServiceImpl';
@@ -401,6 +413,8 @@ export const serviceUserVoteDefinitionServiceImpl: ServiceUserVoteDefinitionServ
 export const serviceVoteDefinitionServiceImpl: ServiceVoteDefinitionService = new ServiceVoteDefinitionServiceImpl(
   judoAxiosProvider,
 );
+export const serviceVoteDefinitionReferenceServiceImpl: ServiceVoteDefinitionReferenceService =
+  new ServiceVoteDefinitionReferenceServiceImpl(judoAxiosProvider);
 export const serviceVoteEntryServiceImpl: ServiceVoteEntryService = new ServiceVoteEntryServiceImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceImpl: ServiceYesNoAbstainVoteDefinitionService =
   new ServiceYesNoAbstainVoteDefinitionServiceImpl(judoAxiosProvider);
@@ -435,8 +449,12 @@ export const userServiceForDashboardHomeImpl: UserServiceForDashboardHome = new 
 export const userServiceForIssuesImpl: UserServiceForIssues = new UserServiceForIssuesImpl(judoAxiosProvider);
 export const userServiceForRatingVoteDefinitionsImpl: UserServiceForRatingVoteDefinitions =
   new UserServiceForRatingVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForRatingVoteEntriesImpl: UserServiceForRatingVoteEntries =
+  new UserServiceForRatingVoteEntriesImpl(judoAxiosProvider);
 export const userServiceForSelectAnswerVoteDefinitionsImpl: UserServiceForSelectAnswerVoteDefinitions =
   new UserServiceForSelectAnswerVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForSelectAnswerVoteEntriesImpl: UserServiceForSelectAnswerVoteEntries =
+  new UserServiceForSelectAnswerVoteEntriesImpl(judoAxiosProvider);
 export const userServiceForUserIssuesImpl: UserServiceForUserIssues = new UserServiceForUserIssuesImpl(
   judoAxiosProvider,
 );
@@ -450,8 +468,12 @@ export const userServiceForVoteEntriesImpl: UserServiceForVoteEntries = new User
 );
 export const userServiceForYesNoAbstainVoteDefinitionsImpl: UserServiceForYesNoAbstainVoteDefinitions =
   new UserServiceForYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForYesNoAbstainVoteEntriesImpl: UserServiceForYesNoAbstainVoteEntries =
+  new UserServiceForYesNoAbstainVoteEntriesImpl(judoAxiosProvider);
 export const userServiceForYesNoVoteDefinitionsImpl: UserServiceForYesNoVoteDefinitions =
   new UserServiceForYesNoVoteDefinitionsImpl(judoAxiosProvider);
+export const userServiceForYesNoVoteEntriesImpl: UserServiceForYesNoVoteEntries =
+  new UserServiceForYesNoVoteEntriesImpl(judoAxiosProvider);
 export const serviceCityServiceForDistrictsImpl: ServiceCityServiceForDistricts =
   new ServiceCityServiceForDistrictsImpl(judoAxiosProvider);
 export const serviceCommentServiceForCreatedByImpl: ServiceCommentServiceForCreatedBy =
@@ -637,6 +659,8 @@ export const serviceVoteDefinitionServiceForIssueImpl: ServiceVoteDefinitionServ
   new ServiceVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
 export const serviceVoteEntryServiceForVoteDefinitionImpl: ServiceVoteEntryServiceForVoteDefinition =
   new ServiceVoteEntryServiceForVoteDefinitionImpl(judoAxiosProvider);
+export const serviceVoteEntryServiceForVoteDefinitionReferenceImpl: ServiceVoteEntryServiceForVoteDefinitionReference =
+  new ServiceVoteEntryServiceForVoteDefinitionReferenceImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForIssueImpl: ServiceYesNoAbstainVoteDefinitionServiceForIssue =
   new ServiceYesNoAbstainVoteDefinitionServiceForIssueImpl(judoAxiosProvider);
 export const serviceYesNoAbstainVoteDefinitionServiceForOwnerImpl: ServiceYesNoAbstainVoteDefinitionServiceForOwner =

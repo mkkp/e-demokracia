@@ -26,6 +26,12 @@ export interface ServiceYesNoAbstainVoteEntryService {
     queryCustomizer?: ServiceYesNoAbstainVoteEntryQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
+  update(
+    target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
+  validateUpdate(
+    target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+  ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
   getOwner(
     target: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

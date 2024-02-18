@@ -14,6 +14,9 @@ import type {
   SelectAnswerVoteSelectionStored,
   ServiceVoteDefinition,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionReference,
+  ServiceVoteDefinitionReferenceQueryCustomizer,
+  ServiceVoteDefinitionReferenceStored,
   ServiceVoteDefinitionStored,
   ServiceVoteEntry,
   ServiceVoteEntryQueryCustomizer,
@@ -189,5 +192,38 @@ export class ServiceVoteEntryServiceImpl extends JudoAxiosService implements Ser
   async getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<JudoRestResponse<YesNoAbstainVoteInput>> {
     const path = '/YesNoAbstainVoteInput/~template';
     return this.axios.get(this.getPathForActor(path));
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getVoteDefinitionReference(
+    target: JudoIdentifiable<ServiceVoteEntry>,
+    queryCustomizer?: ServiceVoteDefinitionReferenceQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionReferenceStored>> {
+    const path = '/service/VoteEntry/voteDefinitionReference/~get';
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        ...(headers ?? {}),
+      },
+    });
+  }
+
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
+   */
+  async getRangeForVoteDefinitionReference(
+    owner?: JudoIdentifiable<ServiceVoteEntry> | ServiceVoteEntry,
+    queryCustomizer?: ServiceVoteDefinitionReferenceQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceVoteDefinitionReferenceStored>>> {
+    const path = '/service/VoteEntry/voteDefinitionReference/~range';
+    return this.axios.post(
+      this.getPathForActor(path),
+      { owner: owner ?? {}, queryCustomizer: queryCustomizer ?? {} },
+      headers ? { headers } : undefined,
+    );
   }
 }

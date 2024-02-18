@@ -247,7 +247,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
           )}
         {(actions?.isRemoveFromFavoritesHidden
           ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
-          : !data.isFavorite) &&
+          : !data.isNotFavorite) &&
           actions.removeFromFavoritesForRatingVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton
@@ -269,7 +269,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
               </LoadingButton>
             </Grid>
           )}
-        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isFavorite) &&
           actions.addToFavoritesForRatingVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton

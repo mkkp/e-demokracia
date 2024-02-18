@@ -19,6 +19,7 @@ export interface ServiceServicePrincipalUserQueryCustomizer extends QueryCustomi
   email?: Array<FilterBytypesEmail>;
   firstName?: Array<FilterBytypesString>;
   isAdmin?: Array<FilterBytypesBoolean>;
+  isNotAdmin?: Array<FilterBytypesBoolean>;
   lastName?: Array<FilterBytypesString>;
   phone?: Array<FilterBytypesPhone>;
   userName?: Array<FilterBytypesString>;

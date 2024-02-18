@@ -42,6 +42,31 @@ export class ServiceYesNoVoteEntryServiceImpl extends JudoAxiosService implement
   }
 
   /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async update(target: Partial<ServiceYesNoVoteEntryStored>): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> {
+    const path = '/service/YesNoVoteEntry/~update';
+    return this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+      },
+    });
+  }
+  /**
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async validateUpdate(
+    target: Partial<ServiceYesNoVoteEntryStored>,
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> {
+    const path = '/service/YesNoVoteEntry/~validate';
+    return this.axios.post(this.getPathForActor(path), target, {
+      headers: {
+        [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 401, 403.
    */
   async getOwner(

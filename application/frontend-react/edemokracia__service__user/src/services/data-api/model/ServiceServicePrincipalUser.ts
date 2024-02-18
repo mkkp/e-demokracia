@@ -13,6 +13,7 @@ export interface ServiceServicePrincipalUser {
   email: string;
   firstName: string;
   isAdmin: boolean;
+  isNotAdmin?: null | boolean;
   lastName: string;
   phone?: null | string;
   userName: string;
@@ -23,6 +24,7 @@ export type ServiceServicePrincipalUserAttributes =
   | 'email'
   | 'firstName'
   | 'isAdmin'
+  | 'isNotAdmin'
   | 'lastName'
   | 'phone'
   | 'userName';

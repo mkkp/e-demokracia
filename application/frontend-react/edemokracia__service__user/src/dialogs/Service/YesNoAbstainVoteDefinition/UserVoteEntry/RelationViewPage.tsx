@@ -214,7 +214,7 @@ export default function ServiceYesNoAbstainVoteDefinitionUserVoteEntryRelationVi
     [data, editMode],
   );
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
   const isFormDeleteable = useCallback(() => {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;

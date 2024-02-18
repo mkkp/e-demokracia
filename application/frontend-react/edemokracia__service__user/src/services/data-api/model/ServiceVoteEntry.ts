@@ -9,6 +9,8 @@
 import type { JudoStored } from '../common';
 import { ServiceVoteDefinition } from './ServiceVoteDefinition';
 import { ServiceVoteDefinitionStored } from './ServiceVoteDefinition';
+import { ServiceVoteDefinitionReference } from './ServiceVoteDefinitionReference';
+import { ServiceVoteDefinitionReferenceStored } from './ServiceVoteDefinitionReference';
 import { VoteStatus } from './VoteStatus';
 
 export interface ServiceVoteEntry {
@@ -18,9 +20,10 @@ export interface ServiceVoteEntry {
   voteStatus?: null | VoteStatus;
   voteTitle?: null | string;
   voteDefinition?: null | ServiceVoteDefinitionStored;
+  voteDefinitionReference?: null | ServiceVoteDefinitionReferenceStored;
 }
 
 export type ServiceVoteEntryAttributes = 'created' | 'issueTitle' | 'userName' | 'voteStatus' | 'voteTitle';
-export type ServiceVoteEntryRelations = 'voteDefinition';
+export type ServiceVoteEntryRelations = 'voteDefinition' | 'voteDefinitionReference';
 
 export interface ServiceVoteEntryStored extends JudoStored<ServiceVoteEntry>, ServiceVoteEntry {}

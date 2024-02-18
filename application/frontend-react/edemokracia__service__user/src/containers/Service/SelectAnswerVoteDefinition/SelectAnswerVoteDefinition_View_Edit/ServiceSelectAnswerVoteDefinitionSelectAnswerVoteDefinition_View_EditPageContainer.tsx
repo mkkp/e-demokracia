@@ -247,7 +247,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
           )}
         {(actions?.isRemoveFromFavoritesHidden
           ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
-          : !data.isFavorite) &&
+          : !data.isNotFavorite) &&
           actions.removeFromFavoritesForSelectAnswerVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton
@@ -269,7 +269,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               </LoadingButton>
             </Grid>
           )}
-        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isFavorite) &&
           actions.addToFavoritesForSelectAnswerVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton

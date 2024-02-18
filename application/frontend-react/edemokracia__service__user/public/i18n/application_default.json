@@ -1055,6 +1055,8 @@
         "service.VoteDefinition.VoteDefinition_View_Edit.voteYesNoAbstain": "Take a vote",
         "service.VoteDefinition.VoteDefinition_View_Edit.yesnoabstainvote": "Yes / No / Abstain vote",
         "service.VoteDefinition.VoteDefinition_View_Edit.yesnovote": "Yes / No vote",
+        "service.VoteDefinitionReference.VoteDefinitionReference_Table": "VoteDefinitionReference Table",
+        "service.VoteDefinitionReference.VoteDefinitionReference_Table.VoteDefinitionReference_Table": "No columns.",
         "service.VoteEntry.VoteEntry_Table": "VoteEntry Table",
         "service.VoteEntry.VoteEntry_Table.VoteEntry_Table": "VoteEntry Table",
         "service.VoteEntry.VoteEntry_Table.created": "Created",

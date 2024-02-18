@@ -14,6 +14,9 @@ import {
   SelectAnswerVoteSelectionStored,
   ServiceVoteDefinition,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionReference,
+  ServiceVoteDefinitionReferenceQueryCustomizer,
+  ServiceVoteDefinitionReferenceStored,
   ServiceVoteDefinitionStored,
   ServiceVoteEntry,
   ServiceVoteEntryQueryCustomizer,
@@ -68,4 +71,14 @@ export interface ServiceVoteEntryService {
     target: YesNoAbstainVoteInput,
   ): Promise<JudoRestResponse<void>>;
   getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<JudoRestResponse<YesNoAbstainVoteInput>>;
+  getVoteDefinitionReference(
+    target: JudoIdentifiable<ServiceVoteEntry>,
+    queryCustomizer?: ServiceVoteDefinitionReferenceQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionReferenceStored>>;
+  getRangeForVoteDefinitionReference(
+    owner?: JudoIdentifiable<ServiceVoteEntry> | ServiceVoteEntry,
+    queryCustomizer?: ServiceVoteDefinitionReferenceQueryCustomizer,
+    headers?: Record<string, string>,
+  ): Promise<JudoRestResponse<Array<ServiceVoteDefinitionReferenceStored>>>;
 }

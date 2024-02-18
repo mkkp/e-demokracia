@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20240209_183709_12ddf9a0_develop">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia">
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="service">
     <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="User" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
@@ -20,6 +20,10 @@
       <accesses xmi:id="_NDSZcFvYEe6bTb-1BwQgmA" upper="1" target="_1QeIsFvQEe6jm_SkPSYEYw" name="userProfile" appliedAnnotations="_7D81X2kNEe25ONJ3V89cVA" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_mGqscFvaEe6bTb-1BwQgmA" upper="1" target="_dGHIYFvOEe6jm_SkPSYEYw" name="adminUserManager" updateable="true" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_mNnPsF5QEe6vsex_cZNQbQ" upper="1" target="_gTUgsF4-Ee6vsex_cZNQbQ" name="userVoteDefinitions" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
+      <accesses xmi:id="_TGoLMM6zEe6ddqBfFzCBZg" target="_mtEPcFtpEe6Mx9dH3yj5gQ" name="selectAnswerVoteEntries" updateable="true"/>
+      <accesses xmi:id="_qiL2sM6zEe6ddqBfFzCBZg" target="_L2sFsFsjEe6Mx9dH3yj5gQ" name="yesNoAbstainVoteEntries" updateable="true"/>
+      <accesses xmi:id="_4bqvAM6zEe6ddqBfFzCBZg" target="_LNXIoFoiEe6_67aMO2jOsw" name="yesNoVoteEntries" updateable="true"/>
+      <accesses xmi:id="_8Ip-IM6zEe6ddqBfFzCBZg" target="_J1G9kFslEe6Mx9dH3yj5gQ" name="ratingVoteEntries"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_GgcgQIyPEe2VSOmaAz6G9Q" name="dashboardMenu" label="Dashboard" iconName="home" access="_GgaEAIyPEe2VSOmaAz6G9Q"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_vW3EUG4rEe2siJt-xjHAyw" name="AdminCategories_Menu" label="Categories" iconName="file-tree" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_vWzZ8G4rEe2siJt-xjHAyw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_8Do7MIXgEe2kLcMqsIbMgQ" name="AdminCountiesMenu" label="Counties" iconName="castle" menuGroup="_oIKpIId-Ee2kLcMqsIbMgQ" access="_8DntEIXgEe2kLcMqsIbMgQ"/>
@@ -32,14 +36,18 @@
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_zCyjYFoTEe6_67aMO2jOsw" name="TechnicalYesNoVoteDefinitionsMenu" label="Vote Definitions - Yes / No" iconName="checkbox-outline" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_zCZh0FoTEe6_67aMO2jOsw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_jgEZEFuXEe6T042_LMmSdQ" name="TechnicalSelectAnswerVoteDefinitionMenu" label="Vote Definitions - Select Answer" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_jf3kwFuXEe6T042_LMmSdQ"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_mNq6EF5QEe6vsex_cZNQbQ" name="UserVoteDefinitionMenu" label="Votes" iconName="vote" access="_mNnPsF5QEe6vsex_cZNQbQ"/>
-      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_gYSocFuaEe6T042_LMmSdQ" name="AdministrativeMenuGroup" label="Administrative functions" menuItems="_oIKpIId-Ee2kLcMqsIbMgQ _mGvk8FvaEe6bTb-1BwQgmA _iuDUYId_Ee2kLcMqsIbMgQ _l9dMQJEaEe29qs15q2b6yw _X0Z8AFu_Ee6HqbmdGwnUzw"/>
-      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="__GjiAFuZEe6T042_LMmSdQ" name="TechicalAccessesMenuGroup" hidden="true" hiddenBy="_tom8IGkwEe25ONJ3V89cVA" menuItems="_0CXbYORyEe2Bgcx6em3jZg _zCyjYFoTEe6_67aMO2jOsw _jgEZEFuXEe6T042_LMmSdQ _9lIR4FuhEe6rLvwZQOpyUA _s3IOEFuiEe6rLvwZQOpyUA __hGdQFvLEe6jm_SkPSYEYw _NDbjYFvYEe6bTb-1BwQgmA"/>
+      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="_gYSocFuaEe6T042_LMmSdQ" name="AdministrativeMenuGroup" label="Administrative functions" hiddenBy="_wD59YM60Ee6ddqBfFzCBZg" menuItems="_oIKpIId-Ee2kLcMqsIbMgQ _mGvk8FvaEe6bTb-1BwQgmA _iuDUYId_Ee2kLcMqsIbMgQ _l9dMQJEaEe29qs15q2b6yw _X0Z8AFu_Ee6HqbmdGwnUzw"/>
+      <menuItems xsi:type="ui:MenuItemGroup" xmi:id="__GjiAFuZEe6T042_LMmSdQ" name="TechicalAccessesMenuGroup" hidden="true" menuItems="_0CXbYORyEe2Bgcx6em3jZg _zCyjYFoTEe6_67aMO2jOsw _jgEZEFuXEe6T042_LMmSdQ _9lIR4FuhEe6rLvwZQOpyUA _s3IOEFuiEe6rLvwZQOpyUA __hGdQFvLEe6jm_SkPSYEYw _NDbjYFvYEe6bTb-1BwQgmA _THH6cM6zEe6ddqBfFzCBZg _qik4QM6zEe6ddqBfFzCBZg _4btyUM6zEe6ddqBfFzCBZg _8Iu2oM6zEe6ddqBfFzCBZg"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_9lIR4FuhEe6rLvwZQOpyUA" name="TechnicalYesNoAbstainVoteDefinitionMenu" label="Vote Definitions - Yes No Abstain" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_9lF1oFuhEe6rLvwZQOpyUA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_s3IOEFuiEe6rLvwZQOpyUA" name="TechnicalRatingVoteDefinitionMenu" label="Vote Definitions - Rating" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_s3Fx0FuiEe6rLvwZQOpyUA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_X0Z8AFu_Ee6HqbmdGwnUzw" name="AdminVoteEntriesMenu" label="Vote Entries" iconName="vote-outline" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_X0RZIFu_Ee6HqbmdGwnUzw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="__hGdQFvLEe6jm_SkPSYEYw" name="TechnicalActiveIssuesMenu" label="Issues - Active" iconName="wechat" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="__g_vkFvLEe6jm_SkPSYEYw"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_NDbjYFvYEe6bTb-1BwQgmA" name="Menu" label="UserProfile" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_NDSZcFvYEe6bTb-1BwQgmA"/>
       <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_mGvk8FvaEe6bTb-1BwQgmA" name="AdminUserManagerMenu" label="Users" iconName="account" menuGroup="_gYSocFuaEe6T042_LMmSdQ" access="_mGqscFvaEe6bTb-1BwQgmA"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_THH6cM6zEe6ddqBfFzCBZg" name="TechnicalSelectAnswerVoteEntries" label="SelectAnswerVoteEntries" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_TGoLMM6zEe6ddqBfFzCBZg"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_qik4QM6zEe6ddqBfFzCBZg" name="TechnicalYesNoAbstainVoteEntries" label="YesNoAbstainVoteEntries" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_qiL2sM6zEe6ddqBfFzCBZg"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_4btyUM6zEe6ddqBfFzCBZg" name="TechnicalYesNoVoteEntries" label="YesNoVoteEntries" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_4bqvAM6zEe6ddqBfFzCBZg"/>
+      <menuItems xsi:type="ui:MenuItemAccess" xmi:id="_8Iu2oM6zEe6ddqBfFzCBZg" name="TechnicalRatingVoteEntries" label="RatingVoteEntries" hidden="true" menuGroup="__GjiAFuZEe6T042_LMmSdQ" access="_8Ip-IM6zEe6ddqBfFzCBZg"/>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_ndA8kGkwEe25ONJ3V89cVA" name="ServicePrincipalUser" actorType="_jUnLgGkqEe25ONJ3V89cVA">
       <attributes xsi:type="structure:DataMember" xmi:id="_TzJu8H8GEe2kLcMqsIbMgQ" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vX4k8G5gEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
@@ -62,6 +70,9 @@
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_toSMAGkwEe25ONJ3V89cVA" name="created" dataType="_7D8NyWkNEe25ONJ3V89cVA" defaultExpression="" binding="_7XNHAGkYEe25ONJ3V89cVA" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_toUoQGkwEe25ONJ3V89cVA"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_wD59YM60Ee6ddqBfFzCBZg" name="isNotAdmin" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="not self.isAdmin&#xA;" memberType="DERIVED">
+        <inherited xmi:id="_wD7ykM60Ee6ddqBfFzCBZg"/>
       </attributes>
       <mapping xmi:id="_rus0MGkwEe25ONJ3V89cVA" target="_BuSFMGkWEe25ONJ3V89cVA"/>
       <form xmi:id="_ndHDMGkwEe25ONJ3V89cVA" name="ServicePrincipalUser_Form" label="ServicePrincipalUser Form" iconName="account" layout="VERTICAL"/>
@@ -1190,8 +1201,8 @@
         <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBnsAEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" hiddenBy="_laXjMHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
         <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBXsAEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" hiddenBy="_lbuOEHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="activate"/>
         <components xsi:type="ui:OperationForm" xmi:id="_Vd5qBHsAEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" hiddenBy="_lYbpgHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qA3sAEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_lXOIkHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qAnsAEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_lZsNwHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qA3sAEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_lZsNwHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_Vd5qAnsAEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_lXOIkHr_Ee6bP4FWw7fjQA" actionContainer="_-dfLEH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-b_9Un4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition">
@@ -1338,8 +1349,8 @@
         <components xsi:type="ui:OperationForm" xmi:id="_JTH2l3r9Ee6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" hiddenBy="_yBFBgHr-Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
         <components xsi:type="ui:OperationForm" xmi:id="_JTH2lnr9Ee6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" hiddenBy="_nBGKEHr3Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="activate"/>
         <components xsi:type="ui:OperationForm" xmi:id="_JTH2lXr9Ee6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_JTH2k3r9Ee6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_x0l6IHr9Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_JTH2knr9Ee6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_x1FpYHr9Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2k3r9Ee6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_x1FpYHr9Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_JTH2knr9Ee6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_x0l6IHr9Ee6bP4FWw7fjQA" actionContainer="_-cGrAH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_p8pkkWksEe25ONJ3V89cVA" name="SimpleVote">
@@ -1621,6 +1632,9 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_5M0NYOR6Ee20cv3f2msZXg" upper="1" target="_-f-eY34XEe2cB7_PsKXsHQ" name="voteDefinition" targetDefinedCRUD="true" defaultExpression="" rangeExpression="" memberType="DERIVED" getterExpression="self.voteDefinition">
         <inherited xmi:id="_5M1bgOR6Ee20cv3f2msZXg"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_1kCz4M6uEe6ddqBfFzCBZg" upper="1" target="_y8FvoM6tEe6ddqBfFzCBZg" name="voteDefinitionReference" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self.voteDefinition">
+        <inherited xmi:id="_1kT5oM6uEe6ddqBfFzCBZg"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_eL6L0OR6Ee20cv3f2msZXg" name="created" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_1F3Js26HEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_eL92MOR6Ee20cv3f2msZXg"/>
       </attributes>
@@ -1784,8 +1798,8 @@
         <components xsi:type="ui:OperationForm" xmi:id="_9jf_BnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" hiddenBy="_yMzT4Hr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
         <components xsi:type="ui:OperationForm" xmi:id="_9jf_BXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" hiddenBy="_yOHigHr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="activate"/>
         <components xsi:type="ui:OperationForm" xmi:id="_9jf_BHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" hiddenBy="_yK-H4Hr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_9jf_A3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_yJ3UoHr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_9jf_AnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_yMLo0Hr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_A3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_yMLo0Hr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_9jf_AnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_yJ3UoHr_Ee6bP4FWw7fjQA" actionContainer="_-awAIH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-Ze00H4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition">
@@ -1925,8 +1939,8 @@
         <components xsi:type="ui:OperationForm" xmi:id="_uXiyNnsCEe6bP4FWw7fjQA" name="deleteOrArchive" label="Delete" iconName="delete" hiddenBy="_sCtJIHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="deleteOrArchive"/>
         <components xsi:type="ui:OperationForm" xmi:id="_uXiyNXsCEe6bP4FWw7fjQA" name="activate" label="Activate" iconName="lock-open" hiddenBy="_sD5b8Hr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="activate"/>
         <components xsi:type="ui:OperationForm" xmi:id="_uXiyNHsCEe6bP4FWw7fjQA" name="closeVote" label="Close Vote" iconName="lock-check" hiddenBy="_sBAgAHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="closeVote"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_uXiyM3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_r_9-MHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
-        <components xsi:type="ui:OperationForm" xmi:id="_uXiyMnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_sCH6UHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyM3sCEe6bP4FWw7fjQA" name="removeFromFavorites" label="Remove from favorites" iconName="star-minus" col="2" hiddenBy="_sCH6UHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="removeFromFavorites"/>
+        <components xsi:type="ui:OperationForm" xmi:id="_uXiyMnsCEe6bP4FWw7fjQA" name="addToFavorites" label="Add to favorites" iconName="star-plus" col="2" hiddenBy="_r_9-MHr_Ee6bP4FWw7fjQA" actionContainer="_-ZmwoH4XEe2cB7_PsKXsHQ" operation="addToFavorites"/>
       </view>
     </elements>
     <elements xsi:type="structure:TransferObjectType" xmi:id="_MgYf0FV5Ee6uPON95HTfyQ" name="ProParent">
@@ -2441,6 +2455,12 @@
           </components>
         </components>
       </view>
+    </elements>
+    <elements xsi:type="structure:TransferObjectType" xmi:id="_y8FvoM6tEe6ddqBfFzCBZg" name="VoteDefinitionReference">
+      <mapping xmi:id="_txv8QM6uEe6ddqBfFzCBZg" target="_0n43QG5mEe2wNaja8kBvcQ"/>
+      <form xmi:id="_y8NEYM6tEe6ddqBfFzCBZg" name="VoteDefinitionReference_Form" label="VoteDefinitionReference Form" layout="VERTICAL"/>
+      <table xmi:id="_y8PgoM6tEe6ddqBfFzCBZg" name="VoteDefinitionReference_Table" label="VoteDefinitionReference Table"/>
+      <view xmi:id="_y8KBEM6tEe6ddqBfFzCBZg" name="VoteDefinitionReference_View_Edit" label="VoteDefinitionReference View / Edit" layout="VERTICAL"/>
     </elements>
   </elements>
   <elements xsi:type="namespace:Package" xmi:id="_7D8Nz2kNEe25ONJ3V89cVA" name="measures">

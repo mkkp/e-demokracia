@@ -14,7 +14,9 @@ import {
   ServiceIssueStored,
   ServiceIssueTypeStored,
   ServiceRatingVoteDefinitionStored,
+  ServiceRatingVoteEntryStored,
   ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntryStored,
   ServiceServicePrincipalUserStored,
   ServiceUserIssuesStored,
   ServiceUserManagerStored,
@@ -23,7 +25,9 @@ import {
   ServiceVoteDefinitionStored,
   ServiceVoteEntryStored,
   ServiceYesNoAbstainVoteDefinitionStored,
+  ServiceYesNoAbstainVoteEntryStored,
   ServiceYesNoVoteDefinitionStored,
+  ServiceYesNoVoteEntryStored,
 } from '../data-api';
 import type { JudoDownloadFile, JudoMetaData } from '../data-api/common';
 
@@ -50,17 +54,27 @@ export interface AccessService {
     identifier: string,
     mask?: string,
   ): Promise<ServiceRatingVoteDefinitionStored | undefined>;
+  findInstanceOfRatingVoteEntries(identifier: string, mask?: string): Promise<ServiceRatingVoteEntryStored | undefined>;
   findInstanceOfSelectAnswerVoteDefinitions(
     identifier: string,
     mask?: string,
   ): Promise<ServiceSelectAnswerVoteDefinitionStored | undefined>;
+  findInstanceOfSelectAnswerVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceSelectAnswerVoteEntryStored | undefined>;
   findInstanceOfVoteEntries(identifier: string, mask?: string): Promise<ServiceVoteEntryStored | undefined>;
   findInstanceOfYesNoAbstainVoteDefinitions(
     identifier: string,
     mask?: string,
   ): Promise<ServiceYesNoAbstainVoteDefinitionStored | undefined>;
+  findInstanceOfYesNoAbstainVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceYesNoAbstainVoteEntryStored | undefined>;
   findInstanceOfYesNoVoteDefinitions(
     identifier: string,
     mask?: string,
   ): Promise<ServiceYesNoVoteDefinitionStored | undefined>;
+  findInstanceOfYesNoVoteEntries(identifier: string, mask?: string): Promise<ServiceYesNoVoteEntryStored | undefined>;
 }

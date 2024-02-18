@@ -290,7 +290,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           )}
         {(actions?.isRemoveFromFavoritesHidden
           ? !actions?.isRemoveFromFavoritesHidden(data, editMode)
-          : !data.isFavorite) &&
+          : !data.isNotFavorite) &&
           actions.removeFromFavoritesForYesNoAbstainVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton
@@ -312,7 +312,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
               </LoadingButton>
             </Grid>
           )}
-        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isNotFavorite) &&
+        {(actions?.isAddToFavoritesHidden ? !actions?.isAddToFavoritesHidden(data, editMode) : !data.isFavorite) &&
           actions.addToFavoritesForYesNoAbstainVoteDefinitionAction && (
             <Grid className="page-action" item>
               <LoadingButton

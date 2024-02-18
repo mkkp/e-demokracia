@@ -15,7 +15,9 @@ import {
   ServiceIssueStored,
   ServiceIssueTypeStored,
   ServiceRatingVoteDefinitionStored,
+  ServiceRatingVoteEntryStored,
   ServiceSelectAnswerVoteDefinitionStored,
+  ServiceSelectAnswerVoteEntryStored,
   ServiceServicePrincipalUserStored,
   ServiceUserIssuesStored,
   ServiceUserManagerStored,
@@ -24,7 +26,9 @@ import {
   ServiceVoteDefinitionStored,
   ServiceVoteEntryStored,
   ServiceYesNoAbstainVoteDefinitionStored,
+  ServiceYesNoAbstainVoteEntryStored,
   ServiceYesNoVoteDefinitionStored,
+  ServiceYesNoVoteEntryStored,
 } from '../data-api';
 import type { JudoDownloadFile, JudoMetaData, JudoToken } from '../data-api/common';
 import type { AccessService } from '../data-service';
@@ -266,6 +270,30 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
     }
   }
   /**
+   * @return {Promise<ServiceRatingVoteEntryStored | undefined>}
+   */
+  async findInstanceOfRatingVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceRatingVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/ratingVoteEntries/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
    * @return {Promise<ServiceSelectAnswerVoteDefinitionStored | undefined>}
    */
   async findInstanceOfSelectAnswerVoteDefinitions(
@@ -274,6 +302,30 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
   ): Promise<ServiceSelectAnswerVoteDefinitionStored | undefined> {
     try {
       const path = '/service/User/selectAnswerVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceSelectAnswerVoteEntryStored | undefined>}
+   */
+  async findInstanceOfSelectAnswerVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceSelectAnswerVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/selectAnswerVoteEntries/~list';
       const response = await this.axios.post(this.getPathForActor(path), {
         _identifier: identifier,
         _mask: mask,
@@ -335,6 +387,30 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
     }
   }
   /**
+   * @return {Promise<ServiceYesNoAbstainVoteEntryStored | undefined>}
+   */
+  async findInstanceOfYesNoAbstainVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceYesNoAbstainVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/yesNoAbstainVoteEntries/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
    * @return {Promise<ServiceYesNoVoteDefinitionStored | undefined>}
    */
   async findInstanceOfYesNoVoteDefinitions(
@@ -343,6 +419,30 @@ export class AccessServiceImpl extends JudoAxiosService implements AccessService
   ): Promise<ServiceYesNoVoteDefinitionStored | undefined> {
     try {
       const path = '/service/User/yesNoVoteDefinitions/~list';
+      const response = await this.axios.post(this.getPathForActor(path), {
+        _identifier: identifier,
+        _mask: mask,
+        _seek: {
+          limit: 1,
+        },
+      });
+      if (Array.isArray(response.data) && response.data.length === 1) {
+        return response.data[0];
+      }
+      return undefined;
+    } catch (error) {
+      return undefined;
+    }
+  }
+  /**
+   * @return {Promise<ServiceYesNoVoteEntryStored | undefined>}
+   */
+  async findInstanceOfYesNoVoteEntries(
+    identifier: string,
+    mask?: string,
+  ): Promise<ServiceYesNoVoteEntryStored | undefined> {
+    try {
+      const path = '/service/User/yesNoVoteEntries/~list';
       const response = await this.axios.post(this.getPathForActor(path), {
         _identifier: identifier,
         _mask: mask,

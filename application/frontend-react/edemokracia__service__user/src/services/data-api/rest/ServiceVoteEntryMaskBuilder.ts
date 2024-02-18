@@ -7,10 +7,17 @@
 // Template file: rest/mask.ts.hbs
 
 import { ServiceVoteDefinitionAttributes, ServiceVoteEntryAttributes } from '../model';
-import { MaskBuilder } from './MaskBuilder';
+import { MaskBuilder, RelationMaskBuilder } from './MaskBuilder';
+import {} from './ServiceVoteDefinitionReferenceMaskBuilder';
+
+export class ServiceVoteEntryVoteDefinitionReferenceMaskBuilder extends RelationMaskBuilder {
+  constructor(protected props: Array<any>) {
+    super('voteDefinitionReference', props);
+  }
+}
 
 export class ServiceVoteEntryMaskBuilder extends MaskBuilder {
-  constructor(protected props: Array<ServiceVoteEntryAttributes>) {
+  constructor(protected props: Array<ServiceVoteEntryAttributes | ServiceVoteEntryVoteDefinitionReferenceMaskBuilder>) {
     super(props);
   }
 }

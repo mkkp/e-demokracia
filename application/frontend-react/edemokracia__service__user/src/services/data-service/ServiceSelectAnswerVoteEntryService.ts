@@ -29,6 +29,12 @@ export interface ServiceSelectAnswerVoteEntryService {
     queryCustomizer?: ServiceSelectAnswerVoteEntryQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
+  update(
+    target: Partial<ServiceSelectAnswerVoteEntryStored>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
+  validateUpdate(
+    target: Partial<ServiceSelectAnswerVoteEntryStored>,
+  ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   getOwner(
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

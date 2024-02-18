@@ -16,6 +16,9 @@ import type {
   ServiceDashboard,
   ServiceVoteDefinition,
   ServiceVoteDefinitionQueryCustomizer,
+  ServiceVoteDefinitionReference,
+  ServiceVoteDefinitionReferenceQueryCustomizer,
+  ServiceVoteDefinitionReferenceStored,
   ServiceVoteDefinitionStored,
   ServiceVoteEntry,
   ServiceVoteEntryQueryCustomizer,
@@ -206,5 +209,17 @@ export class ServiceDashboardServiceForUserVoteEntriesImpl
   async getTemplateOnVoteYesNoAbstainForVoteDefinition(): Promise<JudoRestResponse<YesNoAbstainVoteInput>> {
     const path = '/YesNoAbstainVoteInput/~template';
     return this.axios.get(this.getPathForActor(path));
+  }
+
+  async getVoteDefinitionReference(
+    owner: JudoIdentifiable<ServiceVoteEntry>,
+    queryCustomizer?: ServiceVoteDefinitionReferenceQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionReferenceStored>> {
+    const path = '/service/VoteEntry/voteDefinitionReference/~get';
+    return this.axios.post(this.getPathForActor(path), queryCustomizer ?? {}, {
+      headers: {
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+      },
+    });
   }
 }
