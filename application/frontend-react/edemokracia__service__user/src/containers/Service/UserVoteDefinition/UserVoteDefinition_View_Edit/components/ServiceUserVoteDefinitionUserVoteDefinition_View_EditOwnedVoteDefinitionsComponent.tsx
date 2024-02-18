@@ -43,7 +43,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -128,6 +128,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -143,7 +144,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -269,7 +270,10 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const createdColumn: GridColDef<ServiceVoteDefinitionStored> = {
@@ -364,10 +368,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
     () => [
       {
         id: 'User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceTableRowRemoveButton',
-        label: t(
-          'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Remove',
-          { defaultValue: 'Remove' },
-        ) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceVoteDefinitionStored) =>
@@ -489,6 +490,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceVoteDefinitionQueryCustomizer) => {
@@ -744,6 +746,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -766,10 +769,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -789,10 +789,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.ownedVoteDefinitionsOpenAddSelectorAction && isFormUpdateable() ? (
@@ -811,10 +808,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.ownedVoteDefinitionsBulkRemoveAction && selectionModel.length > 0 ? (
@@ -838,10 +832,7 @@ export function ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDe
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

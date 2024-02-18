@@ -35,7 +35,7 @@ export const Header = () => {
   const mainHeader: ReactNode = (
     <Toolbar>
       {!isHorizontal ? (
-        <IconButton aria-label="open drawer" onClick={() => onChangeMiniDrawer(!miniDrawer)}>
+        <IconButton aria-label="open drawer" color="secondary" onClick={() => onChangeMiniDrawer(!miniDrawer)}>
           {!miniDrawer ? <MdiIcon path="menu-open" /> : <MdiIcon path="menu" />}
         </IconButton>
       ) : null}

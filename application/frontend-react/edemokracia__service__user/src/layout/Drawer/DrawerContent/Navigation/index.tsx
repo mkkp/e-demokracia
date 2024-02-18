@@ -18,6 +18,7 @@ import { ServiceServicePrincipalUserStored } from '~/services/data-api';
 import { NavGroup } from './NavGroup';
 import { NavItem } from './NavItem';
 import { NavItemType } from './NavItem';
+import { ScrollableMenu } from './ScrollableMenu';
 import { menus } from './menu-items';
 
 export const Navigation = () => {
@@ -77,9 +78,11 @@ export const Navigation = () => {
         pt: !miniDrawer ? (isHorizontal ? 0 : 2) : 0,
         '& > ul:first-of-type': { mt: 0 },
         display: isHorizontal ? { xs: 'block', lg: 'flex' } : 'block',
+        width: isHorizontal ? { xs: undefined, lg: '100%' } : undefined,
+        justifyContent: isHorizontal ? 'center' : undefined,
       }}
     >
-      {navGroups}
+      {isHorizontal ? <ScrollableMenu>{navGroups}</ScrollableMenu> : navGroups}
     </Box>
   );
 };

@@ -21,7 +21,7 @@ import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon, SimpleBar } from '~/components';
-import { MenuOrientation, ThemeMode } from '~/config';
+import { MenuOrientation, SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
 import { useConfig } from '~/hooks';
 import { Transitions } from '../../../Transitions';
 import { NavCollapse } from './NavCollapse';
@@ -36,7 +36,7 @@ type VirtualElement = {
 const PopperStyled = styled(Popper)(({ theme }) => ({
   overflow: 'visible',
   zIndex: 1202,
-  minWidth: 180,
+  minWidth: SUBMENU_MIN_WIDTH,
   '&:before': {
     content: '""',
     display: 'block',
@@ -77,8 +77,6 @@ export const NavGroup = ({ item }: NavGroupProps) => {
     <MdiIcon
       path={item?.icon!}
       sx={{
-        fontSize: 20,
-        stroke: '1.5',
         color: theme.palette.primary.main,
       }}
     />
@@ -124,12 +122,14 @@ export const NavGroup = ({ item }: NavGroupProps) => {
           {items}
         </List>
       ) : (
-        <List>
+        <List sx={{ p: 0 }}>
           <ListItemButton
             sx={{
-              p: 1,
-              my: 0.5,
+              py: 0,
+              px: 1,
+              my: 0,
               mr: 1,
+              height: '100%',
               display: 'flex',
               alignItems: 'center',
               backgroundColor: 'inherit',

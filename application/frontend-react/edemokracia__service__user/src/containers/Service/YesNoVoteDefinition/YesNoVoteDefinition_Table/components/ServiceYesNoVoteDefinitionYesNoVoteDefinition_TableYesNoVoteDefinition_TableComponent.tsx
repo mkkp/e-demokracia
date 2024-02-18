@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -119,6 +119,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -134,7 +135,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -265,7 +266,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
     () => [
       {
         id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowRemoveButton',
-        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceYesNoVoteDefinitionStored) => getSelectedRows().length > 0 || isLoading,
@@ -277,7 +278,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
       },
       {
         id: 'User/(esm/_-Zy94H4XEe2cB7_PsKXsHQ)/TransferObjectTableRowDeleteButton',
-        label: t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceYesNoVoteDefinitionStored) =>
@@ -426,6 +427,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceYesNoVoteDefinitionQueryCustomizer) => {
@@ -630,6 +632,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -652,9 +655,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Table.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -672,9 +673,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Table.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.exportAction && true ? (
@@ -692,7 +691,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Export', { defaultValue: 'Export' })}
+                  {t('judo.action.export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
               {actions.openAddSelectorAction && true ? (
@@ -709,7 +708,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Add', { defaultValue: 'Add' })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.openSetSelectorAction && true ? (
@@ -726,7 +725,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Set', { defaultValue: 'Set' })}
+                  {t('judo.action.open-set-selector', { defaultValue: 'Set' })}
                 </Button>
               ) : null}
               {actions.clearAction && data.length ? (
@@ -744,7 +743,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.Clear', { defaultValue: 'Clear' })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.bulkRemoveAction && selectionModel.length > 0 ? (
@@ -764,7 +763,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.bulkDeleteAction && selectionModel.length > 0 ? (
@@ -784,7 +783,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_TableYesNoVoteDefi
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_Table.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

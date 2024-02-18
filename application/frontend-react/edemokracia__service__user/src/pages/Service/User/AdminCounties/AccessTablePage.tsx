@@ -114,7 +114,7 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
   ): Promise<DialogResult<Array<ServiceCountyStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceCountyStored>({
-        dialogTitle: t('service.County.County_Table.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.name!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -144,7 +144,7 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const openCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
@@ -212,7 +212,7 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
     getPageTitle,
     backAction,
     bulkDeleteAction,
-    openFormAction,
+    openCreateFormAction,
     deleteAction,
     filterAction,
     refreshAction,

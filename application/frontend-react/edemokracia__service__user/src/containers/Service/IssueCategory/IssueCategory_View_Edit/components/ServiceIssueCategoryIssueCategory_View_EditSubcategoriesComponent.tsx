@@ -61,7 +61,7 @@ export interface ServiceIssueCategoryIssueCategory_View_EditSubcategoriesCompone
   subcategoriesBulkRemoveAction?: (
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
-  subcategoriesOpenFormAction?: () => Promise<void>;
+  subcategoriesOpenCreateFormAction?: () => Promise<void>;
   subcategoriesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -117,6 +117,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -130,7 +131,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -186,9 +187,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
     () => [
       {
         id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Remove', {
-          defaultValue: 'Remove',
-        }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceIssueCategoryStored) => isLoading,
@@ -200,9 +199,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
       },
       {
         id: 'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-        label: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Delete', {
-          defaultValue: 'Delete',
-        }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceIssueCategoryStored) =>
@@ -268,6 +265,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -434,9 +432,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -454,12 +450,10 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.subcategoriesOpenFormAction && true ? (
+              {actions.subcategoriesOpenCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -469,11 +463,11 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getSubcategoriesMask ? actions.getSubcategoriesMask() : queryCustomizer._mask,
                     };
-                    await actions.subcategoriesOpenFormAction!();
+                    await actions.subcategoriesOpenCreateFormAction!();
                   }}
                   disabled={false}
                 >
-                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.subcategoriesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -493,9 +487,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.subcategoriesBulkDeleteAction && selectionModel.length > 0 ? (
@@ -515,9 +507,7 @@ export function ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponen
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkDelete', {
-                    defaultValue: 'Delete',
-                  })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

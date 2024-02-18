@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -118,6 +118,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -133,7 +134,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -278,6 +279,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceYesNoVoteEntryQueryCustomizer) => {
@@ -469,6 +471,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -491,9 +494,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.entries.voteEntries.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -511,9 +512,7 @@ export function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditVoteEntri
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.entries.voteEntries.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

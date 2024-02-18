@@ -85,12 +85,13 @@ export default function ServiceConParentConParent_TableDialog(props: ServiceConP
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.ConParent.ConParent_Table.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

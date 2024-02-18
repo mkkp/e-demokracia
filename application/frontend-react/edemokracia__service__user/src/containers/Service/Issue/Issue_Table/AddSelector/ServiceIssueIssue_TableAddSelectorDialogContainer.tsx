@@ -103,12 +103,13 @@ export default function ServiceIssueIssue_TableAddSelectorDialog(props: ServiceI
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.Issue.Issue_Table.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -125,7 +126,7 @@ export default function ServiceIssueIssue_TableAddSelectorDialog(props: ServiceI
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>{t('service.Issue.Issue_Table.Add', { defaultValue: 'Add' })}</span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

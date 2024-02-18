@@ -11,11 +11,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -145,9 +147,9 @@ export default function ServiceIssueTypeIssueType_Form(props: ServiceIssueTypeIs
           spacing={2}
         >
           <Grid item data-name="group" xs={12} sm={12}>
-            <Card id="User/(esm/_19au8NvDEe2Bgcx6em3jZg)/GroupVisualElement" data-name="group">
+            <Card id="User/(esm/_19au8NvDEe2Bgcx6em3jZg)/GroupVisualElement" data-name="group" sx={{ height: '100%' }}>
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
                       required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}

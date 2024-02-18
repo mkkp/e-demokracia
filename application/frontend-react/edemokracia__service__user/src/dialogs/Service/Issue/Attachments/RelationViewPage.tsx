@@ -269,7 +269,7 @@ export default function ServiceIssueAttachmentsRelationViewPage(props: ServiceIs
       if (confirmed) {
         await serviceIssueServiceForAttachmentsImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);

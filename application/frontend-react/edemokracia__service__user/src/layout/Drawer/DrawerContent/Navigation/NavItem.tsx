@@ -122,7 +122,7 @@ export const NavItem = ({ item, level }: NavItemProps) => {
             {(!miniDrawer || (miniDrawer && level !== 1)) && (
               <ListItemText
                 primary={
-                  <Typography variant="h6" sx={{ color: textColor }}>
+                  <Typography variant="h6" sx={{ color: textColor }} noWrap>
                     {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                   </Typography>
                 }
@@ -135,9 +135,11 @@ export const NavItem = ({ item, level }: NavItemProps) => {
           component={LinkComponent}
           disabled={item.disabled}
           sx={{
+            py: 0.5,
+            px: 2,
             zIndex: 1201,
             '&:hover': {
-              bgcolor: 'transparent',
+              bgcolor: 'grey:300',
             },
           }}
         >
@@ -170,7 +172,7 @@ export const NavItem = ({ item, level }: NavItemProps) => {
           )}
           <ListItemText
             primary={
-              <Typography variant="h6" color="inherit">
+              <Typography variant="h6" color="inherit" noWrap>
                 {t(`menuTree.${item.title}`, { defaultValue: item.title })}
               </Typography>
             }

@@ -108,17 +108,13 @@ export default function ServiceUserProfileUserProfile_View_EditAreasActivityTab_
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -135,12 +131,7 @@ export default function ServiceUserProfileUserProfile_View_EditAreasActivityTab_
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>
-                {t(
-                  'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Add',
-                  { defaultValue: 'Add' },
-                )}
-              </span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

@@ -142,12 +142,13 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('RatingVoteInput.RatingVoteInput_Form.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -165,6 +166,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
                 loading={isLoading}
                 loadingPosition="start"
                 variant={'contained'}
+                disabled={isLoading}
                 startIcon={isDraft ? <MdiIcon path="check" /> : <MdiIcon path="content-save" />}
                 onClick={async () => {
                   await actions.createAction!();
@@ -173,7 +175,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
                 <span>
                   {isDraft
                     ? t('judo.dialogs.draft.submit', { defaultValue: 'Ok' })
-                    : t('RatingVoteInput.RatingVoteInput_Form.Create', { defaultValue: 'Create' })}
+                    : t('judo.action.create', { defaultValue: 'Create' })}
                 </span>
               </LoadingButton>
               {!isDraft && (
@@ -229,6 +231,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
                 await actions.voteRatingForVoteDefinitionAction!();
@@ -250,6 +253,7 @@ export default function RatingVoteInputRatingVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
                 await actions.voteForRatingVoteDefinitionAction!();

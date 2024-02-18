@@ -243,6 +243,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -263,6 +264,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -283,6 +285,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -303,6 +306,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -323,6 +327,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -343,6 +348,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -363,6 +369,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -383,6 +390,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -403,6 +411,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -423,6 +432,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -443,6 +453,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -463,6 +474,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -483,6 +495,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -503,6 +516,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -523,6 +537,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -543,6 +558,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -651,6 +667,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -671,6 +688,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -691,6 +709,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -711,6 +730,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -731,6 +751,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -751,6 +772,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -771,6 +793,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -791,6 +814,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -811,6 +835,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -831,6 +856,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -851,6 +877,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -871,6 +898,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -891,6 +919,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -911,6 +940,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -931,6 +961,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -951,6 +982,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1235,6 +1267,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1255,6 +1288,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1275,6 +1309,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1295,6 +1330,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1315,6 +1351,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1335,6 +1372,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1355,6 +1393,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1375,6 +1414,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1659,9 +1699,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t('service.UserIssues.UserIssues_View_Edit.root.tabBar.ownedIssuesGroup.ownedIssues.BulkRemove', {
-          defaultValue: 'Remove',
-        }),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {

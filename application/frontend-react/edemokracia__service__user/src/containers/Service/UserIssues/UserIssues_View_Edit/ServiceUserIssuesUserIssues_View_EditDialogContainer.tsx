@@ -129,12 +129,13 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.UserIssues.UserIssues_View_Edit.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -145,12 +146,13 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>{t('service.UserIssues.UserIssues_View_Edit.Refresh', { defaultValue: 'Refresh' })}</span>
+              <span>{t('judo.action.refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -161,12 +163,13 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="delete_forever" />}
               onClick={async () => {
                 actions.deleteAction!();
               }}
             >
-              <span>{t('service.UserIssues.UserIssues_View_Edit.Delete', { defaultValue: 'Delete' })}</span>
+              <span>{t('judo.action.delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -177,12 +180,13 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
             >
-              <span>{t('service.UserIssues.UserIssues_View_Edit.Cancel', { defaultValue: 'Cancel' })}</span>
+              <span>{t('judo.action.cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -193,12 +197,13 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
                 await actions.updateAction!();
               }}
             >
-              <span>{t('service.UserIssues.UserIssues_View_Edit.Update', { defaultValue: 'Save' })}</span>
+              <span>{t('judo.action.update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -209,6 +214,7 @@ export default function ServiceUserIssuesUserIssues_View_EditDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={undefined}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="wechat" />}
               onClick={async () => {
                 await actions.createIssueAction!();

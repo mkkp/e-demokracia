@@ -28,6 +28,6 @@ const customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook: Se
       activeVoteDefinitionsInResidentDistrictOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsInActivityCitiesOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsInActivityCountiesOpenPageAction: openVoteDefinitionPage(),
-      activeVoteDefinitionsInActivityDistictsOpenPageAction: openVoteDefinitionPage(),
+      activeVoteDefinitionsInActivityDistrictsOpenPageAction: openVoteDefinitionPage(),
     };
   };

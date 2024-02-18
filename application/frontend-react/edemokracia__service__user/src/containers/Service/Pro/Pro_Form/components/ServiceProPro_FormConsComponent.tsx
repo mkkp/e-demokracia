@@ -120,6 +120,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -134,7 +135,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -224,7 +225,10 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const downVotesColumn: GridColDef<ServiceConStored> = {
@@ -237,7 +241,10 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
 
@@ -250,7 +257,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
     () => [
       {
         id: 'User/(esm/_eKoPEIfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-        label: t('service.Pro.Pro_Form.cons.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
@@ -358,6 +365,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -546,7 +554,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro_Form.cons.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -564,7 +572,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Pro.Pro_Form.cons.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.consBulkDeleteAction && selectionModel.length > 0 ? (
@@ -584,7 +592,7 @@ export function ServiceProPro_FormConsComponent(props: ServiceProPro_FormConsCom
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Pro.Pro_Form.cons.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

@@ -54,12 +54,12 @@ export default function ServiceCommentComment_TablePage(props: ServiceCommentCom
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
-              disabled={editMode}
+              disabled={isLoading}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.Comment.Comment_Table.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

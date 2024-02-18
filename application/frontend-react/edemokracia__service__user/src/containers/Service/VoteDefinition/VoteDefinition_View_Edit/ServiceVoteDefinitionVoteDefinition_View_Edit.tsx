@@ -11,11 +11,13 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -168,9 +170,9 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
           spacing={2}
         >
           <Grid item data-name="group" xs={12} sm={12}>
-            <Card id="User/(esm/_3IYooI4kEe29qs15q2b6yw)/GroupVisualElement" data-name="group">
+            <Card id="User/(esm/_3IYooI4kEe29qs15q2b6yw)/GroupVisualElement" data-name="group" sx={{ height: '100%' }}>
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                   <Grid item xs={12} sm={12}>
                     <TextField
                       required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
@@ -324,7 +326,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
                       refreshCounter={refreshCounter}
                       fetchCall={actions.issuePreFetchAction}
                     >
-                      {t('service.VoteDefinition.VoteDefinition_View_Edit.issue', { defaultValue: 'Issue' })}
+                      {t('judo.action.open-page', { defaultValue: 'Issue' })}
                       <MdiIcon path="arrow-right" />
                     </AssociationButton>
                   </Grid>

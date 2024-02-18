@@ -107,6 +107,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -121,7 +122,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -166,7 +167,10 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const downVotesColumn: GridColDef<ServiceConStored> = {
@@ -179,7 +183,10 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
 
@@ -192,7 +199,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
     () => [
       {
         id: 'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceTableRowDeleteButton',
-        label: t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceConStored) => getSelectedRows().length > 0 || editMode || !row.__deleteable || isLoading,
@@ -300,6 +307,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -467,7 +475,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -485,7 +493,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.consBulkDeleteAction && selectionModel.length > 0 ? (
@@ -505,7 +513,7 @@ export function ServiceConCon_View_EditConsComponent(props: ServiceConCon_View_E
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.Con.Con_View_Edit.Arguments.cons.table.cons.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

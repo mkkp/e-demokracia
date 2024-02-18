@@ -193,10 +193,10 @@ export const AggregationInput = ({
                       {loading ? (
                         <CircularProgress color="inherit" size="1rem" className="AggregationInputLoading" />
                       ) : null}
-                      {onSet && !exists(value) && (
+                      {onSet && !exists(value) && !readOnly && (
                         <IconButton
                           className={`${name}-set`}
-                          disabled={disabled || readOnly}
+                          disabled={disabled}
                           onClick={(event: any) => {
                             handleDropdownClose(event);
                             onSet();
@@ -227,10 +227,10 @@ export const AggregationInput = ({
                           <MdiIcon path="eye" />
                         </IconButton>
                       )}
-                      {!exists(value) && onCreate && (
+                      {!exists(value) && onCreate && !readOnly && (
                         <IconButton
                           className={`${name}-create`}
-                          disabled={disabled || readOnly || (editMode && !isInlineCreatable)}
+                          disabled={disabled || (editMode && !isInlineCreatable)}
                           onClick={(event: any) => {
                             handleDropdownClose(event);
                             onCreate();
@@ -240,7 +240,7 @@ export const AggregationInput = ({
                           <MdiIcon path="file_document_plus" />
                         </IconButton>
                       )}
-                      {exists(value) && (onEdit || onDelete || onRemove || onSet || onUnset) && !readOnly && (
+                      {exists(value) && (onEdit || onDelete || onRemove || onSet || onUnset) && (
                         <IconButton className={`${name}-dropdown`} disabled={disabled} onClick={handleDropdownToggle}>
                           <MdiIcon path="chevron-down" />
                         </IconButton>
@@ -278,10 +278,10 @@ export const AggregationInput = ({
             <Paper>
               <ClickAwayListener onClickAway={handleDropdownClose}>
                 <MenuList id={`${name}-menu`} autoFocusItem>
-                  {exists(value) && onSet && (
+                  {exists(value) && onSet && !readOnly && (
                     <MenuItem
                       className={`${name}-set`}
-                      disabled={disabled || readOnly}
+                      disabled={disabled}
                       onClick={(event: any) => {
                         handleDropdownClose(event);
                         onSet();
@@ -321,7 +321,7 @@ export const AggregationInput = ({
                       {t('judo.component.AggregationInput.delete', { defaultValue: 'Delete' }) as string}
                     </MenuItem>
                   )}
-                  {exists(value) && onRemove && (
+                  {exists(value) && onRemove && !readOnly && (
                     <MenuItem
                       className={`${name}-remove`}
                       disabled={disabled}
@@ -334,7 +334,7 @@ export const AggregationInput = ({
                       {t('judo.component.AggregationInput.remove', { defaultValue: 'Remove' }) as string}
                     </MenuItem>
                   )}
-                  {exists(value) && onUnset && (
+                  {exists(value) && onUnset && !readOnly && (
                     <MenuItem
                       className={`${name}-unset`}
                       disabled={disabled}

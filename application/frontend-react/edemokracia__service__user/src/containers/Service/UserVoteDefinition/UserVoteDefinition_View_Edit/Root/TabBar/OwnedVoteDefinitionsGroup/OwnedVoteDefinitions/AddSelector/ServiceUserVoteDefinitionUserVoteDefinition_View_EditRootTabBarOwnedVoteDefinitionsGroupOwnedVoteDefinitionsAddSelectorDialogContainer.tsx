@@ -113,17 +113,13 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditRoo
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -140,12 +136,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_EditRoo
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>
-                {t(
-                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.root.tabBar.OwnedVoteDefinitionsGroup.ownedVoteDefinitions.Add',
-                  { defaultValue: 'Add' },
-                )}
-              </span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

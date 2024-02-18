@@ -11,8 +11,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -41,6 +43,7 @@ export type ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteV
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions
   extends ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationVoteSelectAnswerCallOperationSelectorComponentActionDefinitions {
   getPageTitle?: () => string;
+  voteSelectAnswerForVoteDefinitionAction?: () => Promise<void>;
 }
 
 export interface ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationProps {
@@ -84,7 +87,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
           data-name="voteSelectAnswer"
         >
           <CardContent>
-            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="column" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Grid
                   id="User/(esm/_T6Ar0I4jEe29qs15q2b6yw)/OperationFormMappedInputCallOperationSelectorTable"

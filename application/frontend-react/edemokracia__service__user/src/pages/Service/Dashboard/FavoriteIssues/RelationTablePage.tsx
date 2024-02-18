@@ -167,7 +167,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
   ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t('service.Issue.Issue_Table.BulkRemove', { defaultValue: 'Remove' }),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -268,6 +268,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -286,6 +287,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -315,6 +317,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -333,6 +336,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -384,6 +388,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {

@@ -297,10 +297,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceSelectAnswerVoteSelectionStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceSelectAnswerVoteSelectionStored>({
-        dialogTitle: t(
-          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
-          { defaultValue: 'Delete' },
-        ),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.description!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -332,7 +329,10 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
       });
     });
   };
-  const voteSelectionsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const voteSelectionsOpenCreateFormAction = async (
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } =
       await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
@@ -414,6 +414,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -434,6 +435,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -454,6 +456,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -474,6 +477,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -525,6 +529,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -556,6 +561,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -644,7 +650,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     ownerUnsetAction,
     ownerOpenPageAction,
     voteSelectionsBulkDeleteAction,
-    voteSelectionsOpenFormAction,
+    voteSelectionsOpenCreateFormAction,
     voteSelectionsFilterAction,
     voteSelectionsDeleteAction,
     voteSelectionsOpenPageAction,

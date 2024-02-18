@@ -408,12 +408,10 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueInputFor
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        if (result) {
-          onClose();
-          navigate(routeToServiceUserIssuesUserIssues_View_EditCreateIssueOutputView(result.__signedIdentifier));
-        } else {
-          onSubmit();
-        }
+
+        onSubmit(result);
+
+        navigate(routeToServiceUserIssuesUserIssues_View_EditCreateIssueOutputView(result.__signedIdentifier));
       }
     } catch (error) {
       handleError<ServiceCreateIssueInput>(error, { setValidation }, data);

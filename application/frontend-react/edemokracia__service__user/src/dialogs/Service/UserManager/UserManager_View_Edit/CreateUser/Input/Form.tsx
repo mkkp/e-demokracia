@@ -258,12 +258,10 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserInputFo
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        if (result) {
-          onClose();
-          await openServiceUserManagerUserManager_View_EditCreateUserOutputView(result);
-        } else {
-          onSubmit();
-        }
+
+        onSubmit(result);
+
+        await openServiceUserManagerUserManager_View_EditCreateUserOutputView(null, result);
       }
     } catch (error) {
       handleError<ServiceCreateUserInput>(error, { setValidation }, data);

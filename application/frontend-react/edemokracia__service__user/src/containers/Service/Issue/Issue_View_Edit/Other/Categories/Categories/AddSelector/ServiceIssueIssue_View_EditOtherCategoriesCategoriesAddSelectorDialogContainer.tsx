@@ -112,14 +112,13 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddS
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.Issue.Issue_View_Edit.other.categories.categories.Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -136,7 +135,7 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddS
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>{t('service.Issue.Issue_View_Edit.other.categories.categories.Add', { defaultValue: 'Add' })}</span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

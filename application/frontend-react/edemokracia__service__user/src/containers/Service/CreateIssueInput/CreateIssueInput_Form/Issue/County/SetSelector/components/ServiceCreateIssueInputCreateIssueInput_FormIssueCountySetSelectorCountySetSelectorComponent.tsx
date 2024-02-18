@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
@@ -51,7 +51,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelectorCountySetSelectorComponentActionDefinitions {
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -100,6 +100,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -114,7 +115,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -213,6 +214,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceCountyQueryCustomizer) => {
@@ -406,6 +408,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -428,9 +431,7 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Form.issue.county.Table.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -447,12 +448,10 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Form.issue.county.Table.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_TXj-IdvXEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -461,13 +460,11 @@ export function ServiceCreateIssueInputCreateIssueInput_FormIssueCountySetSelect
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Form.issue.county.Table.Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

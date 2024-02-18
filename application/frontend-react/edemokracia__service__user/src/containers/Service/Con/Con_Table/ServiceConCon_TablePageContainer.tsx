@@ -52,12 +52,12 @@ export default function ServiceConCon_TablePage(props: ServiceConCon_TablePagePr
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
-              disabled={editMode}
+              disabled={isLoading}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.Con.Con_Table.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

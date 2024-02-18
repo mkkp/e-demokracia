@@ -277,7 +277,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationV
       if (confirmed) {
         await serviceSelectAnswerVoteDefinitionServiceForVoteSelectionsImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);

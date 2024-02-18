@@ -23,7 +23,7 @@ import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { MdiIcon, SimpleBar } from '~/components';
-import { MenuOrientation, ThemeMode } from '~/config';
+import { MenuOrientation, SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
 import { useConfig } from '~/hooks';
 import { Transitions } from '../../../Transitions';
 import { NavItem } from './NavItem';
@@ -37,7 +37,7 @@ type VirtualElement = {
 const PopperStyled = styled(Popper)(({ theme }) => ({
   overflow: 'visible',
   zIndex: 1202,
-  minWidth: 180,
+  minWidth: SUBMENU_MIN_WIDTH,
   '&:before': {
     content: '""',
     display: 'block',

@@ -95,12 +95,13 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_TableDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Table.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

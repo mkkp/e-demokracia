@@ -82,12 +82,12 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
-              disabled={editMode}
+              disabled={isLoading || editMode}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.District.District_View_Edit.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -99,12 +99,12 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="refresh" />}
-              disabled={editMode}
+              disabled={isLoading || editMode}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>{t('service.District.District_View_Edit.Refresh', { defaultValue: 'Refresh' })}</span>
+              <span>{t('judo.action.refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -116,12 +116,12 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="delete_forever" />}
-              disabled={editMode}
+              disabled={isLoading || editMode}
               onClick={async () => {
                 actions.deleteAction!();
               }}
             >
-              <span>{t('service.District.District_View_Edit.Delete', { defaultValue: 'Delete' })}</span>
+              <span>{t('judo.action.delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -133,12 +133,12 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="cancel" />}
-              disabled={editMode}
+              disabled={isLoading}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
             >
-              <span>{t('service.District.District_View_Edit.Cancel', { defaultValue: 'Cancel' })}</span>
+              <span>{t('judo.action.cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -150,12 +150,12 @@ export default function ServiceDistrictDistrict_View_EditPage(props: ServiceDist
               loadingPosition="start"
               variant={'contained'}
               startIcon={<MdiIcon path="content-save" />}
-              disabled={editMode}
+              disabled={isLoading}
               onClick={async () => {
                 await actions.updateAction!();
               }}
             >
-              <span>{t('service.District.District_View_Edit.Update', { defaultValue: 'Save' })}</span>
+              <span>{t('judo.action.update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}

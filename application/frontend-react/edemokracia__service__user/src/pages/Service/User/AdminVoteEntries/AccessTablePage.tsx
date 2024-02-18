@@ -123,7 +123,7 @@ export default function ServiceUserAdminVoteEntriesAccessTablePage() {
   ): Promise<DialogResult<Array<ServiceVoteEntryStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceVoteEntryStored>({
-        dialogTitle: t('service.VoteEntry.VoteEntry_Table.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.userName!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {

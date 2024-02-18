@@ -42,7 +42,7 @@ import {
   numericColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -118,6 +118,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -133,7 +134,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -214,7 +215,10 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
 
@@ -276,6 +280,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceRatingVoteEntryQueryCustomizer) => {
@@ -466,6 +471,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -488,9 +494,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.voteEntries.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -508,9 +512,7 @@ export function ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEnt
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.RatingVoteDefinition.RatingVoteDefinition_View_Edit.entries.voteEntries.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

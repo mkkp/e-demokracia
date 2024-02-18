@@ -144,6 +144,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -162,6 +163,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -191,6 +193,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -209,6 +212,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -260,6 +264,7 @@ export default function ServiceUserIssuesActiveIssuesInActivityDistrictsRelation
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {

@@ -95,14 +95,13 @@ export default function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_TableD
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_Table.Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

@@ -26,11 +26,7 @@ export const baseTableConfig: Partial<DataGridProps<any>> = {
   density: density.dataGridDensity || 'standard',
 };
 
-export const serverTableConfig: Partial<DataGridProps<any>> = {
-  ...baseTableConfig,
-  sortingMode: 'server',
-  paginationMode: 'server',
-};
+export const filterDebounceMs = 200;
 
 // Measures used for table column width calculations
 export const characterMultiplier = 10;

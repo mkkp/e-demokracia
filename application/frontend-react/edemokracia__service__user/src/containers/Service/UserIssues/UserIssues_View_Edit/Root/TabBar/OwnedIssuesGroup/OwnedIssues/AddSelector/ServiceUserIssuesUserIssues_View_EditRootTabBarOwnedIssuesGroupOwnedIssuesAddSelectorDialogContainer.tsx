@@ -108,16 +108,13 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.UserIssues.UserIssues_View_Edit.root.tabBar.ownedIssuesGroup.ownedIssues.Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -134,11 +131,7 @@ export default function ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssu
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>
-                {t('service.UserIssues.UserIssues_View_Edit.root.tabBar.ownedIssuesGroup.ownedIssues.Add', {
-                  defaultValue: 'Add',
-                })}
-              </span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

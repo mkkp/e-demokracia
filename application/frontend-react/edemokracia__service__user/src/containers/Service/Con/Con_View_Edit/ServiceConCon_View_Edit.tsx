@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -152,309 +153,298 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="con::LabelWrapper" xs={12} sm={12}>
-            <Card
-              id="(User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="con::LabelWrapper"
-            >
+          <Grid item data-name="con" xs={12} sm={12}>
+            <Card id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/GroupVisualElement" data-name="con" sx={{ height: '100%' }}>
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  sx={{ mb: 2 }}
+                >
+                  <Grid item>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/WrapAndLabelVisualElement)/Label"
+                        id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/GroupVisualElement"
                         variant="h5"
                         component="h1"
                       >
-                        {t('service.Con.Con_View_Edit.con.Label', { defaultValue: 'Contra' })}
+                        {t('service.Con.Con_View_Edit.con', { defaultValue: 'Contra' })}
                       </Typography>
                     </Grid>
                   </Grid>
+                </Grid>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12} md={6.0}>
+                    <TextField
+                      required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
+                      name="title"
+                      id="User/(esm/_3ndKkH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
+                      label={t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string}
+                      value={data.title ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={
+                        actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                      }
+                      error={!!validation.get('title')}
+                      helperText={validation.get('title')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('title', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      inputProps={{
+                        maxLength: 255,
+                      }}
+                    />
+                  </Grid>
 
-                  <Grid item data-name="con" xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/__VtG0G5QEe2Q6M99rsfqSQ)/GroupVisualElement"
-                      data-name="con"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
+                  <Grid item xs={12} sm={12} md={3.0}>
+                    <DateTimePicker
+                      ampm={false}
+                      ampmInClock={false}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      slotProps={{
+                        textField: {
+                          id: 'User/(esm/_3nJokH4bEe2j59SYy0JH0Q)/TimestampTypeDateTimeInput',
+                          required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
+                          helperText: validation.get('created'),
+                          error: !!validation.get('created'),
+                          InputProps: {
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <MdiIcon path="schedule" />
+                              </InputAdornment>
+                            ),
+                          },
+                        },
+                      }}
+                      onError={(newError: DateTimeValidationError, value: any) => {
+                        // https://mui.com/x/react-date-pickers/validation/#show-the-error
+                        setValidation((prevValidation) => {
+                          const copy = new Map<keyof ServiceCon, string>(prevValidation);
+                          copy.set(
+                            'created',
+                            newError === 'invalidDate'
+                              ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
+                                  defaultValue: 'Value does not match the pattern requirements.',
+                                }) as string)
+                              : '',
+                          );
+                          return copy;
+                        });
+                      }}
+                      views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
+                      label={t('service.Con.Con_View_Edit.created', { defaultValue: 'Created' }) as string}
+                      value={serviceDateToUiDate(data.created ?? null)}
+                      readOnly={false || !isFormUpdateable()}
+                      disabled={
+                        actions?.isCreatedDisabled ? actions.isCreatedDisabled(data, editMode, isLoading) : isLoading
+                      }
+                      onChange={(newValue: Date) => {
+                        storeDiff('created', newValue);
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={3.0}>
+                    <ServiceConCon_View_EditCreatedByComponent
+                      disabled={false}
+                      readOnly={true || !isFormUpdateable()}
+                      ownerData={data}
+                      editMode={editMode}
+                      isLoading={isLoading}
+                      isDraft={isDraft}
+                      storeDiff={storeDiff}
+                      validationError={validation.get('createdBy')}
+                      actions={actions}
+                      submit={submit}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12}>
+                    <TextField
+                      required={actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true}
+                      name="description"
+                      id="User/(esm/_3nTZkH4bEe2j59SYy0JH0Q)/StringTypeTextArea"
+                      label={t('service.Con.Con_View_Edit.description', { defaultValue: 'Description' }) as string}
+                      value={data.description ?? ''}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': true,
+                      })}
+                      disabled={
+                        actions?.isDescriptionDisabled
+                          ? actions.isDescriptionDisabled(data, editMode, isLoading)
+                          : isLoading
+                      }
+                      multiline
+                      minRows={4.0}
+                      error={!!validation.get('description')}
+                      helperText={validation.get('description')}
+                      onChange={(event) => {
+                        const realValue = event.target.value?.length === 0 ? null : event.target.value;
+                        storeDiff('description', realValue);
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: false || !isFormUpdateable(),
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MdiIcon path="text_fields" />
+                          </InputAdornment>
+                        ),
+                      }}
+                      inputProps={{
+                        maxLength: 16384,
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <LoadingButton
+                      id="User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormVisualElement"
+                      loading={isLoading}
+                      variant={undefined}
+                      startIcon={<MdiIcon path="thumb-up" />}
+                      loadingPosition="start"
+                      onClick={async () => {
+                        if (actions.voteUpForConAction) {
+                          await actions.voteUpForConAction!();
+                        }
+                      }}
+                      disabled={!actions.voteUpForConAction || editMode}
                     >
-                      <Grid item xs={12} sm={12} md={6.0}>
-                        <TextField
-                          required={actions?.isTitleRequired ? actions.isTitleRequired(data, editMode) : true}
-                          name="title"
-                          id="User/(esm/_3ndKkH4bEe2j59SYy0JH0Q)/StringTypeTextInput"
-                          label={t('service.Con.Con_View_Edit.title', { defaultValue: 'Title' }) as string}
-                          value={data.title ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={
-                            actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
-                          }
-                          error={!!validation.get('title')}
-                          helperText={validation.get('title')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('title', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                          inputProps={{
-                            maxLength: 255,
-                          }}
-                        />
-                      </Grid>
+                      {t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'Vote Up' })}
+                    </LoadingButton>
+                  </Grid>
 
-                      <Grid item xs={12} sm={12} md={3.0}>
-                        <DateTimePicker
-                          ampm={false}
-                          ampmInClock={false}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          slotProps={{
-                            textField: {
-                              id: 'User/(esm/_3nJokH4bEe2j59SYy0JH0Q)/TimestampTypeDateTimeInput',
-                              required: actions?.isCreatedRequired ? actions.isCreatedRequired(data, editMode) : true,
-                              helperText: validation.get('created'),
-                              error: !!validation.get('created'),
-                              InputProps: {
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <MdiIcon path="schedule" />
-                                  </InputAdornment>
-                                ),
-                              },
-                            },
-                          }}
-                          onError={(newError: DateTimeValidationError, value: any) => {
-                            // https://mui.com/x/react-date-pickers/validation/#show-the-error
-                            setValidation((prevValidation) => {
-                              const copy = new Map<keyof ServiceCon, string>(prevValidation);
-                              copy.set(
-                                'created',
-                                newError === 'invalidDate'
-                                  ? (t('judo.error.validation-failed.PATTERN_VALIDATION_FAILED', {
-                                      defaultValue: 'Value does not match the pattern requirements.',
-                                    }) as string)
-                                  : '',
-                              );
-                              return copy;
-                            });
-                          }}
-                          views={['year', 'month', 'day', 'hours', 'minutes', 'seconds']}
-                          label={t('service.Con.Con_View_Edit.created', { defaultValue: 'Created' }) as string}
-                          value={serviceDateToUiDate(data.created ?? null)}
-                          readOnly={false || !isFormUpdateable()}
-                          disabled={
-                            actions?.isCreatedDisabled
-                              ? actions.isCreatedDisabled(data, editMode, isLoading)
-                              : isLoading
-                          }
-                          onChange={(newValue: Date) => {
-                            storeDiff('created', newValue);
-                          }}
-                        />
-                      </Grid>
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <NumericInput
+                      required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
+                      name="upVotes"
+                      id="User/(esm/_Widj0IfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
+                      label={t('service.Con.Con_View_Edit.upVotes', { defaultValue: '' }) as string}
+                      customInput={TextField}
+                      value={data.upVotes ?? ''}
+                      formatValue={true}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': false,
+                      })}
+                      disabled={
+                        actions?.isUpVotesDisabled ? actions.isUpVotesDisabled(data, editMode, isLoading) : isLoading
+                      }
+                      error={!!validation.get('upVotes')}
+                      helperText={validation.get('upVotes')}
+                      onValueChange={(values, sourceInfo) => {
+                        const newValue = values.floatValue === undefined ? null : values.floatValue;
+                        if (data.upVotes !== newValue) {
+                          storeDiff('upVotes', newValue);
+                        }
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: true || !isFormUpdateable(),
+                      }}
+                    />
+                  </Grid>
 
-                      <Grid item xs={12} sm={12} md={3.0}>
-                        <ServiceConCon_View_EditCreatedByComponent
-                          disabled={true}
-                          readOnly={true || !isFormUpdateable()}
-                          ownerData={data}
-                          editMode={editMode}
-                          isLoading={isLoading}
-                          isDraft={isDraft}
-                          storeDiff={storeDiff}
-                          validationError={validation.get('createdBy')}
-                          actions={actions}
-                          submit={submit}
-                        />
-                      </Grid>
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <Grid
+                      container
+                      sx={{ height: DIVIDER_HEIGHT }}
+                      id="User/(esm/_IxEW4IfgEe2u0fVmwtP5bA)/PlaceholderVisualElement"
+                    ></Grid>
+                  </Grid>
 
-                      <Grid item xs={12} sm={12}>
-                        <TextField
-                          required={
-                            actions?.isDescriptionRequired ? actions.isDescriptionRequired(data, editMode) : true
-                          }
-                          name="description"
-                          id="User/(esm/_3nTZkH4bEe2j59SYy0JH0Q)/StringTypeTextArea"
-                          label={t('service.Con.Con_View_Edit.description', { defaultValue: 'Description' }) as string}
-                          value={data.description ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': true,
-                          })}
-                          disabled={
-                            actions?.isDescriptionDisabled
-                              ? actions.isDescriptionDisabled(data, editMode, isLoading)
-                              : isLoading
-                          }
-                          multiline
-                          minRows={4.0}
-                          error={!!validation.get('description')}
-                          helperText={validation.get('description')}
-                          onChange={(event) => {
-                            const realValue = event.target.value?.length === 0 ? null : event.target.value;
-                            storeDiff('description', realValue);
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: false || !isFormUpdateable(),
-                            startAdornment: (
-                              <InputAdornment position="start">
-                                <MdiIcon path="text_fields" />
-                              </InputAdornment>
-                            ),
-                          }}
-                          inputProps={{
-                            maxLength: 16384,
-                          }}
-                        />
-                      </Grid>
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <LoadingButton
+                      id="User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormVisualElement"
+                      loading={isLoading}
+                      variant={undefined}
+                      startIcon={<MdiIcon path="thumb-down" />}
+                      loadingPosition="start"
+                      onClick={async () => {
+                        if (actions.voteDownForConAction) {
+                          await actions.voteDownForConAction!();
+                        }
+                      }}
+                      disabled={!actions.voteDownForConAction || editMode}
+                    >
+                      {t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'Vote Down' })}
+                    </LoadingButton>
+                  </Grid>
 
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <LoadingButton
-                          id="User/(esm/_3sNaYIriEe2VSOmaAz6G9Q)/OperationFormVisualElement"
-                          loading={isLoading}
-                          variant={undefined}
-                          startIcon={<MdiIcon path="thumb-up" />}
-                          loadingPosition="start"
-                          onClick={async () => {
-                            if (actions.voteUpForConAction) {
-                              await actions.voteUpForConAction!();
-                            }
-                          }}
-                          disabled={!actions.voteUpForConAction || editMode}
-                        >
-                          {t('service.Con.Con_View_Edit.voteUp', { defaultValue: 'Vote Up' })}
-                        </LoadingButton>
-                      </Grid>
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <NumericInput
+                      required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
+                      name="downVotes"
+                      id="User/(esm/_Wic8wIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
+                      label={t('service.Con.Con_View_Edit.downVotes', { defaultValue: '' }) as string}
+                      customInput={TextField}
+                      value={data.downVotes ?? ''}
+                      formatValue={true}
+                      className={clsx({
+                        'JUDO-viewMode': !editMode,
+                        'JUDO-required': false,
+                      })}
+                      disabled={
+                        actions?.isDownVotesDisabled
+                          ? actions.isDownVotesDisabled(data, editMode, isLoading)
+                          : isLoading
+                      }
+                      error={!!validation.get('downVotes')}
+                      helperText={validation.get('downVotes')}
+                      onValueChange={(values, sourceInfo) => {
+                        const newValue = values.floatValue === undefined ? null : values.floatValue;
+                        if (data.downVotes !== newValue) {
+                          storeDiff('downVotes', newValue);
+                        }
+                      }}
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        readOnly: true || !isFormUpdateable(),
+                      }}
+                    />
+                  </Grid>
 
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <NumericInput
-                          required={actions?.isUpVotesRequired ? actions.isUpVotesRequired(data, editMode) : false}
-                          name="upVotes"
-                          id="User/(esm/_Widj0IfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                          label={t('service.Con.Con_View_Edit.upVotes', { defaultValue: '' }) as string}
-                          customInput={TextField}
-                          value={data.upVotes ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': false,
-                          })}
-                          disabled={
-                            actions?.isUpVotesDisabled
-                              ? actions.isUpVotesDisabled(data, editMode, isLoading)
-                              : isLoading
-                          }
-                          error={!!validation.get('upVotes')}
-                          helperText={validation.get('upVotes')}
-                          onValueChange={(values, sourceInfo) => {
-                            const newValue = values.floatValue === undefined ? null : values.floatValue;
-                            if (data.upVotes !== newValue) {
-                              storeDiff('upVotes', newValue);
-                            }
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: true || !isFormUpdateable(),
-                          }}
-                        />
-                      </Grid>
+                  <Grid item xs={12} sm={12} md={1.0}>
+                    <Grid
+                      container
+                      sx={{ height: DIVIDER_HEIGHT }}
+                      id="User/(esm/_PTjMcIfgEe2u0fVmwtP5bA)/PlaceholderVisualElement"
+                    ></Grid>
+                  </Grid>
 
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <Grid
-                          container
-                          sx={{ height: DIVIDER_HEIGHT }}
-                          id="User/(esm/_IxEW4IfgEe2u0fVmwtP5bA)/PlaceholderVisualElement"
-                        ></Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <LoadingButton
-                          id="User/(esm/_3sP2oIriEe2VSOmaAz6G9Q)/OperationFormVisualElement"
-                          loading={isLoading}
-                          variant={undefined}
-                          startIcon={<MdiIcon path="thumb-down" />}
-                          loadingPosition="start"
-                          onClick={async () => {
-                            if (actions.voteDownForConAction) {
-                              await actions.voteDownForConAction!();
-                            }
-                          }}
-                          disabled={!actions.voteDownForConAction || editMode}
-                        >
-                          {t('service.Con.Con_View_Edit.voteDown', { defaultValue: 'Vote Down' })}
-                        </LoadingButton>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <NumericInput
-                          required={actions?.isDownVotesRequired ? actions.isDownVotesRequired(data, editMode) : false}
-                          name="downVotes"
-                          id="User/(esm/_Wic8wIfYEe2u0fVmwtP5bA)/NumericTypeVisualInput"
-                          label={t('service.Con.Con_View_Edit.downVotes', { defaultValue: '' }) as string}
-                          customInput={TextField}
-                          value={data.downVotes ?? ''}
-                          className={clsx({
-                            'JUDO-viewMode': !editMode,
-                            'JUDO-required': false,
-                          })}
-                          disabled={
-                            actions?.isDownVotesDisabled
-                              ? actions.isDownVotesDisabled(data, editMode, isLoading)
-                              : isLoading
-                          }
-                          error={!!validation.get('downVotes')}
-                          helperText={validation.get('downVotes')}
-                          onValueChange={(values, sourceInfo) => {
-                            const newValue = values.floatValue === undefined ? null : values.floatValue;
-                            if (data.downVotes !== newValue) {
-                              storeDiff('downVotes', newValue);
-                            }
-                          }}
-                          InputLabelProps={{ shrink: true }}
-                          InputProps={{
-                            readOnly: true || !isFormUpdateable(),
-                          }}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={1.0}>
-                        <Grid
-                          container
-                          sx={{ height: DIVIDER_HEIGHT }}
-                          id="User/(esm/_PTjMcIfgEe2u0fVmwtP5bA)/PlaceholderVisualElement"
-                        ></Grid>
-                      </Grid>
-
-                      <Grid item xs={12} sm={12} md={2.0}>
-                        <AssociationButton
-                          id="User/(esm/_Wih1Q4fYEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
-                          variant={undefined}
-                          editMode={editMode}
-                          navigateAction={actions.votesOpenPageAction}
-                          refreshCounter={refreshCounter}
-                        >
-                          {t('service.Con.Con_View_Edit.votes', { defaultValue: 'Votes' })}
-                          <MdiIcon path="arrow-right" />
-                        </AssociationButton>
-                      </Grid>
-                    </Grid>
+                  <Grid item xs={12} sm={12} md={2.0}>
+                    <AssociationButton
+                      id="User/(esm/_Wih1Q4fYEe2u0fVmwtP5bA)/TabularReferenceFieldButton"
+                      variant={undefined}
+                      editMode={editMode}
+                      navigateAction={actions.votesOpenPageAction}
+                      refreshCounter={refreshCounter}
+                    >
+                      {t('judo.action.open-page', { defaultValue: 'Votes' })}
+                      <MdiIcon path="arrow-right" />
+                    </AssociationButton>
                   </Grid>
                 </Grid>
               </CardContent>
@@ -471,100 +461,91 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
               justifyContent="flex-start"
               spacing={2}
             >
-              <Grid item data-name="pros::LabelWrapper" xs={12} sm={12} md={6.0}>
-                <Card
-                  id="(User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
-                  data-name="pros::LabelWrapper"
-                >
+              <Grid item data-name="pros" xs={12} sm={12} md={6.0}>
+                <Card id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/GroupVisualElement" data-name="pros">
                   <CardContent>
-                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      <Grid item xs={12} sm={12}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{ mb: 2 }}
+                    >
+                      <Grid item>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-plus" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/GroupVisualElement"
                             variant="h5"
                             component="h1"
                           >
-                            {t('service.Con.Con_View_Edit.pros.Label', { defaultValue: 'Pros' })}
+                            {t('service.Con.Con_View_Edit.pros', { defaultValue: 'Pros' })}
                           </Typography>
                         </Grid>
                       </Grid>
-
-                      <Grid item data-name="pros" xs={12} sm={12}>
+                    </Grid>
+                    <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
+                      <Grid item data-name="actions" xs={12} sm={12}>
                         <Grid
-                          id="User/(esm/_7cm_0HjlEe6cB8og8p0UuQ)/GroupVisualElement"
-                          data-name="pros"
+                          id="User/(esm/_PwgIEHjsEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="actions"
                           container
                           direction="row"
-                          alignItems="stretch"
+                          alignItems="flex-start"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item data-name="actions" xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_PwgIEHjsEe6cB8og8p0UuQ)/GroupVisualElement"
-                              data-name="actions"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
+                          <Grid item xs={12} sm={12}>
+                            <LoadingButton
+                              id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chat-plus" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                if (actions.createProArgumentAction) {
+                                  await actions.createProArgumentAction!();
+                                }
+                              }}
+                              disabled={!actions.createProArgumentAction || editMode}
                             >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="User/(esm/_DBZYMHjsEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="chat-plus" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    if (actions.createProArgumentAction) {
-                                      await actions.createProArgumentAction!();
-                                    }
-                                  }}
-                                  disabled={!actions.createProArgumentAction || editMode}
-                                >
-                                  {t('service.Con.Con_View_Edit.createProArgument', {
-                                    defaultValue: 'Add Pro Argument',
-                                  })}
-                                </LoadingButton>
-                              </Grid>
-                            </Grid>
+                              {t('service.Con.Con_View_Edit.createProArgument', { defaultValue: 'Add Pro Argument' })}
+                            </LoadingButton>
                           </Grid>
+                        </Grid>
+                      </Grid>
 
-                          <Grid item data-name="table" xs={12} sm={12}>
+                      <Grid item data-name="table" xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_UuxjcHjtEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="table"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_UuxjcHjtEe6cB8og8p0UuQ)/GroupVisualElement"
-                              data-name="table"
+                              id="User/(esm/_WihOMIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
                               container
-                              direction="row"
-                              alignItems="flex-start"
+                              direction="column"
+                              alignItems="stretch"
                               justifyContent="flex-start"
-                              spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
-                                <Grid
-                                  id="User/(esm/_WihOMIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
-                                  container
-                                  direction="column"
-                                  alignItems="stretch"
-                                  justifyContent="flex-start"
-                                >
-                                  <ServiceConCon_View_EditProsComponent
-                                    uniqueId={
-                                      'User/(esm/_WihOMIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
-                                    }
-                                    actions={actions}
-                                    ownerData={data}
-                                    editMode={editMode}
-                                    isFormUpdateable={isFormUpdateable}
-                                    validationError={validation.get('pros')}
-                                    refreshCounter={refreshCounter}
-                                    isOwnerLoading={isLoading}
-                                  />
-                                </Grid>
-                              </Grid>
+                              <ServiceConCon_View_EditProsComponent
+                                uniqueId={
+                                  'User/(esm/_WihOMIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
+                                }
+                                actions={actions}
+                                ownerData={data}
+                                editMode={editMode}
+                                isFormUpdateable={isFormUpdateable}
+                                validationError={validation.get('pros')}
+                                refreshCounter={refreshCounter}
+                                isOwnerLoading={isLoading}
+                              />
                             </Grid>
                           </Grid>
                         </Grid>
@@ -574,100 +555,91 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
                 </Card>
               </Grid>
 
-              <Grid item data-name="cons::LabelWrapper" xs={12} sm={12} md={6.0}>
-                <Card
-                  id="(User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/LabelWrapper"
-                  data-name="cons::LabelWrapper"
-                >
+              <Grid item data-name="cons" xs={12} sm={12} md={6.0}>
+                <Card id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/GroupVisualElement" data-name="cons">
                   <CardContent>
-                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                      <Grid item xs={12} sm={12}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{ mb: 2 }}
+                    >
+                      <Grid item>
                         <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                           <MdiIcon path="chat-minus" sx={{ marginRight: 1 }} />
                           <Typography
-                            id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/WrapAndLabelVisualElement)/Label"
+                            id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/GroupVisualElement"
                             variant="h5"
                             component="h1"
                           >
-                            {t('service.Con.Con_View_Edit.cons.Label', { defaultValue: 'Cons' })}
+                            {t('service.Con.Con_View_Edit.cons', { defaultValue: 'Cons' })}
                           </Typography>
                         </Grid>
                       </Grid>
-
-                      <Grid item data-name="cons" xs={12} sm={12}>
+                    </Grid>
+                    <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
+                      <Grid item data-name="actions" xs={12} sm={12}>
                         <Grid
-                          id="User/(esm/_BJY8cHjmEe6cB8og8p0UuQ)/GroupVisualElement"
-                          data-name="cons"
+                          id="User/(esm/_DsGQIHjuEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="actions"
                           container
                           direction="row"
-                          alignItems="stretch"
+                          alignItems="flex-start"
                           justifyContent="flex-start"
                           spacing={2}
                         >
-                          <Grid item data-name="actions" xs={12} sm={12}>
-                            <Grid
-                              id="User/(esm/_DsGQIHjuEe6cB8og8p0UuQ)/GroupVisualElement"
-                              data-name="actions"
-                              container
-                              direction="row"
-                              alignItems="flex-start"
-                              justifyContent="flex-start"
-                              spacing={2}
+                          <Grid item xs={12} sm={12}>
+                            <LoadingButton
+                              id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                              loading={isLoading}
+                              variant={undefined}
+                              startIcon={<MdiIcon path="chat-minus" />}
+                              loadingPosition="start"
+                              onClick={async () => {
+                                if (actions.createConArgumentAction) {
+                                  await actions.createConArgumentAction!();
+                                }
+                              }}
+                              disabled={!actions.createConArgumentAction || editMode}
                             >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="User/(esm/_DBYxIHjsEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="chat-minus" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    if (actions.createConArgumentAction) {
-                                      await actions.createConArgumentAction!();
-                                    }
-                                  }}
-                                  disabled={!actions.createConArgumentAction || editMode}
-                                >
-                                  {t('service.Con.Con_View_Edit.createConArgument', {
-                                    defaultValue: 'Add Con Argument',
-                                  })}
-                                </LoadingButton>
-                              </Grid>
-                            </Grid>
+                              {t('service.Con.Con_View_Edit.createConArgument', { defaultValue: 'Add Con Argument' })}
+                            </LoadingButton>
                           </Grid>
+                        </Grid>
+                      </Grid>
 
-                          <Grid item data-name="table" xs={12} sm={12}>
+                      <Grid item data-name="table" xs={12} sm={12}>
+                        <Grid
+                          id="User/(esm/_w-gIkHjtEe6cB8og8p0UuQ)/GroupVisualElement"
+                          data-name="table"
+                          container
+                          direction="row"
+                          alignItems="flex-start"
+                          justifyContent="flex-start"
+                          spacing={2}
+                        >
+                          <Grid item xs={12} sm={12}>
                             <Grid
-                              id="User/(esm/_w-gIkHjtEe6cB8og8p0UuQ)/GroupVisualElement"
-                              data-name="table"
+                              id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
                               container
-                              direction="row"
-                              alignItems="flex-start"
+                              direction="column"
+                              alignItems="stretch"
                               justifyContent="flex-start"
-                              spacing={2}
                             >
-                              <Grid item xs={12} sm={12}>
-                                <Grid
-                                  id="User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
-                                  container
-                                  direction="column"
-                                  alignItems="stretch"
-                                  justifyContent="flex-start"
-                                >
-                                  <ServiceConCon_View_EditConsComponent
-                                    uniqueId={
-                                      'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
-                                    }
-                                    actions={actions}
-                                    ownerData={data}
-                                    editMode={editMode}
-                                    isFormUpdateable={isFormUpdateable}
-                                    validationError={validation.get('cons')}
-                                    refreshCounter={refreshCounter}
-                                    isOwnerLoading={isLoading}
-                                  />
-                                </Grid>
-                              </Grid>
+                              <ServiceConCon_View_EditConsComponent
+                                uniqueId={
+                                  'User/(esm/_WieK4IfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'
+                                }
+                                actions={actions}
+                                ownerData={data}
+                                editMode={editMode}
+                                isFormUpdateable={isFormUpdateable}
+                                validationError={validation.get('cons')}
+                                refreshCounter={refreshCounter}
+                                isOwnerLoading={isLoading}
+                              />
                             </Grid>
                           </Grid>
                         </Grid>

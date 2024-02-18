@@ -265,7 +265,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
   ): Promise<DialogResult<Array<ServiceConStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceConStored>({
-        dialogTitle: t('service.Con.Con_View_Edit.Arguments.cons.table.cons.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -352,7 +352,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
   ): Promise<DialogResult<Array<ServiceProStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceProStored>({
-        dialogTitle: t('service.Con.Con_View_Edit.Arguments.pros.table.pros.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -447,9 +447,6 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
       }
     } catch (error) {
       handleError<ServiceCon>(error, { setValidation }, data);
@@ -467,9 +464,6 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        if (!editMode) {
-          await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-        }
       }
     } catch (error) {
       handleError<ServiceCon>(error, { setValidation }, data);
@@ -506,7 +500,7 @@ export default function ServiceConConsRelationViewPage(props: ServiceConConsRela
       if (confirmed) {
         await serviceConServiceForConsImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);

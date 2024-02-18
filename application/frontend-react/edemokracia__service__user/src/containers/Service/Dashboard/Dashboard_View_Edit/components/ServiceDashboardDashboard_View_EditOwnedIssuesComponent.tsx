@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -130,6 +130,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -145,7 +146,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -294,9 +295,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
     () => [
       {
         id: 'User/(esm/_CTqMYFw4Ee6gN-oVBDDIOQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Remove', {
-          defaultValue: 'Remove',
-        }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
@@ -471,6 +470,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceIssueQueryCustomizer) => {
@@ -694,6 +694,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -716,9 +717,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -736,9 +735,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.ownedIssuesOpenAddSelectorAction && isFormUpdateable() ? (
@@ -755,9 +752,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t('service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.ownedIssuesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -777,10 +772,7 @@ export function ServiceDashboardDashboard_View_EditOwnedIssuesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

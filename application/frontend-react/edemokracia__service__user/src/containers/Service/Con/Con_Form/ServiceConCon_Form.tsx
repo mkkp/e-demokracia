@@ -319,6 +319,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               label={t('service.Con.Con_Form.upVotes', { defaultValue: 'UpVotes' }) as string}
               customInput={TextField}
               value={data.upVotes ?? ''}
+              formatValue={true}
               className={clsx({
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
@@ -352,6 +353,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               label={t('service.Con.Con_Form.downVotes', { defaultValue: 'DownVotes' }) as string}
               customInput={TextField}
               value={data.downVotes ?? ''}
+              formatValue={true}
               className={clsx({
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,
@@ -387,14 +389,14 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
               navigateAction={actions.votesOpenPageAction}
               refreshCounter={refreshCounter}
             >
-              {t('service.Con.Con_Form.votes', { defaultValue: 'Votes' })}
+              {t('judo.action.open-page', { defaultValue: 'Votes' })}
               <MdiIcon path="arrow-right" />
             </AssociationButton>
           </Grid>
 
           <Grid item xs={12} sm={12}>
             <ServiceConCon_FormCreatedByComponent
-              disabled={true}
+              disabled={false}
               readOnly={true || !isFormUpdateable()}
               ownerData={data}
               editMode={editMode}
@@ -407,95 +409,45 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
             />
           </Grid>
 
-          <Grid item data-name="cons::LabelWrapper" xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="cons::LabelWrapper"
+              id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
               container
               direction="column"
               alignItems="stretch"
               justifyContent="flex-start"
-              spacing={2}
             >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography
-                    id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.Con.Con_Form.cons.Label', { defaultValue: 'Cons' })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                >
-                  <ServiceConCon_FormConsComponent
-                    uniqueId={'User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
-                    actions={actions}
-                    ownerData={data}
-                    editMode={editMode}
-                    isFormUpdateable={isFormUpdateable}
-                    validationError={validation.get('cons')}
-                    refreshCounter={refreshCounter}
-                    isOwnerLoading={isLoading}
-                  />
-                </Grid>
-              </Grid>
+              <ServiceConCon_FormConsComponent
+                uniqueId={'User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('cons')}
+                refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
+              />
             </Grid>
           </Grid>
 
-          <Grid item data-name="pros::LabelWrapper" xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="pros::LabelWrapper"
+              id="User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
               container
               direction="column"
               alignItems="stretch"
               justifyContent="flex-start"
-              spacing={2}
             >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="table_rows" sx={{ marginRight: 1 }} />
-                  <Typography
-                    id="User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.Con.Con_Form.pros.Label', { defaultValue: 'Pros' })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                >
-                  <ServiceConCon_FormProsComponent
-                    uniqueId={'User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
-                    actions={actions}
-                    ownerData={data}
-                    editMode={editMode}
-                    isFormUpdateable={isFormUpdateable}
-                    validationError={validation.get('pros')}
-                    refreshCounter={refreshCounter}
-                    isOwnerLoading={isLoading}
-                  />
-                </Grid>
-              </Grid>
+              <ServiceConCon_FormProsComponent
+                uniqueId={'User/(esm/_cJHDQIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('pros')}
+                refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
+              />
             </Grid>
           </Grid>
         </Grid>

@@ -270,7 +270,7 @@ export default function ServiceUserAdminIssueTypesAccessViewPage(props: ServiceU
       if (confirmed) {
         await userServiceForAdminIssueTypesImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);

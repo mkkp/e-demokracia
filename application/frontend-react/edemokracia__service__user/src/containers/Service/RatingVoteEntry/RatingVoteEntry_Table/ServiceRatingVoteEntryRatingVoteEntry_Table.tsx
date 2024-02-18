@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -78,7 +79,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_Table(
           data-name="RatingVoteEntry_Table"
         >
           <CardContent>
-            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_J1KA4FslEe6Mx9dH3yj5gQ)/TransferObjectTableEmpty">
                   {

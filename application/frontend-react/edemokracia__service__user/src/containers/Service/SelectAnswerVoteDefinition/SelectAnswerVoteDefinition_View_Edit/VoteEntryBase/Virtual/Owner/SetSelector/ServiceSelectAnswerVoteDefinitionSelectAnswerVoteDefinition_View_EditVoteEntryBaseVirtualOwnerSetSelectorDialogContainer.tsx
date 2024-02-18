@@ -112,17 +112,13 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.owner.Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -139,12 +135,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
                 await actions.setAction!(selectionDiff);
               }}
             >
-              <span>
-                {t(
-                  'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.owner.Set',
-                  { defaultValue: 'Set' },
-                )}
-              </span>
+              <span>{t('judo.action.set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

@@ -24,6 +24,7 @@ import type { AuthProviderProps } from 'react-oidc-context';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { accessServiceImpl, judoAxiosProvider } from '~/services/data-axios';
 import App from './App';
+import { loadProgressBar, progressGlobalStyles } from './Progress';
 import { Auth, axiosRequestInterceptor, storeMeta, userStore } from './auth';
 import { RootErrorBoundary } from './components/RootErrorBoundary';
 import { applicationCustomizer } from './custom';
@@ -48,6 +49,13 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
   await pandino.start();
 
   await applicationCustomizer.customize(pandino.getBundleContext());
+
+  loadProgressBar(
+    {
+      showSpinner: false,
+    },
+    axios,
+  );
 
   judoAxiosProvider.init({
     axios,
@@ -79,6 +87,7 @@ const FILE_DEFAULT_BASE_URL: string = import.meta.env.VITE_FILE_DEFAULT_BASE_URL
 
   root.render(
     <StrictMode>
+      {progressGlobalStyles}
       <ConfigProvider>
         <ThemeCustomization>
           <PandinoProvider ctx={pandino.getBundleContext()}>

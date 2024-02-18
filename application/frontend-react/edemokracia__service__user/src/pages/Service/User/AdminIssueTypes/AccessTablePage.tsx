@@ -124,7 +124,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
   ): Promise<DialogResult<Array<ServiceIssueTypeStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueTypeStored>({
-        dialogTitle: t('service.IssueType.IssueType_Table.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -154,7 +154,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
       });
     });
   };
-  const openFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const openCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
@@ -222,7 +222,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
     getPageTitle,
     backAction,
     bulkDeleteAction,
-    openFormAction,
+    openCreateFormAction,
     deleteAction,
     filterAction,
     refreshAction,

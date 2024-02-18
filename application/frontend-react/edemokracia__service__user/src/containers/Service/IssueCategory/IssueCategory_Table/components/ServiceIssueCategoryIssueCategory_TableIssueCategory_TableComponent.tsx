@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceIssueCategory,
@@ -63,7 +63,7 @@ export interface ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompo
     selectedRows: ServiceIssueCategoryStored[],
   ) => Promise<DialogResult<ServiceIssueCategoryStored[]>>;
   clearAction?: () => Promise<void>;
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   exportAction?: (queryCustomizer: ServiceIssueCategoryQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
@@ -105,6 +105,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -119,7 +120,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -176,7 +177,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
     () => [
       {
         id: 'User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableRowRemoveButton',
-        label: t('service.IssueCategory.IssueCategory_Table.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceIssueCategoryStored) => getSelectedRows().length > 0 || isLoading,
@@ -188,7 +189,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
       },
       {
         id: 'User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableRowDeleteButton',
-        label: t('service.IssueCategory.IssueCategory_Table.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceIssueCategoryStored) => getSelectedRows().length > 0 || !row.__deleteable || isLoading,
@@ -245,6 +246,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceIssueCategoryQueryCustomizer) => {
@@ -421,6 +423,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -443,7 +446,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Table.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -461,7 +464,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.exportAction && true ? (
@@ -479,10 +482,10 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Export', { defaultValue: 'Export' })}
+                  {t('judo.action.export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -492,11 +495,11 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.openAddSelectorAction && true ? (
@@ -513,7 +516,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Add', { defaultValue: 'Add' })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.openSetSelectorAction && true ? (
@@ -530,7 +533,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Set', { defaultValue: 'Set' })}
+                  {t('judo.action.open-set-selector', { defaultValue: 'Set' })}
                 </Button>
               ) : null}
               {actions.clearAction && data.length ? (
@@ -548,7 +551,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.Clear', { defaultValue: 'Clear' })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.bulkRemoveAction && selectionModel.length > 0 ? (
@@ -568,7 +571,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.bulkDeleteAction && selectionModel.length > 0 ? (
@@ -588,7 +591,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.IssueCategory.IssueCategory_Table.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

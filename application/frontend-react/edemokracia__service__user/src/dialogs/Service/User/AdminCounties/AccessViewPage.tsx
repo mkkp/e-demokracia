@@ -258,7 +258,7 @@ export default function ServiceUserAdminCountiesAccessViewPage(props: ServiceUse
   ): Promise<DialogResult<Array<ServiceCityStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceCityStored>({
-        dialogTitle: t('service.County.County_View_Edit.cities.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.name!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -290,7 +290,7 @@ export default function ServiceUserAdminCountiesAccessViewPage(props: ServiceUse
       });
     });
   };
-  const citiesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const citiesOpenCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -373,7 +373,7 @@ export default function ServiceUserAdminCountiesAccessViewPage(props: ServiceUse
       if (confirmed) {
         await userServiceForAdminCountiesImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);
@@ -429,7 +429,7 @@ export default function ServiceUserAdminCountiesAccessViewPage(props: ServiceUse
   const actions: ServiceCountyCounty_View_EditDialogActions = {
     getPageTitle,
     citiesBulkDeleteAction,
-    citiesOpenFormAction,
+    citiesOpenCreateFormAction,
     citiesFilterAction,
     citiesDeleteAction,
     citiesOpenPageAction,

@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   SelectAnswerVoteSelection,
@@ -101,6 +101,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputCallOperationSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputCallOperationSelectorTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputCallOperationSelectorTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -115,7 +116,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -217,6 +218,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: SelectAnswerVoteSelectionQueryCustomizer) => {
@@ -413,6 +415,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -435,10 +438,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.Table.Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -455,10 +455,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.Table.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

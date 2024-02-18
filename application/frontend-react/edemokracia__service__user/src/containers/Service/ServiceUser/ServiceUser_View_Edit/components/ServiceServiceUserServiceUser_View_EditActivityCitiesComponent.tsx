@@ -114,6 +114,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -127,7 +128,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -171,9 +172,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
     () => [
       {
         id: 'User/(esm/_I-1QMIXqEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Remove', {
-          defaultValue: 'Remove',
-        }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceCityStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
@@ -237,6 +236,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -394,9 +394,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -414,10 +412,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.activityCitiesOpenAddSelectorAction && isFormUpdateable() ? (
@@ -434,9 +429,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Add', {
-                    defaultValue: 'Add',
-                  })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.activityCitiesClearAction && data.length && isFormUpdateable() ? (
@@ -454,9 +447,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t('service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.Clear', {
-                    defaultValue: 'Clear',
-                  })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.activityCitiesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -476,10 +467,7 @@ export function ServiceServiceUserServiceUser_View_EditActivityCitiesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_cities.activityCities.BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

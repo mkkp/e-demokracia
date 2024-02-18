@@ -149,6 +149,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -169,6 +170,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -187,6 +189,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -207,6 +210,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -227,6 +231,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {
@@ -253,6 +258,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessTablePage() 
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         setRefreshCounter((prev) => prev + 1);
       }
     } catch (error) {

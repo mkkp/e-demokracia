@@ -203,7 +203,6 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        onSubmit(selectionDiff);
       }
     } catch (error) {
       handleError(error);

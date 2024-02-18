@@ -9,6 +9,7 @@
 export const DIVIDER_HEIGHT = 70;
 export const DRAWER_WIDTH = 260;
 export const MINI_DRAWER_WIDTH = 60;
+export const SUBMENU_MIN_WIDTH = 200;
 
 export type I18n = 'en' | 'hu'; // not used yet, will be implemented later, once we need language switching.
 

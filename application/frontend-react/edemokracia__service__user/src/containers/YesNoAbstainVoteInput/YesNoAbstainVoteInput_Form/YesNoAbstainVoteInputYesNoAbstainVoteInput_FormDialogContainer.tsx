@@ -149,12 +149,13 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Form.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -172,6 +173,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
                 loading={isLoading}
                 loadingPosition="start"
                 variant={'contained'}
+                disabled={isLoading}
                 startIcon={isDraft ? <MdiIcon path="check" /> : <MdiIcon path="content-save" />}
                 onClick={async () => {
                   await actions.createAction!();
@@ -180,7 +182,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
                 <span>
                   {isDraft
                     ? t('judo.dialogs.draft.submit', { defaultValue: 'Ok' })
-                    : t('YesNoAbstainVoteInput.YesNoAbstainVoteInput_Form.Create', { defaultValue: 'Create' })}
+                    : t('judo.action.create', { defaultValue: 'Create' })}
                 </span>
               </LoadingButton>
               {!isDraft && (
@@ -236,6 +238,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
                 await actions.voteYesNoAbstainForVoteDefinitionAction!();
@@ -257,6 +260,7 @@ export default function YesNoAbstainVoteInputYesNoAbstainVoteInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="vote" />}
               onClick={async () => {
                 await actions.voteForYesNoAbstainVoteDefinitionAction!();

@@ -270,6 +270,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -290,6 +291,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -316,6 +318,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -336,6 +339,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -552,9 +556,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceConStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceConStored>({
-        dialogTitle: t('service.Issue.Issue_View_Edit.other.arguments.cons.table.cons.BulkDelete', {
-          defaultValue: 'Delete',
-        }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -641,9 +643,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceProStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceProStored>({
-        dialogTitle: t('service.Issue.Issue_View_Edit.other.arguments.pros.table.pros.BulkDelete', {
-          defaultValue: 'Delete',
-        }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -724,9 +724,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceIssueAttachmentStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueAttachmentStored>({
-        dialogTitle: t('service.Issue.Issue_View_Edit.other.attachments.attachments.BulkDelete', {
-          defaultValue: 'Delete',
-        }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.link!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -758,7 +756,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
       });
     });
   };
-  const attachmentsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const attachmentsOpenCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -920,6 +918,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -1025,7 +1024,7 @@ export default function ServiceUserAdminIssuesAccessViewPage() {
     prosDeleteAction,
     prosOpenPageAction,
     attachmentsBulkDeleteAction,
-    attachmentsOpenFormAction,
+    attachmentsOpenCreateFormAction,
     attachmentsFilterAction,
     attachmentsDeleteAction,
     attachmentsOpenPageAction,

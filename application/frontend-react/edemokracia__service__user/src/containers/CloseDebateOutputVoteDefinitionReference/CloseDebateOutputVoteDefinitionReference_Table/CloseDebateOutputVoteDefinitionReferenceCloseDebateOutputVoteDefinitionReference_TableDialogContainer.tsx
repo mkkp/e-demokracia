@@ -95,16 +95,13 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Table.Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

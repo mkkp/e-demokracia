@@ -249,6 +249,7 @@ export default function ServiceProPro_View_EditCreateConArgumentInputForm(
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         onSubmit();
       }
     } catch (error) {

@@ -64,14 +64,12 @@ export default function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_TableP
               loadingPosition="start"
               variant={'text'}
               startIcon={<MdiIcon path="arrow-left" />}
-              disabled={editMode}
+              disabled={isLoading}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.SelectAnswerVoteEntry.SelectAnswerVoteEntry_Table.Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}

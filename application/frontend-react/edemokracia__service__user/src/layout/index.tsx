@@ -17,7 +17,6 @@ import { usePrincipal } from '~/auth';
 import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
 import { Drawer } from './Drawer';
-import { HorizontalBar } from './Drawer/HorizontalBar';
 import { Footer } from './Footer';
 import { Header } from './Header';
 
@@ -32,19 +31,12 @@ export const Layout = () => {
 
   const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
 
-  // set media wise responsive drawer (auto-close at start based on width)
-  // useEffect(() => {
-  //   if (!miniDrawer) {
-  //     onChangeMiniDrawer(!matchDownXL);
-  //   }
-  // }, [matchDownXL]);
-
   const principalLoaded = () => principal && principal.__signedIdentifier;
 
   return principalLoaded() ? (
     <Box sx={{ display: 'flex', width: '100%' }}>
       <Header />
-      {!isHorizontal ? <Drawer /> : <HorizontalBar />}
+      {!isHorizontal ? <Drawer /> : null}
 
       <Box component="main" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Container

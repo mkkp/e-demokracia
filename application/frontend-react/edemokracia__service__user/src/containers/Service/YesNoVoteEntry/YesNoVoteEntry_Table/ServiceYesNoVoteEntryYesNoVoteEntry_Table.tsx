@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -75,7 +76,7 @@ export default function ServiceYesNoVoteEntryYesNoVoteEntry_Table(
       <Grid item data-name="YesNoVoteEntry_Table" xs={12} sm={12} md={36.0}>
         <Card id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableVisualElement" data-name="YesNoVoteEntry_Table">
           <CardContent>
-            <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+            <Grid container direction="column" alignItems="stretch" justifyContent="flex-start" spacing={2}>
               <Grid item xs={12} sm={12}>
                 <Typography id="User/(esm/_LNiu0FoiEe6_67aMO2jOsw)/TransferObjectTableEmpty">
                   {

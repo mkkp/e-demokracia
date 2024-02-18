@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceServiceUser,
@@ -55,7 +55,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserSetSelectorUserSetSelectorComponentActionDefinitions {
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -104,6 +104,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_eryuAFskEe6Mx9dH3yj5gQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_eryuAFskEe6Mx9dH3yj5gQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_eryuAFskEe6Mx9dH3yj5gQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -118,7 +119,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -205,6 +206,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceServiceUserQueryCustomizer) => {
@@ -389,6 +391,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -411,9 +414,7 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_View_Edit.user.Table.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -430,12 +431,10 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_View_Edit.user.Table.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_eryuAFskEe6Mx9dH3yj5gQ)/TabularReferenceFieldLinkSetSelectorTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -444,13 +443,11 @@ export function ServiceYesNoAbstainVoteEntryYesNoAbstainVoteEntry_View_EditUserS
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.YesNoAbstainVoteEntry.YesNoAbstainVoteEntry_View_Edit.user.Table.Create', {
-                    defaultValue: 'Create',
-                  })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

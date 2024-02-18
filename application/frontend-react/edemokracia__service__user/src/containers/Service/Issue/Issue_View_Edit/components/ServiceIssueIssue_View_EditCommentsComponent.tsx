@@ -118,6 +118,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -132,7 +133,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -212,7 +213,10 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const downVotesColumn: GridColDef<ServiceCommentStored> = {
@@ -225,7 +229,10 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
 
@@ -312,6 +319,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -491,9 +499,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.comments.actions.comments.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -511,9 +517,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.comments.actions.comments.Refresh', {
-                    defaultValue: 'Refresh',
-                  })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

@@ -8,7 +8,7 @@
 import type { Theme } from '@mui/material';
 
 export const mainContainerPadding = {
-  marginTop: (theme: Theme) => theme.spacing(4),
+  marginTop: (theme: Theme) => theme.spacing(3),
   marginBottom: (theme: Theme) => theme.spacing(4),
   display: 'flex',
   flexDirection: 'column',

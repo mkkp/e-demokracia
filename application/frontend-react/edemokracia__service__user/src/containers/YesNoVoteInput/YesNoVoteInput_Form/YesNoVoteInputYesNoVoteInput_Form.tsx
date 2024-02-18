@@ -14,6 +14,7 @@ import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -44,6 +45,8 @@ export type YesNoVoteInputYesNoVoteInput_FormContainerHook = (
 
 export interface YesNoVoteInputYesNoVoteInput_FormActionDefinitions {
   getPageTitle?: (data: YesNoVoteInput) => string;
+  voteYesNoForVoteDefinitionAction?: () => Promise<void>;
+  voteForYesNoVoteDefinitionAction?: () => Promise<void>;
   isValueRequired?: (data: YesNoVoteInput | YesNoVoteInputStored, editMode?: boolean) => boolean;
   isValueDisabled?: (data: YesNoVoteInput | YesNoVoteInputStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }

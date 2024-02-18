@@ -254,7 +254,7 @@ export default function ServiceServiceUserResidentCityRelationViewPage(
   ): Promise<DialogResult<Array<ServiceDistrictStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceDistrictStored>({
-        dialogTitle: t('service.City.City_View_Edit.districts.BulkDelete', { defaultValue: 'Delete' }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.name!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -286,7 +286,7 @@ export default function ServiceServiceUserResidentCityRelationViewPage(
       });
     });
   };
-  const districtsOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const districtsOpenCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
     const { result, data: returnedData } = await openServiceCityDistrictsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -407,7 +407,7 @@ export default function ServiceServiceUserResidentCityRelationViewPage(
   const actions: ServiceCityCity_View_EditDialogActions = {
     getPageTitle,
     districtsBulkDeleteAction,
-    districtsOpenFormAction,
+    districtsOpenCreateFormAction,
     districtsFilterAction,
     districtsDeleteAction,
     districtsOpenPageAction,

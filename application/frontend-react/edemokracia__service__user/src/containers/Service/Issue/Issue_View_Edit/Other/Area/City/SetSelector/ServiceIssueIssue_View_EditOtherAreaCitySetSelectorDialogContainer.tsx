@@ -108,12 +108,13 @@ export default function ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialo
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.Issue.Issue_View_Edit.other.area.city.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -130,7 +131,7 @@ export default function ServiceIssueIssue_View_EditOtherAreaCitySetSelectorDialo
                 await actions.setAction!(selectionDiff);
               }}
             >
-              <span>{t('service.Issue.Issue_View_Edit.other.area.city.Set', { defaultValue: 'Set' })}</span>
+              <span>{t('judo.action.set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

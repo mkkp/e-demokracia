@@ -112,12 +112,13 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerSetSelectorDi
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('service.IssueCategory.IssueCategory_Form.owner.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -134,7 +135,7 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerSetSelectorDi
                 await actions.setAction!(selectionDiff);
               }}
             >
-              <span>{t('service.IssueCategory.IssueCategory_Form.owner.Set', { defaultValue: 'Set' })}</span>
+              <span>{t('judo.action.set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

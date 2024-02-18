@@ -8,4 +8,4 @@ export const X_JUDO_COUNT_RECORDS = 'X-Judo-CountRecords';
 /**
  * Received in responses if requested via `X_JUDO_COUNT_RECORDS`.
  */
-export const X_JUDO_COUNT = 'X-Judo-Count';
+export const X_JUDO_COUNT = 'x-judo-count';

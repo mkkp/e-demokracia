@@ -108,16 +108,13 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Residency.residentCounty.Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -134,11 +131,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasResidencyRes
                 await actions.setAction!(selectionDiff);
               }}
             >
-              <span>
-                {t('service.ServiceUser.ServiceUser_View_Edit.Areas.Residency.residentCounty.Set', {
-                  defaultValue: 'Set',
-                })}
-              </span>
+              <span>{t('judo.action.set', { defaultValue: 'Set' })}</span>
             </LoadingButton>
           </Grid>
         )}

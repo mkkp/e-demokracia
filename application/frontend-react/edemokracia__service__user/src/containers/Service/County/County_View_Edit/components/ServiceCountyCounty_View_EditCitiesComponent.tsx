@@ -59,7 +59,7 @@ import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utili
 export interface ServiceCountyCounty_View_EditCitiesComponentActionDefinitions {
   citiesBulkDeleteAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
   citiesBulkRemoveAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
-  citiesOpenFormAction?: () => Promise<void>;
+  citiesOpenCreateFormAction?: () => Promise<void>;
   citiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -111,6 +111,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -124,7 +125,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -166,7 +167,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
     () => [
       {
         id: 'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.County.County_View_Edit.cities.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceCityStored) => isLoading,
@@ -178,7 +179,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
       },
       {
         id: 'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-        label: t('service.County.County_View_Edit.cities.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceCityStored) =>
@@ -243,6 +244,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -396,7 +398,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County_View_Edit.cities.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -414,10 +416,10 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County_View_Edit.cities.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.citiesOpenFormAction && true ? (
+              {actions.citiesOpenCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -427,11 +429,11 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getCitiesMask ? actions.getCitiesMask() : queryCustomizer._mask,
                     };
-                    await actions.citiesOpenFormAction!();
+                    await actions.citiesOpenCreateFormAction!();
                   }}
                   disabled={false}
                 >
-                  {t('service.County.County_View_Edit.cities.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.citiesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -451,7 +453,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.County.County_View_Edit.cities.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.citiesBulkDeleteAction && selectionModel.length > 0 ? (
@@ -471,7 +473,7 @@ export function ServiceCountyCounty_View_EditCitiesComponent(props: ServiceCount
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.County.County_View_Edit.cities.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

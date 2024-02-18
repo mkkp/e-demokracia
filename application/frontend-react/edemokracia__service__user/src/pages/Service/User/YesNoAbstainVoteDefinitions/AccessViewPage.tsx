@@ -349,6 +349,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -369,6 +370,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -389,6 +391,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -409,6 +412,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -460,6 +464,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -487,6 +492,7 @@ export default function ServiceUserYesNoAbstainVoteDefinitionsAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }

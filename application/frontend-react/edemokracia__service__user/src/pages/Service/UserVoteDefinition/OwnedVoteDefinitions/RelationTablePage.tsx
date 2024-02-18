@@ -174,7 +174,7 @@ export default function ServiceUserVoteDefinitionOwnedVoteDefinitionsRelationTab
   ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t('service.VoteDefinition.VoteDefinition_Table.BulkRemove', { defaultValue: 'Remove' }),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {

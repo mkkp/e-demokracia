@@ -45,7 +45,9 @@ export const CustomTablePagination = (props: CustomTablePaginationProps) => {
       rowsPerPage={props.rowPerPage}
       rowsPerPageOptions={props.pageSizeOptions}
       onRowsPerPageChange={onRowsPerPageChange}
-      labelDisplayedRows={({ from, to }) => `${from}–${to}`}
+      labelDisplayedRows={({ from, to }) =>
+        `${from}–${to}${props.totalCount !== undefined && props.totalCount > -1 ? ` / ${props.totalCount}` : ''}`
+      }
       nextIconButtonProps={{
         disabled: !props.isNextButtonEnabled,
       }}

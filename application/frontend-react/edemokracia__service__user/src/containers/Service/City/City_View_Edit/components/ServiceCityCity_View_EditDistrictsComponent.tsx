@@ -59,7 +59,7 @@ import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utili
 export interface ServiceCityCity_View_EditDistrictsComponentActionDefinitions {
   districtsBulkDeleteAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
   districtsBulkRemoveAction?: (selectedRows: ServiceDistrictStored[]) => Promise<DialogResult<ServiceDistrictStored[]>>;
-  districtsOpenFormAction?: () => Promise<void>;
+  districtsOpenCreateFormAction?: () => Promise<void>;
   districtsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -113,6 +113,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -126,7 +127,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -168,7 +169,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
     () => [
       {
         id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.City.City_View_Edit.districts.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceDistrictStored) => isLoading,
@@ -180,7 +181,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
       },
       {
         id: 'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableRowDeleteButton',
-        label: t('service.City.City_View_Edit.districts.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceDistrictStored) =>
@@ -245,6 +246,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -399,7 +401,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City_View_Edit.districts.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -417,10 +419,10 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City_View_Edit.districts.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.districtsOpenFormAction && true ? (
+              {actions.districtsOpenCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -430,11 +432,11 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getDistrictsMask ? actions.getDistrictsMask() : queryCustomizer._mask,
                     };
-                    await actions.districtsOpenFormAction!();
+                    await actions.districtsOpenCreateFormAction!();
                   }}
                   disabled={false}
                 >
-                  {t('service.City.City_View_Edit.districts.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.districtsBulkRemoveAction && selectionModel.length > 0 ? (
@@ -454,7 +456,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.City.City_View_Edit.districts.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.districtsBulkDeleteAction && selectionModel.length > 0 ? (
@@ -474,7 +476,7 @@ export function ServiceCityCity_View_EditDistrictsComponent(props: ServiceCityCi
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.City.City_View_Edit.districts.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

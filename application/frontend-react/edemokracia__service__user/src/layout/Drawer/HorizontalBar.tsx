@@ -39,26 +39,10 @@ export const HorizontalBar = () => {
   const { container } = useConfig();
 
   return (
-    <ElevationScroll>
-      <AppBar
-        sx={{
-          top: 64,
-          bgcolor: theme.palette.background.paper,
-          width: '100%',
-          height: 62,
-          justifyContent: 'center',
-          borderTop: `1px solid ${theme.palette.divider}`,
-          borderBottom: `1px solid ${theme.palette.divider}`,
-          zIndex: 1098,
-          color: 'inherit',
-        }}
-      >
-        <Container maxWidth={container ? 'xl' : false}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Navigation />
-          </Box>
-        </Container>
-      </AppBar>
-    </ElevationScroll>
+    <Container maxWidth={container ? 'xl' : false}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Navigation />
+      </Box>
+    </Container>
   );
 };

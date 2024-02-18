@@ -43,7 +43,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -64,7 +64,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavoriteVotesGroupFavoriteVoteDefinitionsAddSelectorFavoriteVoteDefinitionsAddSelectorComponentActionDefinitions {
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -113,6 +113,7 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -128,7 +129,7 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -314,7 +315,10 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const statusColumn: GridColDef<ServiceVoteDefinitionStored> = {
@@ -397,6 +401,7 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceVoteDefinitionQueryCustomizer) => {
@@ -675,6 +680,7 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -697,10 +703,7 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.Table.Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -717,13 +720,10 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.Table.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -732,14 +732,11 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.Table.Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

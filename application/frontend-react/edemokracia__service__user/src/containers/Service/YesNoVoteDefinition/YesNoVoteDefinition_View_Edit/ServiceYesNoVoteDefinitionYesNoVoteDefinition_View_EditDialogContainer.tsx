@@ -142,14 +142,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.Back', { defaultValue: 'Back' })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -160,14 +159,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="refresh" />}
               onClick={async () => {
                 await actions.refreshAction!(processQueryCustomizer(queryCustomizer));
               }}
             >
-              <span>
-                {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.Refresh', { defaultValue: 'Refresh' })}
-              </span>
+              <span>{t('judo.action.refresh', { defaultValue: 'Refresh' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -178,14 +176,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading || editMode}
               startIcon={<MdiIcon path="delete_forever" />}
               onClick={async () => {
                 actions.deleteAction!();
               }}
             >
-              <span>
-                {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.Delete', { defaultValue: 'Delete' })}
-              </span>
+              <span>{t('judo.action.delete', { defaultValue: 'Delete' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -196,14 +193,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="cancel" />}
               onClick={async () => {
                 await actions.cancelAction!();
               }}
             >
-              <span>
-                {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.Cancel', { defaultValue: 'Cancel' })}
-              </span>
+              <span>{t('judo.action.cancel', { defaultValue: 'Cancel' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -214,14 +210,13 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="content-save" />}
               onClick={async () => {
                 await actions.updateAction!();
               }}
             >
-              <span>
-                {t('service.YesNoVoteDefinition.YesNoVoteDefinition_View_Edit.Update', { defaultValue: 'Save' })}
-              </span>
+              <span>{t('judo.action.update', { defaultValue: 'Save' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -235,6 +230,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
                 loading={isLoading}
                 loadingPosition="start"
                 variant={undefined}
+                disabled={isLoading || editMode}
                 startIcon={<MdiIcon path="delete" />}
                 onClick={async () => {
                   await actions.deleteOrArchiveForYesNoVoteDefinitionAction!();
@@ -256,6 +252,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
                 loading={isLoading}
                 loadingPosition="start"
                 variant={undefined}
+                disabled={isLoading || editMode}
                 startIcon={<MdiIcon path="lock-open" />}
                 onClick={async () => {
                   await actions.activateForYesNoVoteDefinitionAction!();
@@ -277,6 +274,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
                 loading={isLoading}
                 loadingPosition="start"
                 variant={undefined}
+                disabled={isLoading || editMode}
                 startIcon={<MdiIcon path="lock-check" />}
                 onClick={async () => {
                   await actions.closeVoteForYesNoVoteDefinitionAction!();
@@ -300,6 +298,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
                 loading={isLoading}
                 loadingPosition="start"
                 variant={undefined}
+                disabled={isLoading || editMode}
                 startIcon={<MdiIcon path="star-minus" />}
                 onClick={async () => {
                   await actions.removeFromFavoritesForYesNoVoteDefinitionAction!();
@@ -321,6 +320,7 @@ export default function ServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditD
                 loading={isLoading}
                 loadingPosition="start"
                 variant={undefined}
+                disabled={isLoading || editMode}
                 startIcon={<MdiIcon path="star-plus" />}
                 onClick={async () => {
                   await actions.addToFavoritesForYesNoVoteDefinitionAction!();

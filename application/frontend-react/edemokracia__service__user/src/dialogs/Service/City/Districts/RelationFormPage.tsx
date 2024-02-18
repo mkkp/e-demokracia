@@ -278,7 +278,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res);
+        await onSubmit(res, isDraft);
         if (openCreated) {
           await openServiceCityDistrictsRelationViewPage(res!);
         }

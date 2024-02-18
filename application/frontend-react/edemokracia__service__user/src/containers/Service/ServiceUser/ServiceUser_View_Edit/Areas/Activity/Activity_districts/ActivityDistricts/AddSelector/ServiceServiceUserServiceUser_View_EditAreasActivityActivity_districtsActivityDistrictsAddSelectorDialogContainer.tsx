@@ -108,17 +108,13 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityActi
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -135,12 +131,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityActi
                 await actions.addAction!(selectionDiff);
               }}
             >
-              <span>
-                {t(
-                  'service.ServiceUser.ServiceUser_View_Edit.Areas.activity.activity_districts.activityDistricts.Add',
-                  { defaultValue: 'Add' },
-                )}
-              </span>
+              <span>{t('judo.action.add', { defaultValue: 'Add' })}</span>
             </LoadingButton>
           </Grid>
         )}

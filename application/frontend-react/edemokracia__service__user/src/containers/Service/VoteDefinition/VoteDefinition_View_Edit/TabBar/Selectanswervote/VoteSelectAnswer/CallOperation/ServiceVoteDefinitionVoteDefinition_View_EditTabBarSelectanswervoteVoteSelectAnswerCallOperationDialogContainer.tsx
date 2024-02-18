@@ -101,16 +101,13 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t('service.VoteDefinition.VoteDefinition_View_Edit.tabBar.selectanswervote.voteSelectAnswer.Back', {
-                  defaultValue: 'Back',
-                })}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -121,6 +118,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="rocket-launch" />}
               onClick={async () => {
                 await actions.voteSelectAnswerForVoteDefinitionAction!();

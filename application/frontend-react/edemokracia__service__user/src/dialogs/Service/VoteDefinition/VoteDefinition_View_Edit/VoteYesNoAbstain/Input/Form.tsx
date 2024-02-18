@@ -250,6 +250,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditVoteYesNoAb
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         onSubmit();
       }
     } catch (error) {

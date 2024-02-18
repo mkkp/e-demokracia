@@ -66,7 +66,7 @@ export const OperationFaultDialog = ({ faultObjectKey, content, close }: Operati
           {Object.entries(content).map(([key, value]) => (
             <ListItem id={'faults.' + faultObjectKey + '.' + key} key={key} sx={{ display: 'list-item', p: 0 }}>
               <Typography>
-                <strong>{t('fault.' + faultObjectKey + '.' + key, { defaultValue: key }) as string}:</strong>{' '}
+                <strong>{t(`faults.${faultObjectKey}.${key}`, { defaultValue: key }) as string}:</strong>{' '}
                 {value.toString()}
               </Typography>
             </ListItem>

@@ -36,7 +36,7 @@ import { FilterType } from '~/components-api';
 import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceCreateIssueInput,
@@ -63,7 +63,7 @@ export interface ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_T
     selectedRows: ServiceCreateIssueInputStored[],
   ) => Promise<DialogResult<ServiceCreateIssueInputStored[]>>;
   clearAction?: () => Promise<void>;
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   exportAction?: (queryCustomizer: ServiceCreateIssueInputQueryCustomizer) => Promise<void>;
   openSetSelectorAction?: () => Promise<void>;
   filterAction?: (
@@ -105,6 +105,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -119,7 +120,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -182,7 +183,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
     () => [
       {
         id: 'User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableRowRemoveButton',
-        label: t('service.CreateIssueInput.CreateIssueInput_Table.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceCreateIssueInputStored) => getSelectedRows().length > 0 || isLoading,
@@ -194,7 +195,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
       },
       {
         id: 'User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableRowDeleteButton',
-        label: t('service.CreateIssueInput.CreateIssueInput_Table.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceCreateIssueInputStored) =>
@@ -252,6 +253,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceCreateIssueInputQueryCustomizer) => {
@@ -411,6 +413,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -433,7 +436,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Table.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -451,7 +454,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.exportAction && true ? (
@@ -469,10 +472,10 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Export', { defaultValue: 'Export' })}
+                  {t('judo.action.export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_oCuj8IeIEe2kLcMqsIbMgQ)/TransferObjectTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -482,11 +485,11 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.openAddSelectorAction && true ? (
@@ -503,7 +506,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Add', { defaultValue: 'Add' })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.openSetSelectorAction && true ? (
@@ -520,7 +523,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Set', { defaultValue: 'Set' })}
+                  {t('judo.action.open-set-selector', { defaultValue: 'Set' })}
                 </Button>
               ) : null}
               {actions.clearAction && data.length ? (
@@ -538,7 +541,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.Clear', { defaultValue: 'Clear' })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.bulkRemoveAction && selectionModel.length > 0 ? (
@@ -558,7 +561,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.bulkDeleteAction && selectionModel.length > 0 ? (
@@ -578,7 +581,7 @@ export function ServiceCreateIssueInputCreateIssueInput_TableCreateIssueInput_Ta
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.CreateIssueInput.CreateIssueInput_Table.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

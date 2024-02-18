@@ -267,12 +267,10 @@ export default function ServiceIssueIssue_View_EditCloseDebateInputForm(
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
-        if (result) {
-          onClose();
-          navigate(routeToServiceIssueIssue_View_EditCloseDebateOutputView(result.__signedIdentifier));
-        } else {
-          onSubmit();
-        }
+
+        onSubmit(result);
+
+        navigate(routeToServiceIssueIssue_View_EditCloseDebateOutputView(result.__signedIdentifier));
       }
     } catch (error) {
       handleError<CloseDebateInput>(error, { setValidation }, data);

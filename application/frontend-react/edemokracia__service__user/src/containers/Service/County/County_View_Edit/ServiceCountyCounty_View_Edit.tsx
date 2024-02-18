@@ -158,49 +158,24 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
             />
           </Grid>
 
-          <Grid item data-name="cities::LabelWrapper" xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="cities::LabelWrapper"
+              id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
               container
               direction="column"
               alignItems="stretch"
               justifyContent="flex-start"
-              spacing={2}
             >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="city" sx={{ marginRight: 1 }} />
-                  <Typography
-                    id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.County.County_View_Edit.cities.Label', { defaultValue: 'Cities' })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                >
-                  <ServiceCountyCounty_View_EditCitiesComponent
-                    uniqueId={'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
-                    actions={actions}
-                    ownerData={data}
-                    editMode={editMode}
-                    isFormUpdateable={isFormUpdateable}
-                    validationError={validation.get('cities')}
-                    refreshCounter={refreshCounter}
-                    isOwnerLoading={isLoading}
-                  />
-                </Grid>
-              </Grid>
+              <ServiceCountyCounty_View_EditCitiesComponent
+                uniqueId={'User/(esm/_cK7AsIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('cities')}
+                refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
+              />
             </Grid>
           </Grid>
         </Grid>

@@ -308,9 +308,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
   ): Promise<DialogResult<Array<ServiceIssueCategoryStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueCategoryStored>({
-        dialogTitle: t('service.IssueCategory.IssueCategory_View_Edit.subcategories.BulkDelete', {
-          defaultValue: 'Delete',
-        }),
+        dialogTitle: t('judo.action.bulk-delete', { defaultValue: 'Delete' }),
         itemTitleFn: (item) => item.title!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -342,7 +340,10 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       });
     });
   };
-  const subcategoriesOpenFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+  const subcategoriesOpenCreateFormAction = async (
+    isDraft?: boolean,
+    ownerValidation?: (data: any) => Promise<void>,
+  ) => {
     const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -432,7 +433,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
       if (confirmed) {
         await userServiceForAdminCategoriesImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);
@@ -492,7 +493,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
     ownerUnsetAction,
     ownerOpenPageAction,
     subcategoriesBulkDeleteAction,
-    subcategoriesOpenFormAction,
+    subcategoriesOpenCreateFormAction,
     subcategoriesFilterAction,
     subcategoriesDeleteAction,
     subcategoriesOpenPageAction,

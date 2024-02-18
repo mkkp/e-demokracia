@@ -250,10 +250,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.favoriteIssues.favoriteIssues.BulkRemove',
-          { defaultValue: 'Remove' },
-        ),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -362,10 +359,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceIssueStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceIssueStored>({
-        dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.issues.IssueTabBar.myissues.ownedIssues.BulkRemove',
-          { defaultValue: 'Remove' },
-        ),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -472,10 +466,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.favoriteVotesGroup.favoriteVoteDefinitions.BulkRemove',
-          { defaultValue: 'Remove' },
-        ),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -587,10 +578,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   ): Promise<DialogResult<Array<ServiceVoteDefinitionStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceVoteDefinitionStored>({
-        dialogTitle: t(
-          'service.Dashboard.Dashboard_View_Edit.Selector.votes.votesTabBar.myVotesGroup.ownedVoteDefinitions.BulkRemove',
-          { defaultValue: 'Remove' },
-        ),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => item.countyRepresentation!,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
@@ -700,6 +688,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -720,6 +709,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -740,6 +730,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -760,6 +751,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -802,6 +794,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -822,6 +815,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -842,6 +836,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -862,6 +857,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -948,6 +944,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }
@@ -968,6 +965,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
         if (!editMode) {
           await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
         }

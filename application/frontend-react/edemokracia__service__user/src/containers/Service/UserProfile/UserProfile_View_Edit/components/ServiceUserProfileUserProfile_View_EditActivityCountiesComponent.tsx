@@ -115,6 +115,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -128,7 +129,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -172,10 +173,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
     () => [
       {
         id: 'User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableRowRemoveButton',
-        label: t(
-          'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Remove',
-          { defaultValue: 'Remove' },
-        ) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceCountyStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
@@ -239,6 +237,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -396,10 +395,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -419,10 +415,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.activityCountiesOpenAddSelectorAction && isFormUpdateable() ? (
@@ -441,10 +434,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t(
-                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.Add',
-                    { defaultValue: 'Add' },
-                  )}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.activityCountiesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -468,10 +458,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.UserProfile.UserProfile_View_Edit.Areas.activity.tab_activity_counties.activityCounties.BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

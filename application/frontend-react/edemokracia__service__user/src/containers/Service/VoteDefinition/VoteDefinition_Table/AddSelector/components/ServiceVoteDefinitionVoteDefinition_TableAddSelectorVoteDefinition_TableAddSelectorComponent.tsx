@@ -43,7 +43,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -64,7 +64,7 @@ import {
 import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
 
 export interface ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefinition_TableAddSelectorComponentActionDefinitions {
-  openFormAction?: () => Promise<void>;
+  openCreateFormAction?: () => Promise<void>;
   filterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -113,6 +113,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -128,7 +129,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -195,7 +196,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
     type: 'number',
     filterable: false && true,
     valueFormatter: ({ value }: GridValueFormatterParams<number>) => {
-      return value && new Intl.NumberFormat(l10nLocale).format(value);
+      if (value === null || value === undefined) {
+        return '';
+      }
+      return new Intl.NumberFormat(l10nLocale).format(value);
     },
   };
   const createdColumn: GridColDef<ServiceVoteDefinitionStored> = {
@@ -340,6 +344,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceVoteDefinitionQueryCustomizer) => {
@@ -591,6 +596,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -613,7 +619,7 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteDefinition.VoteDefinition_Table.Table.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -630,10 +636,10 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteDefinition.VoteDefinition_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.openFormAction && true ? (
+              {actions.openCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_-gSncH4XEe2cB7_PsKXsHQ)/TransferObjectTableAddSelectorTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -642,11 +648,11 @@ export function ServiceVoteDefinitionVoteDefinition_TableAddSelectorVoteDefiniti
                     const processedQueryCustomizer = {
                       ...processQueryCustomizer(queryCustomizer),
                     };
-                    await actions.openFormAction!();
+                    await actions.openCreateFormAction!();
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteDefinition.VoteDefinition_Table.Table.Create', { defaultValue: 'Create' })}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

@@ -102,17 +102,13 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>
-                {t(
-                  'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.userVoteEntryGroup.TakeVote.vote.Back',
-                  { defaultValue: 'Back' },
-                )}
-              </span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -123,6 +119,7 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="rocket-launch" />}
               onClick={async () => {
                 await actions.voteForSelectAnswerVoteDefinitionAction!();

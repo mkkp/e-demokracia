@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -71,6 +72,11 @@ export interface ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_Vie
   issuePreFetchAction?: (target?: ServiceIssueStored) => Promise<JudoRestResponse<ServiceIssueStored>>;
   voteAction?: () => Promise<void>;
   takeBackVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  activateForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  addToFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  closeVoteForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  deleteOrArchiveForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
+  removeFromFavoritesForYesNoAbstainVoteDefinitionAction?: () => Promise<void>;
   isCloseAtRequired?: (
     data: ServiceYesNoAbstainVoteDefinition | ServiceYesNoAbstainVoteDefinitionStored,
     editMode?: boolean,
@@ -217,152 +223,153 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="userVoteEntryGroup::LabelWrapper" xs={12} sm={12}>
+          <Grid item data-name="userVoteEntryGroup" xs={12} sm={12}>
             <Card
-              id="(User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="userVoteEntryGroup::LabelWrapper"
+              id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+              data-name="userVoteEntryGroup"
+              sx={{ height: '100%' }}
             >
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  sx={{ mb: 2 }}
+                >
+                  <Grid item>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <Typography
-                        id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
+                        id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
                         variant="h5"
                         component="h1"
                       >
                         {t(
-                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup.Label',
+                          'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.userVoteEntryGroup',
                           { defaultValue: 'My vote entry' },
                         )}
                       </Typography>
                     </Grid>
                   </Grid>
-
-                  <Grid item data-name="userVoteEntryGroup" xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_7M-INFsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                      data-name="userVoteEntryGroup"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    >
-                      {(actions?.isUserVoteHidden
-                        ? !actions?.isUserVoteHidden(data, editMode)
-                        : !data.userHasNoVoteEntry) && (
-                        <Grid item data-name="userVote" xs={12} sm={12}>
+                </Grid>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
+                  {(actions?.isUserVoteHidden
+                    ? !actions?.isUserVoteHidden(data, editMode)
+                    : !data.userHasNoVoteEntry) && (
+                    <Grid item data-name="userVote" xs={12} sm={12}>
+                      <Grid
+                        id="User/(esm/_7M-INVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                        data-name="userVote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item data-name="VirtualForUserVote" xs={12} sm={12}>
                           <Grid
-                            id="User/(esm/_7M-INVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                            data-name="userVote"
+                            id="User/(esm/_7M-INlsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                            data-name="VirtualForUserVote"
                             container
                             direction="row"
                             alignItems="flex-start"
                             justifyContent="flex-start"
                             spacing={2}
                           >
-                            <Grid item data-name="VirtualForUserVote" xs={12} sm={12}>
-                              <Grid
-                                id="User/(esm/_7M-INlsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                                data-name="VirtualForUserVote"
-                                container
-                                direction="row"
-                                alignItems="flex-start"
-                                justifyContent="flex-start"
-                                spacing={2}
-                              >
-                                <Grid item xs={12} sm={12} md={4.0}>
-                                  <LoadingButton
-                                    id="User/(esm/_7M-IN1snEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
-                                    loading={isLoading}
-                                    variant={undefined}
-                                    startIcon={<MdiIcon path="delete" />}
-                                    loadingPosition="start"
-                                    onClick={async () => {
-                                      if (actions.takeBackVoteForYesNoAbstainVoteDefinitionAction) {
-                                        await actions.takeBackVoteForYesNoAbstainVoteDefinitionAction!();
-                                      }
-                                    }}
-                                    disabled={
-                                      !actions.takeBackVoteForYesNoAbstainVoteDefinitionAction ||
-                                      !data.userHasVoteEntry ||
-                                      editMode
-                                    }
-                                  >
-                                    {t(
-                                      'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.takeBackVote',
-                                      { defaultValue: 'TakeBackVote' },
-                                    )}
-                                  </LoadingButton>
-                                </Grid>
-
-                                <Grid item xs={12} sm={12} md={4.0}>
-                                  <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponent
-                                    disabled={true}
-                                    readOnly={true || !isFormUpdateable()}
-                                    ownerData={data}
-                                    editMode={editMode}
-                                    isLoading={isLoading}
-                                    isDraft={isDraft}
-                                    storeDiff={storeDiff}
-                                    validationError={validation.get('userVoteEntry')}
-                                    actions={actions}
-                                    submit={submit}
-                                  />
-                                </Grid>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                        </Grid>
-                      )}
-
-                      {(actions?.isTakeVoteHidden
-                        ? !actions?.isTakeVoteHidden(data, editMode)
-                        : !data.userHasVoteEntry) && (
-                        <Grid item data-name="TakeVote" xs={12} sm={12}>
-                          <Grid
-                            id="User/(esm/_7M-IO1snEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                            data-name="TakeVote"
-                            container
-                            direction="row"
-                            alignItems="flex-start"
-                            justifyContent="flex-start"
-                            spacing={2}
-                          >
-                            <Grid item xs={12} sm={12}>
+                            <Grid item xs={12} sm={12} md={4.0}>
                               <LoadingButton
-                                id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
+                                id="User/(esm/_7M-IN1snEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
                                 loading={isLoading}
                                 variant={undefined}
-                                startIcon={<MdiIcon path="vote" />}
+                                startIcon={<MdiIcon path="delete" />}
                                 loadingPosition="start"
                                 onClick={async () => {
-                                  if (actions.voteAction) {
-                                    await actions.voteAction!();
+                                  if (actions.takeBackVoteForYesNoAbstainVoteDefinitionAction) {
+                                    await actions.takeBackVoteForYesNoAbstainVoteDefinitionAction!();
                                   }
                                 }}
-                                disabled={!actions.voteAction || !data.userHasNoVoteEntry || editMode}
+                                disabled={
+                                  !actions.takeBackVoteForYesNoAbstainVoteDefinitionAction ||
+                                  !data.userHasVoteEntry ||
+                                  editMode
+                                }
                               >
-                                {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.vote', {
-                                  defaultValue: 'Take a vote',
-                                })}
+                                {t(
+                                  'service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.takeBackVote',
+                                  { defaultValue: 'TakeBackVote' },
+                                )}
                               </LoadingButton>
+                            </Grid>
+
+                            <Grid item xs={12} sm={12} md={4.0}>
+                              <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryComponent
+                                disabled={false}
+                                readOnly={true || !isFormUpdateable()}
+                                ownerData={data}
+                                editMode={editMode}
+                                isLoading={isLoading}
+                                isDraft={isDraft}
+                                storeDiff={storeDiff}
+                                validationError={validation.get('userVoteEntry')}
+                                actions={actions}
+                                submit={submit}
+                              />
                             </Grid>
                           </Grid>
                         </Grid>
-                      )}
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  )}
+
+                  {(actions?.isTakeVoteHidden
+                    ? !actions?.isTakeVoteHidden(data, editMode)
+                    : !data.userHasVoteEntry) && (
+                    <Grid item data-name="TakeVote" xs={12} sm={12}>
+                      <Grid
+                        id="User/(esm/_7M-IO1snEe6Mx9dH3yj5gQ)/GroupVisualElement"
+                        data-name="TakeVote"
+                        container
+                        direction="row"
+                        alignItems="flex-start"
+                        justifyContent="flex-start"
+                        spacing={2}
+                      >
+                        <Grid item xs={12} sm={12}>
+                          <LoadingButton
+                            id="User/(esm/_7M-IPFsnEe6Mx9dH3yj5gQ)/OperationFormVisualElement"
+                            loading={isLoading}
+                            variant={undefined}
+                            startIcon={<MdiIcon path="vote" />}
+                            loadingPosition="start"
+                            onClick={async () => {
+                              if (actions.voteAction) {
+                                await actions.voteAction!();
+                              }
+                            }}
+                            disabled={!actions.voteAction || !data.userHasNoVoteEntry || editMode}
+                          >
+                            {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.vote', {
+                              defaultValue: 'Take a vote',
+                            })}
+                          </LoadingButton>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  )}
                 </Grid>
               </CardContent>
             </Card>
           </Grid>
 
           <Grid item data-name="VoteEntryBase" xs={12} sm={12}>
-            <Card id="User/(esm/_7M-IIFsnEe6Mx9dH3yj5gQ)/GroupVisualElement" data-name="VoteEntryBase">
+            <Card
+              id="User/(esm/_7M-IIFsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+              data-name="VoteEntryBase"
+              sx={{ height: '100%' }}
+            >
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                   <Grid item data-name="virtual" xs={12} sm={12}>
                     <Grid
                       id="User/(esm/_7M-IIVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
@@ -530,9 +537,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
                           refreshCounter={refreshCounter}
                           fetchCall={actions.issuePreFetchAction}
                         >
-                          {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.issue', {
-                            defaultValue: 'Issue',
-                          })}
+                          {t('judo.action.open-page', { defaultValue: 'Issue' })}
                           <MdiIcon path="arrow-right" />
                         </AssociationButton>
                       </Grid>
@@ -660,60 +665,34 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
             </Card>
           </Grid>
 
-          <Grid item data-name="entries::LabelWrapper" xs={12} sm={12}>
+          <Grid item data-name="entries" xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="entries::LabelWrapper"
+              id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
+              data-name="entries"
               container
-              direction="column"
-              alignItems="stretch"
+              direction="row"
+              alignItems="flex-start"
               justifyContent="flex-start"
               spacing={2}
             >
               <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <Typography
-                    id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.YesNoAbstainVoteDefinition.YesNoAbstainVoteDefinition_View_Edit.entries.Label', {
-                      defaultValue: 'Entries',
-                    })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item data-name="entries" xs={12} sm={12}>
                 <Grid
-                  id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/GroupVisualElement"
-                  data-name="entries"
+                  id="User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable"
                   container
-                  direction="row"
+                  direction="column"
                   alignItems="stretch"
                   justifyContent="flex-start"
-                  spacing={2}
                 >
-                  <Grid item xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable"
-                      container
-                      direction="column"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                    >
-                      <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponent
-                        uniqueId={'User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable'}
-                        actions={actions}
-                        ownerData={data}
-                        editMode={editMode}
-                        isFormUpdateable={isFormUpdateable}
-                        validationError={validation.get('voteEntries')}
-                        refreshCounter={refreshCounter}
-                        isOwnerLoading={isLoading}
-                      />
-                    </Grid>
-                  </Grid>
+                  <ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditVoteEntriesComponent
+                    uniqueId={'User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable'}
+                    actions={actions}
+                    ownerData={data}
+                    editMode={editMode}
+                    isFormUpdateable={isFormUpdateable}
+                    validationError={validation.get('voteEntries')}
+                    refreshCounter={refreshCounter}
+                    isOwnerLoading={isLoading}
+                  />
                 </Grid>
               </Grid>
             </Grid>

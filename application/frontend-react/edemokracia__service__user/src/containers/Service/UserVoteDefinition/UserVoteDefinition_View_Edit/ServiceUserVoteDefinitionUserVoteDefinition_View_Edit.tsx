@@ -11,8 +11,10 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -226,7 +228,31 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="OwnedVoteDefinitionsGroup"
                     >
                       <CardContent>
-                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={2}
+                          sx={{ mb: 2 }}
+                        >
+                          <Grid item>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="account-box" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t(
+                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.OwnedVoteDefinitionsGroup',
+                                  { defaultValue: 'Owned Votes' },
+                                )}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
@@ -260,7 +286,31 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveGlobalVoteDefinitionsGroup"
                     >
                       <CardContent>
-                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={2}
+                          sx={{ mb: 2 }}
+                        >
+                          <Grid item>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="earth" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t(
+                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveGlobalVoteDefinitionsGroup',
+                                  { defaultValue: 'Active Global Votes' },
+                                )}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
                               id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable"
@@ -294,7 +344,31 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveVoteDefinitionsByOwnerActivityArea"
                     >
                       <CardContent>
-                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={2}
+                          sx={{ mb: 2 }}
+                        >
+                          <Grid item>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="map-search" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t(
+                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerActivityArea',
+                                  { defaultValue: 'Active votes bv my activity areas' },
+                                )}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_75CCAF5KEe6vsex_cZNQbQ)/TabBarVisualElement"
@@ -457,7 +531,31 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveVoteDefinitionsByOwnerResidentAreaGroup"
                     >
                       <CardContent>
-                        <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                        <Grid
+                          container
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          spacing={2}
+                          sx={{ mb: 2 }}
+                        >
+                          <Grid item>
+                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                              <MdiIcon path="castle" sx={{ marginRight: 1 }} />
+                              <Typography
+                                id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement"
+                                variant="h5"
+                                component="h1"
+                              >
+                                {t(
+                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
+                                  { defaultValue: 'Active votes by my resident area' },
+                                )}
+                              </Typography>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                        <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
                               id="User/(esm/_9cDT8F5KEe6vsex_cZNQbQ)/TabBarVisualElement"

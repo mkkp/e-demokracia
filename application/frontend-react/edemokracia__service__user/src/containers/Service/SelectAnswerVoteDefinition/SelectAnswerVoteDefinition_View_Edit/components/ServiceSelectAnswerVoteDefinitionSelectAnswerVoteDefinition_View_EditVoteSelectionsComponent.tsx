@@ -63,7 +63,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   voteSelectionsBulkRemoveAction?: (
     selectedRows: ServiceSelectAnswerVoteSelectionStored[],
   ) => Promise<DialogResult<ServiceSelectAnswerVoteSelectionStored[]>>;
-  voteSelectionsOpenFormAction?: () => Promise<void>;
+  voteSelectionsOpenCreateFormAction?: () => Promise<void>;
   voteSelectionsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -119,6 +119,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -134,7 +135,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -194,10 +195,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     () => [
       {
         id: 'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableRowRemoveButton',
-        label: t(
-          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Remove',
-          { defaultValue: 'Remove' },
-        ) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceSelectAnswerVoteSelectionStored) => isLoading,
@@ -209,10 +207,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       },
       {
         id: 'User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableRowDeleteButton',
-        label: t(
-          'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Delete',
-          { defaultValue: 'Delete' },
-        ) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceSelectAnswerVoteSelectionStored) =>
@@ -278,6 +273,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -449,10 +445,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Filter',
-                    { defaultValue: 'Set Filters' },
-                  )}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -470,13 +463,10 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Refresh',
-                    { defaultValue: 'Refresh' },
-                  )}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
-              {actions.voteSelectionsOpenFormAction && true ? (
+              {actions.voteSelectionsOpenCreateFormAction && true ? (
                 <Button
                   id="User/(esm/_jwqEgFtwEe6Mx9dH3yj5gQ)/TabularReferenceTableCreateButton"
                   startIcon={<MdiIcon path="note-add" />}
@@ -486,14 +476,11 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                       ...processQueryCustomizer(queryCustomizer),
                       _mask: actions.getVoteSelectionsMask ? actions.getVoteSelectionsMask() : queryCustomizer._mask,
                     };
-                    await actions.voteSelectionsOpenFormAction!();
+                    await actions.voteSelectionsOpenCreateFormAction!();
                   }}
                   disabled={false}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.Create',
-                    { defaultValue: 'Create' },
-                  )}
+                  {t('judo.action.open-create-form', { defaultValue: 'Create' })}
                 </Button>
               ) : null}
               {actions.voteSelectionsBulkRemoveAction && selectionModel.length > 0 ? (
@@ -513,10 +500,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkRemove',
-                    { defaultValue: 'Remove' },
-                  )}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.voteSelectionsBulkDeleteAction && selectionModel.length > 0 ? (
@@ -536,10 +520,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   }}
                   disabled={editMode || selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t(
-                    'service.SelectAnswerVoteDefinition.SelectAnswerVoteDefinition_View_Edit.VoteEntryBase.virtual.voteSelections.BulkDelete',
-                    { defaultValue: 'Delete' },
-                  )}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

@@ -150,12 +150,13 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'text'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="arrow-left" />}
               onClick={async () => {
                 await actions.backAction!();
               }}
             >
-              <span>{t('CreateArgumentInput.CreateArgumentInput_Form.Back', { defaultValue: 'Back' })}</span>
+              <span>{t('judo.action.back', { defaultValue: 'Back' })}</span>
             </LoadingButton>
           </Grid>
         )}
@@ -173,6 +174,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
                 loading={isLoading}
                 loadingPosition="start"
                 variant={'contained'}
+                disabled={isLoading}
                 startIcon={isDraft ? <MdiIcon path="check" /> : <MdiIcon path="content-save" />}
                 onClick={async () => {
                   await actions.createAction!();
@@ -181,7 +183,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
                 <span>
                   {isDraft
                     ? t('judo.dialogs.draft.submit', { defaultValue: 'Ok' })
-                    : t('CreateArgumentInput.CreateArgumentInput_Form.Create', { defaultValue: 'Create' })}
+                    : t('judo.action.create', { defaultValue: 'Create' })}
                 </span>
               </LoadingButton>
               {!isDraft && (
@@ -237,6 +239,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-minus" />}
               onClick={async () => {
                 await actions.createConArgumentForConAction!();
@@ -257,6 +260,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-minus" />}
               onClick={async () => {
                 await actions.createConArgumentForProAction!();
@@ -277,6 +281,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-minus" />}
               onClick={async () => {
                 await actions.createConArgumentForIssueAction!();
@@ -298,6 +303,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
                 await actions.createProArgumentForConAction!();
@@ -318,6 +324,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
                 await actions.createProArgumentForProAction!();
@@ -338,6 +345,7 @@ export default function CreateArgumentInputCreateArgumentInput_FormDialog(
               loading={isLoading}
               loadingPosition="start"
               variant={'contained'}
+              disabled={isLoading}
               startIcon={<MdiIcon path="chat-plus" />}
               onClick={async () => {
                 await actions.createProArgumentForIssueAction!();

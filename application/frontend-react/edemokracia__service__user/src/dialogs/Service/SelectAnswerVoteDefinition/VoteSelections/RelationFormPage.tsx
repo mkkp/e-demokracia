@@ -296,7 +296,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res);
+        await onSubmit(res, isDraft);
         if (openCreated) {
           await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(res!);
         }

@@ -116,6 +116,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -129,7 +130,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -181,9 +182,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
     () => [
       {
         id: 'User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceTableRowRemoveButton',
-        label: t('service.Issue.Issue_View_Edit.other.categories.categories.Remove', {
-          defaultValue: 'Remove',
-        }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceIssueCategoryStored) => getSelectedRows().length > 0 || !isFormUpdateable() || isLoading,
@@ -248,6 +247,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPaginationModel((prevState) => ({
       ...prevState,
       pageSize: newValue,
@@ -409,9 +409,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Filter', {
-                    defaultValue: 'Set Filters',
-                  })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -429,7 +427,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.categoriesOpenAddSelectorAction && isFormUpdateable() ? (
@@ -446,7 +444,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Add', { defaultValue: 'Add' })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.categoriesClearAction && data.length && isFormUpdateable() ? (
@@ -464,7 +462,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.categories.categories.Clear', { defaultValue: 'Clear' })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.categoriesBulkRemoveAction && selectionModel.length > 0 ? (
@@ -484,9 +482,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.Issue.Issue_View_Edit.other.categories.categories.BulkRemove', {
-                    defaultValue: 'Remove',
-                  })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

@@ -42,7 +42,7 @@ import {
   singleSelectColumnOperators,
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
-import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceVoteEntry, ServiceVoteEntryQueryCustomizer, ServiceVoteEntryStored } from '~/services/data-api';
@@ -104,6 +104,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
   const apiRef = useGridApiRef();
   const filterModelKey = `User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-filters`;
+  const rowsPerPageKey = `User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');
@@ -119,7 +120,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     getItemParsedWithDefault(filterModelKey, { items: [] }),
   );
   const [filters, setFilters] = useState<Filter[]>(getItemParsedWithDefault(filtersKey, []));
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(getItemParsedWithDefault(rowsPerPageKey, 10));
   const [paginationModel, setPaginationModel] = useState({
     pageSize: rowsPerPage,
     page: 0,
@@ -229,7 +230,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
     () => [
       {
         id: 'User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableRowRemoveButton',
-        label: t('service.VoteEntry.VoteEntry_Table.Remove', { defaultValue: 'Remove' }) as string,
+        label: t('judo.action.remove', { defaultValue: 'Remove' }) as string,
         icon: <MdiIcon path="link_off" />,
         isCRUD: true,
         disabled: (row: ServiceVoteEntryStored) => getSelectedRows().length > 0 || isLoading,
@@ -241,7 +242,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
       },
       {
         id: 'User/(esm/_zJZogORxEe2Bgcx6em3jZg)/TransferObjectTableRowDeleteButton',
-        label: t('service.VoteEntry.VoteEntry_Table.Delete', { defaultValue: 'Delete' }) as string,
+        label: t('judo.action.delete', { defaultValue: 'Delete' }) as string,
         icon: <MdiIcon path="delete_forever" />,
         isCRUD: true,
         disabled: (row: ServiceVoteEntryStored) => getSelectedRows().length > 0 || !row.__deleteable || isLoading,
@@ -297,6 +298,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
 
   const setPageSize = useCallback((newValue: number) => {
     setRowsPerPage(newValue);
+    setItemStringified(rowsPerPageKey, newValue);
     setPage(0);
 
     setQueryCustomizer((prevQueryCustomizer: ServiceVoteEntryQueryCustomizer) => {
@@ -494,6 +496,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
         paginationMode="server"
         sortingMode="server"
         filterMode="server"
+        filterDebounceMs={filterDebounceMs}
         rowCount={rowsPerPage}
         components={{
           Toolbar: () => (
@@ -516,7 +519,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Table.Filter', { defaultValue: 'Set Filters' })}
+                  {t('judo.action.filter', { defaultValue: 'Set Filters' })}
                   {filters.length ? ` (${filters.length})` : ''}
                 </Button>
               ) : null}
@@ -534,7 +537,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Table.Refresh', { defaultValue: 'Refresh' })}
+                  {t('judo.action.refresh', { defaultValue: 'Refresh' })}
                 </Button>
               ) : null}
               {actions.exportAction && true ? (
@@ -552,7 +555,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Export', { defaultValue: 'Export' })}
+                  {t('judo.action.export', { defaultValue: 'Export' })}
                 </Button>
               ) : null}
               {actions.openAddSelectorAction && true ? (
@@ -569,7 +572,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Add', { defaultValue: 'Add' })}
+                  {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
                 </Button>
               ) : null}
               {actions.openSetSelectorAction && true ? (
@@ -586,7 +589,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Set', { defaultValue: 'Set' })}
+                  {t('judo.action.open-set-selector', { defaultValue: 'Set' })}
                 </Button>
               ) : null}
               {actions.clearAction && data.length ? (
@@ -604,7 +607,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.Clear', { defaultValue: 'Clear' })}
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.bulkRemoveAction && selectionModel.length > 0 ? (
@@ -624,7 +627,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.BulkRemove', { defaultValue: 'Remove' })}
+                  {t('judo.action.bulk-remove', { defaultValue: 'Remove' })}
                 </Button>
               ) : null}
               {actions.bulkDeleteAction && selectionModel.length > 0 ? (
@@ -644,7 +647,7 @@ export function ServiceVoteEntryVoteEntry_TableVoteEntry_TableComponent(
                   }}
                   disabled={selectedRows.current.some((s) => !s.__deleteable) || isLoading}
                 >
-                  {t('service.VoteEntry.VoteEntry_Table.BulkDelete', { defaultValue: 'Delete' })}
+                  {t('judo.action.bulk-delete', { defaultValue: 'Delete' })}
                 </Button>
               ) : null}
               {<AdditionalToolbarActions />}

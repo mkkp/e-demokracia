@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -43,6 +44,8 @@ export type RatingVoteInputRatingVoteInput_FormContainerHook = (
 
 export interface RatingVoteInputRatingVoteInput_FormActionDefinitions {
   getPageTitle?: (data: RatingVoteInput) => string;
+  voteForRatingVoteDefinitionAction?: () => Promise<void>;
+  voteRatingForVoteDefinitionAction?: () => Promise<void>;
   isValueRequired?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean) => boolean;
   isValueDisabled?: (data: RatingVoteInput | RatingVoteInputStored, editMode?: boolean, isLoading?: boolean) => boolean;
 }
@@ -134,6 +137,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
               label={t('RatingVoteInput.RatingVoteInput_Form.value', { defaultValue: 'Vote rate' }) as string}
               customInput={TextField}
               value={data.value ?? ''}
+              formatValue={true}
               className={clsx({
                 'JUDO-viewMode': !editMode,
                 'JUDO-required': false,

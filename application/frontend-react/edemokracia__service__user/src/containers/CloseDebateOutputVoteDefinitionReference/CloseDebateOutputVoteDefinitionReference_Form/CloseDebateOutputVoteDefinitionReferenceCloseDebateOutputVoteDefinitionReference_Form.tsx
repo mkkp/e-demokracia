@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -142,41 +143,34 @@ export default function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutpu
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item data-name="debate::LabelWrapper" xs={12} sm={12}>
-            <Card
-              id="(User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="debate::LabelWrapper"
-            >
+          <Grid item data-name="debate" xs={12} sm={12}>
+            <Card id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement" data-name="debate" sx={{ height: '100%' }}>
               <CardContent>
-                <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
-                  <Grid item xs={12} sm={12}>
+                <Grid
+                  container
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  spacing={2}
+                  sx={{ mb: 2 }}
+                >
+                  <Grid item>
                     <Grid container direction="row" alignItems="center" justifyContent="flex-start">
                       <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
                       <Typography
-                        id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/WrapAndLabelVisualElement)/Label"
+                        id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
                         variant="h5"
                         component="h1"
                       >
                         {t(
-                          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate.Label',
+                          'CloseDebateOutputVoteDefinitionReference.CloseDebateOutputVoteDefinitionReference_Form.debate',
                           { defaultValue: 'Close debate' },
                         )}
                       </Typography>
                     </Grid>
                   </Grid>
-
-                  <Grid item data-name="debate" xs={12} sm={12}>
-                    <Grid
-                      id="User/(esm/_YoAHulu1Ee6Lb6PYNSnQSA)/GroupVisualElement"
-                      data-name="debate"
-                      container
-                      direction="row"
-                      alignItems="stretch"
-                      justifyContent="flex-start"
-                      spacing={2}
-                    ></Grid>
-                  </Grid>
                 </Grid>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}></Grid>
               </CardContent>
             </Card>
           </Grid>

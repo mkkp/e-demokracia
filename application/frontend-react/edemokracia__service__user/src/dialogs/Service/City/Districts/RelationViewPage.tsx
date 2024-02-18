@@ -270,7 +270,7 @@ export default function ServiceCityDistrictsRelationViewPage(props: ServiceCityD
       if (confirmed) {
         await serviceCityServiceForDistrictsImpl.delete(data);
         showSuccessSnack(t('judo.action.delete.success', { defaultValue: 'Delete successful' }));
-        onClose();
+        onSubmit();
       }
     } catch (error) {
       handleError(error, undefined, data);

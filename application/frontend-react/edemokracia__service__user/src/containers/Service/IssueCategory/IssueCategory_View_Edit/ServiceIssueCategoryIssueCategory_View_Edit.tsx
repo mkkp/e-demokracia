@@ -227,51 +227,24 @@ export default function ServiceIssueCategoryIssueCategory_View_Edit(
             />
           </Grid>
 
-          <Grid item data-name="subcategories::LabelWrapper" xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="subcategories::LabelWrapper"
+              id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
               container
               direction="column"
               alignItems="stretch"
               justifyContent="flex-start"
-              spacing={2}
             >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="file-tree" sx={{ marginRight: 1 }} />
-                  <Typography
-                    id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.IssueCategory.IssueCategory_View_Edit.subcategories.Label', {
-                      defaultValue: 'Subcategories',
-                    })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                >
-                  <ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent
-                    uniqueId={'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
-                    actions={actions}
-                    ownerData={data}
-                    editMode={editMode}
-                    isFormUpdateable={isFormUpdateable}
-                    validationError={validation.get('subcategories')}
-                    refreshCounter={refreshCounter}
-                    isOwnerLoading={isLoading}
-                  />
-                </Grid>
-              </Grid>
+              <ServiceIssueCategoryIssueCategory_View_EditSubcategoriesComponent
+                uniqueId={'User/(esm/_8sbTAIdgEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('subcategories')}
+                refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
+              />
             </Grid>
           </Grid>
         </Grid>

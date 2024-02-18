@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { clsx } from 'clsx';
@@ -211,7 +212,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
 
               <Grid item xs={12} sm={12}>
                 <ServiceCommentComment_FormCreatedByComponent
-                  disabled={true}
+                  disabled={false}
                   readOnly={true || !isFormUpdateable()}
                   ownerData={data}
                   editMode={editMode}
@@ -270,6 +271,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                   label={t('service.Comment.Comment_Form.upVotes', { defaultValue: 'UpVotes' }) as string}
                   customInput={TextField}
                   value={data.upVotes ?? ''}
+                  formatValue={true}
                   className={clsx({
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': false,
@@ -305,6 +307,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                   label={t('service.Comment.Comment_Form.downVotes', { defaultValue: 'DownVotes' }) as string}
                   customInput={TextField}
                   value={data.downVotes ?? ''}
+                  formatValue={true}
                   className={clsx({
                     'JUDO-viewMode': !editMode,
                     'JUDO-required': false,
@@ -340,7 +343,7 @@ export default function ServiceCommentComment_Form(props: ServiceCommentComment_
                   navigateAction={actions.votesOpenPageAction}
                   refreshCounter={refreshCounter}
                 >
-                  {t('service.Comment.Comment_Form.votes', { defaultValue: 'Votes' })}
+                  {t('judo.action.open-page', { defaultValue: 'Votes' })}
                   <MdiIcon path="arrow-right" />
                 </AssociationButton>
               </Grid>

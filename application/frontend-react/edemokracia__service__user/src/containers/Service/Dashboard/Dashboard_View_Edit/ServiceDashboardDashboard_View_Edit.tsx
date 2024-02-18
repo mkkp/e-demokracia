@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -188,7 +189,28 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
               <Grid item data-name="issues" xs={12} sm={12}>
                 <Card id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" data-name="issues">
                   <CardContent>
-                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{ mb: 2 }}
+                    >
+                      <Grid item>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="wechat" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupVisualElement"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Dashboard.Dashboard_View_Edit.issues', { defaultValue: 'Issues' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                       <Grid container item xs={12} sm={12}>
                         <ModeledTabs
                           id="User/(esm/_CR_JgIyUEe2VSOmaAz6G9Q)/TabBarVisualElement"
@@ -299,7 +321,28 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
               <Grid item data-name="votes" xs={12} sm={12}>
                 <Card id="User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupVisualElement" data-name="votes">
                   <CardContent>
-                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{ mb: 2 }}
+                    >
+                      <Grid item>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="vote" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="User/(esm/_bFZdMGBVEe6M1JBD8stPIg)/GroupVisualElement"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Dashboard.Dashboard_View_Edit.votes', { defaultValue: 'Votes' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                       <Grid container item xs={12} sm={12}>
                         <ModeledTabs
                           id="User/(esm/_ju2mUGBVEe6M1JBD8stPIg)/TabBarVisualElement"
@@ -410,7 +453,28 @@ export default function ServiceDashboardDashboard_View_Edit(props: ServiceDashbo
               <Grid item data-name="votesCast" xs={12} sm={12}>
                 <Card id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" data-name="votesCast">
                   <CardContent>
-                    <Grid container direction="row" alignItems="stretch" justifyContent="flex-start" spacing={2}>
+                    <Grid
+                      container
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      spacing={2}
+                      sx={{ mb: 2 }}
+                    >
+                      <Grid item>
+                        <Grid container direction="row" alignItems="center" justifyContent="flex-start">
+                          <MdiIcon path="vote-outline" sx={{ marginRight: 1 }} />
+                          <Typography
+                            id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupVisualElement"
+                            variant="h5"
+                            component="h1"
+                          >
+                            {t('service.Dashboard.Dashboard_View_Edit.votesCast', { defaultValue: 'Votes Cast' })}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                       <Grid item xs={12} sm={12}>
                         <Grid
                           id="User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable"

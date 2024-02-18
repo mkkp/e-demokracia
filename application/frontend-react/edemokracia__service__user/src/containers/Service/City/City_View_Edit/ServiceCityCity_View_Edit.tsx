@@ -158,49 +158,24 @@ export default function ServiceCityCity_View_Edit(props: ServiceCityCity_View_Ed
             />
           </Grid>
 
-          <Grid item data-name="districts::LabelWrapper" xs={12} sm={12}>
+          <Grid item xs={12} sm={12}>
             <Grid
-              id="(User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/LabelWrapper"
-              data-name="districts::LabelWrapper"
+              id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
               container
               direction="column"
               alignItems="stretch"
               justifyContent="flex-start"
-              spacing={2}
             >
-              <Grid item xs={12} sm={12}>
-                <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                  <MdiIcon path="home-city" sx={{ marginRight: 1 }} />
-                  <Typography
-                    id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/WrapAndLabelVisualElement)/Label"
-                    variant="h5"
-                    component="h1"
-                  >
-                    {t('service.City.City_View_Edit.districts.Label', { defaultValue: 'Districts' })}
-                  </Typography>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} sm={12}>
-                <Grid
-                  id="User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable"
-                  container
-                  direction="column"
-                  alignItems="stretch"
-                  justifyContent="flex-start"
-                >
-                  <ServiceCityCity_View_EditDistrictsComponent
-                    uniqueId={'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
-                    actions={actions}
-                    ownerData={data}
-                    editMode={editMode}
-                    isFormUpdateable={isFormUpdateable}
-                    validationError={validation.get('districts')}
-                    refreshCounter={refreshCounter}
-                    isOwnerLoading={isLoading}
-                  />
-                </Grid>
-              </Grid>
+              <ServiceCityCity_View_EditDistrictsComponent
+                uniqueId={'User/(esm/_cLC8gIXhEe2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable'}
+                actions={actions}
+                ownerData={data}
+                editMode={editMode}
+                isFormUpdateable={isFormUpdateable}
+                validationError={validation.get('districts')}
+                refreshCounter={refreshCounter}
+                isOwnerLoading={isLoading}
+              />
             </Grid>
           </Grid>
         </Grid>

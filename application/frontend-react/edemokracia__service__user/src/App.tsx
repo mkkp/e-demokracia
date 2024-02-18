@@ -14,29 +14,32 @@ import { PrincipalProvider } from './auth';
 import { BreadcrumbProvider, MdiIcon } from './components';
 import { DialogProvider } from './components/dialog';
 import { Layout } from './layout';
+import { ScrollToTop } from './layout/ScrollToTop';
 
 function App() {
   return (
-    <PrincipalProvider>
-      <SnackbarProvider
-        maxSnack={3}
-        action={(snackbarId) => (
-          <IconButton
-            className="close-error-snackbar"
-            style={{ color: '#fff' }}
-            onClick={() => closeSnackbar(snackbarId)}
-          >
-            <MdiIcon path="close" />
-          </IconButton>
-        )}
-      >
-        <DialogProvider>
-          <BreadcrumbProvider>
-            <Layout />
-          </BreadcrumbProvider>
-        </DialogProvider>
-      </SnackbarProvider>
-    </PrincipalProvider>
+    <ScrollToTop>
+      <PrincipalProvider>
+        <SnackbarProvider
+          maxSnack={3}
+          action={(snackbarId) => (
+            <IconButton
+              className="close-error-snackbar"
+              style={{ color: '#fff' }}
+              onClick={() => closeSnackbar(snackbarId)}
+            >
+              <MdiIcon path="close" />
+            </IconButton>
+          )}
+        >
+          <DialogProvider>
+            <BreadcrumbProvider>
+              <Layout />
+            </BreadcrumbProvider>
+          </DialogProvider>
+        </SnackbarProvider>
+      </PrincipalProvider>
+    </ScrollToTop>
   );
 }
 

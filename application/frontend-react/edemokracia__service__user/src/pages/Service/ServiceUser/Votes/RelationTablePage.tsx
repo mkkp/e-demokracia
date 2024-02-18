@@ -155,7 +155,7 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   ): Promise<DialogResult<Array<ServiceSimpleVoteStored>>> => {
     return new Promise((resolve) => {
       openCRUDDialog<ServiceSimpleVoteStored>({
-        dialogTitle: t('service.SimpleVote.SimpleVote_Table.BulkRemove', { defaultValue: 'Remove' }),
+        dialogTitle: t('judo.action.bulk-remove', { defaultValue: 'Remove' }),
         itemTitleFn: (item) => t('judo.placeholder', { defaultValue: 'placeholder' }) as string,
         selectedItems: selectedRows,
         action: async (item, successHandler: () => void, errorHandler: (error: any) => void) => {
