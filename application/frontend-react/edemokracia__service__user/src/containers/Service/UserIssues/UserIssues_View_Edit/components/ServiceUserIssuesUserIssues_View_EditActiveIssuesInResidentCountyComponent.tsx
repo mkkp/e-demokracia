@@ -290,7 +290,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
         label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || !row.isEditable || isLoading,
         action: actions.activeIssuesInResidentCountyCreateCommentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentCountyCreateCommentAction!(rowData);
@@ -303,7 +303,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
           defaultValue: 'createConArgument',
         }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInResidentCountyCreateConArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentCountyCreateConArgumentAction!(rowData);
@@ -316,7 +317,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCount
           defaultValue: 'createProArgument',
         }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInResidentCountyCreateProArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentCountyCreateProArgumentAction!(rowData);

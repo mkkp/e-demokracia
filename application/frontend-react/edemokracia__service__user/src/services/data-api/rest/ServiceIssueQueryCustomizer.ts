@@ -24,6 +24,7 @@ export interface ServiceIssueQueryCustomizer extends QueryCustomizer<ServiceIssu
   defaultVoteType?: Array<FilterByVoteType>;
   description?: Array<FilterBytypesText>;
   districtRepresentation?: Array<FilterBytypesString>;
+  isEditable?: Array<FilterBytypesBoolean>;
   isFavorite?: Array<FilterBytypesBoolean>;
   isIssueActive?: Array<FilterBytypesBoolean>;
   isIssueDeletable?: Array<FilterBytypesBoolean>;

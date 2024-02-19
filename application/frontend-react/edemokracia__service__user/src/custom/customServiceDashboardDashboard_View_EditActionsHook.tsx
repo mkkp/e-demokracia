@@ -26,6 +26,6 @@ const customServiceDashboardDashboard_View_EditActionsHook: ServiceDashboardDash
     ownedVoteDefinitionsOpenPageAction: openVoteDefinitionPage(),
     favoriteIssuesOpenPageAction: openIssuePage(),
     ownedIssuesOpenPageAction: openIssuePage(),
-    userVoteEntriesOpenPageAction: openVoteEntryPage()
+    userVoteEntriesOpenPageAction: openVoteEntryPage(),
   };
 };

@@ -358,7 +358,7 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceTableRowButtonGroup)',
         label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || !row.isEditable || isLoading,
         action: actions.ownedIssuesCreateCommentAction
           ? async (rowData) => {
               await actions.ownedIssuesCreateCommentAction!(rowData);
@@ -371,7 +371,8 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
           defaultValue: 'createConArgument',
         }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.ownedIssuesCreateConArgumentAction
           ? async (rowData) => {
               await actions.ownedIssuesCreateConArgumentAction!(rowData);
@@ -384,7 +385,8 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
           defaultValue: 'createProArgument',
         }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.ownedIssuesCreateProArgumentAction
           ? async (rowData) => {
               await actions.ownedIssuesCreateProArgumentAction!(rowData);

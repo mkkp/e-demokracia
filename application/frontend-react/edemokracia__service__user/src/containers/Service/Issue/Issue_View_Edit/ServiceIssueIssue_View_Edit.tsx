@@ -270,7 +270,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       disabled={
                         actions?.isDefaultVoteTypeDisabled
                           ? actions.isDefaultVoteTypeDisabled(data, editMode, isLoading)
-                          : isLoading
+                          : !data.isEditable || isLoading
                       }
                       error={!!validation.get('defaultVoteType')}
                       helperText={validation.get('defaultVoteType')}
@@ -318,7 +318,9 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                         'JUDO-required': true,
                       })}
                       disabled={
-                        actions?.isTitleDisabled ? actions.isTitleDisabled(data, editMode, isLoading) : isLoading
+                        actions?.isTitleDisabled
+                          ? actions.isTitleDisabled(data, editMode, isLoading)
+                          : !data.isEditable || isLoading
                       }
                       error={!!validation.get('title')}
                       helperText={validation.get('title')}
@@ -343,14 +345,14 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
 
                   <Grid item xs={12} sm={12} md={4.0}>
                     <TextField
-                      required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : true}
+                      required={actions?.isStatusRequired ? actions.isStatusRequired(data, editMode) : false}
                       name="status"
                       id="User/(esm/_Bw7xwGkwEe25ONJ3V89cVA)/EnumerationTypeCombo"
                       label={t('service.Issue.Issue_View_Edit.status', { defaultValue: 'Status' }) as string}
                       value={data.status || ''}
                       className={clsx({
                         'JUDO-viewMode': !editMode,
-                        'JUDO-required': true,
+                        'JUDO-required': false,
                       })}
                       disabled={
                         actions?.isStatusDisabled ? actions.isStatusDisabled(data, editMode, isLoading) : isLoading
@@ -362,7 +364,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       }}
                       InputLabelProps={{ shrink: true }}
                       InputProps={{
-                        readOnly: false || !isFormUpdateable(),
+                        readOnly: true || !isFormUpdateable(),
                         startAdornment: (
                           <InputAdornment position="start">
                             <MdiIcon path="list" />
@@ -457,7 +459,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                       disabled={
                         actions?.isDescriptionDisabled
                           ? actions.isDescriptionDisabled(data, editMode, isLoading)
-                          : isLoading
+                          : !data.isEditable || isLoading
                       }
                       multiline
                       minRows={4.0}
@@ -484,7 +486,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
 
                   <Grid item xs={12} sm={12}>
                     <ServiceIssueIssue_View_EditOwnerComponent
-                      disabled={false}
+                      disabled={!data.isEditable || false}
                       readOnly={false || !isFormUpdateable()}
                       ownerData={data}
                       editMode={editMode}
@@ -612,7 +614,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                       await actions.createConArgumentAction!();
                                     }
                                   }}
-                                  disabled={!actions.createConArgumentAction || editMode}
+                                  disabled={!actions.createConArgumentAction || !data.isIssueActive || editMode}
                                 >
                                   {t('service.Issue.Issue_View_Edit.createConArgument', {
                                     defaultValue: 'Add Con Argument',
@@ -708,7 +710,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                                       await actions.createProArgumentAction!();
                                     }
                                   }}
-                                  disabled={!actions.createProArgumentAction || editMode}
+                                  disabled={!actions.createProArgumentAction || !data.isIssueActive || editMode}
                                 >
                                   {t('service.Issue.Issue_View_Edit.createProArgument', {
                                     defaultValue: 'Add Pro Argument',
@@ -914,7 +916,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                               await actions.createCommentAction!();
                             }
                           }}
-                          disabled={!actions.createCommentAction || editMode}
+                          disabled={!actions.createCommentAction || !data.isEditable || editMode}
                         >
                           {t('service.Issue.Issue_View_Edit.createComment', { defaultValue: 'Add comment' })}
                         </LoadingButton>

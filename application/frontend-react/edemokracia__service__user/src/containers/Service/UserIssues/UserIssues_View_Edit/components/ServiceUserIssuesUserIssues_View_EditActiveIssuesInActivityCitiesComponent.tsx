@@ -314,7 +314,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitie
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_zR1kkFraEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
         label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || !row.isEditable || isLoading,
         action: actions.activeIssuesInActivityCitiesCreateCommentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCitiesCreateCommentAction!(rowData);
@@ -327,7 +327,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitie
           defaultValue: 'createConArgument',
         }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInActivityCitiesCreateConArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCitiesCreateConArgumentAction!(rowData);
@@ -340,7 +341,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCitie
           defaultValue: 'createProArgument',
         }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInActivityCitiesCreateProArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCitiesCreateProArgumentAction!(rowData);

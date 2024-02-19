@@ -203,7 +203,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
   const getPageQueryCustomizer: () => ServiceIssueQueryCustomizer = () => ({
     _mask: actions.getMask
       ? actions.getMask!()
-      : '{created,defaultVoteType,description,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},attachments{file,link,type},categories{description,title},comments{comment,created,createdByName,downVotes,upVotes},issueType{description,title},owner{representation},city{representation},county{representation},district{representation}}',
+      : '{created,defaultVoteType,description,isEditable,isFavorite,isIssueActive,isIssueDeletable,isIssueDraft,isIssueNotActive,isIssueNotDeletable,isIssueNotDraft,isNotFavorite,isVoteClosable,isVoteNotClosable,status,title,cons{downVotes,title,upVotes},pros{downVotes,title,upVotes},attachments{file,link,type},categories{description,title},comments{comment,created,createdByName,downVotes,upVotes},issueType{description,title},owner{representation},city{representation},county{representation},district{representation}}',
   });
 
   // Private actions

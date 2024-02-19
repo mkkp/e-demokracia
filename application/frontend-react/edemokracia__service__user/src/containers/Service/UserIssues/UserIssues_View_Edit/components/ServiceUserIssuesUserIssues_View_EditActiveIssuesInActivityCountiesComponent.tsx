@@ -302,7 +302,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
         label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || !row.isEditable || isLoading,
         action: actions.activeIssuesInActivityCountiesCreateCommentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCountiesCreateCommentAction!(rowData);
@@ -315,7 +315,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
           defaultValue: 'createConArgument',
         }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInActivityCountiesCreateConArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCountiesCreateConArgumentAction!(rowData);
@@ -328,7 +329,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCount
           defaultValue: 'createProArgument',
         }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInActivityCountiesCreateProArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInActivityCountiesCreateProArgumentAction!(rowData);

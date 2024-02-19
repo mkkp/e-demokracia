@@ -39,6 +39,7 @@ export interface ServiceIssue {
   defaultVoteType?: null | VoteType;
   description: string;
   districtRepresentation?: null | string;
+  isEditable?: null | boolean;
   isFavorite?: null | boolean;
   isIssueActive?: null | boolean;
   isIssueDeletable?: null | boolean;
@@ -53,7 +54,7 @@ export interface ServiceIssue {
   isVoteNotClosable?: null | boolean;
   representation?: null | string;
   scope?: null | IssueScope;
-  status: IssueStatus;
+  status?: null | IssueStatus;
   title: string;
   attachments?: null | Array<ServiceIssueAttachmentStored>;
   categories?: null | Array<ServiceIssueCategoryStored>;
@@ -76,6 +77,7 @@ export type ServiceIssueAttributes =
   | 'defaultVoteType'
   | 'description'
   | 'districtRepresentation'
+  | 'isEditable'
   | 'isFavorite'
   | 'isIssueActive'
   | 'isIssueDeletable'

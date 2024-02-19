@@ -333,7 +333,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistr
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_BZzIWFrcEe6gN-oVBDDIOQ)/TabularReferenceTableRowButtonGroup)',
         label: t('service.UserIssues.UserIssues_View_Edit.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || !row.isEditable || isLoading,
         action: actions.activeIssuesInResidentDistrictCreateCommentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentDistrictCreateCommentAction!(rowData);
@@ -346,7 +346,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistr
           defaultValue: 'createConArgument',
         }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInResidentDistrictCreateConArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentDistrictCreateConArgumentAction!(rowData);
@@ -359,7 +360,8 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentDistr
           defaultValue: 'createProArgument',
         }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || editMode || isLoading,
+        disabled: (row: ServiceIssueStored) =>
+          getSelectedRows().length > 0 || editMode || !row.isIssueActive || isLoading,
         action: actions.activeIssuesInResidentDistrictCreateProArgumentAction
           ? async (rowData) => {
               await actions.activeIssuesInResidentDistrictCreateProArgumentAction!(rowData);

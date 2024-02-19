@@ -310,7 +310,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         id: 'User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
         label: t('service.Issue.Issue_Table.createComment', { defaultValue: 'createComment' }) as string,
         icon: <MdiIcon path="comment-text-multiple" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isEditable || isLoading,
         action: actions.createCommentAction
           ? async (rowData) => {
               await actions.createCommentAction!(rowData);
@@ -321,7 +321,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         id: 'User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
         label: t('service.Issue.Issue_Table.createConArgument', { defaultValue: 'createConArgument' }) as string,
         icon: <MdiIcon path="chat-minus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isIssueActive || isLoading,
         action: actions.createConArgumentAction
           ? async (rowData) => {
               await actions.createConArgumentAction!(rowData);
@@ -332,7 +332,7 @@ export function ServiceIssueIssue_TableIssue_TableComponent(props: ServiceIssueI
         id: 'User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormTableRowCallOperationButton/(discriminator/User/(esm/_qCtwUGksEe25ONJ3V89cVA)/TransferObjectTable)',
         label: t('service.Issue.Issue_Table.createProArgument', { defaultValue: 'createProArgument' }) as string,
         icon: <MdiIcon path="chat-plus" />,
-        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || isLoading,
+        disabled: (row: ServiceIssueStored) => getSelectedRows().length > 0 || !row.isIssueActive || isLoading,
         action: actions.createProArgumentAction
           ? async (rowData) => {
               await actions.createProArgumentAction!(rowData);

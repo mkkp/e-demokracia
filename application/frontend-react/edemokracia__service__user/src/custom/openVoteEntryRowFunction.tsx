@@ -11,12 +11,11 @@ import { processQueryCustomizer } from '~/utilities';
 import type { ServiceVoteEntryStored } from '~/services/data-api';
 
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { UserServiceForVoteEntriesImpl } from '~/services/data-axios/UserServiceForVoteEntriesImpl';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
 import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
+import { UserServiceForVoteEntriesImpl } from '~/services/data-axios/UserServiceForVoteEntriesImpl';
 import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoAbstainVoteDefinitionsImpl';
 import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
-
 
 import {
   routeToServiceUserAdminVoteEntriesAccessTablePage,
@@ -31,10 +30,7 @@ export const openVoteEntryPage = () => {
   const [createDialog, closeDialog, closeAllDialogs] = useDialog();
   const { navigate } = useJudoNavigation();
 
-  const userServiceForVoteEntriesImpl = useMemo(
-    () => new UserServiceForVoteEntriesImpl(judoAxiosProvider),
-    [],
-  );
+  const userServiceForVoteEntriesImpl = useMemo(() => new UserServiceForVoteEntriesImpl(judoAxiosProvider), []);
   const userServiceForRatingVoteDefinitionsImpl = useMemo(
     () => new UserServiceForRatingVoteDefinitionsImpl(judoAxiosProvider),
     [],
@@ -58,7 +54,7 @@ export const openVoteEntryPage = () => {
     const entryIdAccessFilterCustomizer: any = {
       _identifier: row!.__identifier,
     };
-    const res = await userServiceForVoteEntriesImpl.list(processQueryCustomizer(entryIdAccessFilterCustomizer));    
+    const res = await userServiceForVoteEntriesImpl.list(processQueryCustomizer(entryIdAccessFilterCustomizer));
 
     const id = res.data[0].voteDefinitionReference!.__signedIdentifier;
     const entityType = res.data[0].voteDefinitionReference!.__entityType;
@@ -94,4 +90,3 @@ export const openVoteEntryPage = () => {
     }
   };
 };
-

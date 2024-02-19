@@ -49,7 +49,7 @@ data-api/model/ServiceCreateIssueInput.ts,7463dece97ee87ae4abe1f1e483cebe0
 data-api/model/ServiceCreateUserInput.ts,3c54d2c505483bdd360a0aabfb935407
 data-api/model/ServiceDashboard.ts,70580ac281f0f9c1134bb72538ec6c64
 data-api/model/ServiceDistrict.ts,6f6b14ff7294fe2915474d1ba4cb3459
-data-api/model/ServiceIssue.ts,1c159cde8ac6b19be5bf36288338a8f4
+data-api/model/ServiceIssue.ts,37d99401c4963215d241064a4672e7d1
 data-api/model/ServiceIssueAttachment.ts,4daed8d95f28fda33d38114b7c11174d
 data-api/model/ServiceIssueCategory.ts,bea7cbbe6c804e34d97513177ca54026
 data-api/model/ServiceIssueType.ts,e5875ce41cd2aa0db8c456ca99be49d7
@@ -147,7 +147,7 @@ data-api/rest/ServiceIssueAttachmentQueryCustomizer.ts,72c63b646d40fe8f9cf032ca1
 data-api/rest/ServiceIssueCategoryMaskBuilder.ts,6ad7edcdd46e459f426ac02ae266d078
 data-api/rest/ServiceIssueCategoryQueryCustomizer.ts,7bcec974039e37cd09bc87afe34860de
 data-api/rest/ServiceIssueMaskBuilder.ts,c860df40c78ff3d30da3c6fe503bac81
-data-api/rest/ServiceIssueQueryCustomizer.ts,bf380f647ba1e16c8289c5a905f1e5ef
+data-api/rest/ServiceIssueQueryCustomizer.ts,a558e4d36a5d6db0d22e42253a380c69
 data-api/rest/ServiceIssueTypeMaskBuilder.ts,dd1544445c46e74f605aef0c646835ec
 data-api/rest/ServiceIssueTypeQueryCustomizer.ts,02d979db3d5651a4b1f0d5ddf7f0d696
 data-api/rest/ServiceProMaskBuilder.ts,c337a906fd6271791fb43aee567d4cc7

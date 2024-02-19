@@ -619,7 +619,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_qEQBYGksEe25ONJ3V89cVA" name="description" dataType="_7D8NzGkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_MuXgwGkREe25ONJ3V89cVA" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_qEf5AGksEe25ONJ3V89cVA"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_qE5hoGksEe25ONJ3V89cVA" name="status" dataType="_B7DAwGkUEe25ONJ3V89cVA" required="true" defaultExpression="edemokracia::IssueStatus#CREATED" binding="_LHce4GkUEe25ONJ3V89cVA" getterExpression="" memberType="MAPPED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_qE5hoGksEe25ONJ3V89cVA" name="status" dataType="_B7DAwGkUEe25ONJ3V89cVA" defaultExpression="edemokracia::IssueStatus#CREATED" binding="_LHce4GkUEe25ONJ3V89cVA" getterExpression="self.status&#xA;" memberType="DERIVED">
         <inherited xmi:id="_qFJZQGksEe25ONJ3V89cVA"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_eaGVoIewEe2kLcMqsIbMgQ" name="representation" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.title" memberType="DERIVED">
@@ -658,7 +658,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_Z0Np4HkGEe6cB8og8p0UuQ" name="isIssueActive" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#ACTIVE" memberType="DERIVED">
         <inherited xmi:id="_Z0Np4XkGEe6cB8og8p0UuQ"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_Cylr4HkHEe6cB8og8p0UuQ" name="isIssueDeletable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#CREATED or (self.status == edemokracia::IssueStatus#ACTIVE and edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner)" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_Cylr4HkHEe6cB8og8p0UuQ" name="isIssueDeletable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#CREATED or (self.status == edemokracia::IssueStatus#ACTIVE and edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any().isAdmin)" memberType="DERIVED">
         <inherited xmi:id="_Cylr4XkHEe6cB8og8p0UuQ"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_vLG90HnpEe6IpMjJEx4KXg" name="isIssueNotActive" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#ACTIVE" memberType="DERIVED">
@@ -670,7 +670,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_vOwHsHnpEe6IpMjJEx4KXg" name="isIssueNotDraft" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="self.status == edemokracia::IssueStatus#ACTIVE" getterExpression="self.status != edemokracia::IssueStatus#CREATED" memberType="DERIVED">
         <inherited xmi:id="_vOwHsXnpEe6IpMjJEx4KXg"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_vQa7oHnpEe6IpMjJEx4KXg" name="isIssueNotDeletable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#CREATED and not (self.status == edemokracia::IssueStatus#ACTIVE and edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner)" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_vQa7oHnpEe6IpMjJEx4KXg" name="isIssueNotDeletable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#CREATED and not (self.status == edemokracia::IssueStatus#ACTIVE and edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any().isAdmin)" memberType="DERIVED">
         <inherited xmi:id="_vQa7oXnpEe6IpMjJEx4KXg"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_THS4UHnqEe6IpMjJEx4KXg" name="isIssueInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#VOTING" memberType="DERIVED">
@@ -678,6 +678,9 @@
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_W7QSIHnqEe6IpMjJEx4KXg" name="isIssueNotInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING" memberType="DERIVED">
         <inherited xmi:id="_W7QSIXnqEe6IpMjJEx4KXg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_w10JMM65Ee6ddqBfFzCBZg" name="isEditable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#CREATED or edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner&#xA;" memberType="DERIVED">
+        <inherited xmi:id="_w10JMc65Ee6ddqBfFzCBZg"/>
       </attributes>
       <mapping xmi:id="_qC2TMGksEe25ONJ3V89cVA" target="_GDYW0GkOEe25ONJ3V89cVA"/>
       <operations xmi:id="_1qtJ0IycEe2VSOmaAz6G9Q" name="createComment" customImplementation="false" body="" operationType="MAPPED" binding="createComment">
@@ -726,12 +729,12 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8IdvSEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8INvSEe2Bgcx6em3jZg" name="description" label="Description" iconName="text_fields" dataFeature="_R2x48Nu4Ee2Bgcx6em3jZg"/>
           </components>
-          <components xsi:type="ui:DataField" xmi:id="_h1CAMOMdEe2Bgcx6em3jZg" name="defaultVoteType" label="Default Vote Type" iconName="list" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-          <components xsi:type="ui:DataField" xmi:id="_BvyiQGkwEe25ONJ3V89cVA" name="title" label="Title" iconName="text_fields" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+          <components xsi:type="ui:DataField" xmi:id="_h1CAMOMdEe2Bgcx6em3jZg" name="defaultVoteType" label="Default Vote Type" iconName="list" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+          <components xsi:type="ui:DataField" xmi:id="_BvyiQGkwEe25ONJ3V89cVA" name="title" label="Title" iconName="text_fields" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
           <components xsi:type="ui:DataField" xmi:id="_Bw7xwGkwEe25ONJ3V89cVA" name="status" label="Status" iconName="list" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
           <components xsi:type="ui:DataField" xmi:id="_BvJpEGkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
-          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" label="Description" iconName="text_fields" col="12" row="4" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_plsB8Id8Ee2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="12" relationFeature="_qYS-wGksEe25ONJ3V89cVA" targetDefinedTabular="false">
+          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" label="Description" iconName="text_fields" col="12" row="4" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_plsB8Id8Ee2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="12" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="_qYS-wGksEe25ONJ3V89cVA" targetDefinedTabular="false">
             <columns xsi:type="ui:DataColumn" xmi:id="_pltQEId8Ee2kLcMqsIbMgQ" name="representation" label="Representation" iconName="text_fields" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ"/>
           </components>
         </components>
@@ -739,7 +742,7 @@
           <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" col="12" row="10">
             <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" frame="true" col="6" row="11">
               <components xsi:type="ui:Group" xmi:id="_qJPPCnjvEe6cB8og8p0UuQ" name="actions" col="6">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" operation="createConArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" operation="createConArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPDHjvEe6cB8og8p0UuQ" name="table" col="6" row="10">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPDXjvEe6cB8og8p0UuQ" name="cons" label="" iconName="" col="6" row="10" relationFeature="_gKs3kH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true">
@@ -751,7 +754,7 @@
             </components>
             <components xsi:type="ui:Group" xmi:id="_qJPPAXjvEe6cB8og8p0UuQ" name="pros" label="Pros" iconName="chat-plus" frame="true" col="6" row="11">
               <components xsi:type="ui:Group" xmi:id="_qJPPAnjvEe6cB8og8p0UuQ" name="actions" col="6">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" operation="createProArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" operation="createProArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPBHjvEe6cB8og8p0UuQ" name="table" col="6" row="10">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPBXjvEe6cB8og8p0UuQ" name="pros" label="" iconName="" col="6" row="10" relationFeature="_7XpxEH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true">
@@ -788,7 +791,7 @@
           </tabs>
           <tabs xmi:id="__yV9oIybEe2VSOmaAz6G9Q" name="comments" label="Comments" iconName="comment-text-multiple" col="12" row="10">
             <components xsi:type="ui:Group" xmi:id="_NSnZ0IyeEe2VSOmaAz6G9Q" name="actions" col="12">
-              <components xsi:type="ui:OperationForm" xmi:id="_S8tEQIydEe2VSOmaAz6G9Q" name="createComment" label="Add comment" iconName="comment-text-multiple" operation="createComment"/>
+              <components xsi:type="ui:OperationForm" xmi:id="_S8tEQIydEe2VSOmaAz6G9Q" name="createComment" label="Add comment" iconName="comment-text-multiple" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" operation="createComment"/>
               <components xsi:type="ui:TabularReferenceField" xmi:id="_mvouIIybEe2VSOmaAz6G9Q" name="comments" label="" iconName="" col="12" row="10" relationFeature="_UjefsIybEe2VSOmaAz6G9Q" targetDefinedTabular="false">
                 <columns xsi:type="ui:DataColumn" xmi:id="_mvrxcIybEe2VSOmaAz6G9Q" name="comment" label="Comment" iconName="text_fields" dataFeature="_HqzzwG5VEe2wNaja8kBvcQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_mvvb0IybEe2VSOmaAz6G9Q" name="created" label="Created" iconName="schedule" dataFeature="_Hq4FMG5VEe2wNaja8kBvcQ"/>
