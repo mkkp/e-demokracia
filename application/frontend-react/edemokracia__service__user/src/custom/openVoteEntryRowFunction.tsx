@@ -48,15 +48,19 @@ export const openVoteEntryPage = () => {
     [],
   );
 
-  return async function (row: ServiceVoteEntryStored) {
+  return async function (row: ServiceVoteEntryStored, isDraft?: boolean) {
     closeAllDialogs();
 
     const entryIdAccessFilterCustomizer: any = {
       _identifier: row!.__identifier,
     };
-    const res = await userServiceForVoteEntriesImpl.list(processQueryCustomizer(entryIdAccessFilterCustomizer));
 
-    const id = res.data[0].voteDefinitionReference!.__signedIdentifier;
+    const res = await userServiceForVoteEntriesImpl.list(
+      undefined,
+      processQueryCustomizer(entryIdAccessFilterCustomizer),
+    );
+
+    const id = res.data[0].voteDefinitionReference!.__identifier;
     const entityType = res.data[0].voteDefinitionReference!.__entityType;
 
     const idAccessFilterCustomizer: any = {
@@ -65,7 +69,10 @@ export const openVoteEntryPage = () => {
 
     if (entityType === 'edemokracia.YesNoVoteDefinition') {
       // Retrieve signedIdentifier from access
-      const res = await userServiceForYesNoVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+      const res = await userServiceForYesNoVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
       // Open view page in access
       navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
     } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {

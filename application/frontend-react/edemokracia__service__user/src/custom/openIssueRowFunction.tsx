@@ -16,7 +16,7 @@ export const openIssuePage = () => {
   const { navigate } = useJudoNavigation();
   const userServiceForIssuesImpl = useMemo(() => new UserServiceForIssuesImpl(judoAxiosProvider), []);
 
-  return async function (row: ServiceIssueStored) {
+  return async function (row: ServiceIssueStored, isDraft?: boolean) {
     closeAllDialogs();
 
     const id = row!.__identifier;
@@ -27,7 +27,7 @@ export const openIssuePage = () => {
     };
 
     // Retrieve signedIdentifier from access
-    const res = await userServiceForIssuesImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+    const res = await userServiceForIssuesImpl.list(undefined, processQueryCustomizer(idAccessFilterCustomizer));
     // Open view page in access
     navigate(routeToServiceUserIssuesAccessViewPage(res.data[0].__signedIdentifier));
   };

@@ -45,7 +45,7 @@ export const openVoteDefinitionPage = () => {
     [],
   );
 
-  return async function (row: ServiceVoteDefinitionStored) {
+  return async function (row: ServiceVoteDefinitionStored, isDraft?: boolean) {
     closeAllDialogs();
 
     const id = row!.__identifier;
@@ -57,7 +57,10 @@ export const openVoteDefinitionPage = () => {
 
     if (entityType === 'edemokracia.YesNoVoteDefinition') {
       // Retrieve signedIdentifier from access
-      const res = await userServiceForYesNoVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+      const res = await userServiceForYesNoVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
       // Open view page in access
       navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
     } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
@@ -69,12 +72,16 @@ export const openVoteDefinitionPage = () => {
       navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
     } else if (entityType === 'edemokracia.RatingVoteDefinition') {
       // Retrieve signedIdentifier from access
-      const res = await userServiceForRatingVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+      const res = await userServiceForRatingVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
       // Open view page in access
       navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
     } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
+        undefined,
         processQueryCustomizer(idAccessFilterCustomizer),
       );
       // Open view page in access

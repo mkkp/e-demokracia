@@ -76,12 +76,16 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
       // 3. Open view page in access
       if (entityType === 'edemokracia.YesNoVoteDefinition') {
         // Retrieve signedIdentifier from access
-        const res = await userServiceForYesNoVoteDefinitionsImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+        const res = await userServiceForYesNoVoteDefinitionsImpl.list(
+          undefined,
+          processQueryCustomizer(idAccessFilterCustomizer),
+        );
         // Open view page in access
         navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
       } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
+          undefined,
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
@@ -89,6 +93,7 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
       } else if (entityType === 'edemokracia.RatingVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForRatingVoteDefinitionsImpl.list(
+          undefined,
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access
@@ -96,6 +101,7 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
       } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
         // Retrieve signedIdentifier from access
         const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
+          undefined,
           processQueryCustomizer(idAccessFilterCustomizer),
         );
         // Open view page in access

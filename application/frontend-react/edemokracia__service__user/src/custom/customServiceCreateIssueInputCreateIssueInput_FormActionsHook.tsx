@@ -33,7 +33,7 @@ const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCrea
 
     return {
       postCreateIssueForUserIssuesAction: async (
-        output: ServiceIssue,
+        output: ServiceIssueStored,
         onSubmit: (result?: ServiceIssueStored) => Promise<void>,
         onClose: () => Promise<void>,
       ) => {
@@ -46,7 +46,7 @@ const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCrea
           _identifier: id,
         };
 
-        const res = await userServiceForIssuesImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+        const res = await userServiceForIssuesImpl.list(undefined, processQueryCustomizer(idAccessFilterCustomizer));
 
         await onClose();
 
