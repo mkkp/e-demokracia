@@ -72,7 +72,7 @@ export default function CreateArgumentInputCreateArgumentInput_Table(
     `(${OBJECTCLASS}=${CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: CreateArgumentInputCreateArgumentInput_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

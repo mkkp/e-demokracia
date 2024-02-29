@@ -122,10 +122,11 @@ export const useServiceIssueCategorySubcategoriesRelationFormPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -156,7 +157,7 @@ export interface ServiceIssueCategorySubcategoriesRelationFormPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueCategory) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationFeatureForm
@@ -323,10 +324,7 @@ export default function ServiceIssueCategorySubcategoriesRelationFormPage(
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceIssueCategorySubcategoriesRelationViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceIssueCategory>(error, { setValidation }, data);

@@ -66,7 +66,7 @@ export default function CloseDebateInputCloseDebateInput_Table(props: CloseDebat
     `(${OBJECTCLASS}=${CLOSE_DEBATE_INPUT_CLOSE_DEBATE_INPUT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: CloseDebateInputCloseDebateInput_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

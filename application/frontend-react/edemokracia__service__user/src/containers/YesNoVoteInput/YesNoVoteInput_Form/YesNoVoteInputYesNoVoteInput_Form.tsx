@@ -104,7 +104,7 @@ export default function YesNoVoteInputYesNoVoteInput_Form(props: YesNoVoteInputY
   );
   const containerActions: YesNoVoteInputYesNoVoteInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

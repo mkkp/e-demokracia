@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator, dateTimeColumnOperators } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -56,7 +58,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentActionDefinitions {
   voteEntriesFilterAction?: (
@@ -93,6 +95,9 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponentSidekickComponent';
+
 // XMIID: User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable
 // Name: voteEntries
 export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditVoteEntriesComponent(
@@ -110,6 +115,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_SELECT_ANSWER_VOTE_DEFINITION_SELECT_ANSWER_VOTE_DEFINITION_VIEW_EDIT_VOTE_ENTRIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -153,6 +159,8 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   const [lastItem, setLastItem] = useState<ServiceSelectAnswerVoteEntryStored>();
   const [firstItem, setFirstItem] = useState<ServiceSelectAnswerVoteEntryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceSelectAnswerVoteEntryStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -385,7 +393,7 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
   };
 
   async function fetchData() {
-    if (!isLoading && ownerData.__signedIdentifier) {
+    if (ownerData.__signedIdentifier) {
       setIsInternalLoading(true);
 
       try {
@@ -424,6 +432,14 @@ export function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
       id="User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable"
       data-table-name="voteEntries"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

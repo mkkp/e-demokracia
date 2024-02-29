@@ -65,7 +65,7 @@ export default function ServiceCountyCounty_Table(props: ServiceCountyCounty_Tab
     `(${OBJECTCLASS}=${SERVICE_COUNTY_COUNTY_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceCountyCounty_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

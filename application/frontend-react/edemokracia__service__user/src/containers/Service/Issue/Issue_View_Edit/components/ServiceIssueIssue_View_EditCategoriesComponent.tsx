@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceIssue,
@@ -54,7 +56,7 @@ import {
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceIssueIssue_View_EditCategoriesComponentActionDefinitions {
   categoriesOpenAddSelectorAction?: () => Promise<void>;
@@ -97,6 +99,9 @@ export interface ServiceIssueIssue_View_EditCategoriesComponentProps {
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_CATEGORIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceIssueIssue_View_EditCategoriesComponentSidekickComponent';
+
 // XMIID: User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable
 // Name: categories
 export function ServiceIssueIssue_View_EditCategoriesComponent(
@@ -114,6 +119,7 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_CATEGORIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -150,6 +156,8 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceIssueCategoryStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -352,6 +360,14 @@ export function ServiceIssueIssue_View_EditCategoriesComponent(
 
   return (
     <div id="User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" data-table-name="categories">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

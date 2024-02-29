@@ -125,10 +125,11 @@ export const useServiceUserManagerUserManager_View_EditCreateUserInputForm = ():
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -159,7 +160,7 @@ export interface ServiceUserManagerUserManager_View_EditCreateUserInputFormProps
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCreateUserInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationUnmappedInputPageDefinition

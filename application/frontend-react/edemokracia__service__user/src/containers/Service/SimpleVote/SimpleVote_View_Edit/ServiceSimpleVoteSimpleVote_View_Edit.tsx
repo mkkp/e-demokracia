@@ -26,6 +26,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import type { JudoRestResponse } from '~/services/data-api/rest';
+import type { BaseDateValidationProps } from '~/utilities';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -56,6 +57,7 @@ export interface ServiceSimpleVoteSimpleVote_View_EditActionDefinitions {
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getCreatedValidationProps?: (data: ServiceSimpleVote) => BaseDateValidationProps;
   getMask?: () => string;
 }
 
@@ -112,7 +114,7 @@ export default function ServiceSimpleVoteSimpleVote_View_Edit(props: ServiceSimp
   );
   const containerActions: ServiceSimpleVoteSimpleVote_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

@@ -107,10 +107,11 @@ export const useServiceUserProfileUserProfile_View_EditAreasActivityTab_activity
                   result: 'close',
                 });
               }}
-              onSubmit={async (result, isDraft) => {
+              onSubmit={async (result, isDraft, openCreated) => {
                 await closeDialog();
                 resolve({
                   result: isDraft ? 'submit-draft' : 'submit',
+                  openCreated,
                   data: result,
                 });
               }}
@@ -136,7 +137,7 @@ export interface ServiceUserProfileUserProfile_View_EditAreasActivityTab_activit
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceFieldTableAddSelectorPageDefinition

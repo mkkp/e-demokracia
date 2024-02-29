@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceDistrict,
@@ -54,7 +56,7 @@ import {
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceUserProfileUserProfile_View_EditActivityDistrictsComponentActionDefinitions {
   activityDistrictsOpenAddSelectorAction?: () => Promise<void>;
@@ -96,6 +98,9 @@ export interface ServiceUserProfileUserProfile_View_EditActivityDistrictsCompone
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_ACTIVITY_DISTRICTS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceUserProfileUserProfile_View_EditActivityDistrictsComponentSidekickComponent';
+
 // XMIID: User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable
 // Name: activityDistricts
 export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponent(
@@ -113,6 +118,7 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_USER_PROFILE_USER_PROFILE_VIEW_EDIT_ACTIVITY_DISTRICTS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -149,6 +155,8 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceDistrictStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -338,6 +346,14 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
       id="User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
       data-table-name="activityDistricts"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

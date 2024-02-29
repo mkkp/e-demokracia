@@ -101,7 +101,7 @@ export default function ServiceCityCity_Form(props: ServiceCityCity_FormProps) {
   );
   const containerActions: ServiceCityCity_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

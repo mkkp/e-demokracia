@@ -29,6 +29,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import type { JudoRestResponse } from '~/services/data-api/rest';
+import type { BaseDateValidationProps } from '~/utilities';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -97,6 +98,8 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions 
   isVoteYesNoAbstainHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
   isYesnovoteHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
   isVoteYesNoHidden?: (data: ServiceVoteDefinition | ServiceVoteDefinitionStored, editMode?: boolean) => boolean;
+  getCloseAtValidationProps?: (data: ServiceVoteDefinition) => BaseDateValidationProps;
+  getCreatedValidationProps?: (data: ServiceVoteDefinition) => BaseDateValidationProps;
   getMask?: () => string;
 }
 
@@ -155,7 +158,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_Edit(
   );
   const containerActions: ServiceVoteDefinitionVoteDefinition_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

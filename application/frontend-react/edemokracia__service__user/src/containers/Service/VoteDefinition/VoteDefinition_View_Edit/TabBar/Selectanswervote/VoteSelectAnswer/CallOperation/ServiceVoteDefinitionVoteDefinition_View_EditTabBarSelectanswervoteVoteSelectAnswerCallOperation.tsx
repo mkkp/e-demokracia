@@ -77,7 +77,7 @@ export default function ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelec
     );
   const containerActions: ServiceVoteDefinitionVoteDefinition_View_EditTabBarSelectanswervoteVoteSelectAnswerCallOperationActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

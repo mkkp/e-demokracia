@@ -112,10 +112,11 @@ export const useServiceCreateIssueInputDistrictRelationViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -143,7 +144,7 @@ export interface ServiceCreateIssueInputDistrictRelationViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceDistrict) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceDistrictStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_D9mKgNvXEe2Bgcx6em3jZg)/RelationFeatureView

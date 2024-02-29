@@ -51,6 +51,23 @@
                                 </configuration>
                             </execution>
 
+                            <execution>
+                                <id>add-apm-agent</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>copy</goal>
+                                </goals>
+                                <configuration>
+                                    <artifactItems>
+                                        <artifactItem>
+                                            <groupId>co.elastic.apm</groupId>
+                                            <artifactId>elastic-apm-agent</artifactId>
+                                            <version>1.46.0</version>
+                                            <outputDirectory>target/assembly</outputDirectory>
+                                        </artifactItem>
+                                    </artifactItems>
+                                </configuration>
+                            </execution>
 
 
                         </executions>

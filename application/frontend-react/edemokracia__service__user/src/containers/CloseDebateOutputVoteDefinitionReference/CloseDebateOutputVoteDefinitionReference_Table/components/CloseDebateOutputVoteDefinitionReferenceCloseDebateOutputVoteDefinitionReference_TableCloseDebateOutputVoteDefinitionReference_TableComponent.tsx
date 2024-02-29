@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type {
   CloseDebateOutputVoteDefinitionReference,
@@ -52,7 +54,7 @@ import {
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentActionDefinitions {
   openAddSelectorAction?: () => Promise<void>;
@@ -96,6 +98,9 @@ export interface CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDe
   validationError?: string;
 }
 
+export const CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponentSidekickComponent';
+
 // XMIID: User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable
 // Name: CloseDebateOutputVoteDefinitionReference_Table
 export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDefinitionReference_TableCloseDebateOutputVoteDefinitionReference_TableComponent(
@@ -103,6 +108,7 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
@@ -145,6 +151,10 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
   const [lastItem, setLastItem] = useState<CloseDebateOutputVoteDefinitionReferenceStored>();
   const [firstItem, setFirstItem] = useState<CloseDebateOutputVoteDefinitionReferenceStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<CloseDebateOutputVoteDefinitionReferenceStored>>>(
+      sidekickComponentFilter,
+    );
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -328,32 +338,30 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
-        };
-        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+        _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+      };
+      const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -367,6 +375,13 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
       id="User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable"
       data-table-name="CloseDebateOutputVoteDefinitionReference_Table"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

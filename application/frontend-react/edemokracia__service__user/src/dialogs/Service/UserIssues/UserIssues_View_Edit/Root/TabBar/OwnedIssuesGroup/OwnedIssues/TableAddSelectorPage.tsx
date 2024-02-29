@@ -107,10 +107,11 @@ export const useServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroupO
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -135,7 +136,7 @@ export interface ServiceUserIssuesUserIssues_View_EditRootTabBarOwnedIssuesGroup
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssue) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldTableAddSelectorPageDefinition

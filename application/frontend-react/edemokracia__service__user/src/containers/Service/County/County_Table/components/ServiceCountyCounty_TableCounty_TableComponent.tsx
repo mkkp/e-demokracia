@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
@@ -48,7 +50,7 @@ import {
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceCountyCounty_TableCounty_TableComponentActionDefinitions {
   openAddSelectorAction?: () => Promise<void>;
@@ -86,6 +88,9 @@ export interface ServiceCountyCounty_TableCounty_TableComponentProps {
   validationError?: string;
 }
 
+export const SERVICE_COUNTY_COUNTY_TABLE_COUNTY_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceCountyCounty_TableCounty_TableComponentSidekickComponent';
+
 // XMIID: User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable
 // Name: County_Table
 export function ServiceCountyCounty_TableCounty_TableComponent(
@@ -93,6 +98,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_COUNTY_COUNTY_TABLE_COUNTY_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
@@ -135,6 +141,7 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
   const [lastItem, setLastItem] = useState<ServiceCountyStored>();
   const [firstItem, setFirstItem] = useState<ServiceCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent = useTrackComponent<FC<SidekickComponentProps<ServiceCountyStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -321,32 +328,30 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
-        };
-        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+        _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+      };
+      const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -357,6 +362,13 @@ export function ServiceCountyCounty_TableCounty_TableComponent(
 
   return (
     <div id="User/(esm/_a0aoB32iEe2LTNnGda5kaw)/TransferObjectTableTable" data-table-name="County_Table">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

@@ -80,7 +80,7 @@ export default function ServiceRatingVoteDefinitionRatingVoteDefinition_View_Edi
     );
   const containerActions: ServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteEntryBaseVirtualOwnerSetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

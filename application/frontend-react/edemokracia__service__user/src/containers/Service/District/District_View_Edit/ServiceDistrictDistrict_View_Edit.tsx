@@ -101,7 +101,7 @@ export default function ServiceDistrictDistrict_View_Edit(props: ServiceDistrict
   );
   const containerActions: ServiceDistrictDistrict_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

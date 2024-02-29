@@ -155,9 +155,12 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
     });
   };
   const openCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceUserAdminIssueTypesAccessFormPage(null as any);
+    const { result, data: returnedData, openCreated } = await openServiceUserAdminIssueTypesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
+    }
+    if (openCreated && returnedData) {
+      await openPageAction(returnedData!);
     }
   };
   const deleteAction = async (target: ServiceIssueTypeStored, silentMode?: boolean) => {
@@ -181,6 +184,8 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceIssueType>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

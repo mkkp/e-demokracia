@@ -74,7 +74,7 @@ export default function ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinit
     );
   const containerActions: ServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_TableActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

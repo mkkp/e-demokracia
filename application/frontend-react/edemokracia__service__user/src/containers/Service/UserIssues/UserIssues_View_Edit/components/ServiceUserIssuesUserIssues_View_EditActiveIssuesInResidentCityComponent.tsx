@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -62,7 +64,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponentActionDefinitions {
   activeIssuesInResidentCityFilterAction?: (
@@ -108,6 +110,9 @@ export interface ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCity
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_RESIDENT_CITY_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponentSidekickComponent';
+
 // XMIID: User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable
 // Name: activeIssuesInResidentCity
 export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityComponent(
@@ -125,6 +130,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_RESIDENT_CITY_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -168,6 +174,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
   const [lastItem, setLastItem] = useState<ServiceIssueStored>();
   const [firstItem, setFirstItem] = useState<ServiceIssueStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent = useTrackComponent<FC<SidekickComponentProps<ServiceIssueStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -560,7 +567,7 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
   };
 
   async function fetchData() {
-    if (!isLoading && ownerData.__signedIdentifier) {
+    if (ownerData.__signedIdentifier) {
       setIsInternalLoading(true);
 
       try {
@@ -601,6 +608,14 @@ export function ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCityC
       id="User/(esm/_BZzIUVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable"
       data-table-name="activeIssuesInResidentCity"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

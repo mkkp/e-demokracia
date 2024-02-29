@@ -211,6 +211,8 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceSimpleVote>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {

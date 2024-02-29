@@ -103,7 +103,7 @@ export default function RatingVoteInputRatingVoteInput_Form(props: RatingVoteInp
   );
   const containerActions: RatingVoteInputRatingVoteInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

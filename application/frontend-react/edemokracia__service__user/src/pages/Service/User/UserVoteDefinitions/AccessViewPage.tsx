@@ -556,6 +556,8 @@ export default function ServiceUserUserVoteDefinitionsAccessViewPage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceVoteDefinition>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {

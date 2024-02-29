@@ -126,10 +126,11 @@ export const useServiceProProsRelationViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -158,7 +159,7 @@ export interface ServiceProProsRelationViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServicePro) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceProStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceProStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_KSx6sIezEe2kLcMqsIbMgQ)/RelationFeatureView
@@ -329,6 +330,8 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceCon>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };
@@ -416,6 +419,8 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
     } catch (error) {
       if (!silentMode) {
         handleError<ServicePro>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };
@@ -478,7 +483,7 @@ export default function ServiceProProsRelationViewPage(props: ServiceProProsRela
       navigate(
         routeToServiceProVotesRelationTablePage(((target as ServiceSimpleVoteStored) || data).__signedIdentifier),
       );
-      onClose();
+      onSubmit();
     }
   };
   const backAction = async () => {

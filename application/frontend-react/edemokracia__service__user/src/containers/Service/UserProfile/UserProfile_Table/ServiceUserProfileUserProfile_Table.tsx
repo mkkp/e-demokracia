@@ -63,7 +63,7 @@ export default function ServiceUserProfileUserProfile_Table(props: ServiceUserPr
     `(${OBJECTCLASS}=${SERVICE_USER_PROFILE_USER_PROFILE_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceUserProfileUserProfile_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

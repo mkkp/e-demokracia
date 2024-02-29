@@ -102,10 +102,11 @@ export const useServiceServiceUserServiceUser_View_EditAreasResidencyResidentCit
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -130,7 +131,7 @@ export interface ServiceServiceUserServiceUser_View_EditAreasResidencyResidentCi
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCity) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCityStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceCityStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_I-5hoIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldLinkSetSelectorPageDefinition

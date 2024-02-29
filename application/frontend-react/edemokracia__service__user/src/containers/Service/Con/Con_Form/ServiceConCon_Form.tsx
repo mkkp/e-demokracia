@@ -25,6 +25,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import type { JudoRestResponse } from '~/services/data-api/rest';
+import type { BaseDateValidationProps } from '~/utilities';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -77,6 +78,7 @@ export interface ServiceConCon_FormActionDefinitions
   isTitleDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isUpVotesRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
   isUpVotesDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getCreatedValidationProps?: (data: ServiceCon) => BaseDateValidationProps;
 }
 
 export interface ServiceConCon_FormProps {
@@ -131,7 +133,7 @@ export default function ServiceConCon_Form(props: ServiceConCon_FormProps) {
     `(${OBJECTCLASS}=${SERVICE_CON_CON_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceConCon_FormActionDefinitions = customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

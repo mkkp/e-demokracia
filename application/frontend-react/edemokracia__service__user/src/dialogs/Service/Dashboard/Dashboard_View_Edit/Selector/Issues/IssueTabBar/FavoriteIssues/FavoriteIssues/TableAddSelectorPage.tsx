@@ -110,10 +110,11 @@ export const useServiceDashboardDashboard_View_EditSelectorIssuesIssueTabBarFavo
                   result: 'close',
                 });
               }}
-              onSubmit={async (result, isDraft) => {
+              onSubmit={async (result, isDraft, openCreated) => {
                 await closeDialog();
                 resolve({
                   result: isDraft ? 'submit-draft' : 'submit',
+                  openCreated,
                   data: result,
                 });
               }}
@@ -139,7 +140,7 @@ export interface ServiceDashboardDashboard_View_EditSelectorIssuesIssueTabBarFav
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssue) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_7sPXAFw4Ee6gN-oVBDDIOQ)/TabularReferenceFieldTableAddSelectorPageDefinition

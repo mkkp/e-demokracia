@@ -117,10 +117,11 @@ export const useServiceCityDistrictsRelationFormPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -148,7 +149,7 @@ export interface ServiceCityDistrictsRelationFormPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceDistrict) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceDistrictStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceDistrictStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_a0XksX2iEe2LTNnGda5kaw)/RelationFeatureForm
@@ -278,10 +279,7 @@ export default function ServiceCityDistrictsRelationFormPage(props: ServiceCityD
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceCityDistrictsRelationViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceDistrict>(error, { setValidation }, data);

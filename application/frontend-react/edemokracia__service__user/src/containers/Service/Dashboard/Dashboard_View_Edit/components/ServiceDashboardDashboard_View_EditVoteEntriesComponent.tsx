@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -62,7 +64,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentActionDefinitions {
   userVoteEntriesFilterAction?: (
@@ -99,6 +101,9 @@ export interface ServiceDashboardDashboard_View_EditVoteEntriesComponentProps {
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_VOTE_ENTRIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceDashboardDashboard_View_EditVoteEntriesComponentSidekickComponent';
+
 // XMIID: User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable
 // Name: voteEntries
 export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
@@ -116,6 +121,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_VOTE_ENTRIES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -159,6 +165,8 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   const [lastItem, setLastItem] = useState<ServiceVoteEntryStored>();
   const [firstItem, setFirstItem] = useState<ServiceVoteEntryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceVoteEntryStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -408,7 +416,7 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
   };
 
   async function fetchData() {
-    if (!isLoading && ownerData.__signedIdentifier) {
+    if (ownerData.__signedIdentifier) {
       setIsInternalLoading(true);
 
       try {
@@ -447,6 +455,14 @@ export function ServiceDashboardDashboard_View_EditVoteEntriesComponent(
       id="User/(esm/_YR3LQFxHEe6ma86ynyYZNw)/TabularReferenceFieldRelationDefinedTable"
       data-table-name="voteEntries"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

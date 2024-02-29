@@ -26,7 +26,7 @@ export const baseTableConfig: Partial<DataGridProps<any>> = {
   density: density.dataGridDensity || 'standard',
 };
 
-export const filterDebounceMs = 200;
+export const filterDebounceMs = 400;
 
 // Measures used for table column width calculations
 export const characterMultiplier = 10;

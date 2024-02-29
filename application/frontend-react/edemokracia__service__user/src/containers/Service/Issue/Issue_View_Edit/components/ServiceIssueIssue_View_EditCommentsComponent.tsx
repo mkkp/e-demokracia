@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -62,7 +64,7 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceIssueIssue_View_EditCommentsComponentActionDefinitions {
   commentsFilterAction?: (
@@ -101,6 +103,9 @@ export interface ServiceIssueIssue_View_EditCommentsComponentProps {
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_ISSUE_ISSUE_VIEW_EDIT_COMMENTS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceIssueIssue_View_EditCommentsComponentSidekickComponent';
+
 // XMIID: User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable
 // Name: comments
 export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssueIssue_View_EditCommentsComponentProps) {
@@ -116,6 +121,7 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_ISSUE_ISSUE_VIEW_EDIT_COMMENTS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -153,6 +159,8 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceCommentStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -445,6 +453,14 @@ export function ServiceIssueIssue_View_EditCommentsComponent(props: ServiceIssue
 
   return (
     <div id="User/(esm/_mvouIIybEe2VSOmaAz6G9Q)/TabularReferenceFieldRelationDefinedTable" data-table-name="comments">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

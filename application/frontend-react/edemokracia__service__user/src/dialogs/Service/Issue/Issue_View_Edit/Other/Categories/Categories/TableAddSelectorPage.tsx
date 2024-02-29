@@ -100,10 +100,11 @@ export const useServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSele
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -128,7 +129,7 @@ export interface ServiceIssueIssue_View_EditOtherCategoriesCategoriesTableAddSel
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueCategory) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueCategoryStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_LRJ3AId9Ee2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorPageDefinition

@@ -80,7 +80,7 @@ export default function ServiceIssueCategoryIssueCategory_FormOwnerSetSelector(
     );
   const containerActions: ServiceIssueCategoryIssueCategory_FormOwnerSetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

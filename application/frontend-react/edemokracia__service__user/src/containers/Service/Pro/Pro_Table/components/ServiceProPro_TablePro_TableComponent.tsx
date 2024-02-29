@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServicePro, ServiceProQueryCustomizer, ServiceProStored } from '~/services/data-api';
@@ -56,7 +58,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceProPro_TablePro_TableComponentActionDefinitions {
   openAddSelectorAction?: () => Promise<void>;
@@ -98,11 +100,15 @@ export interface ServiceProPro_TablePro_TableComponentProps {
   validationError?: string;
 }
 
+export const SERVICE_PRO_PRO_TABLE_PRO_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceProPro_TablePro_TableComponentSidekickComponent';
+
 // XMIID: User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable
 // Name: Pro_Table
 export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_TablePro_TableComponentProps) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_PRO_PRO_TABLE_PRO_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
@@ -146,6 +152,7 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
   const [lastItem, setLastItem] = useState<ServiceProStored>();
   const [firstItem, setFirstItem] = useState<ServiceProStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent = useTrackComponent<FC<SidekickComponentProps<ServiceProStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -491,32 +498,30 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
-        };
-        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+        _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+      };
+      const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -527,6 +532,13 @@ export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_Table
 
   return (
     <div id="User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="Pro_Table">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

@@ -10,6 +10,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import { useEffect, useState } from 'react';
 import { usePrincipal } from '~/auth';
 import { MenuOrientation } from '~/config';
@@ -21,11 +23,18 @@ import { NavItemType } from './NavItem';
 import { ScrollableMenu } from './ScrollableMenu';
 import { menus } from './menu-items';
 
+export const MENU_ITEMS_CUSTOMIZER_HOOK_INTERFACE_KEY = 'MenuItemsCustomizerHook';
+export type MenuItemsCustomizerHook = () => (items: NavItemType[]) => NavItemType[];
+
 export const Navigation = () => {
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
   const { menuOrientation, miniDrawer } = useConfig();
-  const [menuItems, setMenuItems] = useState<NavItemType[]>(menus);
+  const { service: useMenuItemsCustomizer } = useTrackService<MenuItemsCustomizerHook>(
+    `(${OBJECTCLASS}=${MENU_ITEMS_CUSTOMIZER_HOOK_INTERFACE_KEY})`,
+  );
+  const menuItemsCustomizer = useMenuItemsCustomizer && useMenuItemsCustomizer();
+  const [menuItems, setMenuItems] = useState<NavItemType[]>(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus);
 
   const { principal } = usePrincipal();
 
@@ -51,7 +60,7 @@ export const Navigation = () => {
 
   useEffect(() => {
     const filteredMenus: NavItemType[] = [];
-    handlerMenuItems(menus, filteredMenus);
+    handlerMenuItems(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus, filteredMenus);
     setMenuItems(filteredMenus);
   }, [principal]);
 

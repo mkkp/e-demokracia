@@ -117,10 +117,11 @@ export const useServiceUserYesNoAbstainVoteEntriesAccessViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -155,7 +156,7 @@ export interface ServiceUserYesNoAbstainVoteEntriesAccessViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceYesNoAbstainVoteEntry) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceYesNoAbstainVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceYesNoAbstainVoteEntryStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qiL2sM6zEe6ddqBfFzCBZg)/AccessViewPageDefinition

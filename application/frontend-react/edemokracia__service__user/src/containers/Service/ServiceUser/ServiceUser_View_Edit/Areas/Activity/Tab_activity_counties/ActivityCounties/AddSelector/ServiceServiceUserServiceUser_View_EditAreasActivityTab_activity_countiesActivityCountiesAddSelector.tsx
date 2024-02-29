@@ -80,7 +80,7 @@ export default function ServiceServiceUserServiceUser_View_EditAreasActivityTab_
     );
   const containerActions: ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

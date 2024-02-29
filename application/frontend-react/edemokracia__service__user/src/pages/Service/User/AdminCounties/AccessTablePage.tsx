@@ -145,9 +145,12 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
     });
   };
   const openCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceUserAdminCountiesAccessFormPage(null as any);
+    const { result, data: returnedData, openCreated } = await openServiceUserAdminCountiesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
+    }
+    if (openCreated && returnedData) {
+      await openPageAction(returnedData!);
     }
   };
   const deleteAction = async (target: ServiceCountyStored, silentMode?: boolean) => {
@@ -171,6 +174,8 @@ export default function ServiceUserAdminCountiesAccessTablePage() {
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceCounty>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

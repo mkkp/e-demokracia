@@ -118,10 +118,11 @@ export const useServiceUserAdminIssueTypesAccessFormPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -149,7 +150,7 @@ export interface ServiceUserAdminIssueTypesAccessFormPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueType) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueTypeStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_-T3OwNu-Ee2Bgcx6em3jZg)/AccessFormPageDefinition
@@ -261,10 +262,7 @@ export default function ServiceUserAdminIssueTypesAccessFormPage(props: ServiceU
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceUserAdminIssueTypesAccessViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceIssueType>(error, { setValidation }, data);

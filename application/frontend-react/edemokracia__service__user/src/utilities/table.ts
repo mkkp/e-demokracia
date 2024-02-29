@@ -27,6 +27,14 @@ export interface RefreshableTable {
   fetchData: () => Promise<void>;
 }
 
+export interface SidekickComponentProps<T> {
+  editMode?: boolean;
+  isLoading?: boolean;
+  filters: Filter[];
+  onFiltersChange: (newFilters: Filter[]) => void;
+  data: T[];
+}
+
 export const TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY = 'TABLE_COLUMN_CUSTOMIZER_HOOK_INTERFACE_KEY';
 
 export type ColumnCustomizerHook<T extends JudoStored<T>> = () => ColumnCustomizer<T>;

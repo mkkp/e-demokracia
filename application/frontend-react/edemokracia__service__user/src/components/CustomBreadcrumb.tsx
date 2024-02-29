@@ -24,6 +24,7 @@ interface BreadcrumbProviderProps {
 export type JudoNavigationSetTitle = (pageTitle: string) => void;
 
 interface JudoNavigationProviderContext {
+  externalNavigate: (to: string) => void;
   clearNavigate: (to: To) => void;
   navigate: (to: To) => void;
   back: () => void;
@@ -107,6 +108,9 @@ export const BreadcrumbProvider = ({ children }: BreadcrumbProviderProps) => {
   );
 
   const judoNavigationContext = {
+    externalNavigate: (to: string) => {
+      window.location.href = to;
+    },
     clearNavigate: (to: To) => {
       setBreadcrumbItems([]);
       setNextBreadcrumbItem({

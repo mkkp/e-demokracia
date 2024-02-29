@@ -71,7 +71,7 @@ export default function ServiceServicePrincipalUserServicePrincipalUser_Table(
     );
   const containerActions: ServiceServicePrincipalUserServicePrincipalUser_TableActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

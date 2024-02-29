@@ -19,15 +19,32 @@ export interface TabPanelProps {
   children?: ReactNode;
   index: number;
   value: number;
+  orientation?: 'horizontal' | 'vertical';
 }
 
 export function TabPanel(props: TabPanelProps) {
-  const { id, children, value, index, ...other } = props;
+  const { id, children, value, orientation, index, ...other } = props;
 
   return (
-    <div role="tabpanel" hidden={value !== index} id={id} aria-labelledby={`simple-tab-${index}`} {...other}>
-      {value === index && <Box sx={{ p: (theme) => theme.spacing(3) }}>{children}</Box>}
-    </div>
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      id={id}
+      aria-labelledby={`simple-tab-${index}`}
+      sx={{ flex: orientation === 'vertical' ? '1' : undefined }}
+      {...other}
+    >
+      {value === index && (
+        <Box
+          sx={{
+            py: (theme) => (orientation === 'horizontal' ? theme.spacing(3) : 0),
+            px: (theme) => (orientation === 'vertical' ? theme.spacing(3) : 0),
+          }}
+        >
+          {children}
+        </Box>
+      )}
+    </Box>
   );
 }
 
@@ -104,7 +121,7 @@ export function ModeledTabs({ id, ownerData, childTabs, children, orientation, v
         ))}
       </Tabs>
       {childTabs.map((c: any, index: number) => (
-        <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index}>
+        <TabPanel id={`${c.id}-tab-panel`} key={c.id} value={value} index={index} orientation={orientation}>
           {Array.isArray(children) ? children[index] : ''}
         </TabPanel>
       ))}

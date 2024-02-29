@@ -101,10 +101,11 @@ export const useServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelectorPage = (
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -129,7 +130,7 @@ export interface ServiceIssueIssue_View_EditIssueIssueTypeLinkSetSelectorPagePro
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueType) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueTypeStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueTypeStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_FHpVENvSEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition

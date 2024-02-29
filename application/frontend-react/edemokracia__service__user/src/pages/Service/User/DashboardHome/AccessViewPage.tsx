@@ -312,6 +312,8 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceIssue>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {
@@ -421,6 +423,8 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceIssue>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {
@@ -528,6 +532,8 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceVoteDefinition>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {
@@ -640,6 +646,8 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceVoteDefinition>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {

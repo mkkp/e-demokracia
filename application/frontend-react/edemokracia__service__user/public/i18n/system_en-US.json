@@ -34,6 +34,8 @@
         "judo.dialogs.crud-bulk.toast.success": "Operation(s) executed successfully",
         "judo.dialogs.crud-bulk.toast.warn": "Not all operations executed successfully!",
         "judo.dialogs.crud-bulk.execute": "Execute Operation(s)",
+        "judo.pages.redirect.wait": "Please wait, you will be redirected to the requested page...",
+        "judo.pages.redirect.error": "An error occurred during redirect. Please try again later!",
         "judo.pages.actions": "Actions",
         "judo.pages.back": "Back",
         "judo.pages.save": "Save",

@@ -103,10 +103,11 @@ export const useServiceUserVoteDefinitionOwnedVoteDefinitionsAddSelectorPage = (
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -131,7 +132,7 @@ export interface ServiceUserVoteDefinitionOwnedVoteDefinitionsAddSelectorPagePro
   isDraft?: boolean;
   ownerValidation?: (data: ServiceVoteDefinition) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceVoteDefinitionStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceVoteDefinitionStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_7OZ8MF5AEe6vsex_cZNQbQ)/RelationFeatureTableAddSelectorPageDefinition

@@ -111,7 +111,7 @@ export default function ServiceCountyCounty_View_Edit(props: ServiceCountyCounty
   );
   const containerActions: ServiceCountyCounty_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

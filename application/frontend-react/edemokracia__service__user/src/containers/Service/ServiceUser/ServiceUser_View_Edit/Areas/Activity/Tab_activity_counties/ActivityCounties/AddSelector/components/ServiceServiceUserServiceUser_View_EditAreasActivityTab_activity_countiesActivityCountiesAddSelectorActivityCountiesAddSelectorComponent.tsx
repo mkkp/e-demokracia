@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type { ServiceCounty, ServiceCountyQueryCustomizer, ServiceCountyStored } from '~/services/data-api';
 import type { JudoIdentifiable } from '~/services/data-api/common';
@@ -48,7 +50,7 @@ import {
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActivityCountiesAddSelectorComponentActionDefinitions {
   openCreateFormAction?: () => Promise<void>;
@@ -81,6 +83,9 @@ export interface ServiceServiceUserServiceUser_View_EditAreasActivityTab_activit
   alreadySelected: ServiceCountyStored[];
 }
 
+export const SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_ADD_SELECTOR_ACTIVITY_COUNTIES_ADD_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActivityCountiesAddSelectorComponentSidekickComponent';
+
 // XMIID: User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorTable
 // Name: activityCounties::Add::Selector
 export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity_countiesActivityCountiesAddSelectorActivityCountiesAddSelectorComponent(
@@ -98,6 +103,7 @@ export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
     alreadySelected,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_SERVICE_USER_SERVICE_USER_VIEW_EDIT_AREAS_ACTIVITY_TAB_ACTIVITY_COUNTIES_ACTIVITY_COUNTIES_ADD_SELECTOR_ACTIVITY_COUNTIES_ADD_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-rowsPerPage`;
@@ -140,6 +146,7 @@ export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
   const [lastItem, setLastItem] = useState<ServiceCountyStored>();
   const [firstItem, setFirstItem] = useState<ServiceCountyStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent = useTrackComponent<FC<SidekickComponentProps<ServiceCountyStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -298,51 +305,62 @@ export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
 
   const handleIsRowSelectable = useCallback(
     (params: GridRowParams<ServiceCountyStored & { __selected?: boolean }>) => {
-      return isRowSelectable(params.row, !false, alreadySelected);
+      return isRowSelectable(params.row, !true, alreadySelected);
     },
     [],
   );
 
   const handleOnSelection = (newSelectionModel: GridRowSelectionModel) => {
     if (!Array.isArray(selectionModel)) return;
-    if (newSelectionModel.length === 0) {
-      setSelectionModel([]);
-      setSelectionDiff([]);
-      return;
+    // added new items
+    if (newSelectionModel.length > selectionModel.length) {
+      const diff = newSelectionModel.length - selectionModel.length;
+      const newItemsId = [...newSelectionModel].slice(diff * -1);
+      const newItems = data.filter((value) => newItemsId.indexOf(value.__identifier as GridRowId) !== -1);
+      setSelectionDiff((prevSelectedItems: ServiceCountyStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
+
+        return [...prevSelectedItems, ...newItems];
+      });
     }
 
-    const lastId = newSelectionModel[newSelectionModel.length - 1];
+    // removed items
+    if (newSelectionModel.length < selectionModel.length) {
+      const removedItemsId = selectionModel.filter((value) => newSelectionModel.indexOf(value) === -1);
+      setSelectionDiff((prevSelectedItems: ServiceCountyStored[]) => {
+        if (!Array.isArray(prevSelectedItems)) return [];
 
-    setSelectionModel([lastId]);
-    setSelectionDiff([data.find((value) => value.__identifier === lastId)!]);
+        return [...prevSelectedItems.filter((value) => removedItemsId.indexOf(value.__identifier as GridRowId) === -1)];
+      });
+    }
+
+    setSelectionModel(newSelectionModel);
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-        };
-        const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+      };
+      const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -356,6 +374,13 @@ export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
       id="User/(esm/_I-t7cIXqEe2kLcMqsIbMgQ)/TabularReferenceFieldTableAddSelectorTable"
       data-table-name="activityCounties::Add::Selector"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}
@@ -377,7 +402,7 @@ export function ServiceServiceUserServiceUser_View_EditAreasActivityTab_activity
         }}
         columns={effectiveTableColumns}
         isRowSelectable={handleIsRowSelectable}
-        hideFooterSelectedRowCount={!false}
+        hideFooterSelectedRowCount={!true}
         checkboxSelection
         rowSelectionModel={selectionModel}
         onRowSelectionModelChange={handleOnSelection}

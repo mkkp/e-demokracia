@@ -111,8 +111,8 @@ export const AggregationInput = ({
 
   const onInputChange = useMemo(
     () =>
-      debounce((event: any, value: string) => {
-        if (allowFetch) {
+      debounce((event: any, value: string, reason: string) => {
+        if (allowFetch && reason !== 'reset') {
           handleSearch(value);
         }
       }, debounceInputs),
@@ -143,6 +143,7 @@ export const AggregationInput = ({
           readOnly={effectiveReadOnly}
           onOpen={() => {
             if (!readOnly) {
+              setOptions([]); // always start with a clean slate
               setAllowFetch(true);
               handleSearch('');
             }

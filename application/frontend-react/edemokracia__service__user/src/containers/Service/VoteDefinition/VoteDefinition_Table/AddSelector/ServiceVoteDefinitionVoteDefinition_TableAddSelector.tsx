@@ -84,7 +84,7 @@ export default function ServiceVoteDefinitionVoteDefinition_TableAddSelector(
     );
   const containerActions: ServiceVoteDefinitionVoteDefinition_TableAddSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

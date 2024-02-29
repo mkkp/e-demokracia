@@ -65,7 +65,7 @@ export default function ServiceDashboardDashboard_Table(props: ServiceDashboardD
     `(${OBJECTCLASS}=${SERVICE_DASHBOARD_DASHBOARD_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceDashboardDashboard_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

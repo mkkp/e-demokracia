@@ -119,10 +119,11 @@ export const useServiceYesNoAbstainVoteDefinitionVoteEntriesRelationViewPage = (
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -157,7 +158,7 @@ export interface ServiceYesNoAbstainVoteDefinitionVoteEntriesRelationViewPagePro
   isDraft?: boolean;
   ownerValidation?: (data: ServiceYesNoAbstainVoteEntry) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceYesNoAbstainVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceYesNoAbstainVoteEntryStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_-O5k4FsjEe6Mx9dH3yj5gQ)/RelationFeatureView

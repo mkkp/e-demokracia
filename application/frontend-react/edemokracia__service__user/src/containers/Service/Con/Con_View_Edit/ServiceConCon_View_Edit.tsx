@@ -29,6 +29,7 @@ import { DIVIDER_HEIGHT } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import type { JudoRestResponse } from '~/services/data-api/rest';
+import type { BaseDateValidationProps } from '~/utilities';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -83,6 +84,7 @@ export interface ServiceConCon_View_EditActionDefinitions
   isTitleDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
   isUpVotesRequired?: (data: ServiceCon | ServiceConStored, editMode?: boolean) => boolean;
   isUpVotesDisabled?: (data: ServiceCon | ServiceConStored, editMode?: boolean, isLoading?: boolean) => boolean;
+  getCreatedValidationProps?: (data: ServiceCon) => BaseDateValidationProps;
   getMask?: () => string;
 }
 
@@ -139,7 +141,7 @@ export default function ServiceConCon_View_Edit(props: ServiceConCon_View_EditPr
   );
   const containerActions: ServiceConCon_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

@@ -138,10 +138,11 @@ export const useServiceUserManagerUserManager_View_EditCreateUserOutputView = ()
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -176,7 +177,7 @@ export interface ServiceUserManagerUserManager_View_EditCreateUserOutputViewProp
   isDraft?: boolean;
   ownerValidation?: (data: ServiceServiceUser) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationOutputPageDefinition
@@ -594,7 +595,7 @@ export default function ServiceUserManagerUserManager_View_EditCreateUserOutputV
           ((target as ServiceSimpleVoteStored) || data).__signedIdentifier,
         ),
       );
-      onClose();
+      onSubmit();
     }
   };
   const backAction = async () => {

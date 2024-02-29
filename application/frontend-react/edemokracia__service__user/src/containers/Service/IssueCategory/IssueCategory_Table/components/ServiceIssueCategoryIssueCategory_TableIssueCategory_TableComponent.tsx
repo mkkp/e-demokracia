@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceIssueCategory,
@@ -52,7 +54,7 @@ import {
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceIssueCategoryIssueCategory_TableIssueCategory_TableComponentActionDefinitions {
   openAddSelectorAction?: () => Promise<void>;
@@ -96,6 +98,9 @@ export interface ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompo
   validationError?: string;
 }
 
+export const SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ISSUE_CATEGORY_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceIssueCategoryIssueCategory_TableIssueCategory_TableComponentSidekickComponent';
+
 // XMIID: User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable
 // Name: IssueCategory_Table
 export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableComponent(
@@ -103,6 +108,7 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_ISSUE_CATEGORY_ISSUE_CATEGORY_TABLE_ISSUE_CATEGORY_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
@@ -145,6 +151,8 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   const [lastItem, setLastItem] = useState<ServiceIssueCategoryStored>();
   const [firstItem, setFirstItem] = useState<ServiceIssueCategoryStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceIssueCategoryStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -349,32 +357,30 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-          _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
-        };
-        const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+        _mask: actions.getMask ? actions.getMask() : queryCustomizer._mask,
+      };
+      const { data: res, headers } = await actions.refreshAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -385,6 +391,13 @@ export function ServiceIssueCategoryIssueCategory_TableIssueCategory_TableCompon
 
   return (
     <div id="User/(esm/_qJVVsGksEe25ONJ3V89cVA)/TransferObjectTableTable" data-table-name="IssueCategory_Table">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

@@ -66,6 +66,7 @@ export const openVoteDefinitionPage = () => {
     } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
+        undefined,
         processQueryCustomizer(idAccessFilterCustomizer),
       );
       // Open view page in access

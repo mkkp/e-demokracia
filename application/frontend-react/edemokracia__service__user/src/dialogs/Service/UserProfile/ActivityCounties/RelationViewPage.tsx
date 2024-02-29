@@ -117,10 +117,11 @@ export const useServiceUserProfileActivityCountiesRelationViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -148,7 +149,7 @@ export interface ServiceUserProfileActivityCountiesRelationViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_gu_zQFvREe6jm_SkPSYEYw)/RelationFeatureView
@@ -287,9 +288,12 @@ export default function ServiceUserProfileActivityCountiesRelationViewPage(
     });
   };
   const citiesOpenCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceCountyCitiesRelationFormPage(data);
+    const { result, data: returnedData, openCreated } = await openServiceCountyCitiesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+    if (openCreated && returnedData) {
+      await citiesOpenPageAction(returnedData!);
     }
   };
   const citiesFilterAction = async (
@@ -324,6 +328,8 @@ export default function ServiceUserProfileActivityCountiesRelationViewPage(
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceCity>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

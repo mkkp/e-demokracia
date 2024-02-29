@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -62,7 +64,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceUserManagerUserManager_View_EditUsersComponentActionDefinitions {
   usersFilterAction?: (
@@ -99,6 +101,9 @@ export interface ServiceUserManagerUserManager_View_EditUsersComponentProps {
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_USERS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceUserManagerUserManager_View_EditUsersComponentSidekickComponent';
+
 // XMIID: User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable
 // Name: users
 export function ServiceUserManagerUserManager_View_EditUsersComponent(
@@ -116,6 +121,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_USERS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -159,6 +165,8 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   const [lastItem, setLastItem] = useState<ServiceServiceUserStored>();
   const [firstItem, setFirstItem] = useState<ServiceServiceUserStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceServiceUserStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -484,7 +492,7 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
   };
 
   async function fetchData() {
-    if (!isLoading && ownerData.__signedIdentifier) {
+    if (ownerData.__signedIdentifier) {
       setIsInternalLoading(true);
 
       try {
@@ -520,6 +528,14 @@ export function ServiceUserManagerUserManager_View_EditUsersComponent(
 
   return (
     <div id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable" data-table-name="users">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

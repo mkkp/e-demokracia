@@ -125,7 +125,7 @@ export default function ServiceIssueAttachmentIssueAttachment_Form(
   );
   const containerActions: ServiceIssueAttachmentIssueAttachment_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

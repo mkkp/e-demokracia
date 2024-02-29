@@ -65,7 +65,7 @@ export default function ServiceDistrictDistrict_Table(props: ServiceDistrictDist
     `(${OBJECTCLASS}=${SERVICE_DISTRICT_DISTRICT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceDistrictDistrict_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

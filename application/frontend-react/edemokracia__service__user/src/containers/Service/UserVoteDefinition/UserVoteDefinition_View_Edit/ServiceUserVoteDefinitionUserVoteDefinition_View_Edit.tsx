@@ -134,7 +134,7 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
     );
   const containerActions: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>
@@ -228,30 +228,6 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="OwnedVoteDefinitionsGroup"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="account-box" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t(
-                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.OwnedVoteDefinitionsGroup',
-                                  { defaultValue: 'Owned Votes' },
-                                )}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
@@ -286,30 +262,6 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveGlobalVoteDefinitionsGroup"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="earth" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t(
-                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveGlobalVoteDefinitionsGroup',
-                                  { defaultValue: 'Active Global Votes' },
-                                )}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
@@ -344,30 +296,6 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveVoteDefinitionsByOwnerActivityArea"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="map-search" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t(
-                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerActivityArea',
-                                  { defaultValue: 'Active votes bv my activity areas' },
-                                )}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
@@ -531,30 +459,6 @@ export default function ServiceUserVoteDefinitionUserVoteDefinition_View_Edit(
                       data-name="ActiveVoteDefinitionsByOwnerResidentAreaGroup"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="castle" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t(
-                                  'service.UserVoteDefinition.UserVoteDefinition_View_Edit.ActiveVoteDefinitionsByOwnerResidentAreaGroup',
-                                  { defaultValue: 'Active votes by my resident area' },
-                                )}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs

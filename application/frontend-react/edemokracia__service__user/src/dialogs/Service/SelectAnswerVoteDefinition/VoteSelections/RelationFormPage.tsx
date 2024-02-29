@@ -120,10 +120,11 @@ export const useServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage 
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -154,7 +155,11 @@ export interface ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage
   isDraft?: boolean;
   ownerValidation?: (data: ServiceSelectAnswerVoteSelection) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceSelectAnswerVoteSelectionStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (
+    result?: ServiceSelectAnswerVoteSelectionStored,
+    isDraft?: boolean,
+    openCreated?: boolean,
+  ) => Promise<void>;
 }
 
 // XMIID: User/(esm/_-cKskFtqEe6Mx9dH3yj5gQ)/RelationFeatureForm
@@ -296,10 +301,7 @@ export default function ServiceSelectAnswerVoteDefinitionVoteSelectionsRelationF
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceSelectAnswerVoteSelection>(error, { setValidation }, data);

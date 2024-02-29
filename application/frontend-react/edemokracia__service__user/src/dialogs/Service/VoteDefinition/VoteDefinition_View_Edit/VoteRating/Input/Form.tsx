@@ -117,10 +117,11 @@ export const useServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputForm
                 result: 'close',
               });
             }}
-            onSubmit={async (isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
               });
             }}
           />
@@ -147,7 +148,7 @@ export interface ServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFor
   isDraft?: boolean;
   ownerValidation?: (data: RatingVoteInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: RatingVoteInputStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: RatingVoteInputStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_T5_dsI4jEe29qs15q2b6yw)/OperationUnmappedInputPageDefinition

@@ -80,7 +80,7 @@ export default function ServiceCreateIssueInputCreateIssueInput_FormIssueDistric
     );
   const containerActions: ServiceCreateIssueInputCreateIssueInput_FormIssueDistrictSetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

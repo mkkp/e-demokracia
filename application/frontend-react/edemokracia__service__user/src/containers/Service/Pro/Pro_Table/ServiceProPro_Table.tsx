@@ -64,7 +64,7 @@ export default function ServiceProPro_Table(props: ServiceProPro_TableProps) {
     `(${OBJECTCLASS}=${SERVICE_PRO_PRO_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceProPro_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

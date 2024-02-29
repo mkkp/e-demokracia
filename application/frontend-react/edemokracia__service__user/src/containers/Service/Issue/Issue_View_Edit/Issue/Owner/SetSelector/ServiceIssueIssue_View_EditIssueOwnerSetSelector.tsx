@@ -80,7 +80,7 @@ export default function ServiceIssueIssue_View_EditIssueOwnerSetSelector(
     );
   const containerActions: ServiceIssueIssue_View_EditIssueOwnerSetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -44,6 +45,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type {
@@ -63,7 +65,7 @@ import {
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentActionDefinitions {
   ownedVoteDefinitionsOpenAddSelectorAction?: () => Promise<void>;
@@ -109,6 +111,9 @@ export interface ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponen
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_OWNED_VOTE_DEFINITIONS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentSidekickComponent';
+
 // XMIID: User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable
 // Name: ownedVoteDefinitions
 export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent(
@@ -126,6 +131,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_OWNED_VOTE_DEFINITIONS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -170,6 +176,8 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
   const [lastItem, setLastItem] = useState<ServiceVoteDefinitionStored>();
   const [firstItem, setFirstItem] = useState<ServiceVoteDefinitionStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceVoteDefinitionStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -653,7 +661,7 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
   };
 
   async function fetchData() {
-    if (!isLoading && ownerData.__signedIdentifier) {
+    if (ownerData.__signedIdentifier) {
       setIsInternalLoading(true);
 
       try {
@@ -692,6 +700,14 @@ export function ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponent
       id="User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldRelationDefinedTable"
       data-table-name="ownedVoteDefinitions"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

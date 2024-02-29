@@ -84,7 +84,7 @@ export default function ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddS
     );
   const containerActions: ServiceIssueIssue_View_EditOtherCategoriesCategoriesAddSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

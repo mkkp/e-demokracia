@@ -121,10 +121,11 @@ export const useServiceIssueAttachmentsRelationFormPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -155,7 +156,7 @@ export interface ServiceIssueAttachmentsRelationFormPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueAttachment) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueAttachmentStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueAttachmentStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationFeatureForm
@@ -280,10 +281,7 @@ export default function ServiceIssueAttachmentsRelationFormPage(props: ServiceIs
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceIssueAttachmentsRelationViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceIssueAttachment>(error, { setValidation }, data);

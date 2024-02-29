@@ -156,7 +156,7 @@ export default function ServiceCreateUserInputCreateUserInput_Form(
   );
   const containerActions: ServiceCreateUserInputCreateUserInput_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

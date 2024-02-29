@@ -626,6 +626,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationV
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceCon>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };
@@ -713,6 +715,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationV
     } catch (error) {
       if (!silentMode) {
         handleError<ServicePro>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };
@@ -763,9 +767,12 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationV
     });
   };
   const attachmentsOpenCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceIssueAttachmentsRelationFormPage(data);
+    const { result, data: returnedData, openCreated } = await openServiceIssueAttachmentsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+    if (openCreated && returnedData) {
+      await attachmentsOpenPageAction(returnedData!);
     }
   };
   const attachmentsFilterAction = async (
@@ -800,6 +807,8 @@ export default function ServiceUserIssuesActiveIssuesInActivityCountiesRelationV
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceIssueAttachment>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

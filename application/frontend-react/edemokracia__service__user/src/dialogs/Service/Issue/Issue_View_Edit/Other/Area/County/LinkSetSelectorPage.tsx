@@ -100,10 +100,11 @@ export const useServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPage = 
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -128,7 +129,7 @@ export interface ServiceIssueIssue_View_EditOtherAreaCountyLinkSetSelectorPagePr
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_pPQxkdvUEe2Bgcx6em3jZg)/TabularReferenceFieldLinkSetSelectorPageDefinition

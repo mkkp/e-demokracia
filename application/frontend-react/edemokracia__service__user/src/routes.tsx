@@ -11,8 +11,15 @@ import { ComponentProxy } from '@pandino/react-hooks';
 import type { ReactElement } from 'react';
 import { Suspense, lazy } from 'react';
 import { Navigate, Route } from 'react-router-dom';
+import { Redirect } from './pages/Redirect';
 
 let routes: Array<{ path: string; element: ReactElement; exact?: boolean }> = [];
+
+routes.push({
+  path: '_redirect',
+  exact: true,
+  element: <Redirect />,
+});
 
 export const ROUTE_SERVICE_COMMENT_VOTES_RELATION_TABLE_PAGE_INTERFACE_KEY =
   'ServiceCommentVotesRelationTablePageRoute';

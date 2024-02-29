@@ -65,7 +65,7 @@ export default function ServiceVoteEntryVoteEntry_Table(props: ServiceVoteEntryV
     `(${OBJECTCLASS}=${SERVICE_VOTE_ENTRY_VOTE_ENTRY_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceVoteEntryVoteEntry_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

@@ -80,7 +80,7 @@ export default function ServiceUserProfileUserProfile_View_EditAreasResidencyRes
     );
   const containerActions: ServiceUserProfileUserProfile_View_EditAreasResidencyResidentCountySetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

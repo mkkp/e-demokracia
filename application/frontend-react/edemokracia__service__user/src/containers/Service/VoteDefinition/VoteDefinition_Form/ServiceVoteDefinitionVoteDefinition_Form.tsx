@@ -31,6 +31,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { useL10N } from '~/l10n/l10n-context';
 import type { JudoIdentifiable } from '~/services/data-api/common';
 import type { JudoRestResponse } from '~/services/data-api/rest';
+import type { BaseDateValidationProps } from '~/utilities';
 import { isErrorOperationFault, serviceDateToUiDate, uiDateToServiceDate, useErrorHandler } from '~/utilities';
 
 import { DateTimePicker } from '@mui/x-date-pickers';
@@ -114,6 +115,8 @@ export interface ServiceVoteDefinitionVoteDefinition_FormActionDefinitions {
     editMode?: boolean,
     isLoading?: boolean,
   ) => boolean;
+  getCloseAtValidationProps?: (data: ServiceVoteDefinition) => BaseDateValidationProps;
+  getCreatedValidationProps?: (data: ServiceVoteDefinition) => BaseDateValidationProps;
 }
 
 export interface ServiceVoteDefinitionVoteDefinition_FormProps {
@@ -169,7 +172,7 @@ export default function ServiceVoteDefinitionVoteDefinition_Form(props: ServiceV
   );
   const containerActions: ServiceVoteDefinitionVoteDefinition_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

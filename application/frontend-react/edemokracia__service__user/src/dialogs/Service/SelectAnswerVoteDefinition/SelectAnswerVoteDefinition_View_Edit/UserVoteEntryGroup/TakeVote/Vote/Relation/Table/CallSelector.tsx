@@ -102,10 +102,11 @@ export const useServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View
                   result: 'close',
                 });
               }}
-              onSubmit={async (result, isDraft) => {
+              onSubmit={async (result, isDraft, openCreated) => {
                 await closeDialog();
                 resolve({
                   result: isDraft ? 'submit-draft' : 'submit',
+                  openCreated,
                   data: result,
                 });
               }}
@@ -129,7 +130,7 @@ export interface ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_Vie
   isDraft?: boolean;
   ownerValidation?: (data: SelectAnswerVoteSelection) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: SelectAnswerVoteSelectionStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: SelectAnswerVoteSelectionStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_0SJy11tuEe6Mx9dH3yj5gQ)/OperationFormMappedInputSelectorCallOperationPageDefinition
@@ -207,6 +208,8 @@ export default function ServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinit
         showSuccessSnack(
           t('judo.action.operation.success', { defaultValue: 'Operation executed successfully' }) as string,
         );
+
+        onSubmit();
       }
     } catch (error) {
       handleError(error);

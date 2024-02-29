@@ -39,7 +39,7 @@ export interface NavItemProps {
 
 export const NavItem = ({ item, level }: NavItemProps) => {
   const { t } = useTranslation();
-  const { clearNavigate } = useJudoNavigation();
+  const { clearNavigate, externalNavigate } = useJudoNavigation();
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
@@ -73,7 +73,11 @@ export const NavItem = ({ item, level }: NavItemProps) => {
         // menu item-based navigations should always clear the breadcrumbs
         e.preventDefault();
         e.stopPropagation();
-        clearNavigate(item.url!);
+        if (item.url!.startsWith('http')) {
+          externalNavigate(item.url!);
+        } else {
+          clearNavigate(item.url!);
+        }
       }}
     />
   ));

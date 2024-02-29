@@ -140,10 +140,11 @@ export const useServiceIssueOwnerRelationViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -178,7 +179,7 @@ export interface ServiceIssueOwnerRelationViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceServiceUser) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qYS-wGksEe25ONJ3V89cVA)/RelationFeatureView
@@ -622,7 +623,7 @@ export default function ServiceIssueOwnerRelationViewPage(props: ServiceIssueOwn
           ((target as ServiceSimpleVoteStored) || data).__signedIdentifier,
         ),
       );
-      onClose();
+      onSubmit();
     }
   };
 

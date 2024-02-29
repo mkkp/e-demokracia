@@ -110,10 +110,11 @@ export const useServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVot
                   result: 'close',
                 });
               }}
-              onSubmit={async (result, isDraft) => {
+              onSubmit={async (result, isDraft, openCreated) => {
                 await closeDialog();
                 resolve({
                   result: isDraft ? 'submit-draft' : 'submit',
+                  openCreated,
                   data: result,
                 });
               }}
@@ -139,7 +140,7 @@ export interface ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarMyVo
   isDraft?: boolean;
   ownerValidation?: (data: ServiceVoteDefinition) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceVoteDefinitionStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceVoteDefinitionStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_ZesvsGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorPageDefinition

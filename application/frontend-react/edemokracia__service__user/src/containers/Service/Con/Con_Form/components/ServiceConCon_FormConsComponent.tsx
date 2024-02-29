@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -43,6 +44,7 @@ import {
 } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import { useL10N } from '~/l10n/l10n-context';
 import type { ServiceCon, ServiceConQueryCustomizer, ServiceConStored } from '~/services/data-api';
@@ -56,7 +58,7 @@ import {
   processQueryCustomizer,
   serviceDateToUiDate,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceConCon_FormConsComponentActionDefinitions {
   consBulkDeleteAction?: (selectedRows: ServiceConStored[]) => Promise<DialogResult<ServiceConStored[]>>;
@@ -97,6 +99,9 @@ export interface ServiceConCon_FormConsComponentProps {
   isFormUpdateable: () => boolean;
 }
 
+export const SERVICE_CON_CON_FORM_CONS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceConCon_FormConsComponentSidekickComponent';
+
 // XMIID: User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable
 // Name: cons
 export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsComponentProps) {
@@ -112,6 +117,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_CON_CON_FORM_CONS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
@@ -149,6 +155,7 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
       : [],
     ...mapAllFiltersToQueryCustomizerProperties(filters),
   });
+  const SidekickComponent = useTrackComponent<FC<SidekickComponentProps<ServiceConStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -492,6 +499,14 @@ export function ServiceConCon_FormConsComponent(props: ServiceConCon_FormConsCom
 
   return (
     <div id="User/(esm/_cI62AIfYEe2u0fVmwtP5bA)/TabularReferenceFieldRelationDefinedTable" data-table-name="cons">
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        editMode={editMode}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

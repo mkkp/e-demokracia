@@ -66,7 +66,7 @@ export default function ServiceServiceUserServiceUser_Table(props: ServiceServic
     `(${OBJECTCLASS}=${SERVICE_SERVICE_USER_SERVICE_USER_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceServiceUserServiceUser_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

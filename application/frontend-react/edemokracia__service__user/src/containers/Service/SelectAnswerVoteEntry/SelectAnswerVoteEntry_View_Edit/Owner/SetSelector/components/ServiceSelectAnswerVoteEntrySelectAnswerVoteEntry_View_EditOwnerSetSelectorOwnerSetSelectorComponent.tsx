@@ -27,8 +27,9 @@ import type {
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
 import { OBJECTCLASS } from '@pandino/pandino-api';
+import { ComponentProxy, useTrackComponent } from '@pandino/react-hooks';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Dispatch, ElementType, MouseEvent, SetStateAction } from 'react';
+import type { Dispatch, ElementType, FC, MouseEvent, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CustomTablePagination, MdiIcon } from '~/components';
 import type { Filter, FilterOption } from '~/components-api';
@@ -37,6 +38,7 @@ import { useConfirmDialog } from '~/components/dialog';
 import { ContextMenu, StripedDataGrid, columnsActionCalculator } from '~/components/table';
 import type { ContextMenuApi } from '~/components/table/ContextMenu';
 import { baseColumnConfig, basePageSizeOptions, baseTableConfig, filterDebounceMs } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useDataStore } from '~/hooks';
 import type {
   ServiceServiceUser,
@@ -52,7 +54,7 @@ import {
   processQueryCustomizer,
   useErrorHandler,
 } from '~/utilities';
-import type { ColumnCustomizerHook, DialogResult, TableRowAction } from '~/utilities';
+import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
 
 export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerSetSelectorOwnerSetSelectorComponentActionDefinitions {
   openCreateFormAction?: () => Promise<void>;
@@ -85,6 +87,9 @@ export interface ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwne
   alreadySelected: ServiceServiceUserStored[];
 }
 
+export const SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_OWNER_SET_SELECTOR_OWNER_SET_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY =
+  'ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerSetSelectorOwnerSetSelectorComponentSidekickComponent';
+
 // XMIID: User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable
 // Name: owner::Set::Selector
 export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwnerSetSelectorOwnerSetSelectorComponent(
@@ -102,6 +107,7 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
     alreadySelected,
   } = props;
   const apiRef = useGridApiRef();
+  const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_SELECT_ANSWER_VOTE_ENTRY_SELECT_ANSWER_VOTE_ENTRY_VIEW_EDIT_OWNER_SET_SELECTOR_OWNER_SET_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
   const filterModelKey = `User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filterModel`;
   const filtersKey = `User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filters`;
   const rowsPerPageKey = `User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-rowsPerPage`;
@@ -144,6 +150,8 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
   const [lastItem, setLastItem] = useState<ServiceServiceUserStored>();
   const [firstItem, setFirstItem] = useState<ServiceServiceUserStored>();
   const [isNextButtonEnabled, setIsNextButtonEnabled] = useState<boolean>(true);
+  const SidekickComponent =
+    useTrackComponent<FC<SidekickComponentProps<ServiceServiceUserStored>>>(sidekickComponentFilter);
 
   const isLoading = useMemo(() => isInternalLoading || !!isOwnerLoading, [isInternalLoading, isOwnerLoading]);
 
@@ -320,31 +328,29 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
   };
 
   async function fetchData() {
-    if (!isLoading) {
-      setIsInternalLoading(true);
+    setIsInternalLoading(true);
 
-      try {
-        const processedQueryCustomizer = {
-          ...processQueryCustomizer(queryCustomizer),
-        };
-        const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
+    try {
+      const processedQueryCustomizer = {
+        ...processQueryCustomizer(queryCustomizer),
+      };
+      const { data: res, headers } = await actions.selectorRangeAction!(processedQueryCustomizer);
 
-        if (res.length > rowsPerPage) {
-          setIsNextButtonEnabled(true);
-          res.pop();
-        } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
-          setIsNextButtonEnabled(false);
-        }
-
-        setData(res);
-        setFirstItem(res[0]);
-        setLastItem(res[res.length - 1]);
-        setRowCount(res.length || 0);
-      } catch (error) {
-        handleError(error);
-      } finally {
-        setIsInternalLoading(false);
+      if (res.length > rowsPerPage) {
+        setIsNextButtonEnabled(true);
+        res.pop();
+      } else if (queryCustomizer._seek?.limit === rowsPerPage + 1) {
+        setIsNextButtonEnabled(false);
       }
+
+      setData(res);
+      setFirstItem(res[0]);
+      setLastItem(res[res.length - 1]);
+      setRowCount(res.length || 0);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsInternalLoading(false);
     }
   }
 
@@ -358,6 +364,13 @@ export function ServiceSelectAnswerVoteEntrySelectAnswerVoteEntry_View_EditOwner
       id="User/(esm/_Eq0jMFuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable"
       data-table-name="owner::Set::Selector"
     >
+      <ComponentProxy
+        filter={sidekickComponentFilter}
+        isLoading={isLoading}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        data={data}
+      />
       <StripedDataGrid
         apiRef={apiRef}
         {...baseTableConfig}

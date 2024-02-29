@@ -62,7 +62,7 @@ export default function ServiceProParentProParent_Table(props: ServiceProParentP
     `(${OBJECTCLASS}=${SERVICE_PRO_PARENT_PRO_PARENT_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceProParentProParent_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

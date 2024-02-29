@@ -100,10 +100,11 @@ export const useServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelector
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -128,7 +129,7 @@ export interface ServiceYesNoVoteEntryYesNoVoteEntry_View_EditUserLinkSetSelecto
   isDraft?: boolean;
   ownerValidation?: (data: ServiceServiceUser) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceServiceUserStored[], isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceServiceUserStored[], isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_88iwkFowEe6_67aMO2jOsw)/TabularReferenceFieldLinkSetSelectorPageDefinition

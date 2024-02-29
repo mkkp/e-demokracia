@@ -38,6 +38,10 @@ export const columnsActionCalculator: ColumnActionsProvider<any> = (
   const splitActions = [...keptCrudActions, ...keptOperationActions];
   const dropdownActions = [...originalCrudActions, ...originalOperationActions];
 
+  if (splitActions.length === 0 && dropdownActions.length === 0) {
+    return [];
+  }
+
   return [
     {
       ...baseColumnConfig,

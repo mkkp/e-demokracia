@@ -119,10 +119,11 @@ export const useServiceIssueCategorySubcategoriesRelationViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -153,7 +154,7 @@ export interface ServiceIssueCategorySubcategoriesRelationViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceIssueCategory) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceIssueCategoryStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_qT2joGksEe25ONJ3V89cVA)/RelationFeatureView
@@ -348,9 +349,16 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
     isDraft?: boolean,
     ownerValidation?: (data: any) => Promise<void>,
   ) => {
-    const { result, data: returnedData } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
+    const {
+      result,
+      data: returnedData,
+      openCreated,
+    } = await openServiceIssueCategorySubcategoriesRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+    if (openCreated && returnedData) {
+      await subcategoriesOpenPageAction(returnedData!);
     }
   };
   const subcategoriesFilterAction = async (
@@ -385,6 +393,8 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceIssueCategory>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

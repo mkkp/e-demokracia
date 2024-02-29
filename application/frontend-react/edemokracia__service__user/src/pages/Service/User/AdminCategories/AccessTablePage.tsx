@@ -158,9 +158,12 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
     });
   };
   const openCreateFormAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceUserAdminCategoriesAccessFormPage(null as any);
+    const { result, data: returnedData, openCreated } = await openServiceUserAdminCategoriesAccessFormPage(null as any);
     if (result === 'submit') {
       setRefreshCounter((prev) => prev + 1);
+    }
+    if (openCreated && returnedData) {
+      await openPageAction(returnedData!);
     }
   };
   const deleteAction = async (target: ServiceIssueCategoryStored, silentMode?: boolean) => {
@@ -184,6 +187,8 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceIssueCategory>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

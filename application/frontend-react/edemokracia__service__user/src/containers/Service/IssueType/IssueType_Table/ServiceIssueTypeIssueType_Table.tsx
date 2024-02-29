@@ -65,7 +65,7 @@ export default function ServiceIssueTypeIssueType_Table(props: ServiceIssueTypeI
     `(${OBJECTCLASS}=${SERVICE_ISSUE_TYPE_ISSUE_TYPE_TABLE_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceIssueTypeIssueType_TableActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

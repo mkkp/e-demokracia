@@ -108,7 +108,7 @@ export default function CloseDebateInputCloseDebateInput_View_Edit(
   );
   const containerActions: CloseDebateInputCloseDebateInput_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

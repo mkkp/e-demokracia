@@ -116,10 +116,11 @@ export const useServiceUserRatingVoteEntriesAccessViewPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -154,7 +155,7 @@ export interface ServiceUserRatingVoteEntriesAccessViewPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceRatingVoteEntry) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceRatingVoteEntryStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceRatingVoteEntryStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_8Ip-IM6zEe6ddqBfFzCBZg)/AccessViewPageDefinition

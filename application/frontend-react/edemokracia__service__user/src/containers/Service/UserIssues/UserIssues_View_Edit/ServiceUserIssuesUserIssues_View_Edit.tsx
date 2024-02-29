@@ -132,7 +132,7 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
   );
   const containerActions: ServiceUserIssuesUserIssues_View_EditActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>
@@ -220,29 +220,6 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                   <Grid item data-name="ownedIssuesGroup" xs={12} sm={12}>
                     <Card id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement" data-name="ownedIssuesGroup">
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="account-box" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t('service.UserIssues.UserIssues_View_Edit.ownedIssuesGroup', {
-                                  defaultValue: 'Owned issues',
-                                })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item xs={12} sm={12}>
                             <Grid
@@ -274,29 +251,6 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                   <Grid item data-name="activeGlobalIssues" xs={12} sm={12}>
                     <Card id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement" data-name="activeGlobalIssues">
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="earth" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t('service.UserIssues.UserIssues_View_Edit.activeGlobalIssues', {
-                                  defaultValue: 'Active global issues',
-                                })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item data-name="activeGlobal" xs={12} sm={12}>
                             <Grid
@@ -343,29 +297,6 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                       data-name="activeIssuesByActivityArea"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="map-search" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t('service.UserIssues.UserIssues_View_Edit.activeIssuesByActivityArea', {
-                                  defaultValue: 'Active issues by my activity areas',
-                                })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs
@@ -526,29 +457,6 @@ export default function ServiceUserIssuesUserIssues_View_Edit(props: ServiceUser
                       data-name="activeIssuesByResidentArea"
                     >
                       <CardContent>
-                        <Grid
-                          container
-                          direction="row"
-                          alignItems="center"
-                          justifyContent="space-between"
-                          spacing={2}
-                          sx={{ mb: 2 }}
-                        >
-                          <Grid item>
-                            <Grid container direction="row" alignItems="center" justifyContent="flex-start">
-                              <MdiIcon path="home-circle" sx={{ marginRight: 1 }} />
-                              <Typography
-                                id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement"
-                                variant="h5"
-                                component="h1"
-                              >
-                                {t('service.UserIssues.UserIssues_View_Edit.activeIssuesByResidentArea', {
-                                  defaultValue: 'Active issues by my resident area',
-                                })}
-                              </Typography>
-                            </Grid>
-                          </Grid>
-                        </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid container item xs={12} sm={12}>
                             <ModeledTabs

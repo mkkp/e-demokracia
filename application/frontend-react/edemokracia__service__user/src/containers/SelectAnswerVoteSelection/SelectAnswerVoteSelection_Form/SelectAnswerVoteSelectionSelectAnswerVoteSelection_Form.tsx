@@ -121,7 +121,7 @@ export default function SelectAnswerVoteSelectionSelectAnswerVoteSelection_Form(
     );
   const containerActions: SelectAnswerVoteSelectionSelectAnswerVoteSelection_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

@@ -121,10 +121,11 @@ export const useServiceIssueIssue_View_EditCreateCommentInputForm = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
               });
             }}
           />
@@ -154,7 +155,7 @@ export interface ServiceIssueIssue_View_EditCreateCommentInputFormProps {
   isDraft?: boolean;
   ownerValidation?: (data: CreateCommentInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: CreateCommentInputStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: CreateCommentInputStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_S8tEQIydEe2VSOmaAz6G9Q)/OperationUnmappedInputPageDefinition

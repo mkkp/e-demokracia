@@ -80,7 +80,7 @@ export default function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetS
     );
   const containerActions: ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetSelectorActionDefinitions =
     customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

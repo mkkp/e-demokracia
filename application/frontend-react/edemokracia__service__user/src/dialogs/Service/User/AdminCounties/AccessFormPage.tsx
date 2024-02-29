@@ -111,10 +111,11 @@ export const useServiceUserAdminCountiesAccessFormPage = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (result, isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
                 data: result,
               });
             }}
@@ -142,7 +143,7 @@ export interface ServiceUserAdminCountiesAccessFormPageProps {
   isDraft?: boolean;
   ownerValidation?: (data: ServiceCounty) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: ServiceCountyStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: ServiceCountyStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_8DntEIXgEe2kLcMqsIbMgQ)/AccessFormPageDefinition
@@ -251,10 +252,7 @@ export default function ServiceUserAdminCountiesAccessFormPage(props: ServiceUse
         await customActions.postCreateAction(data, res, onSubmit, onClose, openCreated);
       } else {
         showSuccessSnack(t('judo.action.create.success', { defaultValue: 'Create successful' }));
-        await onSubmit(res, isDraft);
-        if (openCreated) {
-          await openServiceUserAdminCountiesAccessViewPage(res!);
-        }
+        await onSubmit(res, isDraft, openCreated);
       }
     } catch (error) {
       handleError<ServiceCounty>(error, { setValidation }, data);

@@ -121,10 +121,11 @@ export const useServiceProPro_View_EditCreateProArgumentInputForm = (): ((
                 result: 'close',
               });
             }}
-            onSubmit={async (isDraft) => {
+            onSubmit={async (result, isDraft, openCreated) => {
               await closeDialog();
               resolve({
                 result: isDraft ? 'submit-draft' : 'submit',
+                openCreated,
               });
             }}
           />
@@ -154,7 +155,7 @@ export interface ServiceProPro_View_EditCreateProArgumentInputFormProps {
   isDraft?: boolean;
   ownerValidation?: (data: CreateArgumentInput) => Promise<void>;
   onClose: () => Promise<void>;
-  onSubmit: (result?: CreateArgumentInputStored, isDraft?: boolean) => Promise<void>;
+  onSubmit: (result?: CreateArgumentInputStored, isDraft?: boolean, openCreated?: boolean) => Promise<void>;
 }
 
 // XMIID: User/(esm/_KRUbM3jvEe6cB8og8p0UuQ)/OperationUnmappedInputPageDefinition

@@ -101,7 +101,7 @@ export default function ServiceCountyCounty_Form(props: ServiceCountyCounty_Form
   );
   const containerActions: ServiceCountyCounty_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

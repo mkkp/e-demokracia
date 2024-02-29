@@ -121,7 +121,7 @@ export default function ServiceIssueCategoryIssueCategory_Form(props: ServiceIss
   );
   const containerActions: ServiceIssueCategoryIssueCategory_FormActionDefinitions =
     customContainerHook?.(data, editMode, storeDiff) || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
   const autoFocusInputRef = useRef<any>(null);
 
   useEffect(() => {

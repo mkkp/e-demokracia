@@ -212,6 +212,8 @@ export default function ServiceDashboardOwnedIssuesRelationTablePage() {
       } catch (error) {
         if (!silentMode) {
           handleError<ServiceIssue>(error, undefined, target);
+        } else {
+          throw error;
         }
       } finally {
         if (!silentMode) {

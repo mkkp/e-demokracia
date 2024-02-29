@@ -75,7 +75,7 @@ export default function ServiceIssueIssue_TableAddSelector(props: ServiceIssueIs
     `(${OBJECTCLASS}=${SERVICE_ISSUE_ISSUE_TABLE_ADD_SELECTOR_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY})`,
   );
   const containerActions: ServiceIssueIssue_TableAddSelectorActionDefinitions = customContainerHook?.() || {};
-  const actions = useMemo(() => ({ ...containerActions, ...pageActions }), [containerActions, pageActions]);
+  const actions = useMemo(() => ({ ...pageActions, ...containerActions }), [pageActions, containerActions]);
 
   return (
     <Grid container>

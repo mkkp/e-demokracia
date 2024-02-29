@@ -174,6 +174,8 @@ export default function ServiceUserAdminVoteEntriesAccessTablePage() {
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceVoteEntry>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };

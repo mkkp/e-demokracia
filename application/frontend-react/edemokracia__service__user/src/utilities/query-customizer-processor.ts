@@ -9,7 +9,7 @@
 import type { QueryCustomizer } from '~/services/data-api/common';
 import { exists, simpleCloneDeep } from './helper';
 
-export function processQueryCustomizer<T>(queryCustomizer: T): T {
+export function processQueryCustomizer<T>(queryCustomizer: QueryCustomizer<T>): QueryCustomizer<T> {
   const clone: any = simpleCloneDeep(queryCustomizer);
 
   if (typeof clone !== 'object') {

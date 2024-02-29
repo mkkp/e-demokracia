@@ -333,10 +333,16 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     isDraft?: boolean,
     ownerValidation?: (data: any) => Promise<void>,
   ) => {
-    const { result, data: returnedData } =
-      await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(data);
+    const {
+      result,
+      data: returnedData,
+      openCreated,
+    } = await openServiceSelectAnswerVoteDefinitionVoteSelectionsRelationFormPage(data);
     if (result === 'submit' && !editMode) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+    if (openCreated && returnedData) {
+      await voteSelectionsOpenPageAction(returnedData!);
     }
   };
   const voteSelectionsFilterAction = async (
@@ -371,6 +377,8 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
     } catch (error) {
       if (!silentMode) {
         handleError<ServiceSelectAnswerVoteSelection>(error, undefined, target);
+      } else {
+        throw error;
       }
     }
   };
