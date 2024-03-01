@@ -739,7 +739,7 @@
           </components>
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_hZfckId8Ee2kLcMqsIbMgQ" name="other" label="" col="12" stretch="NONE" row="11" fit="LOOSE">
-          <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="10" fit="LOOSE">
+          <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="VERTICAL" row="10" fit="LOOSE">
             <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="6" stretch="NONE" row="11" fit="LOOSE">
               <components xsi:type="ui:Group" xmi:id="_qJPPCnjvEe6cB8og8p0UuQ" name="actions" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="6" stretch="NONE" row="1" fit="LOOSE">
                 <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" stretch="NONE" row="1" fit="LOOSE" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" onBlur="false" operation="createConArgument"/>
