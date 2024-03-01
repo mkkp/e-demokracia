@@ -326,6 +326,7 @@ export default function ServiceIssueCategorySubcategoriesRelationViewPage(
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

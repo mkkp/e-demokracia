@@ -266,6 +266,7 @@ export default function ServiceUserProfileActivityCitiesRelationViewPage(
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

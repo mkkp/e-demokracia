@@ -301,6 +301,7 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
@@ -401,6 +402,7 @@ export default function ServiceIssueConsRelationViewPage(props: ServiceIssueCons
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

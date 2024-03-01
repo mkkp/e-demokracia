@@ -140,6 +140,7 @@ export default function ServiceUserAdminCategoriesAccessTablePage() {
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             setRefreshCounter((prev) => prev + 1);

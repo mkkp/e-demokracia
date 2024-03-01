@@ -351,6 +351,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
@@ -440,6 +441,7 @@ export default function ServiceConProsRelationViewPage(props: ServiceConProsRela
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

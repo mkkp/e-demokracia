@@ -322,6 +322,7 @@ export default function ServiceUserAdminCategoriesAccessViewPage(props: ServiceU
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

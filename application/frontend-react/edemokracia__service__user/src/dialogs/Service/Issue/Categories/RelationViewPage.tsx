@@ -343,6 +343,7 @@ export default function ServiceIssueCategoriesRelationViewPage(props: ServiceIss
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

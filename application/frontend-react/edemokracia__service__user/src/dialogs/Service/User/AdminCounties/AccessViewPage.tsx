@@ -272,6 +272,7 @@ export default function ServiceUserAdminCountiesAccessViewPage(props: ServiceUse
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

@@ -137,6 +137,7 @@ export default function ServiceUserAdminIssueTypesAccessTablePage() {
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             setRefreshCounter((prev) => prev + 1);

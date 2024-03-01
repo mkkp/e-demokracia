@@ -187,6 +187,7 @@ export default function ServiceUserVoteDefinitionOwnedVoteDefinitionsRelationTab
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             setRefreshCounter((prev) => prev + 1);

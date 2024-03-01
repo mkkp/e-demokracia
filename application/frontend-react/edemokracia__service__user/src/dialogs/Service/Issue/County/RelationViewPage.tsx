@@ -260,6 +260,7 @@ export default function ServiceIssueCountyRelationViewPage(props: ServiceIssueCo
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

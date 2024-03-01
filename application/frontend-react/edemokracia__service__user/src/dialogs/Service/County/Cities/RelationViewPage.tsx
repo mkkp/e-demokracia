@@ -272,6 +272,7 @@ export default function ServiceCountyCitiesRelationViewPage(props: ServiceCounty
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

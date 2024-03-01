@@ -560,6 +560,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
@@ -649,6 +650,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {
@@ -732,6 +734,7 @@ export default function ServiceUserIssuesUserIssues_View_EditCreateIssueOutputVi
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

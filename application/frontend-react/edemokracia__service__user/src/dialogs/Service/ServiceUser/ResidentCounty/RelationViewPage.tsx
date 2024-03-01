@@ -270,6 +270,7 @@ export default function ServiceServiceUserResidentCountyRelationViewPage(
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

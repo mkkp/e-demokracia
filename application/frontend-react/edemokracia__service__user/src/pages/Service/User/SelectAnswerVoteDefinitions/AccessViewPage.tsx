@@ -310,6 +310,7 @@ export default function ServiceUserSelectAnswerVoteDefinitionsAccessViewPage() {
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

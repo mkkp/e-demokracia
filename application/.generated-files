@@ -15,7 +15,7 @@ docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,ead98c7db6638fee0fe4890a0bcd24da
+frontend-react/pom.xml,8a1026e3de18bd19eb3ab3d63bf78931
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 internal/pom.xml,a954ddcb6ee521bf1616cf02552e9880
 karaf-features/pom.xml,65964f3bbda475c0937f841941ea2851

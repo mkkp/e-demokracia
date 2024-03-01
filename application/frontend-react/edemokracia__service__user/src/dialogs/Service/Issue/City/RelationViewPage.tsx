@@ -255,6 +255,7 @@ export default function ServiceIssueCityRelationViewPage(props: ServiceIssueCity
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

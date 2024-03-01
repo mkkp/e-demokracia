@@ -180,6 +180,7 @@ export default function ServiceDashboardFavoriteIssuesRelationTablePage() {
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             setRefreshCounter((prev) => prev + 1);

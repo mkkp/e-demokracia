@@ -1712,6 +1712,7 @@ export default function ServiceUserUserIssuesAccessViewPage() {
             errorHandler(error);
           }
         },
+        autoCloseOnSuccess: true,
         onClose: async (needsRefresh) => {
           if (needsRefresh) {
             if (actions.refreshAction) {

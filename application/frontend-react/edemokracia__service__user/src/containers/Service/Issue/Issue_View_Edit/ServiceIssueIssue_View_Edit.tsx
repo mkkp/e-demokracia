@@ -565,12 +565,16 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   data-name="arguments"
                   container
                   direction="row"
-                  alignItems="flex-start"
+                  alignItems="stretch"
                   justifyContent="flex-start"
                   spacing={2}
                 >
                   <Grid item data-name="cons" xs={12} sm={12} md={6.0}>
-                    <Card id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupVisualElement" data-name="cons">
+                    <Card
+                      id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                      data-name="cons"
+                      sx={{ height: '100%' }}
+                    >
                       <CardContent>
                         <Grid
                           container
@@ -666,7 +670,11 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                   </Grid>
 
                   <Grid item data-name="pros" xs={12} sm={12} md={6.0}>
-                    <Card id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupVisualElement" data-name="pros">
+                    <Card
+                      id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupVisualElement"
+                      data-name="pros"
+                      sx={{ height: '100%' }}
+                    >
                       <CardContent>
                         <Grid
                           container
