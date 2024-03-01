@@ -61,6 +61,7 @@ import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableR
 export interface ServiceUserProfileUserProfile_View_EditActivityCitiesComponentActionDefinitions {
   activityCitiesOpenAddSelectorAction?: () => Promise<void>;
   activityCitiesBulkRemoveAction?: (selectedRows: ServiceCityStored[]) => Promise<DialogResult<ServiceCityStored[]>>;
+  activityCitiesClearAction?: () => Promise<void>;
   activityCitiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -444,6 +445,24 @@ export function ServiceUserProfileUserProfile_View_EditActivityCitiesComponent(
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
                   {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
+                </Button>
+              ) : null}
+              {actions.activityCitiesClearAction && data.length && isFormUpdateable() ? (
+                <Button
+                  id="User/(esm/_fsW_rVvTEe6jm_SkPSYEYw)/TabularReferenceTableClearButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCitiesMask ? actions.getActivityCitiesMask() : queryCustomizer._mask,
+                    };
+                    await actions.activityCitiesClearAction!();
+                    handleOnSelection([]);
+                  }}
+                  disabled={editMode || !isFormUpdateable() || isLoading}
+                >
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.activityCitiesBulkRemoveAction && selectionModel.length > 0 ? (

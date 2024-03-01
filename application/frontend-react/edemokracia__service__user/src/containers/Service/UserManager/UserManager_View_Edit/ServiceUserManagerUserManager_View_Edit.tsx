@@ -10,6 +10,9 @@ import { LoadingButton } from '@mui/lab';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -125,45 +128,40 @@ export default function ServiceUserManagerUserManager_View_Edit(props: ServiceUs
           spacing={2}
         >
           <Grid item xs={12} sm={4.0}>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <LoadingButton
-                id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
-                loading={isLoading}
-                startIcon={<MdiIcon path="account-plus" />}
-                loadingPosition="start"
-                onClick={
-                  actions.createUserAction
-                    ? async () => {
-                        await actions.createUserAction!();
-                      }
-                    : undefined
-                }
-                disabled={isLoading || editMode}
-              >
-                {t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}
-              </LoadingButton>
-            </Box>
+            <Box sx={{ display: 'flex', gap: 1 }}></Box>
           </Grid>
 
-          <Grid item xs={12} sm={12}>
-            <Grid
-              id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
-              container
-              direction="column"
-              alignItems="stretch"
-              justifyContent="flex-start"
+          <Grid item data-name="UserGroup" xs={12} sm={12}>
+            <Card
+              id="User/(esm/_XSWnMNfnEe6GGcgLB1np_g)/GroupVisualElement"
+              data-name="UserGroup"
+              sx={{ height: '100%' }}
             >
-              <ServiceUserManagerUserManager_View_EditUsersComponent
-                uniqueId={'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'}
-                actions={actions}
-                ownerData={data}
-                editMode={editMode}
-                isFormUpdateable={isFormUpdateable}
-                validationError={validation.get('users')}
-                refreshCounter={refreshCounter}
-                isOwnerLoading={isLoading}
-              />
-            </Grid>
+              <CardContent>
+                <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
+                  <Grid item xs={12} sm={12}>
+                    <Grid
+                      id="User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable"
+                      container
+                      direction="column"
+                      alignItems="stretch"
+                      justifyContent="flex-start"
+                    >
+                      <ServiceUserManagerUserManager_View_EditUsersComponent
+                        uniqueId={'User/(esm/_MJ6o0FvVEe6jm_SkPSYEYw)/TabularReferenceFieldRelationDefinedTable'}
+                        actions={actions}
+                        ownerData={data}
+                        editMode={editMode}
+                        isFormUpdateable={isFormUpdateable}
+                        validationError={validation.get('users')}
+                        refreshCounter={refreshCounter}
+                        isOwnerLoading={isLoading}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
       </Grid>

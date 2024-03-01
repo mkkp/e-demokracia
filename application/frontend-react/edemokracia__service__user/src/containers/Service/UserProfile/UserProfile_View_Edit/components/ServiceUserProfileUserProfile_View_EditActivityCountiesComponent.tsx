@@ -63,6 +63,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityCountiesComponen
   activityCountiesBulkRemoveAction?: (
     selectedRows: ServiceCountyStored[],
   ) => Promise<DialogResult<ServiceCountyStored[]>>;
+  activityCountiesClearAction?: () => Promise<void>;
   activityCountiesFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -450,6 +451,26 @@ export function ServiceUserProfileUserProfile_View_EditActivityCountiesComponent
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
                   {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
+                </Button>
+              ) : null}
+              {actions.activityCountiesClearAction && data.length && isFormUpdateable() ? (
+                <Button
+                  id="User/(esm/_fsW_qlvTEe6jm_SkPSYEYw)/TabularReferenceTableClearButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityCountiesMask
+                        ? actions.getActivityCountiesMask()
+                        : queryCustomizer._mask,
+                    };
+                    await actions.activityCountiesClearAction!();
+                    handleOnSelection([]);
+                  }}
+                  disabled={editMode || !isFormUpdateable() || isLoading}
+                >
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.activityCountiesBulkRemoveAction && selectionModel.length > 0 ? (

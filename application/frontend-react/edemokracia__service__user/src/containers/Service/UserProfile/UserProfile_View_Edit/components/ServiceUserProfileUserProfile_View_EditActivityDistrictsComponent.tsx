@@ -63,6 +63,7 @@ export interface ServiceUserProfileUserProfile_View_EditActivityDistrictsCompone
   activityDistrictsBulkRemoveAction?: (
     selectedRows: ServiceDistrictStored[],
   ) => Promise<DialogResult<ServiceDistrictStored[]>>;
+  activityDistrictsClearAction?: () => Promise<void>;
   activityDistrictsFilterAction?: (
     id: string,
     filterOptions: FilterOption[],
@@ -451,6 +452,26 @@ export function ServiceUserProfileUserProfile_View_EditActivityDistrictsComponen
                   disabled={editMode || !isFormUpdateable() || isLoading}
                 >
                   {t('judo.action.open-add-selector', { defaultValue: 'Add' })}
+                </Button>
+              ) : null}
+              {actions.activityDistrictsClearAction && data.length && isFormUpdateable() ? (
+                <Button
+                  id="User/(esm/_fsW_sFvTEe6jm_SkPSYEYw)/TabularReferenceTableClearButton"
+                  startIcon={<MdiIcon path="link_off" />}
+                  variant={'text'}
+                  onClick={async () => {
+                    const processedQueryCustomizer = {
+                      ...processQueryCustomizer(queryCustomizer),
+                      _mask: actions.getActivityDistrictsMask
+                        ? actions.getActivityDistrictsMask()
+                        : queryCustomizer._mask,
+                    };
+                    await actions.activityDistrictsClearAction!();
+                    handleOnSelection([]);
+                  }}
+                  disabled={editMode || !isFormUpdateable() || isLoading}
+                >
+                  {t('judo.action.clear', { defaultValue: 'Clear' })}
                 </Button>
               ) : null}
               {actions.activityDistrictsBulkRemoveAction && selectionModel.length > 0 ? (

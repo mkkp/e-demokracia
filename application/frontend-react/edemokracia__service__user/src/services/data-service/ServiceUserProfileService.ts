@@ -32,6 +32,8 @@ export interface ServiceUserProfileService {
     queryCustomizer?: ServiceUserProfileQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  update(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  validateUpdate(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
   getTemplateForActivityCities(): Promise<JudoRestResponse<ServiceCity>>;
   listActivityCities(
     target: JudoIdentifiable<ServiceUserProfile>,
@@ -43,6 +45,10 @@ export interface ServiceUserProfileService {
     queryCustomizer?: ServiceCityQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
+  setActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
@@ -62,6 +68,10 @@ export interface ServiceUserProfileService {
     queryCustomizer?: ServiceCountyQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
+  setActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
@@ -81,6 +91,10 @@ export interface ServiceUserProfileService {
     queryCustomizer?: ServiceDistrictQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
+  setActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceDistrict>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,

@@ -35,6 +35,10 @@ export interface ServiceUserProfileServiceForActivityDistricts {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
+  setActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceDistrict>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,

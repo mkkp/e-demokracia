@@ -110,6 +110,22 @@ export class ServiceUserProfileServiceForActivityCitiesImpl
   }
 
   /**
+   * From: relation.isSetable
+   * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
+   */
+  async setActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<JudoRestResponse<void>> {
+    const path = '/service/UserProfile/~update/activityCities/~set';
+    return this.axios.post(this.getPathForActor(path), selected, {
+      headers: {
+        [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
+      },
+    });
+  }
+
+  /**
    * From: relation.isAddable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */

@@ -31,6 +31,7 @@ const ServiceUserManagerUserManager_View_Edit = lazy(
 
 export interface ServiceUserManagerUserManager_View_EditPageActions
   extends ServiceUserManagerUserManager_View_EditActionDefinitions {
+  createUserAction?: () => Promise<void>;
   backAction?: () => Promise<void>;
   cancelAction?: () => Promise<void>;
   deleteAction?: () => Promise<void>;
@@ -164,6 +165,23 @@ export default function ServiceUserManagerUserManager_View_EditPage(
               }}
             >
               <span>{t('judo.action.update', { defaultValue: 'Save' })}</span>
+            </LoadingButton>
+          </Grid>
+        )}
+        {!editMode && actions.createUserAction && (
+          <Grid className="page-action" item>
+            <LoadingButton
+              id="User/(esm/_rDBEIFv6Ee6nEc5rp_Qy4A)/OperationFormVisualElement"
+              loading={isLoading}
+              loadingPosition="start"
+              variant={undefined}
+              startIcon={<MdiIcon path="account-plus" />}
+              disabled={isLoading || editMode}
+              onClick={async () => {
+                await actions.createUserAction!();
+              }}
+            >
+              <span>{t('service.UserManager.UserManager_View_Edit.createUser', { defaultValue: 'Create User' })}</span>
             </LoadingButton>
           </Grid>
         )}

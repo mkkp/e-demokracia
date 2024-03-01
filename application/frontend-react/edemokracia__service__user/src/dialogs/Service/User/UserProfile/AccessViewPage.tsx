@@ -220,7 +220,7 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     [data, editMode],
   );
   const isFormUpdateable = useCallback(() => {
-    return false && typeof data?.__updateable === 'boolean' && data?.__updateable;
+    return true && typeof data?.__updateable === 'boolean' && data?.__updateable;
   }, [data]);
   const isFormDeleteable = useCallback(() => {
     return false && typeof data?.__deleteable === 'boolean' && data?.__deleteable;
@@ -233,7 +233,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   });
 
   // Private actions
-  const submit = async () => {};
+  const submit = async () => {
+    await updateAction();
+  };
   const refresh = async () => {
     if (actions.refreshAction) {
       await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
@@ -286,6 +288,10 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const backAction = async () => {
     onClose();
   };
+  const cancelAction = async () => {
+    // no need to set editMode to false, given refresh should do it implicitly
+    await refreshAction(processQueryCustomizer(getPageQueryCustomizer()));
+  };
   const refreshAction = async (
     queryCustomizer: ServiceUserProfileQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceUserProfileStored>> => {
@@ -314,6 +320,22 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     } finally {
       setIsLoading(false);
       setRefreshCounter((prevCounter) => prevCounter + 1);
+    }
+  };
+  const updateAction = async () => {
+    setIsLoading(true);
+    try {
+      const { data: res } = await userServiceForUserProfileImpl.update(payloadDiff.current);
+      if (res) {
+        showSuccessSnack(t('judo.action.save.success', { defaultValue: 'Changes saved' }));
+        setValidation(new Map<keyof ServiceUserProfile, string>());
+        setEditMode(false);
+        await actions.refreshAction!(getPageQueryCustomizer());
+      }
+    } catch (error) {
+      handleError<ServiceUserProfile>(error, { setValidation }, data);
+    } finally {
+      setIsLoading(false);
     }
   };
   const residentCityAutocompleteRangeAction = async (
@@ -462,6 +484,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       });
     });
   };
+  const activityCitiesClearAction = async () => {
+    storeDiff('activityCities', []);
+  };
   const activityCitiesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -513,6 +538,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
         data: [],
       });
     });
+  };
+  const activityDistrictsClearAction = async () => {
+    storeDiff('activityDistricts', []);
   };
   const activityDistrictsFilterAction = async (
     id: string,
@@ -569,6 +597,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
       });
     });
   };
+  const activityCountiesClearAction = async () => {
+    storeDiff('activityCounties', []);
+  };
   const activityCountiesFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -599,7 +630,9 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
   const actions: ServiceUserProfileUserProfile_View_EditDialogActions = {
     getPageTitle,
     backAction,
+    cancelAction,
     refreshAction,
+    updateAction,
     residentCityAutocompleteRangeAction,
     residentCityOpenSetSelectorAction,
     residentCityUnsetAction,
@@ -614,16 +647,19 @@ export default function ServiceUserUserProfileAccessViewPage(props: ServiceUserU
     residentDistrictOpenPageAction,
     activityCitiesOpenAddSelectorAction,
     activityCitiesBulkRemoveAction,
+    activityCitiesClearAction,
     activityCitiesFilterAction,
     activityCitiesRemoveAction,
     activityCitiesOpenPageAction,
     activityDistrictsOpenAddSelectorAction,
     activityDistrictsBulkRemoveAction,
+    activityDistrictsClearAction,
     activityDistrictsFilterAction,
     activityDistrictsRemoveAction,
     activityDistrictsOpenPageAction,
     activityCountiesOpenAddSelectorAction,
     activityCountiesBulkRemoveAction,
+    activityCountiesClearAction,
     activityCountiesFilterAction,
     activityCountiesRemoveAction,
     activityCountiesOpenPageAction,

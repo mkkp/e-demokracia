@@ -241,12 +241,6 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       setIsLoading(false);
     }
   };
-  const createUserAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
-    const { result, data: returnedData } = await openServiceUserManagerUserManager_View_EditCreateUserInputForm(data);
-    if (result === 'submit' && !editMode) {
-      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
-    }
-  };
   const usersFilterAction = async (
     id: string,
     filterOptions: FilterOption[],
@@ -272,6 +266,12 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
       }
     }
   };
+  const createUserAction = async (isDraft?: boolean, ownerValidation?: (data: any) => Promise<void>) => {
+    const { result, data: returnedData } = await openServiceUserManagerUserManager_View_EditCreateUserInputForm(data);
+    if (result === 'submit' && !editMode) {
+      await actions.refreshAction!(processQueryCustomizer(getPageQueryCustomizer()));
+    }
+  };
   const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
     const { data: sp } = await userServiceForAdminUserManagerImpl.refreshForAdminUserManager({
       _mask: '{}',
@@ -285,10 +285,10 @@ export default function ServiceUserAdminUserManagerAccessViewPage() {
     cancelAction,
     refreshAction,
     updateAction,
-    createUserAction,
     usersFilterAction,
     usersRefreshAction,
     usersOpenPageAction,
+    createUserAction,
     ...(customActions ?? {}),
   };
 

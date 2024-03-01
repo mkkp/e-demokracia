@@ -38,6 +38,10 @@ export interface ServiceUserProfileServiceForActivityCounties {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
   getTemplate(): Promise<JudoRestResponse<ServiceCounty>>;
+  setActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,

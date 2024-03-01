@@ -36,6 +36,8 @@ export interface UserServiceForUserProfile {
     queryCustomizer?: ServiceUserProfileQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  update(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  validateUpdate(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -47,6 +49,14 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
   getTemplateForActivityCities(): Promise<JudoRestResponse<ServiceCity>>;
+  validateUpdateActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
+  setActivityCities(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCity>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceCity>>,
@@ -66,6 +76,14 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
   getTemplateForActivityCounties(): Promise<JudoRestResponse<ServiceCounty>>;
+  validateUpdateActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
+  setActivityCounties(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceCounty>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceCounty>>,
@@ -85,6 +103,14 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   getTemplateForActivityDistricts(): Promise<JudoRestResponse<ServiceDistrict>>;
+  validateUpdateActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
+  setActivityDistricts(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    selected: Array<JudoIdentifiable<ServiceDistrict>>,
+  ): Promise<JudoRestResponse<void>>;
   addActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: Array<JudoIdentifiable<ServiceDistrict>>,
@@ -104,6 +130,10 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCityStored>>>;
   getTemplateForResidentCity(): Promise<JudoRestResponse<ServiceCity>>;
+  validateUpdateResidentCity(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceCityStored>,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   setResidentCity(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: JudoIdentifiable<ServiceCity>,
@@ -123,6 +153,10 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
   getTemplateForResidentCounty(): Promise<JudoRestResponse<ServiceCounty>>;
+  validateUpdateResidentCounty(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceCountyStored>,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: JudoIdentifiable<ServiceCounty>,
@@ -142,6 +176,10 @@ export interface UserServiceForUserProfile {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   getTemplateForResidentDistrict(): Promise<JudoRestResponse<ServiceDistrict>>;
+  validateUpdateResidentDistrict(
+    owner: JudoIdentifiable<ServiceUserProfile>,
+    target: Partial<ServiceDistrictStored>,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceUserProfile>,
     selected: JudoIdentifiable<ServiceDistrict>,

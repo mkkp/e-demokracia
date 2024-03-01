@@ -17,7 +17,7 @@
       <accesses xmi:id="_s3Fx0FuiEe6rLvwZQOpyUA" lower="0" upper="-1" target="_-dYdYn4XEe2cB7_PsKXsHQ" name="ratingVoteDefinitions" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="_X0RZIFu_Ee6HqbmdGwnUzw" lower="0" upper="-1" target="_zJIiwORxEe2Bgcx6em3jZg" name="adminVoteEntries" createable="false" updateable="false" deleteable="true" targetDefinedCRUD="false" accessType="ALL"/>
       <accesses xmi:id="__g_vkFvLEe6jm_SkPSYEYw" lower="0" upper="-1" target="_qCREY2ksEe25ONJ3V89cVA" name="issues" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
-      <accesses xmi:id="_NDSZcFvYEe6bTb-1BwQgmA" lower="0" upper="1" target="_1QeIsFvQEe6jm_SkPSYEYw" name="userProfile" appliedAnnotations="_7D81X2kNEe25ONJ3V89cVA" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
+      <accesses xmi:id="_NDSZcFvYEe6bTb-1BwQgmA" lower="0" upper="1" target="_1QeIsFvQEe6jm_SkPSYEYw" name="userProfile" appliedAnnotations="_7D81X2kNEe25ONJ3V89cVA" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_mGqscFvaEe6bTb-1BwQgmA" lower="0" upper="1" target="_dGHIYFvOEe6jm_SkPSYEYw" name="adminUserManager" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_mNnPsF5QEe6vsex_cZNQbQ" lower="0" upper="1" target="_gTUgsF4-Ee6vsex_cZNQbQ" name="userVoteDefinitions" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" getterExpression="edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()" accessType="DERIVED"/>
       <accesses xmi:id="_TGoLMM6zEe6ddqBfFzCBZg" lower="0" upper="-1" target="_mtEPcFtpEe6Mx9dH3yj5gQ" name="selectAnswerVoteEntries" createable="false" updateable="true" deleteable="false" targetDefinedCRUD="false" accessType="ALL"/>
@@ -649,7 +649,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_eGKLYHiyEe6cB8og8p0UuQ" name="debateCloseAt" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_ETCyoHiyEe6cB8og8p0UuQ" getterExpression="" identifier="false" memberType="MAPPED">
         <inherited xmi:id="_eGKLYXiyEe6cB8og8p0UuQ"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_TBoOsHj5Ee6cB8og8p0UuQ" name="isVoteClosable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#VOTING" identifier="false" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_TBoOsHj5Ee6cB8og8p0UuQ" name="isVoteClosable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#VOTING and self.currentVoteDefinition!isDefined()" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_TB_bEHj5Ee6cB8og8p0UuQ"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_nVP0sHkAEe6cB8og8p0UuQ" name="isIssueDraft" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="self.status == edemokracia::IssueStatus#ACTIVE" getterExpression="self.status == edemokracia::IssueStatus#CREATED" identifier="false" memberType="DERIVED">
@@ -664,7 +664,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_vLG90HnpEe6IpMjJEx4KXg" name="isIssueNotActive" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#ACTIVE" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_vLG90XnpEe6IpMjJEx4KXg"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_vNCQcHnpEe6IpMjJEx4KXg" name="isVoteNotClosable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING" identifier="false" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_vNCQcHnpEe6IpMjJEx4KXg" name="isVoteNotClosable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING or self.currentVoteDefinition!isUndefined()&#xA;" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_vNCQcXnpEe6IpMjJEx4KXg"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_vOwHsHnpEe6IpMjJEx4KXg" name="isIssueNotDraft" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="self.status == edemokracia::IssueStatus#ACTIVE" getterExpression="self.status != edemokracia::IssueStatus#CREATED" identifier="false" memberType="DERIVED">
@@ -673,10 +673,10 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_vQa7oHnpEe6IpMjJEx4KXg" name="isIssueNotDeletable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#CREATED and not (self.status == edemokracia::IssueStatus#ACTIVE and edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any().isAdmin)" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_vQa7oXnpEe6IpMjJEx4KXg"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_THS4UHnqEe6IpMjJEx4KXg" name="isIssueInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#VOTING" identifier="false" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_THS4UHnqEe6IpMjJEx4KXg" name="isIssueInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#VOTING and self.currentVoteDefinition!isDefined()" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_THS4UXnqEe6IpMjJEx4KXg"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_W7QSIHnqEe6IpMjJEx4KXg" name="isIssueNotInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING" identifier="false" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_W7QSIHnqEe6IpMjJEx4KXg" name="isIssueNotInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING or self.currentVoteDefinition!isUndefined()" identifier="false" memberType="DERIVED">
         <inherited xmi:id="_W7QSIXnqEe6IpMjJEx4KXg"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_w10JMM65Ee6ddqBfFzCBZg" name="isEditable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#CREATED or edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner&#xA;" identifier="false" memberType="DERIVED">
@@ -2218,19 +2218,21 @@
       </operations>
       <form xmi:id="_dGJkoFvOEe6jm_SkPSYEYw" name="UserManager_Form" label="UserManager Form" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false"/>
       <table xmi:id="_dGLZ0FvOEe6jm_SkPSYEYw" name="UserManager_Table" label="UserManager Table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0"/>
-      <view xmi:id="_dGIWgFvOEe6jm_SkPSYEYw" name="UserManager_View_Edit" label="UserManager View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" titleFrom="LABEL">
+      <view xmi:id="_dGIWgFvOEe6jm_SkPSYEYw" name="UserManager_View_Edit" label="UserManager View / Edit" layout="VERTICAL" horizontal="LEFT" vertical="TOP" frame="false" performableActions="_rDBEIFv6Ee6nEc5rp_Qy4A" titleFrom="LABEL">
         <components xsi:type="ui:ActionGroup" xmi:id="_9ybJYFvVEe6jm_SkPSYEYw" name="userManagerActionGroup" label="Actions" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" featuredActions="10">
-          <actions xmi:id="_rDBEIFv6Ee6nEc5rp_Qy4A" name="createUser" label="Create User" iconName="account-plus" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="createUser"/>
+          <actions xmi:id="_rDBEIFv6Ee6nEc5rp_Qy4A" name="createUser" label="Create User" iconName="account-plus" col="4" stretch="NONE" row="1" fit="LOOSE" onBlur="false" actionContainer="_dGIWgFvOEe6jm_SkPSYEYw" operation="createUser"/>
         </components>
-        <components xsi:type="ui:TabularReferenceField" xmi:id="_MJ6o0FvVEe6jm_SkPSYEYw" name="users" label="" iconName="" col="12" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_X0EKgFvPEe6jm_SkPSYEYw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
-          <columns xsi:type="ui:DataColumn" xmi:id="_MKAvcFvVEe6jm_SkPSYEYw" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MKAIYFvVEe6jm_SkPSYEYw" name="userName" label="UserName" iconName="format-size" visible="true" sort="NONE" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ728FvVEe6jm_SkPSYEYw" name="firstName" label="FirstName" iconName="format-size" visible="true" sort="NONE" dataFeature="_p2JT8GksEe25ONJ3V89cVA" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ9FEFvVEe6jm_SkPSYEYw" name="lastName" label="LastName" iconName="format-size" visible="true" sort="NONE" dataFeature="_p2tUoGksEe25ONJ3V89cVA" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ9sIFvVEe6jm_SkPSYEYw" name="phone" label="Phone" iconName="format-size" visible="true" sort="NONE" dataFeature="_p3JZgGksEe25ONJ3V89cVA" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ-TMFvVEe6jm_SkPSYEYw" name="email" label="Email" iconName="format-size" visible="true" sort="NONE" dataFeature="_p3jCIGksEe25ONJ3V89cVA" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ-6QFvVEe6jm_SkPSYEYw" name="isAdmin" label="IsAdmin" iconName="toggle-switch" visible="true" sort="NONE" dataFeature="_p4NJcGksEe25ONJ3V89cVA" formatValue="true"/>
-          <columns xsi:type="ui:DataColumn" xmi:id="_MJ_hUFvVEe6jm_SkPSYEYw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_p4zmYGksEe25ONJ3V89cVA" formatValue="true"/>
+        <components xsi:type="ui:Group" xmi:id="_XSWnMNfnEe6GGcgLB1np_g" name="UserGroup" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="1" fit="LOOSE">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_MJ6o0FvVEe6jm_SkPSYEYw" name="users" label="" iconName="" col="12" stretch="NONE" row="10" fit="LOOSE" onBlur="false" relationFeature="_X0EKgFvPEe6jm_SkPSYEYw" targetDefinedTabular="false" smallTable="false" representationComponent="table" rowsPerPage="10" crudOperationsDisplayed="1" transferOperationsDisplayed="0">
+            <columns xsi:type="ui:DataColumn" xmi:id="_MKAvcFvVEe6jm_SkPSYEYw" name="representation" label="Representation" iconName="format-size" visible="true" sort="NONE" dataFeature="_QrtE4IdhEe2kLcMqsIbMgQ" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MKAIYFvVEe6jm_SkPSYEYw" name="userName" label="UserName" iconName="format-size" visible="true" sort="NONE" dataFeature="_dmMwgH4NEe2cB7_PsKXsHQ" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ728FvVEe6jm_SkPSYEYw" name="firstName" label="FirstName" iconName="format-size" visible="true" sort="NONE" dataFeature="_p2JT8GksEe25ONJ3V89cVA" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ9FEFvVEe6jm_SkPSYEYw" name="lastName" label="LastName" iconName="format-size" visible="true" sort="NONE" dataFeature="_p2tUoGksEe25ONJ3V89cVA" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ9sIFvVEe6jm_SkPSYEYw" name="phone" label="Phone" iconName="format-size" visible="true" sort="NONE" dataFeature="_p3JZgGksEe25ONJ3V89cVA" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ-TMFvVEe6jm_SkPSYEYw" name="email" label="Email" iconName="format-size" visible="true" sort="NONE" dataFeature="_p3jCIGksEe25ONJ3V89cVA" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ-6QFvVEe6jm_SkPSYEYw" name="isAdmin" label="IsAdmin" iconName="toggle-switch" visible="true" sort="NONE" dataFeature="_p4NJcGksEe25ONJ3V89cVA" formatValue="true"/>
+            <columns xsi:type="ui:DataColumn" xmi:id="_MJ_hUFvVEe6jm_SkPSYEYw" name="created" label="Created" iconName="calendar-clock" visible="true" sort="NONE" dataFeature="_p4zmYGksEe25ONJ3V89cVA" formatValue="true"/>
+          </components>
         </components>
       </view>
     </elements>
@@ -2859,7 +2861,7 @@
       <input xmi:id="_cW7PUXjnEe6cB8og8p0UuQ" lower="1" upper="1" target="_GaaTIHW5Ee2LTNnGda5kaw" name="input" createable="false" updateable="false" deleteable="false" targetDefinedCRUD="false" rangeType="ANY" rangeExpression=""/>
       <inherited xmi:id="_cW7PUnjnEe6cB8og8p0UuQ"/>
     </operations>
-    <operations xmi:id="_xL4RsHj3Ee6cB8og8p0UuQ" name="closeVote" customImplementation="false" body="if (this.status == edemokracia::IssueStatus#VOTING or this.currentVoteDefinition!isUndefined()) {&#xA;&#x9;return;&#xA;}&#xA;&#xA;this.status = edemokracia::IssueStatus#CLOSED;&#xA; " stateful="true" operationType="INSTANCE" binding="" initializer="false">
+    <operations xmi:id="_xL4RsHj3Ee6cB8og8p0UuQ" name="closeVote" customImplementation="false" body="if (this.status != edemokracia::IssueStatus#VOTING or this.currentVoteDefinition!isUndefined()) {&#xA;&#x9;return;&#xA;}&#xA;&#xA;this.status = edemokracia::IssueStatus#CLOSED;&#xA; " stateful="true" operationType="INSTANCE" binding="" initializer="false">
       <inherited xmi:id="_xL4Rs3j3Ee6cB8og8p0UuQ"/>
     </operations>
     <operations xmi:id="_g4-GEHkGEe6cB8og8p0UuQ" name="activate" customImplementation="false" body="if (this.status != edemokracia::IssueStatus#CREATED) {&#xA;&#x9;return;&#xA;}&#xA;this.status = edemokracia::IssueStatus#ACTIVE;&#xA; " stateful="true" operationType="INSTANCE" binding="" initializer="false">
