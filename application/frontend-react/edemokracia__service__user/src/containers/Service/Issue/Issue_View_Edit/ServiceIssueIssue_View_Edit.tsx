@@ -596,6 +596,27 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                               </Typography>
                             </Grid>
                           </Grid>
+                          <Grid item>
+                            <ButtonGroup size="small">
+                              {actions.createConArgumentAction && (
+                                <IconButton
+                                  id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                                  disabled={isLoading || !data.isIssueActive || editMode}
+                                  title={
+                                    t('service.Issue.Issue_View_Edit.createConArgument', {
+                                      defaultValue: 'Add Con Argument',
+                                    }) as string
+                                  }
+                                  color="primary"
+                                  onClick={async () => {
+                                    await actions.createConArgumentAction!();
+                                  }}
+                                >
+                                  <MdiIcon path="chat-minus" />
+                                </IconButton>
+                              )}
+                            </ButtonGroup>
+                          </Grid>
                         </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item data-name="actions" xs={12} sm={12}>
@@ -607,27 +628,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                               alignItems="flex-start"
                               justifyContent="flex-start"
                               spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="chat-minus" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    if (actions.createConArgumentAction) {
-                                      await actions.createConArgumentAction!();
-                                    }
-                                  }}
-                                  disabled={!actions.createConArgumentAction || !data.isIssueActive || editMode}
-                                >
-                                  {t('service.Issue.Issue_View_Edit.createConArgument', {
-                                    defaultValue: 'Add Con Argument',
-                                  })}
-                                </LoadingButton>
-                              </Grid>
-                            </Grid>
+                            ></Grid>
                           </Grid>
 
                           <Grid item data-name="table" xs={12} sm={12}>
@@ -696,6 +697,27 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                               </Typography>
                             </Grid>
                           </Grid>
+                          <Grid item>
+                            <ButtonGroup size="small">
+                              {actions.createProArgumentAction && (
+                                <IconButton
+                                  id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
+                                  disabled={isLoading || !data.isIssueActive || editMode}
+                                  title={
+                                    t('service.Issue.Issue_View_Edit.createProArgument', {
+                                      defaultValue: 'Add Pro Argument',
+                                    }) as string
+                                  }
+                                  color="primary"
+                                  onClick={async () => {
+                                    await actions.createProArgumentAction!();
+                                  }}
+                                >
+                                  <MdiIcon path="chat-plus" />
+                                </IconButton>
+                              )}
+                            </ButtonGroup>
+                          </Grid>
                         </Grid>
                         <Grid container direction="row" alignItems="flex-start" justifyContent="flex-start" spacing={2}>
                           <Grid item data-name="actions" xs={12} sm={12}>
@@ -707,27 +729,7 @@ export default function ServiceIssueIssue_View_Edit(props: ServiceIssueIssue_Vie
                               alignItems="flex-start"
                               justifyContent="flex-start"
                               spacing={2}
-                            >
-                              <Grid item xs={12} sm={12}>
-                                <LoadingButton
-                                  id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElement"
-                                  loading={isLoading}
-                                  variant={undefined}
-                                  startIcon={<MdiIcon path="chat-plus" />}
-                                  loadingPosition="start"
-                                  onClick={async () => {
-                                    if (actions.createProArgumentAction) {
-                                      await actions.createProArgumentAction!();
-                                    }
-                                  }}
-                                  disabled={!actions.createProArgumentAction || !data.isIssueActive || editMode}
-                                >
-                                  {t('service.Issue.Issue_View_Edit.createProArgument', {
-                                    defaultValue: 'Add Pro Argument',
-                                  })}
-                                </LoadingButton>
-                              </Grid>
-                            </Grid>
+                            ></Grid>
                           </Grid>
 
                           <Grid item data-name="table" xs={12} sm={12}>

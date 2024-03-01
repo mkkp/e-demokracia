@@ -739,10 +739,10 @@
           </components>
         </components>
         <components xsi:type="ui:TabBar" xmi:id="_hZfckId8Ee2kLcMqsIbMgQ" name="other" label="" col="12" row="11">
-          <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" col="12" row="10">
-            <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" frame="true" col="6" row="11">
+          <tabs xmi:id="_OgpR0Id9Ee2kLcMqsIbMgQ" name="arguments" label="Arguments" iconName="wechat" col="12" stretch="VERTICAL" row="10">
+            <components xsi:type="ui:Group" xmi:id="_qJPPCXjvEe6cB8og8p0UuQ" name="cons" label="Cons" iconName="chat-minus" frame="true" performableActions="_qJPPC3jvEe6cB8og8p0UuQ" col="6" row="11">
               <components xsi:type="ui:Group" xmi:id="_qJPPCnjvEe6cB8og8p0UuQ" name="actions" col="6">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" operation="createConArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPC3jvEe6cB8og8p0UuQ" name="createConArgument" label="Add Con Argument" iconName="chat-minus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" actionContainer="_qJPPCXjvEe6cB8og8p0UuQ" operation="createConArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPDHjvEe6cB8og8p0UuQ" name="table" col="6" row="10">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPDXjvEe6cB8og8p0UuQ" name="cons" label="" iconName="" col="6" row="10" relationFeature="_gKs3kH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true">
@@ -752,9 +752,9 @@
                 </components>
               </components>
             </components>
-            <components xsi:type="ui:Group" xmi:id="_qJPPAXjvEe6cB8og8p0UuQ" name="pros" label="Pros" iconName="chat-plus" frame="true" col="6" row="11">
+            <components xsi:type="ui:Group" xmi:id="_qJPPAXjvEe6cB8og8p0UuQ" name="pros" label="Pros" iconName="chat-plus" frame="true" performableActions="_qJPPA3jvEe6cB8og8p0UuQ" col="6" row="11">
               <components xsi:type="ui:Group" xmi:id="_qJPPAnjvEe6cB8og8p0UuQ" name="actions" col="6">
-                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" operation="createProArgument"/>
+                <components xsi:type="ui:OperationForm" xmi:id="_qJPPA3jvEe6cB8og8p0UuQ" name="createProArgument" label="Add Pro Argument" iconName="chat-plus" col="6" enabledBy="_Z0Np4HkGEe6cB8og8p0UuQ" actionContainer="_qJPPAXjvEe6cB8og8p0UuQ" operation="createProArgument"/>
               </components>
               <components xsi:type="ui:Group" xmi:id="_qJPPBHjvEe6cB8og8p0UuQ" name="table" col="6" row="10">
                 <components xsi:type="ui:TabularReferenceField" xmi:id="_qJPPBXjvEe6cB8og8p0UuQ" name="pros" label="" iconName="" col="6" row="10" relationFeature="_7XpxEH2fEe2LTNnGda5kaw" targetDefinedTabular="false" smallTable="true">

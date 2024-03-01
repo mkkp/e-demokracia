@@ -8076,16 +8076,11 @@
       </children>
       <children xsi:type="ui:TabController" xmi:id="User/(esm/_hZfckId8Ee2kLcMqsIbMgQ)/TabBarVisualElement" name="other" label="" fit="LOOSE" col="12.0" row="11.0">
         <tabs xmi:id="User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupTab" name="arguments" sourceId="_OgpR0Id9Ee2kLcMqsIbMgQ">
-          <element xsi:type="ui:Flex" xmi:id="User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupVisualElement" name="arguments" sourceId="_OgpR0Id9Ee2kLcMqsIbMgQ" label="Arguments" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
+          <element xsi:type="ui:Flex" xmi:id="User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/GroupVisualElement" name="arguments" sourceId="_OgpR0Id9Ee2kLcMqsIbMgQ" label="Arguments" fit="LOOSE" col="12.0" row="10.0" stretch="VERTICAL" mainAxisAlignment="START">
             <icon xmi:id="User/(esm/_OgpR0Id9Ee2kLcMqsIbMgQ)/VisualElementIcon" name="arguments::Icon" iconName="wechat"/>
             <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupVisualElement" name="cons" sourceId="_qJPPCXjvEe6cB8og8p0UuQ" label="Cons" fit="LOOSE" col="6.0" row="11.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/VisualElementIcon" name="cons::Icon" iconName="chat-minus"/>
-              <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPCnjvEe6cB8og8p0UuQ)/GroupVisualElement" name="actions" sourceId="_qJPPCnjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" isInCard="true" mainAxisAlignment="START">
-                <children xsi:type="ui:Button" xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElement" name="createConArgument" label="Add Con Argument" fit="LOOSE" col="6.0" isInCard="true" enabledBy="User/(esm/_Z0Np4HkGEe6cB8og8p0UuQ)/AttributeType" dataElement="User/(esm/_Pc0T4HjoEe6cB8og8p0UuQ)/OperationType">
-                  <icon xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElementIcon" name="createConArgument::Icon" iconName="chat-minus"/>
-                  <actionDefinition xsi:type="ui:OpenOperationInputFormActionDefinition" xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormOpenPageUnmappedInputActionDefinition/(discriminator/User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationForm)" name="service::Issue::Issue_View_Edit::other::arguments::cons::actions::createConArgument::Open::Operation::Form" formFor="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallActionDefinition/(discriminator/User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectForm)"/>
-                </children>
-              </children>
+              <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPCnjvEe6cB8og8p0UuQ)/GroupVisualElement" name="actions" sourceId="_qJPPCnjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" isInCard="true" mainAxisAlignment="START"/>
               <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPDHjvEe6cB8og8p0UuQ)/GroupVisualElement" name="table" sourceId="_qJPPDHjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" row="10.0" isInCard="true" mainAxisAlignment="START">
                 <children xsi:type="ui:Table" xmi:id="User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable" name="cons" sourceId="_qJPPDXjvEe6cB8og8p0UuQ" label="" fit="LOOSE" col="6.0" row="10.0" disabled="true" isInCard="true" dataElement="User/(esm/_gKs3kH2fEe2LTNnGda5kaw)/RelationType" crudOperationsDisplayed="1" isSmallTable="true" isEager="true" relationName="cons" selectorRowsPerPage="10">
                   <columns xmi:id="User/(esm/_qJPPDnjvEe6cB8og8p0UuQ)/TableColumn/(discriminator/User/(esm/_qJPPDXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable)" name="title" label="Title" col="2.0" format="%s" attributeType="User/(esm/_O60ZQH2hEe2LTNnGda5kaw)/AttributeType" sort="NONE"/>
@@ -8136,16 +8131,17 @@
                   </rowActionButtonGroup>
                 </children>
               </children>
+              <actionButtonGroup xmi:id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupButtonGroup" name="service::Issue::Issue_View_Edit::other::arguments::cons::GroupActions" label="Actions">
+                <buttons xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElement" name="createConArgument" label="Add Con Argument" fit="LOOSE" col="6.0" isInCard="true" enabledBy="User/(esm/_Z0Np4HkGEe6cB8og8p0UuQ)/AttributeType" dataElement="User/(esm/_Pc0T4HjoEe6cB8og8p0UuQ)/OperationType">
+                  <icon xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormVisualElementIcon" name="createConArgument::Icon" iconName="chat-minus"/>
+                  <actionDefinition xsi:type="ui:OpenOperationInputFormActionDefinition" xmi:id="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormOpenPageUnmappedInputActionDefinition/(discriminator/User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationForm)" name="service::Issue::Issue_View_Edit::other::arguments::cons::actions::createConArgument::Open::Operation::Form" formFor="User/(esm/_qJPPC3jvEe6cB8og8p0UuQ)/OperationFormCallActionDefinition/(discriminator/User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectForm)"/>
+                </buttons>
+              </actionButtonGroup>
               <frame xmi:id="User/(esm/_qJPPCXjvEe6cB8og8p0UuQ)/GroupFrame"/>
             </children>
             <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupVisualElement" name="pros" sourceId="_qJPPAXjvEe6cB8og8p0UuQ" label="Pros" fit="LOOSE" col="6.0" row="11.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/VisualElementIcon" name="pros::Icon" iconName="chat-plus"/>
-              <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPAnjvEe6cB8og8p0UuQ)/GroupVisualElement" name="actions" sourceId="_qJPPAnjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" isInCard="true" mainAxisAlignment="START">
-                <children xsi:type="ui:Button" xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElement" name="createProArgument" label="Add Pro Argument" fit="LOOSE" col="6.0" isInCard="true" enabledBy="User/(esm/_Z0Np4HkGEe6cB8og8p0UuQ)/AttributeType" dataElement="User/(esm/_PdJEAHjoEe6cB8og8p0UuQ)/OperationType">
-                  <icon xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElementIcon" name="createProArgument::Icon" iconName="chat-plus"/>
-                  <actionDefinition xsi:type="ui:OpenOperationInputFormActionDefinition" xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormOpenPageUnmappedInputActionDefinition/(discriminator/User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationForm)" name="service::Issue::Issue_View_Edit::other::arguments::pros::actions::createProArgument::Open::Operation::Form" formFor="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallActionDefinition/(discriminator/User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectForm)"/>
-                </children>
-              </children>
+              <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPAnjvEe6cB8og8p0UuQ)/GroupVisualElement" name="actions" sourceId="_qJPPAnjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" isInCard="true" mainAxisAlignment="START"/>
               <children xsi:type="ui:Flex" xmi:id="User/(esm/_qJPPBHjvEe6cB8og8p0UuQ)/GroupVisualElement" name="table" sourceId="_qJPPBHjvEe6cB8og8p0UuQ" fit="LOOSE" col="6.0" row="10.0" isInCard="true" mainAxisAlignment="START">
                 <children xsi:type="ui:Table" xmi:id="User/(esm/_qJPPBXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable" name="pros" sourceId="_qJPPBXjvEe6cB8og8p0UuQ" label="" fit="LOOSE" col="6.0" row="10.0" disabled="true" isInCard="true" dataElement="User/(esm/_7XpxEH2fEe2LTNnGda5kaw)/RelationType" crudOperationsDisplayed="1" isSmallTable="true" isEager="true" relationName="pros" selectorRowsPerPage="10">
                   <columns xmi:id="User/(esm/_qJPPBnjvEe6cB8og8p0UuQ)/TableColumn/(discriminator/User/(esm/_qJPPBXjvEe6cB8og8p0UuQ)/TabularReferenceFieldRelationDefinedTable)" name="title" label="Title" col="2.0" format="%s" attributeType="User/(esm/_TO8g4H2hEe2LTNnGda5kaw)/AttributeType" sort="NONE"/>
@@ -8196,6 +8192,12 @@
                   </rowActionButtonGroup>
                 </children>
               </children>
+              <actionButtonGroup xmi:id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupButtonGroup" name="service::Issue::Issue_View_Edit::other::arguments::pros::GroupActions" label="Actions">
+                <buttons xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElement" name="createProArgument" label="Add Pro Argument" fit="LOOSE" col="6.0" isInCard="true" enabledBy="User/(esm/_Z0Np4HkGEe6cB8og8p0UuQ)/AttributeType" dataElement="User/(esm/_PdJEAHjoEe6cB8og8p0UuQ)/OperationType">
+                  <icon xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormVisualElementIcon" name="createProArgument::Icon" iconName="chat-plus"/>
+                  <actionDefinition xsi:type="ui:OpenOperationInputFormActionDefinition" xmi:id="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormOpenPageUnmappedInputActionDefinition/(discriminator/User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationForm)" name="service::Issue::Issue_View_Edit::other::arguments::pros::actions::createProArgument::Open::Operation::Form" formFor="User/(esm/_qJPPA3jvEe6cB8og8p0UuQ)/OperationFormCallActionDefinition/(discriminator/User/(esm/_GavqUHW5Ee2LTNnGda5kaw)/TransferObjectForm)"/>
+                </buttons>
+              </actionButtonGroup>
               <frame xmi:id="User/(esm/_qJPPAXjvEe6cB8og8p0UuQ)/GroupFrame"/>
             </children>
           </element>
