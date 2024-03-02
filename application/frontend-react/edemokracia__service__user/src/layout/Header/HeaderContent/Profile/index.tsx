@@ -12,6 +12,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -25,15 +26,30 @@ import { useTheme } from '@mui/material/styles';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { MdiIcon } from '~/components';
+import { MdiIcon, useJudoNavigation } from '~/components';
 import { ThemeMode } from '~/config';
+import { useServiceUserUserProfileAccessViewPage } from '~/dialogs/Service/User/UserProfile/AccessViewPage';
 import { useHeroProps } from '~/hooks';
+import type { JudoIdentifiable } from '~/services/data-api/common';
+import { userServiceForUserProfileImpl } from '~/services/data-axios';
 import { Transitions } from '../../../Transitions';
 
 export const Profile = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const heroProps = useHeroProps();
+  const getSingletonPayload = async (): Promise<JudoIdentifiable<any>> => {
+    const { data: sp } = await userServiceForUserProfileImpl.refreshForUserProfile({
+      _mask: '{}',
+    });
+    return sp;
+  };
+  const openServiceUserUserProfileAccessViewPage = useServiceUserUserProfileAccessViewPage();
+  const openProfilePage = async () => {
+    const profileData = await getSingletonPayload();
+    setOpen(false);
+    await openServiceUserUserProfileAccessViewPage(profileData);
+  };
   const { signoutRedirect, isAuthenticated } = useAuth();
   const doLogout = useCallback(() => {
     const redirectUrl = window.location.href.split('#')[0];
@@ -130,6 +146,13 @@ export const Profile = () => {
                   </CardContent>
 
                   <List component="nav" sx={{ p: 0, '& .MuiListItemIcon-root': { minWidth: 32 } }}>
+                    <ListItemButton onClick={openProfilePage}>
+                      <ListItemIcon>
+                        <MdiIcon path="cog-outline" />
+                      </ListItemIcon>
+                      <ListItemText primary={t('judo.profile.profile', { defaultValue: 'Profile' })} />
+                    </ListItemButton>
+                    <Divider />
                     <ListItemButton onClick={doLogout}>
                       <ListItemIcon>
                         <MdiIcon path="logout" />

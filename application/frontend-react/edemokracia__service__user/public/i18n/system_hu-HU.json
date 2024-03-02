@@ -1,5 +1,6 @@
 {
     "translation": {
+        "judo.profile.profile": "Profil",
         "judo.security.login": "Belépés",
         "judo.security.logout": "Kilépés",
         "judo.security.loading-principal": "Felhasználói adatok betöltése...",

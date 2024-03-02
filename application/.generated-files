@@ -15,7 +15,7 @@ docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,8a1026e3de18bd19eb3ab3d63bf78931
+frontend-react/pom.xml,6e1df3f1b7c993e12513abd5671ba9f2
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 internal/pom.xml,a954ddcb6ee521bf1616cf02552e9880
 karaf-features/pom.xml,65964f3bbda475c0937f841941ea2851
@@ -26,7 +26,7 @@ launcher/Build edemokracia Application.launch,06425f6a35aa82b149a92af8ee309827
 launcher/Compile edemokracia Custom Application.launch,589057793117e366005ba03dcbcfe284
 launcher/Run edemokracia Application.launch,c9b310d6660114eb63440620e9fa0173
 model/pom.xml,63585b6fccdfed35f1c1df2f61cb2c58
-pom.xml,3d2eef59dce8b118863ffbf64803bca8
+pom.xml,776d4dac9203e2118eea4c17c9feb639
 rest/pom.xml,a9d58d72376622f2864cc2429156df40
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940
