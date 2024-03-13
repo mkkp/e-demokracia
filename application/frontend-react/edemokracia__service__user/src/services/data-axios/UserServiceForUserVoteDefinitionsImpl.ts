@@ -25,9 +25,12 @@ import type {
   YesNoVoteInputStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { UserServiceForUserVoteDefinitions } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for User.userVoteDefinitions
@@ -91,11 +94,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsGlobal(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsGlobal/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -228,11 +233,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInActivityCities(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCities/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -365,11 +372,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInActivityCounties(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityCounties/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -504,11 +513,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInActivityDistricts(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInActivityDistricts/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -643,11 +654,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInResidentCity(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCity/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -780,11 +793,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInResidentCounty(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentCounty/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -917,11 +932,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateActiveVoteDefinitionsInResidentDistrict(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/activeVoteDefinitionsInResidentDistrict/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -1076,11 +1093,13 @@ export class UserServiceForUserVoteDefinitionsImpl
   async updateOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>> {
     const path = '/service/UserVoteDefinition/~update/ownedVoteDefinitions/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

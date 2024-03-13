@@ -21,7 +21,7 @@ import {
   ServiceUserProfileQueryCustomizer,
   ServiceUserProfileStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceUserProfile
@@ -32,8 +32,14 @@ export interface ServiceUserProfileService {
     queryCustomizer?: ServiceUserProfileQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
-  update(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
-  validateUpdate(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  update(
+    target: Partial<ServiceUserProfileStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  validateUpdate(
+    target: Partial<ServiceUserProfileStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
   getTemplateForActivityCities(): Promise<JudoRestResponse<ServiceCity>>;
   listActivityCities(
     target: JudoIdentifiable<ServiceUserProfile>,

@@ -52,6 +52,7 @@ import {
   getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   useErrorHandler,
 } from '~/utilities';
 import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
@@ -108,10 +109,11 @@ export function ServiceSelectAnswerVoteSelectionSelectAnswerVoteSelection_TableS
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_SELECT_ANSWER_VOTE_SELECTION_SELECT_ANSWER_VOTE_SELECTION_TABLE_SELECT_ANSWER_VOTE_SELECTION_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_pSMpMFtqEe6Mx9dH3yj5gQ)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

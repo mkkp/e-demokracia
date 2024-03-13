@@ -17,9 +17,12 @@ import type {
   ServiceServiceUserStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceIssueServiceForCategories } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for ServiceIssue.categories
@@ -237,11 +240,13 @@ export class ServiceIssueServiceForCategoriesImpl extends JudoAxiosService imple
   async createSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>> {
     const path = '/service/IssueCategory/~update/subcategories/~create';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -258,11 +263,13 @@ export class ServiceIssueServiceForCategoriesImpl extends JudoAxiosService imple
   async updateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>> {
     const path = '/service/IssueCategory/~update/subcategories/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

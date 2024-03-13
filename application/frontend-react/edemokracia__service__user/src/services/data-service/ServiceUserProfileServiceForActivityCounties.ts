@@ -16,7 +16,7 @@ import {
   ServiceCountyStored,
   ServiceUserProfile,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceUserProfile.activityCounties
@@ -59,10 +59,12 @@ export interface ServiceUserProfileServiceForActivityCounties {
   createCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: ServiceCity,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<JudoRestResponse<void>>;
   updateCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
 }

@@ -51,7 +51,7 @@ import {
   ServiceServiceUserStored,
   ServiceYesNoAbstainVoteDefinition,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceYesNoAbstainVoteDefinition.issue
@@ -71,11 +71,13 @@ export interface ServiceYesNoAbstainVoteDefinitionServiceForIssue {
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   deleteAttachments(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
   updateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   listCategories(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -135,6 +137,7 @@ export interface ServiceYesNoAbstainVoteDefinitionServiceForIssue {
   updateCons(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   createConArgumentForCons(
     owner: JudoIdentifiable<ServiceCon>,
@@ -237,6 +240,7 @@ export interface ServiceYesNoAbstainVoteDefinitionServiceForIssue {
   updatePros(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   createConArgumentForPros(
     owner: JudoIdentifiable<ServicePro>,

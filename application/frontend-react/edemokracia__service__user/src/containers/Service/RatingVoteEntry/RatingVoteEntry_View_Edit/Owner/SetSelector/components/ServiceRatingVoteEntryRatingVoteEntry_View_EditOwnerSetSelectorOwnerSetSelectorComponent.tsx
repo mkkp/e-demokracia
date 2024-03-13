@@ -52,6 +52,7 @@ import {
   isRowSelectable,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   useErrorHandler,
 } from '~/utilities';
 import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
@@ -107,10 +108,11 @@ export function ServiceRatingVoteEntryRatingVoteEntry_View_EditOwnerSetSelectorO
     alreadySelected,
   } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_RATING_VOTE_ENTRY_RATING_VOTE_ENTRY_VIEW_EDIT_OWNER_SET_SELECTOR_OWNER_SET_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_L_YV8FuXEe6T042_LMmSdQ)/TabularReferenceFieldLinkSetSelectorTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

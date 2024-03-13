@@ -52,6 +52,7 @@ import {
   getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   useErrorHandler,
 } from '~/utilities';
 import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
@@ -104,10 +105,11 @@ export function CreateArgumentInputCreateArgumentInput_TableCreateArgumentInput_
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${CREATE_ARGUMENT_INPUT_CREATE_ARGUMENT_INPUT_TABLE_CREATE_ARGUMENT_INPUT_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_Ga4NMHW5Ee2LTNnGda5kaw)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

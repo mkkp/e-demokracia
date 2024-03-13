@@ -21,7 +21,7 @@ import {
   ServiceUserProfileQueryCustomizer,
   ServiceUserProfileStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userProfile
@@ -36,8 +36,14 @@ export interface UserServiceForUserProfile {
     queryCustomizer?: ServiceUserProfileQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
-  update(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
-  validateUpdate(target: Partial<ServiceUserProfileStored>): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  update(
+    target: Partial<ServiceUserProfileStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
+  validateUpdate(
+    target: Partial<ServiceUserProfileStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserProfileStored>>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     queryCustomizer?: ServiceCityQueryCustomizer,
@@ -52,6 +58,7 @@ export interface UserServiceForUserProfile {
   validateUpdateActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceUserProfile>,
@@ -79,6 +86,7 @@ export interface UserServiceForUserProfile {
   validateUpdateActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceUserProfile>,
@@ -106,6 +114,7 @@ export interface UserServiceForUserProfile {
   validateUpdateActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceUserProfile>,
@@ -133,6 +142,7 @@ export interface UserServiceForUserProfile {
   validateUpdateResidentCity(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setResidentCity(
     owner: JudoIdentifiable<ServiceUserProfile>,
@@ -156,6 +166,7 @@ export interface UserServiceForUserProfile {
   validateUpdateResidentCounty(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceUserProfile>,
@@ -179,6 +190,7 @@ export interface UserServiceForUserProfile {
   validateUpdateResidentDistrict(
     owner: JudoIdentifiable<ServiceUserProfile>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceUserProfile>,

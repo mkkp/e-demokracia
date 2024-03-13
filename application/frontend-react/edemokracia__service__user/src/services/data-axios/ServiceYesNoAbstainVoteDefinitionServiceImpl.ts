@@ -27,9 +27,12 @@ import type {
   YesNoAbstainVoteInput,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceYesNoAbstainVoteDefinitionService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Class Service Implementation for ServiceYesNoAbstainVoteDefinition
@@ -60,11 +63,13 @@ export class ServiceYesNoAbstainVoteDefinitionServiceImpl
    */
   async update(
     target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>> {
     const path = '/service/YesNoAbstainVoteDefinition/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

@@ -7,7 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import { CloseDebateInput, CloseDebateInputStored, JudoRestResponse } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for CloseDebateInput

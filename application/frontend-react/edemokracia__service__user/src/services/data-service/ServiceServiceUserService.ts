@@ -24,7 +24,7 @@ import {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceServiceUser
@@ -35,8 +35,14 @@ export interface ServiceServiceUserService {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
-  update(target: Partial<ServiceServiceUserStored>): Promise<JudoRestResponse<ServiceServiceUserStored>>;
-  validateUpdate(target: Partial<ServiceServiceUserStored>): Promise<JudoRestResponse<ServiceServiceUserStored>>;
+  update(
+    target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
+  validateUpdate(
+    target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getTemplateForActivityCities(): Promise<JudoRestResponse<ServiceCity>>;
   listActivityCities(
     target: JudoIdentifiable<ServiceServiceUser>,

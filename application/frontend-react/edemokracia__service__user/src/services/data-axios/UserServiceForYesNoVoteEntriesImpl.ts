@@ -16,9 +16,12 @@ import type {
   ServiceYesNoVoteEntryStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { UserServiceForYesNoVoteEntries } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for User.yesNoVoteEntries
@@ -80,11 +83,15 @@ export class UserServiceForYesNoVoteEntriesImpl extends JudoAxiosService impleme
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceYesNoVoteEntryStored>): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> {
+  async update(
+    target: Partial<ServiceYesNoVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>> {
     const path = '/service/YesNoVoteEntry/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

@@ -28,7 +28,7 @@ import {
   ServiceUserIssuesQueryCustomizer,
   ServiceUserIssuesStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceUserIssues

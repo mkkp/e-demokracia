@@ -16,7 +16,7 @@ import {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceCounty.cities
@@ -33,13 +33,25 @@ export interface ServiceCountyServiceForCities {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   getTemplate(): Promise<JudoRestResponse<ServiceCity>>;
-  create(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<JudoRestResponse<ServiceCityStored>>;
-  validateCreate(owner: JudoIdentifiable<ServiceCounty>, target: ServiceCity): Promise<JudoRestResponse<ServiceCity>>;
+  create(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: ServiceCity,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
+  validateCreate(
+    owner: JudoIdentifiable<ServiceCounty>,
+    target: ServiceCity,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCity>>;
   delete(target: JudoIdentifiable<ServiceCity>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceCityStored>): Promise<JudoRestResponse<ServiceCityStored>>;
+  update(
+    target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCityStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceCounty>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   listDistricts(
     owner: JudoIdentifiable<ServiceCity>,
@@ -50,18 +62,22 @@ export interface ServiceCountyServiceForCities {
   createDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: ServiceDistrict,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateCreateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: ServiceDistrict,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrict>>;
   deleteDistricts(target: JudoIdentifiable<ServiceDistrict>): Promise<JudoRestResponse<void>>;
   updateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdateDistricts(
     owner: JudoIdentifiable<ServiceCity>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
 }

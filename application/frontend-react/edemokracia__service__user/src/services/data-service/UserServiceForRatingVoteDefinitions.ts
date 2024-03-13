@@ -31,7 +31,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.ratingVoteDefinitions
@@ -49,9 +49,11 @@ export interface UserServiceForRatingVoteDefinitions {
   ): Promise<JudoRestResponse<ServiceRatingVoteDefinitionStored>>;
   update(
     target: Partial<ServiceRatingVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceRatingVoteDefinitionStored>>;
   validateUpdate(
     target: Partial<ServiceRatingVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceRatingVoteDefinitionStored>>;
   getIssue(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
@@ -61,6 +63,7 @@ export interface UserServiceForRatingVoteDefinitions {
   validateUpdateIssue(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -100,6 +103,7 @@ export interface UserServiceForRatingVoteDefinitions {
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
@@ -117,6 +121,7 @@ export interface UserServiceForRatingVoteDefinitions {
   validateUpdateUserVoteEntry(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     target: Partial<ServiceRatingVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceRatingVoteEntryStored>>;
   listVoteEntries(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
@@ -126,6 +131,7 @@ export interface UserServiceForRatingVoteDefinitions {
   validateUpdateVoteEntries(
     owner: JudoIdentifiable<ServiceRatingVoteDefinition>,
     target: Partial<ServiceRatingVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceRatingVoteEntryStored>>;
   activate(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<JudoRestResponse<void>>;
   addToFavorites(owner: JudoIdentifiable<ServiceRatingVoteDefinition>): Promise<JudoRestResponse<void>>;

@@ -61,6 +61,7 @@ import {
   getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
@@ -133,10 +134,11 @@ export function ServiceUserIssuesUserIssues_View_EditOwnedIssuesComponent(
     isFormUpdateable,
   } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_OWNED_ISSUES_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

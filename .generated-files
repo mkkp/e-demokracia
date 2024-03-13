@@ -9,4 +9,4 @@ generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 generator-parameter.properties,6e835a0c70e8c11da3ad1ad8fa78e387
 judo.properties,58ca243364d4280868ac7cb999eee760
 judo.sh,69496a77164df0f3bc6e44dac22c6d5d
-pom.xml,7ad970f3ab9b6f1d5099c982e6a21fbb
+pom.xml,315f08fb22b108d6d578678348ac49e2

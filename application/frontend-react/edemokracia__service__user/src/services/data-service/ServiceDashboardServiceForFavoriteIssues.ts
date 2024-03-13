@@ -51,7 +51,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceDashboard.favoriteIssues
@@ -89,11 +89,13 @@ export interface ServiceDashboardServiceForFavoriteIssues {
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   deleteAttachments(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
   updateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   listCategories(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -153,6 +155,7 @@ export interface ServiceDashboardServiceForFavoriteIssues {
   updateCons(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   createConArgumentForCons(
     owner: JudoIdentifiable<ServiceCon>,
@@ -255,6 +258,7 @@ export interface ServiceDashboardServiceForFavoriteIssues {
   updatePros(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   createConArgumentForPros(
     owner: JudoIdentifiable<ServicePro>,

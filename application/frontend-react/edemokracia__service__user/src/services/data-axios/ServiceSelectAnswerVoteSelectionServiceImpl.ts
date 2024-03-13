@@ -13,9 +13,12 @@ import type {
   ServiceSelectAnswerVoteSelectionStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceSelectAnswerVoteSelectionService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Class Service Implementation for ServiceSelectAnswerVoteSelection
@@ -66,11 +69,13 @@ export class ServiceSelectAnswerVoteSelectionServiceImpl
    */
   async update(
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteSelection/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

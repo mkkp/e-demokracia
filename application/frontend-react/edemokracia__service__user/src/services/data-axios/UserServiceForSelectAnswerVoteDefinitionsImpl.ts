@@ -36,9 +36,12 @@ import type {
   ServiceServiceUserStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { UserServiceForSelectAnswerVoteDefinitions } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for User.selectAnswerVoteDefinitions
@@ -105,11 +108,13 @@ export class UserServiceForSelectAnswerVoteDefinitionsImpl
    */
   async update(
     target: Partial<ServiceSelectAnswerVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteDefinitionStored>> {
     const path = '/service/SelectAnswerVoteDefinition/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -456,11 +461,13 @@ export class UserServiceForSelectAnswerVoteDefinitionsImpl
   async createVoteSelections(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: ServiceSelectAnswerVoteSelection,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteDefinition/~update/voteSelections/~create';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -479,11 +486,13 @@ export class UserServiceForSelectAnswerVoteDefinitionsImpl
   async updateVoteSelections(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteDefinition>,
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>> {
     const path = '/service/SelectAnswerVoteDefinition/~update/voteSelections/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

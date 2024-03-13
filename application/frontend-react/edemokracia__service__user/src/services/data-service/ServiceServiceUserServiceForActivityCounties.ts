@@ -16,7 +16,7 @@ import {
   ServiceCountyStored,
   ServiceServiceUser,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceServiceUser.activityCounties
@@ -38,10 +38,14 @@ export interface ServiceServiceUserServiceForActivityCounties {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceCountyStored>>>;
   getTemplate(): Promise<JudoRestResponse<ServiceCounty>>;
-  update(target: Partial<ServiceCountyStored>): Promise<JudoRestResponse<ServiceCountyStored>>;
+  update(
+    target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -64,14 +68,17 @@ export interface ServiceServiceUserServiceForActivityCounties {
   createCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: ServiceCity,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   deleteCities(target: JudoIdentifiable<ServiceCity>): Promise<JudoRestResponse<void>>;
   updateCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   validateUpdateCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
 }

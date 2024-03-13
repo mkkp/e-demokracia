@@ -13,7 +13,7 @@ import {
   ServiceDistrictQueryCustomizer,
   ServiceDistrictStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceCreateIssueInput.district

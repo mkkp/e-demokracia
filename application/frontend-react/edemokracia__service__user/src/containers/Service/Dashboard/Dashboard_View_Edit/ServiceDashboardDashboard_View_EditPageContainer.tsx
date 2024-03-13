@@ -70,7 +70,7 @@ export default function ServiceDashboardDashboard_View_EditPage(props: ServiceDa
     submit,
   } = props;
   const queryCustomizer: ServiceDashboardQueryCustomizer = {
-    _mask: actions.getMask ? actions.getMask!() : '{}',
+    _mask: actions.getMask ? actions.getMask!() : '{welcome}',
   };
 
   return (

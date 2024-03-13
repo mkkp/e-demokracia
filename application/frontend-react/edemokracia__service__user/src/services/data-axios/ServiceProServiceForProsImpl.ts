@@ -30,9 +30,12 @@ import type {
   ServiceSimpleVoteStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceProServiceForPros } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for ServicePro.pros
@@ -107,11 +110,15 @@ export class ServiceProServiceForProsImpl extends JudoAxiosService implements Se
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceProStored>): Promise<JudoRestResponse<ServiceProStored>> {
+  async update(
+    target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceProStored>> {
     const path = '/service/Pro/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -158,11 +165,13 @@ export class ServiceProServiceForProsImpl extends JudoAxiosService implements Se
   async updateCons(
     owner: JudoIdentifiable<ServicePro>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>> {
     const path = '/service/Pro/~update/cons/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -349,11 +358,13 @@ export class ServiceProServiceForProsImpl extends JudoAxiosService implements Se
   async updatePros(
     owner: JudoIdentifiable<ServicePro>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>> {
     const path = '/service/Pro/~update/pros/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

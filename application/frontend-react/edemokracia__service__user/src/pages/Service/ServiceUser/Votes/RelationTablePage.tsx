@@ -187,6 +187,7 @@ export default function ServiceServiceUserVotesRelationTablePage() {
   };
   const clearAction = async () => {
     try {
+      setIsLoading(true);
       await serviceServiceUserServiceForVotesImpl.setVotes(
         { __signedIdentifier: signedIdentifier } as JudoIdentifiable<any>,
         [],
@@ -194,6 +195,8 @@ export default function ServiceServiceUserVotesRelationTablePage() {
       setRefreshCounter((prev) => prev + 1);
     } catch (e) {
       console.error(e);
+    } finally {
+      setIsLoading(false);
     }
   };
   const removeAction = async (target?: ServiceSimpleVoteStored, silentMode?: boolean) => {

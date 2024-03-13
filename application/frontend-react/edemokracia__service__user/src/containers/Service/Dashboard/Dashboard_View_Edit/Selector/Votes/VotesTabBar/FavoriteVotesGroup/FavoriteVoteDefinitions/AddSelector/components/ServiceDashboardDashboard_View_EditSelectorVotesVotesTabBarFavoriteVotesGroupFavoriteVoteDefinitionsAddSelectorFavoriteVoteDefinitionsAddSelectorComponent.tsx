@@ -60,6 +60,7 @@ import {
   isRowSelectable,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
@@ -116,10 +117,11 @@ export function ServiceDashboardDashboard_View_EditSelectorVotesVotesTabBarFavor
     alreadySelected,
   } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_SELECTOR_VOTES_VOTES_TAB_BAR_FAVORITE_VOTES_GROUP_FAVORITE_VOTE_DEFINITIONS_ADD_SELECTOR_FAVORITE_VOTE_DEFINITIONS_ADD_SELECTOR_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_vp60sGBWEe6M1JBD8stPIg)/TabularReferenceFieldTableAddSelectorTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

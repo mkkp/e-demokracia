@@ -13,7 +13,7 @@ import {
   ServiceDistrictStored,
   ServiceServiceUser,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceServiceUser.activityDistricts
@@ -35,10 +35,14 @@ export interface ServiceServiceUserServiceForActivityDistricts {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceDistrictStored>>>;
   getTemplate(): Promise<JudoRestResponse<ServiceDistrict>>;
-  update(target: Partial<ServiceDistrictStored>): Promise<JudoRestResponse<ServiceDistrictStored>>;
+  update(
+    target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,

@@ -25,7 +25,7 @@ import {
   ServiceSimpleVoteStored,
   ServiceUserManager,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceUserManager.users
@@ -41,10 +41,14 @@ export interface ServiceUserManagerServiceForUsers {
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
-  update(target: Partial<ServiceServiceUserStored>): Promise<JudoRestResponse<ServiceServiceUserStored>>;
+  update(
+    target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   listActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -60,10 +64,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   validateUpdateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -91,10 +97,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   validateUpdateActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -122,10 +130,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -153,10 +163,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   validateUpdateResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -180,10 +192,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   validateUpdateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -207,10 +221,12 @@ export interface ServiceUserManagerServiceForUsers {
   updateResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   validateUpdateResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -233,6 +249,7 @@ export interface ServiceUserManagerServiceForUsers {
   validateUpdateVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceSimpleVoteStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSimpleVoteStored>>;
   setVotes(
     owner: JudoIdentifiable<ServiceServiceUser>,

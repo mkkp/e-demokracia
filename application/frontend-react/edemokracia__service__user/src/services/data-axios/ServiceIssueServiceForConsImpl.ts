@@ -31,9 +31,12 @@ import type {
   ServiceSimpleVoteStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceIssueServiceForCons } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for ServiceIssue.cons
@@ -108,11 +111,15 @@ export class ServiceIssueServiceForConsImpl extends JudoAxiosService implements 
    * From: relation.isUpdatable
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceConStored>): Promise<JudoRestResponse<ServiceConStored>> {
+  async update(
+    target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceConStored>> {
     const path = '/service/Con/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -159,11 +166,13 @@ export class ServiceIssueServiceForConsImpl extends JudoAxiosService implements 
   async updateCons(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>> {
     const path = '/service/Con/~update/cons/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -350,11 +359,13 @@ export class ServiceIssueServiceForConsImpl extends JudoAxiosService implements 
   async updatePros(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>> {
     const path = '/service/Con/~update/pros/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

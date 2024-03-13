@@ -171,7 +171,7 @@ export default function ServiceUserDashboardHomeAccessViewPage() {
   }, [data]);
 
   const getPageQueryCustomizer: () => ServiceDashboardQueryCustomizer = () => ({
-    _mask: actions.getMask ? actions.getMask!() : '{}',
+    _mask: actions.getMask ? actions.getMask!() : '{welcome}',
   });
 
   // Private actions

@@ -38,7 +38,7 @@ import {
   YesNoVoteInput,
   YesNoVoteInputStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.dashboardHome
@@ -152,6 +152,7 @@ export interface UserServiceForDashboardHome {
   updateOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   addOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
@@ -199,6 +200,7 @@ export interface UserServiceForDashboardHome {
   updateOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>>;
   addOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceDashboard>,

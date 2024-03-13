@@ -30,7 +30,7 @@ import {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceIssue.cons
@@ -47,10 +47,14 @@ export interface ServiceIssueServiceForCons {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   delete(target: JudoIdentifiable<ServiceCon>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceConStored>): Promise<JudoRestResponse<ServiceConStored>>;
+  update(
+    target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceConStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   listCons(
     owner: JudoIdentifiable<ServiceCon>,
@@ -61,10 +65,12 @@ export interface ServiceIssueServiceForCons {
   updateCons(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   validateUpdateCons(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   createConArgumentForCons(
     owner: JudoIdentifiable<ServiceCon>,
@@ -86,6 +92,7 @@ export interface ServiceIssueServiceForCons {
   validateUpdateCreatedBy(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getParentCon(
     owner: JudoIdentifiable<ServiceCon>,
@@ -95,6 +102,7 @@ export interface ServiceIssueServiceForCons {
   validateUpdateParentCon(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceConParentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConParentStored>>;
   getParentPro(
     owner: JudoIdentifiable<ServiceCon>,
@@ -104,6 +112,7 @@ export interface ServiceIssueServiceForCons {
   validateUpdateParentPro(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceProParentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProParentStored>>;
   listPros(
     owner: JudoIdentifiable<ServiceCon>,
@@ -114,10 +123,12 @@ export interface ServiceIssueServiceForCons {
   updatePros(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   validateUpdatePros(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   createConArgumentForPros(
     owner: JudoIdentifiable<ServicePro>,
@@ -139,6 +150,7 @@ export interface ServiceIssueServiceForCons {
   validateUpdateVotes(
     owner: JudoIdentifiable<ServiceCon>,
     target: Partial<ServiceSimpleVoteStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSimpleVoteStored>>;
   createConArgument(owner: JudoIdentifiable<ServiceCon>, target: CreateArgumentInput): Promise<JudoRestResponse<void>>;
   getTemplateOnCreateConArgument(): Promise<JudoRestResponse<CreateArgumentInput>>;

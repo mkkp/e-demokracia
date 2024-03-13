@@ -55,6 +55,7 @@ import {
   getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   serviceDateToUiDate,
   useErrorHandler,
 } from '~/utilities';
@@ -108,10 +109,11 @@ export const SERVICE_PRO_PRO_TABLE_PRO_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERF
 export function ServiceProPro_TablePro_TableComponent(props: ServiceProPro_TablePro_TableComponentProps) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${SERVICE_PRO_PRO_TABLE_PRO_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_qLrfEGksEe25ONJ3V89cVA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

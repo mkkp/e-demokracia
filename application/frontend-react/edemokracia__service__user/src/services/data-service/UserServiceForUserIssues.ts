@@ -25,7 +25,7 @@ import {
   ServiceUserIssuesQueryCustomizer,
   ServiceUserIssuesStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.userIssues
@@ -48,6 +48,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesGlobal(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesGlobal(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -82,6 +83,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInActivityCities(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInActivityCities(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -120,6 +122,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInActivityCounties(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInActivityCounties(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInActivityCounties(
@@ -160,6 +163,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInActivityDistricts(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInActivityDistricts(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInActivityDistricts(
@@ -200,6 +204,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInResidentCity(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInResidentCity(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -236,6 +241,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInResidentCounty(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInResidentCounty(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -274,6 +280,7 @@ export interface UserServiceForUserIssues {
   updateActiveIssuesInResidentDistrict(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForActiveIssuesInResidentDistrict(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForActiveIssuesInResidentDistrict(
@@ -319,6 +326,7 @@ export interface UserServiceForUserIssues {
   updateOwnedIssues(
     owner: JudoIdentifiable<ServiceUserIssues>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   addOwnedIssues(
     owner: JudoIdentifiable<ServiceUserIssues>,

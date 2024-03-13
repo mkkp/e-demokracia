@@ -33,3 +33,7 @@ export interface BaseDateValidationProps {
   disablePast?: boolean;
   disableFuture?: boolean;
 }
+
+export interface RandomUtils {
+  getGeneratorUUIDv4: () => string;
+}

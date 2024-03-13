@@ -31,7 +31,7 @@ import {
   YesNoVoteInput,
   YesNoVoteInputStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.yesNoVoteDefinitions
@@ -49,9 +49,11 @@ export interface UserServiceForYesNoVoteDefinitions {
   ): Promise<JudoRestResponse<ServiceYesNoVoteDefinitionStored>>;
   update(
     target: Partial<ServiceYesNoVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoVoteDefinitionStored>>;
   validateUpdate(
     target: Partial<ServiceYesNoVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoVoteDefinitionStored>>;
   getIssue(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
@@ -61,6 +63,7 @@ export interface UserServiceForYesNoVoteDefinitions {
   validateUpdateIssue(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
@@ -100,6 +103,7 @@ export interface UserServiceForYesNoVoteDefinitions {
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
@@ -117,6 +121,7 @@ export interface UserServiceForYesNoVoteDefinitions {
   validateUpdateUserVoteEntry(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     target: Partial<ServiceYesNoVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
   listVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
@@ -126,6 +131,7 @@ export interface UserServiceForYesNoVoteDefinitions {
   validateUpdateVoteEntries(
     owner: JudoIdentifiable<ServiceYesNoVoteDefinition>,
     target: Partial<ServiceYesNoVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
   activate(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<JudoRestResponse<void>>;
   addToFavorites(owner: JudoIdentifiable<ServiceYesNoVoteDefinition>): Promise<JudoRestResponse<void>>;

@@ -39,22 +39,22 @@
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.judo-properties-definition.fragment.hbs' file -->
-        <structured-map-proxy-version>2.0.0.20231122_182717_c1fe065e_develop</structured-map-proxy-version>
+        <structured-map-proxy-version>2.0.0.20240304_134724_72ade506_develop</structured-map-proxy-version>
         <judo-dao-api-version>1.0.4.20240129_105710_5ca64071_develop</judo-dao-api-version>
         <judo-dispatcher-api-version>1.0.3.20230826_230134_1ce94d88_develop</judo-dispatcher-api-version>
-        <judo-sdk-common-version>1.0.4.20240209_041252_f75c5bf1_develop</judo-sdk-common-version>
+        <judo-sdk-common-version>1.0.4.20240313_041226_1c53e514_develop</judo-sdk-common-version>
         <mapper-version>1.0.4.20230826_230852_5723dcb6_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20240227_042333_cde341b4_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20240229_041327_9be4afe8_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20240229_040556_2d620164_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20240227_041339_7c27a9b3_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20240301_184705_cbfad003_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20240313_041537_ee4e9c9e_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20240313_074031_6c144173_develop</judo-platform-version>
+        <judo-services-version>1.1.0.20240313_042231_f5567ca3_develop</judo-services-version>
+        <judo-rdbms-schema-version>1.0.0.20240313_041541_d8940788_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20240312_040638_0e9d6e41_develop</judo-tatami-client-version>
         
         <judo-meta-ui-version>1.1.0.20240301_184656_ee0f3e33_develop</judo-meta-ui-version>
         <judo-meta-psm-version>1.3.0.20240127_122224_4f1de775_develop</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20240209_041348_72a2ccfe_develop</judo-psm-generator-sdk-core-version>
-        <judo-psm-generator-jaxrs-version>1.0.0.20240215_132236_b1c995c7_develop</judo-psm-generator-jaxrs-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20240313_041300_d16cc314_develop</judo-psm-generator-sdk-core-version>
+        <judo-psm-generator-jaxrs-version>1.0.0.20240313_041308_6fb5419b_develop</judo-psm-generator-jaxrs-version>
         <cxf-jaxrs-application-manager-version>0.7.1.20230914_110111_1c9ad225_develop</cxf-jaxrs-application-manager-version>
         
         <osgi-default-import>

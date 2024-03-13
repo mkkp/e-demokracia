@@ -12,7 +12,7 @@ import {
   ServiceIssueTypeQueryCustomizer,
   ServiceIssueTypeStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.adminIssueTypes
@@ -29,9 +29,21 @@ export interface UserServiceForAdminIssueTypes {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
   getTemplate(): Promise<JudoRestResponse<ServiceIssueType>>;
-  create(target: ServiceIssueType): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
-  validateCreate(target: ServiceIssueType): Promise<JudoRestResponse<ServiceIssueType>>;
+  create(
+    target: ServiceIssueType,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  validateCreate(
+    target: ServiceIssueType,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueType>>;
   delete(target: JudoIdentifiable<ServiceIssueType>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceIssueTypeStored>): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
-  validateUpdate(target: Partial<ServiceIssueTypeStored>): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  update(
+    target: Partial<ServiceIssueTypeStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
+  validateUpdate(
+    target: Partial<ServiceIssueTypeStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
 }

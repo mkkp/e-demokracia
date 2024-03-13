@@ -81,7 +81,7 @@ export default function ServiceDashboardDashboard_View_EditDialog(
     isDraft,
   } = props;
   const queryCustomizer: ServiceDashboardQueryCustomizer = {
-    _mask: actions.getMask ? actions.getMask!() : '{}',
+    _mask: actions.getMask ? actions.getMask!() : '{welcome}',
   };
 
   return (

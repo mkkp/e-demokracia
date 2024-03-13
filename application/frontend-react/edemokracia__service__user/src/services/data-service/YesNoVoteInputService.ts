@@ -7,7 +7,7 @@
 // Template file: data-service/classService.ts.hbs
 
 import { JudoRestResponse, YesNoVoteInput, YesNoVoteInputStored } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for YesNoVoteInput

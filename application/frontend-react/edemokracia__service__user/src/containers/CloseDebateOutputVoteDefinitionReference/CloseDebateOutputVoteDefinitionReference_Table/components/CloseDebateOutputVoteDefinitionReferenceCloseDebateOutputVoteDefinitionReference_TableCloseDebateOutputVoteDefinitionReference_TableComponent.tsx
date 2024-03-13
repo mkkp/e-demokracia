@@ -52,6 +52,7 @@ import {
   getUpdatedRowsSelected,
   mapAllFiltersToQueryCustomizerProperties,
   processQueryCustomizer,
+  randomUtils,
   useErrorHandler,
 } from '~/utilities';
 import type { ColumnCustomizerHook, DialogResult, SidekickComponentProps, TableRowAction } from '~/utilities';
@@ -108,10 +109,11 @@ export function CloseDebateOutputVoteDefinitionReferenceCloseDebateOutputVoteDef
 ) {
   const { uniqueId, actions, refreshCounter, isOwnerLoading, isDraft, validationError } = props;
   const apiRef = useGridApiRef();
+  const generatorUUIDv4 = randomUtils.getGeneratorUUIDv4();
   const sidekickComponentFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=${CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_CLOSE_DEBATE_OUTPUT_VOTE_DEFINITION_REFERENCE_TABLE_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY}))`;
-  const filterModelKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-filterModel`;
-  const filtersKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-filters`;
-  const rowsPerPageKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-rowsPerPage`;
+  const filterModelKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filterModel`;
+  const filtersKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-filters`;
+  const rowsPerPageKey = `User/(esm/_YoAHv1u1Ee6Lb6PYNSnQSA)/TransferObjectTableTable-${uniqueId}-${generatorUUIDv4}-rowsPerPage`;
 
   const { openConfirmDialog } = useConfirmDialog();
   const { getItemParsed, getItemParsedWithDefault, setItemStringified } = useDataStore('sessionStorage');

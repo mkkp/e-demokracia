@@ -8,3 +8,5 @@ export interface QueryCustomizer<T> {
   _orderBy?: Array<OrderingType>;
   _identifier?: string;
 }
+
+export type CommandQueryCustomizer = Pick<QueryCustomizer<any>, '_mask'>;

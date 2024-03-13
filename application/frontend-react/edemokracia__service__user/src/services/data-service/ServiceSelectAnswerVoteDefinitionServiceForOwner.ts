@@ -25,7 +25,7 @@ import {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceSelectAnswerVoteDefinition.owner
@@ -60,6 +60,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -87,6 +88,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -114,6 +116,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -141,6 +144,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -164,6 +168,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
@@ -187,6 +192,7 @@ export interface ServiceSelectAnswerVoteDefinitionServiceForOwner {
   updateResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,

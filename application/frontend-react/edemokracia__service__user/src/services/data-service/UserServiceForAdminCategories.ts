@@ -15,7 +15,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.adminCategories
@@ -32,11 +32,23 @@ export interface UserServiceForAdminCategories {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   getTemplate(): Promise<JudoRestResponse<ServiceIssueCategory>>;
-  create(target: ServiceIssueCategory): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
-  validateCreate(target: ServiceIssueCategory): Promise<JudoRestResponse<ServiceIssueCategory>>;
+  create(
+    target: ServiceIssueCategory,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  validateCreate(
+    target: ServiceIssueCategory,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueCategory>>;
   delete(target: JudoIdentifiable<ServiceIssueCategory>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceIssueCategoryStored>): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
-  validateUpdate(target: Partial<ServiceIssueCategoryStored>): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  update(
+    target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
+  validateUpdate(
+    target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   getOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -50,10 +62,12 @@ export interface UserServiceForAdminCategories {
   validateCreateOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceServiceUser,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUser>>;
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceIssueCategory>,
@@ -72,18 +86,22 @@ export interface UserServiceForAdminCategories {
   createSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   validateCreateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: ServiceIssueCategory,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategory>>;
   deleteSubcategories(target: JudoIdentifiable<ServiceIssueCategory>): Promise<JudoRestResponse<void>>;
   updateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   validateUpdateSubcategories(
     owner: JudoIdentifiable<ServiceIssueCategory>,
     target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
 }

@@ -33,7 +33,7 @@ import {
   YesNoVoteInput,
   YesNoVoteInputStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceUserVoteDefinition.ownedVoteDefinitions
@@ -54,10 +54,14 @@ export interface ServiceUserVoteDefinitionServiceForOwnedVoteDefinitions {
     queryCustomizer?: ServiceVoteDefinitionQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceVoteDefinitionStored>>>;
-  update(target: Partial<ServiceVoteDefinitionStored>): Promise<JudoRestResponse<ServiceVoteDefinitionStored>>;
+  update(
+    target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
     target: Partial<ServiceVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceVoteDefinitionStored>>;
   addOwnedVoteDefinitions(
     owner: JudoIdentifiable<ServiceUserVoteDefinition>,
@@ -75,6 +79,7 @@ export interface ServiceUserVoteDefinitionServiceForOwnedVoteDefinitions {
   validateUpdateIssue(
     owner: JudoIdentifiable<ServiceVoteDefinition>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   activateForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;
   addToFavoritesForIssue(owner: JudoIdentifiable<ServiceIssue>): Promise<JudoRestResponse<void>>;

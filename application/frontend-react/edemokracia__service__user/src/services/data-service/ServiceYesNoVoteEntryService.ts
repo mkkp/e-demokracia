@@ -15,7 +15,7 @@ import {
   ServiceYesNoVoteEntryQueryCustomizer,
   ServiceYesNoVoteEntryStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceYesNoVoteEntry
@@ -26,8 +26,14 @@ export interface ServiceYesNoVoteEntryService {
     queryCustomizer?: ServiceYesNoVoteEntryQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
-  update(target: Partial<ServiceYesNoVoteEntryStored>): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
-  validateUpdate(target: Partial<ServiceYesNoVoteEntryStored>): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
+  update(
+    target: Partial<ServiceYesNoVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
+  validateUpdate(
+    target: Partial<ServiceYesNoVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceYesNoVoteEntryStored>>;
   getOwner(
     target: JudoIdentifiable<ServiceYesNoVoteEntry>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

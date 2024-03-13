@@ -17,7 +17,7 @@ import {
   ServiceUserManagerQueryCustomizer,
   ServiceUserManagerStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.adminUserManager
@@ -32,8 +32,14 @@ export interface UserServiceForAdminUserManager {
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
-  update(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
-  validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  update(
+    target: Partial<ServiceUserManagerStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  validateUpdate(
+    target: Partial<ServiceUserManagerStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
   listUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,
@@ -42,10 +48,12 @@ export interface UserServiceForAdminUserManager {
   updateUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   validateUpdateUsers(
     owner: JudoIdentifiable<ServiceUserManager>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   createUser(target: ServiceCreateUserInput): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getTemplateOnCreateUser(): Promise<JudoRestResponse<ServiceCreateUserInput>>;

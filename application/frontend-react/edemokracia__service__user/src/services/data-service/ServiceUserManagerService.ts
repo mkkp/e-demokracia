@@ -16,7 +16,7 @@ import {
   ServiceUserManagerQueryCustomizer,
   ServiceUserManagerStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceUserManager
@@ -27,8 +27,14 @@ export interface ServiceUserManagerService {
     queryCustomizer?: ServiceUserManagerQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
-  update(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
-  validateUpdate(target: Partial<ServiceUserManagerStored>): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  update(
+    target: Partial<ServiceUserManagerStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
+  validateUpdate(
+    target: Partial<ServiceUserManagerStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceUserManagerStored>>;
   listUsers(
     target: JudoIdentifiable<ServiceUserManager>,
     queryCustomizer?: ServiceServiceUserQueryCustomizer,

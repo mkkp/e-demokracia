@@ -26,9 +26,12 @@ import type {
   ServiceSimpleVoteStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceIssueServiceForOwner } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Relation Service Implementation for ServiceIssue.owner
@@ -151,11 +154,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateActivityCities(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>> {
     const path = '/service/ServiceUser/~update/activityCities/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -250,11 +255,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateActivityCounties(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>> {
     const path = '/service/ServiceUser/~update/activityCounties/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -349,11 +356,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateActivityDistricts(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/ServiceUser/~update/activityDistricts/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -446,11 +455,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateResidentCity(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>> {
     const path = '/service/ServiceUser/~update/residentCity/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -524,11 +535,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateResidentCounty(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>> {
     const path = '/service/ServiceUser/~update/residentCounty/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -602,11 +615,13 @@ export class ServiceIssueServiceForOwnerImpl extends JudoAxiosService implements
   async updateResidentDistrict(
     owner: JudoIdentifiable<ServiceServiceUser>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>> {
     const path = '/service/ServiceUser/~update/residentDistrict/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

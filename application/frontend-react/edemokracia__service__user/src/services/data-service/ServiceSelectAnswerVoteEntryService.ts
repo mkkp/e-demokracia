@@ -18,7 +18,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceSelectAnswerVoteEntry
@@ -31,9 +31,11 @@ export interface ServiceSelectAnswerVoteEntryService {
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   update(
     target: Partial<ServiceSelectAnswerVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   validateUpdate(
     target: Partial<ServiceSelectAnswerVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   getOwner(
     target: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,

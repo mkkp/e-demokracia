@@ -18,7 +18,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.selectAnswerVoteEntries
@@ -36,9 +36,11 @@ export interface UserServiceForSelectAnswerVoteEntries {
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   update(
     target: Partial<ServiceSelectAnswerVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   validateUpdate(
     target: Partial<ServiceSelectAnswerVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteEntryStored>>;
   getOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
@@ -53,6 +55,7 @@ export interface UserServiceForSelectAnswerVoteEntries {
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
@@ -76,6 +79,7 @@ export interface UserServiceForSelectAnswerVoteEntries {
   validateUpdateValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,
     target: Partial<ServiceSelectAnswerVoteSelectionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceSelectAnswerVoteSelectionStored>>;
   setValue(
     owner: JudoIdentifiable<ServiceSelectAnswerVoteEntry>,

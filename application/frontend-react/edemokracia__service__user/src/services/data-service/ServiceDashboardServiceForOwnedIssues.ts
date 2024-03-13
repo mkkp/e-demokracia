@@ -51,7 +51,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for ServiceDashboard.ownedIssues
@@ -72,10 +72,14 @@ export interface ServiceDashboardServiceForOwnedIssues {
     queryCustomizer?: ServiceIssueQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<Array<ServiceIssueStored>>>;
-  update(target: Partial<ServiceIssueStored>): Promise<JudoRestResponse<ServiceIssueStored>>;
+  update(
+    target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored>>;
   validateUpdate(
     owner: JudoIdentifiable<ServiceDashboard>,
     target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
   addOwnedIssues(
     owner: JudoIdentifiable<ServiceDashboard>,
@@ -94,15 +98,18 @@ export interface ServiceDashboardServiceForOwnedIssues {
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   deleteAttachments(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
   updateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateUpdateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   listCategories(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -118,6 +125,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateCategories(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueCategoryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueCategoryStored>>;
   setCategories(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -145,6 +153,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateCity(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceCityStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>>;
   setCity(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -162,6 +171,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateComments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceCommentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCommentStored>>;
   voteDownForComments(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
   voteUpForComments(owner: JudoIdentifiable<ServiceComment>): Promise<JudoRestResponse<void>>;
@@ -174,10 +184,12 @@ export interface ServiceDashboardServiceForOwnedIssues {
   updateCons(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   validateUpdateCons(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceConStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceConStored>>;
   createConArgumentForCons(
     owner: JudoIdentifiable<ServiceCon>,
@@ -205,6 +217,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateCounty(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCountyStored>>;
   setCounty(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -222,6 +235,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateCreatedBy(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   getDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -237,6 +251,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceDistrictStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceDistrictStored>>;
   setDistrict(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -260,6 +275,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateIssueType(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceIssueTypeStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueTypeStored>>;
   setIssueType(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -282,6 +298,7 @@ export interface ServiceDashboardServiceForOwnedIssues {
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceIssue>,
@@ -300,10 +317,12 @@ export interface ServiceDashboardServiceForOwnedIssues {
   updatePros(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   validateUpdatePros(
     owner: JudoIdentifiable<ServiceIssue>,
     target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   createConArgumentForPros(
     owner: JudoIdentifiable<ServicePro>,

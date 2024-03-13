@@ -15,7 +15,7 @@ import {
   ServiceYesNoAbstainVoteEntryQueryCustomizer,
   ServiceYesNoAbstainVoteEntryStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Relation Service for User.yesNoAbstainVoteEntries
@@ -33,9 +33,11 @@ export interface UserServiceForYesNoAbstainVoteEntries {
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
   update(
     target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
   validateUpdate(
     target: Partial<ServiceYesNoAbstainVoteEntryStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteEntryStored>>;
   getOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,
@@ -50,6 +52,7 @@ export interface UserServiceForYesNoAbstainVoteEntries {
   validateUpdateOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,
     target: Partial<ServiceServiceUserStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceServiceUserStored>>;
   setOwner(
     owner: JudoIdentifiable<ServiceYesNoAbstainVoteEntry>,

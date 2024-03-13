@@ -6,6 +6,8 @@
 // Template name: actor/src/utilities/helper.ts
 // Template file: actor/src/utilities/helper.ts.hbs
 
+import type { RandomUtils } from './interfaces';
+
 export const exists = (element: any) => element !== undefined && element !== null;
 
 export const dateToJudoDateString = (date: Date | null | undefined) => {
@@ -50,3 +52,9 @@ export const endWithSlash = (input: string): string => (input.endsWith('/') ? in
 
 // only for testing purposes
 export const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+export const GENERATOR_UUID_V4 = '2132d139-004a-4ab1-b616-369646f769a9';
+
+export const randomUtils: RandomUtils = {
+  getGeneratorUUIDv4: () => GENERATOR_UUID_V4,
+};

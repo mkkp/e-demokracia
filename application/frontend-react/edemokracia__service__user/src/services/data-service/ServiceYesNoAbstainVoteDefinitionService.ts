@@ -26,7 +26,7 @@ import {
   ServiceYesNoAbstainVoteEntryStored,
   YesNoAbstainVoteInput,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceYesNoAbstainVoteDefinition
@@ -39,9 +39,11 @@ export interface ServiceYesNoAbstainVoteDefinitionService {
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>>;
   update(
     target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>>;
   validateUpdate(
     target: Partial<ServiceYesNoAbstainVoteDefinitionStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceYesNoAbstainVoteDefinitionStored>>;
   getIssue(
     target: JudoIdentifiable<ServiceYesNoAbstainVoteDefinition>,

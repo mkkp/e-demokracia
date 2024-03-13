@@ -16,9 +16,12 @@ import type {
   ServiceCountyStored,
 } from '../data-api';
 import type { JudoIdentifiable } from '../data-api/common';
-import { X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
+import { CommandQueryCustomizer } from '../data-api/common';
+import { X_JUDO_MASK, X_JUDO_SIGNED_IDENTIFIER } from '../data-api/rest/headers';
 import type { ServiceCountyService } from '../data-service';
 import { JudoAxiosService } from './JudoAxiosService';
+
+const DEFAULT_COMMAND_MASK = '{}';
 
 /**
  * Class Service Implementation for ServiceCounty
@@ -64,11 +67,15 @@ export class ServiceCountyServiceImpl extends JudoAxiosService implements Servic
   /**
    * @throws {AxiosError} With data containing {@link Array<FeedbackItem>} for status codes: 400, 401, 403.
    */
-  async update(target: Partial<ServiceCountyStored>): Promise<JudoRestResponse<ServiceCountyStored>> {
+  async update(
+    target: Partial<ServiceCountyStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceCountyStored>> {
     const path = '/service/County/~update';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: target.__signedIdentifier!,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }
@@ -95,11 +102,13 @@ export class ServiceCountyServiceImpl extends JudoAxiosService implements Servic
   async createCities(
     owner: JudoIdentifiable<ServiceCounty>,
     target: JudoIdentifiable<ServiceCity>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceCityStored>> {
     const path = '/service/County/~update/cities/~create';
     return this.axios.post(this.getPathForActor(path), target, {
       headers: {
         [X_JUDO_SIGNED_IDENTIFIER]: owner.__signedIdentifier!,
+        [X_JUDO_MASK]: queryCustomizer?._mask ?? DEFAULT_COMMAND_MASK,
       },
     });
   }

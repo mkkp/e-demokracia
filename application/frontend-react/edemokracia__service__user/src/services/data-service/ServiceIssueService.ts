@@ -46,7 +46,7 @@ import {
   ServiceServiceUserQueryCustomizer,
   ServiceServiceUserStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceIssue
@@ -57,16 +57,24 @@ export interface ServiceIssueService {
     queryCustomizer?: ServiceIssueQueryCustomizer,
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceIssueStored>>;
-  update(target: Partial<ServiceIssueStored>): Promise<JudoRestResponse<ServiceIssueStored>>;
-  validateUpdate(target: Partial<ServiceIssueStored>): Promise<JudoRestResponse<ServiceIssueStored>>;
+  update(
+    target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored>>;
+  validateUpdate(
+    target: Partial<ServiceIssueStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueStored>>;
   getTemplateForAttachments(): Promise<JudoRestResponse<ServiceIssueAttachment>>;
   createAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: JudoIdentifiable<ServiceIssueAttachment>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateCreateAttachments(
     owner: JudoIdentifiable<ServiceIssue>,
     target: ServiceIssueAttachment,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachment>>;
   listAttachments(
     target: JudoIdentifiable<ServiceIssue>,

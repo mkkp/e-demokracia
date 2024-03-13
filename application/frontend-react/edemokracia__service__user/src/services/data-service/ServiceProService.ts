@@ -28,7 +28,7 @@ import {
   ServiceSimpleVoteQueryCustomizer,
   ServiceSimpleVoteStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServicePro
@@ -40,8 +40,14 @@ export interface ServiceProService {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceProStored>>;
   delete(target: JudoIdentifiable<ServicePro>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceProStored>): Promise<JudoRestResponse<ServiceProStored>>;
-  validateUpdate(target: Partial<ServiceProStored>): Promise<JudoRestResponse<ServiceProStored>>;
+  update(
+    target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceProStored>>;
+  validateUpdate(
+    target: Partial<ServiceProStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceProStored>>;
   listCons(
     target: JudoIdentifiable<ServicePro>,
     queryCustomizer?: ServiceConQueryCustomizer,

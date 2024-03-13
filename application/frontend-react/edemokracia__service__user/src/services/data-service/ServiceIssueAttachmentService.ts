@@ -12,7 +12,7 @@ import {
   ServiceIssueAttachmentQueryCustomizer,
   ServiceIssueAttachmentStored,
 } from '../data-api';
-import type { JudoIdentifiable } from '../data-api/common';
+import type { CommandQueryCustomizer, JudoIdentifiable } from '../data-api/common';
 
 /**
  * Class Service for ServiceIssueAttachment
@@ -25,8 +25,12 @@ export interface ServiceIssueAttachmentService {
     headers?: Record<string, string>,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   delete(target: JudoIdentifiable<ServiceIssueAttachment>): Promise<JudoRestResponse<void>>;
-  update(target: Partial<ServiceIssueAttachmentStored>): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
+  update(
+    target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
+  ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
   validateUpdate(
     target: Partial<ServiceIssueAttachmentStored>,
+    queryCustomizer?: CommandQueryCustomizer,
   ): Promise<JudoRestResponse<ServiceIssueAttachmentStored>>;
 }
