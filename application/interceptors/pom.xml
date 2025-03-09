@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!-- This is generated file. It is composed from template fragment which can be extended -->
+
+    <!-- To define create 'interceptors/pom.xml.project-definition.fragment.hbs' file -->
+    <parent>
+        <artifactId>edemokracia-application</artifactId>
+        <groupId>party.mkkp.edemokracia</groupId>
+        <version>${revision}</version>
+    </parent>
+    
+    <artifactId>edemokracia-application-interceptors</artifactId>
+    <name>edemokracia interceptors</name>
+    <description>Operations interceptors for edemokracia application</description>
+    <!-- End of 'interceptors/pom.xml.project-definition.fragment.hbs' -->
+
+    <packaging>bundle</packaging>
+
+    <properties>
+        <!-- To define create 'interceptors/pom.xml.properties-definition.fragment.hbs' file -->
+        <!-- End of 'interceptors/pom.xml.properties-definition.fragment.hbs' -->
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- To define create 'interceptors/pom.xml.extra-plugin-management.fragment.hbs' file -->
+                <!-- End of 'interceptors/pom.xml.extra-plugin-management.fragment.hbs'  -->
+                
+                
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.44.3</version>
+                <configuration>
+                    <formats>
+                        <!-- you can define as many formats as you want, each is independent -->
+                        <format>
+                            <!-- define the files to apply to -->
+                            <includes>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                            </includes>
+                            <!-- define the steps to apply to those files -->
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <!-- define a language-specific format -->
+                    <java>
+                        <!-- no need to specify files, inferred automatically, but you can if you want -->
+
+                        <!-- apply a specific flavor of google-java-format and reflow long strings -->
+                        <!--
+                        <googleJavaFormat>
+                            <version>1.8</version>
+                            <style>AOSP</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <formatJavadoc>false</formatJavadoc>
+                        </googleJavaFormat>
+                        -->
+                        <palantirJavaFormat>
+                            <version>2.39.0</version>                     <!-- optional -->
+                            <style>PALANTIR</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                            <formatJavadoc>false</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                        </palantirJavaFormat>
+
+                        <!-- make sure every file has the following copyright header.
+                          optionally, Spotless can set copyright years by digging
+                          through git history (see "license" section below) -->
+                        <licenseHeader>
+                            <content>/* (C)$YEAR */</content>  <!-- or <file>${project.basedir}/license-header</file> -->
+                        </licenseHeader>
+                    </java>
+                    <removeUnusedImports>
+                        <engine>google-java-format</engine>    <!-- optional. Defaults to `google-java-format`. Can be switched to `cleanthat-javaparser-unnecessaryimport` (e.g. to process JDK17 source files with a JDK8+ Runtime) -->
+                    </removeUnusedImports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+            </plugin>
+
+            <!-- To define create 'interceptors/pom.xml.extra-plugins.fragment.hbs' file -->
+            <!-- End of 'interceptors/pom.xml.extra-plugins.fragment.hbs' -->
+            
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>party.mkkp.edemokracia</groupId>
+            <artifactId>edemokracia-application-sdk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.runtime</groupId>
+            <artifactId>judo-runtime-core-dispatcher</artifactId>
+            <version>${judo-runtime-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo</groupId>
+            <artifactId>judo-dao-api</artifactId>
+            <version>${judo-dao-api-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo</groupId>
+            <artifactId>judo-dispatcher-api</artifactId>
+            <version>${judo-dispatcher-api-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo</groupId>
+            <artifactId>judo-sdk-common</artifactId>
+            <version>${judo-sdk-common-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-common</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-osgi</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>hu.blackbelt.judo.generator</groupId>
+            <artifactId>judo-psm-generator-sdk-core-empty-custom-operation-osgi</artifactId>
+            <version>${judo-psm-generator-sdk-core-version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.15</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.12.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>3.12.4</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- To define create 'interceptors/pom.xml.extra-dependencies.fragment.hbs' file -->
+        <!-- End of 'interceptors/pom.xml.extra-dependencies.fragment.hbs' -->
+    </dependencies>
+
+</project>

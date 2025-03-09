@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+  <defs>
+    <linearGradient id="gradDialogue" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f7f7f7; stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f7f7f7; stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" fill="url(#gradDialogue)" />
+  
+  <!-- Left speech bubble -->
+  <ellipse cx="10" cy="16" rx="6" ry="5" fill="#cceeff" opacity="0.15" />
+  <polygon points="4,20 6,20 4,24" fill="#cceeff" opacity="0.15" />
+  
+  <!-- Right speech bubble -->
+  <ellipse cx="22" cy="16" rx="6" ry="5" fill="#ffcccc" opacity="0.15" />
+  <polygon points="28,20 26,20 28,24" fill="#ffcccc" opacity="0.15" />
+</svg>

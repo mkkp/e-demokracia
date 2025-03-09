@@ -6,9 +6,10 @@
 // Template name: actor/src/layout/Header/AppBarStyled.tsx
 // Template file: actor/src/layout/Header/AppBarStyled.tsx.hbs
 
-import { styled } from '@mui/material/styles';
-import type { AppBarProps } from '@mui/material';
+import { type AppBarProps, IconButton, type IconButtonPropsColorOverrides } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
+import { styled } from '@mui/material/styles';
+import { fontWeight } from '@mui/system';
 import { DRAWER_WIDTH } from '~/config';
 
 export interface AppBarStyledProps extends AppBarProps {
@@ -17,6 +18,15 @@ export interface AppBarStyledProps extends AppBarProps {
 
 export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(
   ({ theme, open }) => ({
+    // PATCH BEGIN
+    textTransform: 'uppercase',
+    backgroundColor: theme.palette.primary.main,
+    color: '#ffffff',
+    fontWeight: 'bold',
+    button: {
+      fontWeight: 'bold',
+    },
+    // PATCH END
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -35,3 +45,11 @@ export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !
     }),
   }),
 );
+
+export const AppBarDrwawerIconButtonStyled = styled(IconButton, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})<IconButtonPropsColorOverrides>(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: '#ffffff',
+  fontWeight: 'bold',
+}));

@@ -181,6 +181,7 @@
             <version>${project.version}</version>
         </dependency>
 
+
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>
             <artifactId>edemokracia-application-frontend-react-edemokracia__service__user</artifactId>

@@ -6,34 +6,43 @@ JUDO runner.
 USAGE: judo.sh COMMANDS... [OPTIONS...]
     env <env>                               Use alternate env (custom properties file). Default judo is used.
     clean                                   Stop postgresql docker container and clear data.
-    reset-checksum                          Reset checksum. When the build fails with checksum error it can be reset with this command.
-
     prune                                   Stop postgresql docker container and delete untracked files in this repository.
         -f                                  Clear only frontend data.
         -y                                  Skip confirmation.
 
     update                                  Update dependency versions in JUDO project.
+        -i --ignore-checksum                Ignores checksum errors and updates checksums according to new sources.
+
     generate                                Generate application based on model in JUDO project.
+        -i --ignore-checksum                Ignores checksum errors and updates checksums according to new sources.
+
+    generate-root                           Generate application root structure on model in JUDO project.
+        -i --ignore-checksum                Ignores checksum errors and updates checksums according to new sources.
+
     dump                                    Dump postgresql db data before clearing and starting application.
     import                                  Import postgresql db data
         -dn --dump-name                     Import dump name when it's not defined loaded the last one
     schema-upgrade                          It can be used with persistent db (postgresql) only. It uses the current running database to
                                             generate the difference and after it applied.
     build                                   Build project.
+        -v <VERSION> --version <VERSION>    Use given version as model and application version
         -p --build-parallel                 Parallel maven build. The log can be chaotic.
         -a --build-app-module               Build app module only.
+        -f --build-fronted-module           Build fronted module only.
+        -sc --build-schema-cli              Build schema CLI standalon JAR file.
+        -d --docker                         Build docker images.
         -M --skip-model                     Skip model building.
         -B --skip-backend                   Skip backend building.
         -F --skip-frontend                  Skip frontend building.
-        -FR --skip-react                    Skip react frontend building.
-        -BM --skip-backendmodels            Skip Backend Models building.
         -KA --skip-karaf                    Skip Backend Karaf building.
-        -d --docker                         Build docker image.
         -S --skip-schema                    Skip building schema migration image.
-        -v <VERSION> --version <VERSION>    Record given version number frontend root application's version.html during frontend build.
+        -ma --maven-argument                Add extra maven argument.
+        -q --quick                          Quick mode which uses cache and ignores validations.
+        -i --ignore-checksum                Ignores checksum errors and updates checksums according to new sources.
+
     reckless                                Build and run project in reckless mode. It is skipping validations, docker builds and run as fast as possible.
     start                                   Run application with postgresql and keycloak.
-        -w --skip-watch-bundles             Disable watching of bundle changes
+        -W --skip-watch-bundles             Disable watching of bundle changes
         -K --skip-keycloak                  Skip starting keycloak.
         -o \"<name>=<value>,<name2>=<value2>, ...\" --options \"<name>=<value>,<name2>=<value2>, ...\"
                                             Add options (defaults can be defined in judo.properties)
@@ -47,6 +56,7 @@ USAGE: judo.sh COMMANDS... [OPTIONS...]
                                                keycloak_port = <port>
                                                compose_access_ip = <alternate ip address to access app>
                                                karaf_enable_admin_user = 1
+                                               java_compiler = ejc | javac. Which compuler can be used, default is ejc
     stop                                    Stop application, postgresql and keycloak. (if running)
     status                                  Print status of containers
 
@@ -55,20 +65,159 @@ EXAMPLES:
     ./judo.sh prune -f                      Clear untracked data in application/frontend if opening modeling project freezes in designer.
 
     ./judo.sh build -a                      Build app module only for backend. Useful for updating custom operations for running backend.
+    ./judo.sh build -f -q                   Build model and fronted only in quick mode. Useful when frontend changes needs to be checked.
     ./judo.sh build -F -KA                  Build model and backend without frontend. Useful when custom operations need to be implemented.
 
     ./judo.sh prune build start             Super fresh application build and start.
     ./judo.sh build clean start             Stop postgresql docker container then build and run application (including keycloak) with clean db.
     ./judo.sh build start -K                Stop postgresql docker container then build and restart application.
-    ./judo.sh build -M -F -BM clean start   Stop postgresql docker container then rebuild app and start application with clean db.
-    ./judo.sh build -M -F -BM start -K      Rebuild app and restart application.
-
+    ./judo.sh build -M -F clean start       Stop postgresql docker container then rebuild app and start application with clean db.
+    ./judo.sh build -M -F start -K          Rebuild app and restart application.
+    ./judo.sh build -ma \"-rf :${app_name}-application-karaf-offline\"
+                                            Continue build from module.
     ./judo.sh start -o \"runtime=compose,compose_env=compose-postgresql-https'\"
                                             Run application in docker compose using the compose-postgresql-https's docker-compose.yaml
 
     ./judo.sh env compose-dev build start   Build and run application with compose-dev env. (have to be described in compose-dev.properties)
 
 """
+}
+
+parse_env_args () {
+    set -- "${original_args[@]}"
+    while [ $# -ne 0 ]; do
+        case "$1" in
+            env)  shift 1; profile=$1; shift 1;;
+            *)    shift 1;
+            ;;
+        esac
+    done
+}
+
+parse_command_args () {
+    set -- "${original_args[@]}"
+    local currentcommand=""
+
+    while [ $# -ne 0 ]; do
+        case "$1" in
+            env)                            currentcommand="env"; shift 2;;
+            clean)                          currentcommand="clean"; clean=1; shift 1;;
+            ignore-checksum)                currentcommand="ignore-checksum"; ignoreChecksum=1; shift 1;;
+            prune)
+                currentcommand="prune"
+                git_available=$( git rev-parse --is-inside-work-tree )
+                if [ $? -eq 0 -a "$git_available" == "true" ] ; then
+                    prune=1
+                else
+                    echo "Prune only supported in git repositories"
+                    exit 22
+                fi
+                shift 1
+                ;;
+            update)                         currentcommand="update"; update=1; shift 1;;
+            generate)                       currentcommand="generate"; generate=1; shift 1;;
+            generate-root)                  currentcommand="generate-root"; generateRoot=1; shift 1;;
+            dump)                           currentcommand="dump"; dump=1; shift 1;;
+            import)                         currentcommand="import"; import=1; shift 1;;
+            build)                          currentcommand="build"; build=1; shift 1;;
+            reckless)                       currentcommand="reckless"; build=1; reckless=1; buildKaraf=0; quickMode=1; shift 1;;
+            start)                          currentcommand="start"; start=1; shift 1;;
+            schema-upgrade)                 currentcommand="schema-upgrade"; schemaUpgrade=1; shift 1;;
+            stop)                           currentcommand="stop"; stop=1; shift 1;;
+            status)                         currentcommand="status"; status=1; shift 1;;
+            *)
+                if [ -z "${currentcommand}" ]; then
+                    echo "Unrecognized option: $1"
+                    print-help
+                    exit 22
+                fi
+            ;;
+        esac
+
+        if [ $# -eq 0 ]; then :
+        elif [[ $1 =~ ^(env|clean|prune|update|generate|generate-root|dump|import|build|reckless|start|stop|status|schema-upgrade)$ ]]; then :
+        elif [ "${currentcommand}" == "update" ]; then
+            case "$1" in
+                -i | --ignore-checksum)         ignoreUpdateChecksum=1; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+
+        elif [ "${currentcommand}" == "generate" ]; then
+            case "$1" in
+                -i | --ignore-checksum)         ignoreGenerateChecksum=1; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        elif [ "${currentcommand}" == "generate-root" ]; then
+            case "$1" in
+                -i | --ignore-checksum)         ignoreGenerateChecksum=1; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        elif [ "${currentcommand}" == "prune" ]; then
+            case "$1" in
+                -f)                             pruneFrontend=1; shift 1;;
+                -y)                             pruneConfirmation=0; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        elif [ "${currentcommand}" == "import" ]; then
+            case "$1" in
+                -dn | --dump-name)              shift 1; export dumpName=$1; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        elif [ "${currentcommand}" == "build" ]; then
+            case "$1" in
+                -p | --build-parallel)          buildParallel=1; shift 1;;
+                -a | --build-app-module)        buildAppModule=1; buildFrontend=0; buildModel=0; shift 1;;
+                -f | --build-frontend-module)   buildKaraf=0; buildBackend=0; buildAppModule=0; buildFrontend=1; buildModel=0; shift 1;;
+                -sc | --build-schema-cli)       schemaCliBuilding=1; shift 1;;
+                -M | --skip-model)              buildModel=0; shift 1;;
+                -B | --skip-backend)            buildBackend=0; shift 1;;
+                -F | --skip-frontend)           buildFrontend=0; shift 1;;
+                -KA | --skip-karaf)             buildKaraf=0; shift 1;;
+                -d | --docker)                  dockerBuilding=1; shift 1;;
+                -S | --skip-schema)             schemaBuilding=0; shift 1;;
+                -v | --version)                 shift 1; versionNumber=$1; shift 1;;
+                -ma | --maven-argument)         shift 1; extraMavenArgs="$extraMavenArgs $1"; shift 1;;
+                -q | --quick)                   quickMode=1; shift 1;;
+                -i | --ignore-checksum)         ignoreBuildChecksum=1; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        elif [ "${currentcommand}" == "start" ]; then
+            case "$1" in
+                -w  | --skip-watch-bundles)     watchBundles=0; shift 1;;
+                -K  | --skip-keycloak)          startKeycloak=0; shift 1;;
+                -o | --options)                 shift 1; while read -d, -r pair; do IFS='=' read -r key val <<<"$pair"; eval "$key"="$val"; done <<<"$1,"; shift 1;;
+                *)
+                    echo "Illegal option: $1 for command: $currentcommand"
+                    print-help
+                    exit 22
+                    ;;
+            esac
+        fi
+    done
 }
 
 # Args:
@@ -179,12 +328,12 @@ import_postgres () {
     local INSTANCE_NAME=$1
     local image_name=$2
     if [ -z $image_name ]; then
-      local dumps=($(ls ${APP_DIR}/${app_name}_dump_*.tar.gz))
+      local dumps=($(ls ${schema_name}_dump_*.tar.gz))
       dumps=$dumps | xargs -n1 | sort | xargs
       image_name=${dumps[${#dumps[@]} - 1]}
     fi
     echo "Loading dump: $image_name"
-    docker exec -i ${INSTANCE_NAME} pg_restore -Fc --clean -U ${app_name} -d ${app_name} < ${image_name} || exit
+    docker exec -i ${INSTANCE_NAME} /bin/bash -c "PGPASSWORD=${schema_name} pg_restore -Fc --clean -U ${schema_name} -d ${schema_name}" < ${image_name} || exit
 }
 
 # Args:
@@ -194,19 +343,21 @@ dump_postgresql () {
     local TIMESTAMP=$( date +%Y%m%d_%H%M%S )
 
     echo "Dumping database..."
-    local DUMP_FILE=${app_name}_dump_$TIMESTAMP.tar.gz
-    docker exec -i ${INSTANCE_NAME} /bin/bash -c "PGPASSWORD=${app_name} pg_dump --username=${app_name} -F c ${app_name}" > $DUMP_FILE || exit
+    local DUMP_FILE=${schema_name}_dump_$TIMESTAMP.tar.gz
+    docker exec -i ${INSTANCE_NAME} /bin/bash -c "PGPASSWORD=${schema_name} pg_dump --username=${schema_name} -F c ${schema_name}" > $DUMP_FILE || exit
     echo "Database dumped to $DUMP_FILE"
 }
 
 upgrade_postgresql_schema () {
     mvnd judo-rdbms-schema:apply \
-    -DjdbcUrl=jdbc:postgresql://127.0.0.1:5432/${app_name} \
+    ${mavenVersionArg} \
+    -DjdbcUrl=jdbc:postgresql://127.0.0.1:${POSTGRES_PORT:-5432}/${schema_name} \
     -DdbType=postgresql \
-    -DdbUser=${app_name} \
-    -DdbPassword=${app_name} \
-    -DupdateModel=${APP_DIR}/model/target/generated-resources/model/${app_name}-rdbms_postgresql.model \
-    -f ${APP_DIR}/schema || exit
+    -DdbUser=${schema_name} \
+    -DdbPassword=${schema_name} \
+    -DschemaIgnoreModelDependency=true \
+    -DupdateModel=${SCHEMA_DIR}/model/target/generated-resources/model/${schema_name}-rdbms_postgresql.model \
+    -f ${SCHEMA_DIR}/schema || exit
 }
 
 install_maven_wrapper () {
@@ -214,13 +365,9 @@ install_maven_wrapper () {
     sed $(get_sed_edit_option) 's/https:\/\/nexus\.judo\.technology\/repository\/maven-judong\//https:\/\/repo\.maven\.apache\.org\/maven2\//; s/https\:\/\//####/; s/\/\//\//; s/####/https\:\/\//' ${MODEL_DIR}/.mvn/wrapper/maven-wrapper.properties
 }
 
-reset_checksum () {
-    find ${MODEL_DIR} -name '.generated-file*' -type f | xargs rm -rf
-}
-
 prune_application () {
-    if [ $prune_confirmation -eq 1 ]; then
-        [ $prune_frontend -eq 1 ] && location="frontend-react" || location="this repository"
+    if [ $pruneConfirmation -eq 1 ]; then
+        [ $pruneFrontend -eq 1 ] && location="frontend-react" || location="this repository"
         echo -ne "Prune command deletes all untracked files in $location!\nAre you sure you want to continue? [Y/n]: "
         read canContinue
     else
@@ -228,29 +375,23 @@ prune_application () {
     fi
 
     if [ "$canContinue" == "Y" ]; then
-        if [ $postgres -eq 1 ]; then
-            stop_docker_instance postgres-${app_name}
-        fi
-        stop_docker_instance keycloak-${app_name}
-        if [ $karaf -eq 1 ]; then
-            stop_karaf $KARAF_PORT $KARAF_DIR
-        fi
-
-        if [ $prune_frontend -eq 1 ]; then
-            cd ${APP_DIR}/frontend-react
-            git clean -dffx
-            cd $CURR_DIR
+        if [ $pruneFrontend -eq 1 ]; then
+            git clean -dffx ${APP_DIR}/frontend-react
         else
-            echo "Pruning repository started..."
-            git clean -dffx
-            echo "Pruning repository finished."
+            if [ $postgres -eq 1 ]; then
+                stop_docker_instance postgres-${schema_name}
+            fi
+            stop_docker_instance keycloak-${keycloak_name}
+            if [ $karaf -eq 1 ]; then
+                stop_karaf $KARAF_PORT $KARAF_DIR
+            fi
+            git clean -dffx $MODEL_DIR
         fi
     else
         echo "Aborting prune."
         exit 13
     fi
 }
-
 
 # Args:
 # 1 - instance name
@@ -327,7 +468,7 @@ start_keycloak () {
     docker_instance_exists $INSTANCE_NAME
     if [ $? -eq 0 ]; then
       echo "Instance $INSTANCE_NAME is not existing, starting..."
-      keycloak_image=quay.io/keycloak/keycloak:latest
+      keycloak_image=quay.io/keycloak/keycloak:26.1.2
       tcp_port_is_open 127.0.0.1 $KEYCLOAK_PORT
       if [ $? -eq 0 ]
       then
@@ -335,12 +476,17 @@ start_keycloak () {
           exit 1
       fi
 
+      local keycloakExtraEnvs=""
+      if [ $postgres -eq 1 ]; then
+            keycloakExtraEnvs=$(echo "-e KC_DB=postgres -e KC_DB_URL_HOST=postgres-${schema_name} -e KC_DB_URL_DATABASE=${schema_name} -e KC_DB_PASSWORD=${schema_name} -e KC_DB_USERNAME=${schema_name} -e KC_DB_SCHEMA=public")
+      fi
+
       create_docker_network ${app_name}
       docker run -d \
           --name ${INSTANCE_NAME} \
           --network=${app_name} \
           -e KEYCLOAK_ADMIN=admin \
-          -e KEYCLOAK_ADMIN_PASSWORD=judo \
+          -e KEYCLOAK_ADMIN_PASSWORD=judo ${keycloakExtraEnvs} \
           -p $KEYCLOAK_PORT:$KEYCLOAK_PORT \
           -it $keycloak_image \
           start-dev --http-port=$KEYCLOAK_PORT --http-relative-path /auth || exit
@@ -368,14 +514,15 @@ start_postgres () {
 
         create_docker_network ${app_name}
         docker run -d \
-            -v ${app_name}_db:/var/lib/postgresql/pgdata \
+            -v ${schema_name}_postgresql_db:/var/lib/postgresql/pgdata \
+            -v ${schema_name}_postgresql_data:/var/lib/postgresql/data \
             --network=${app_name} \
             --name $INSTANCE_NAME \
             -e PGDATA=/var/lib/postgresql/pgdata \
-            -e POSTGRES_USER=${app_name} \
-            -e POSTGRES_PASSWORD=${app_name} \
+            -e POSTGRES_USER=${schema_name} \
+            -e POSTGRES_PASSWORD=${schema_name} \
             -p $POSTGRES_PORT:5432 \
-            postgres:latest || exit
+            postgres:16.2 || exit
     else
         start_docker_instance $INSTANCE_NAME
     fi
@@ -390,11 +537,13 @@ karaf_running () {
     local KARAF_DIR=$2
 
     if [ -d "${KARAF_DIR}" ]; then
-        KARAF_IS_RUNNING=$(${KARAF_DIR}/bin/status)
-        if [[ $KARAF_IS_RUNNING == "Running ..." ]]; then
-          return 1;
-        else
-          return 0;
+        if [ -f "${KARAF_DIR}/bin/status" ]; then
+          KARAF_IS_RUNNING=$(${KARAF_DIR}/bin/status)
+          if [[ $KARAF_IS_RUNNING == "Running ..." ]]; then
+            return 1;
+          else
+            return 0;
+          fi
         fi
     fi
     return 0;
@@ -452,23 +601,25 @@ start_karaf () {
 
     export EXTRA_JAVA_OPTS="-Dfile.encoding=UTF-8"
 
-    export JUDO_PLATFORM_IDENTIFIER_SIGNER_SECRET=tJ0lt0h9X2WvVydp4SoDIahBdBcctMxlTn6UJ1xTbQYltBF//qPLmyZPU6X02ETnsP/X7G3IDhGttNXISwyi1uJk5haBj3MI88baDxckmOKpAd6Fy93KSZJgPoGuICD0bPYKeXMSSqEKypt4NkY0NiNL2aLVwL3UDCWHsWQsCfk=
-    export JUDO_PLATFORM_KEYCLOAK_DEFAULT_PASSWORD_POLICY=SAME_EMAIL
-    export JUDO_PLATFORM_LOG_SMTP_SERVER=true
-    export JUDO_PLATFORM_RDBMS_DB_DATABASE=${app_name}
-    export JUDO_PLATFORM_RDBMS_DB_USER=${app_name}
-    export JUDO_PLATFORM_RDBMS_DB_PASSWORD=${app_name}
-    export JUDO_PLATFORM_FILESTORE=rdbms
+    export JUDO_PLATFORM_RDBMS_DB_DATABASE=${schema_name}
+    export JUDO_PLATFORM_RDBMS_DB_USER=${schema_name}
+    export JUDO_PLATFORM_RDBMS_DB_PASSWORD=${schema_name}
     export JUDO_PLATFORM_KEYCLOAK_AUTH_SERVER_URL=http://localhost:${KEYCLOAK_PORT}/auth
     if [ $watchBundles -eq 0 ]; then
         export JUDO_PLATFORM_BUNDLE_WATCHER=false
     fi
     local VERSION_NUMBER=$(mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout)
 
+    if [ -f ${MODEL_DIR}/judo-karaf.env ]; then
+        source ${MODEL_DIR}/judo-karaf.env
+        local variables_export=$(cut -d= -f1 ${MODEL_DIR}/judo-karaf.env)
+        export ${variables_export}
+    fi
+
     rm -rf $KARAF_DIR && \
     mkdir $KARAF_DIR && \
     cd $KARAF_DIR && \
-    tar xvvzf $APP_DIR/karaf-offline/target/${app_name}-application-karaf-offline-${VERSION_NUMBER}.tar.gz && \
+    tar xzf $APP_DIR/karaf-offline/target/${app_name}-application-karaf-offline-${VERSION_NUMBER}.tar.gz && \
     mv $KARAF_DIR/${app_name}-application-karaf-offline-${VERSION_NUMBER}/* $KARAF_DIR/ || exit
 
     export EXTRA_JAVA_OPTS="-Xms1024m -Xmx1024m -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8"
@@ -484,11 +635,47 @@ start_karaf () {
     (nohup $KARAF_DIR/bin/karaf debug run clean > ${KARAF_DIR}/console.out &) || exit
 }
 
+append () {
+    local orig=$1
+    local added=$2
+    if [[ -z "${orig:-}" ]]; then
+        echo "${added}";
+    else
+        echo "${orig},${added}";
+    fi
+}
+
+calculate_modules () {
+    local model=$1
+    local sdk=$2
+    local app=$3
+    local fronted=$4
+    local interceptors=$5
+
+    local modulenames=""
+    if [ ${model} -eq 1 ]; then
+       modulenames=$(append "${modulenames}" "model");
+    fi
+
+    if [ ${sdk} -eq 1 ]; then
+       modulenames=$(append "${modulenames}" "sdk,internal");
+    fi
+
+    if [ ${app} -eq 1 ]; then
+       modulenames=$(append "${modulenames}" "app");
+    fi
+    if [ ${interceptors} -eq 1 ]; then
+       modulenames=$(append "${modulenames}" "interceptors");
+    fi
+    echo "${modulenames}";
+}
+
 install_bundles () {
-    local modulenames=$(find ${APP_DIR}/frontend-react/${path_name}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
-    modulenames="${modulenames},model,sdk,internal,app"
+    local frontend_modulenames=$(find ${APP_DIR}/frontend-react/${path_name}* -type f -name pom.xml | xargs -0 -I % dirname "%" | xargs -0 -I % realpath --relative-to=${APP_DIR} "%" | sed 's/\n/,/g')
+    local modulenames=$(calculate_modules 1 1 1 1 1)
+    modulenames=$(append "${modulenames}" "${frontend_modulenames}")
     echo "Module names: $modulenames"
-    mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames}
+    mvnd build-helper:attach-artifact@attach-artifacts bundle:bundle install:install -f ${APP_DIR} -DskipModels=true -pl ${modulenames} ${mavenVersionArg}
 }
 
 # Args:
@@ -583,7 +770,8 @@ Access in PROD mode:
 
     create_docker_network ${app_name}
     create_docker_volume ${app_name}_certs
-    create_docker_volume ${app_name}_db
+    create_docker_volume ${app_name}_postgresql_db
+    create_docker_volume ${app_name}_postgresql_data
     create_docker_volume ${app_name}_filestore
     load_application_image
     docker compose -f ${APP_DIR}/docker/${compose_env}/docker-compose.yml up || exit
@@ -593,12 +781,13 @@ Access in PROD mode:
 # 1 - compsose env
 stop_compose () {
     local compose_env=$1
+    export EXTERNAL_IP_DASH=$(get_dashed_ip)
     docker compose -f ${APP_DIR}/docker/${compose_env}/docker-compose.yml down --volumes || exit
 }
 
 # Args:
 get_compose_envs () {
-    for compose_name in $(find ./docker -type f -name 'docker-compose.yml' | sed -r 's|/[^/]+$||' | sed 's/.*\///')
+    for compose_name in $(find ${APP_DIR}/docker -type f -name 'docker-compose.yml' | sed -r 's|/[^/]+$||' | sed 's/.*\///')
     do
         echo "$compose_name"
         # or do whatever with individual element of the array
@@ -616,16 +805,19 @@ load_application_image () {
 
 schema_upgrade () {
     if [ $postgres -eq 1 ]; then
-        start_postgres postgres-${app_name} $POSTGRES_PORT
+        start_postgres postgres-${schema_name} $POSTGRES_PORT
         wait_for_port 127.0.0.1 ${POSTGRES_PORT:-5432} 30
         upgrade_postgresql_schema
     fi
 }
 
 build () {
-    echo "Building version ${FULL_VERSION_NUMBER}"
+    echo "Building version ${versionNumber}"
     local goal="install"
-    local args="-Dsmartbuilder.profiling=true"
+    local args="$extraMavenArgs $mavenVersionArg -Dsmartbuilder.profiling=true"
+    if [ $ignoreBuildChecksum -eq 1 ]; then
+        args="$args -DvalidateChecksum=false"
+    fi
     if [ $reckless -eq 1 ]; then
         if [ $karaf -eq 0 ]; then
            echo "Reckless mode can be used with local karaf only"
@@ -634,39 +826,61 @@ build () {
            start_local_env
         fi
         goal="package"
-        args="$args -Dprofile -Dmaven.test.skip=true -Dquick -DdialectList=$dbtype -DvalidateModels=false -DvalidateChecksum=false -DskipSchemaDocker -DskipSchemaCli -DuseCache=true -DskipKarafFeature=true"
+        args="$args -Dprofile -Dmaven.test.skip=true \
+        	-DdialectList=$dbtype \
+        	-DvalidateChecksum=false \
+        	-DskipSchemaDocker=true \
+        	-DskipSchemaCli=true \
+        	-DskipKarafFeature=true"
+    else
+        mvnd --purge --stop
+        if [ $buildKaraf -eq 1 ]; then
+            if [ $karaf -eq 1 ]; then
+                stop_karaf $KARAF_PORT $KARAF_DIR
+                rm -rf $KARAF_DIR
+            fi
+        fi
     fi
-    if [ $skipBackend -eq 1 -a $skipFrontend -eq 0 ]; then
-        [ $skipReact -eq 1 ] || mvnd install -f ${APP_DIR}/frontend-react || exit
-    elif [ $skipBackend -eq 0 -a $buildAppModule -eq 1 ]; then
-        mvnd install -f ${APP_DIR}/app || exit
-    elif [ $skipBackend -eq 0 ]; then
+    if [ $quickMode -eq 1 ]; then
+        args="$args -Dfrontend-build-type=quick \
+        	-DvalidateModels=false \
+        	-DuseCache=true \
+        	-DskipPrepareNodeJS"
+    fi
+    if [ $buildBackend -eq 0 -a $buildFrontend -eq 1 ]; then
+        mvnd install -f ${APP_DIR}/frontend-react $args $mavenVersionArg || exit
+    elif [ $buildBackend -eq 1 -a $buildAppModule -eq 1 ]; then
+        local modulenames=$(calculate_modules 0 0 1 0  1)
+        echo "Module names: $modulenames"
+        mvnd install -f ${APP_DIR} -pl ${modulenames} $args $mavenVersionArg|| exit
+    elif [ $buildBackend -eq 1 ]; then
 #        if [ $buildParallel -eq 1 ]; then
 #            args="$args -T 1C";
 #        fi
-        if [ $skipFrontend -eq 1 ]; then
-            args="$args -DskipFrontendReact"
+        if [ $buildFrontend -eq 0 ]; then
+            args="$args -DskipReact -DskipFrontendModel -DskipPrepareNodeJS"
         fi
-        if [ $skipReact -eq 1 ]; then
-            args="$args -DskipFrontendReact"
+        if [ $buildModel -eq 0 ]; then
+            args="$args -DskipModels"
         fi
-
-        if [ $skipBackendModels -eq 1 ]; then
-            args="$args -DskipBackendModels"
-        fi
-        if [ $karafBuilding -eq 0 ]; then
+        if [ $buildKaraf -eq 0 ]; then
             args="$args -DskipKaraf"
         fi
         if [ $dockerBuilding -eq 0 ]; then
-            args="$args -DskipDocker -DkarafOfflineZip=false"
+            args="$args -DskipDocker -DskipSchemaDocker -DkarafOfflineZip=false"
         fi
         if [ $schemaBuilding -eq 0 ]; then
             args="$args -DskipSchema"
         fi
+        if [ $schemaCliBuilding -eq 0 ]; then
+            args="$args -DskipSchemaCli"
+        fi
         mvnd $goal -f $MODEL_DIR $args || exit
     fi
     if [ $reckless -eq 1 ]; then
-        schema_upgrade
+	    if [ $schemaUpgrade -eq 1 ]; then
+	        schema_upgrade
+	    fi
         install_bundles
         (tail -n 20 -f ${KARAF_DIR}/console.out ; echo "Karaf and other services still running\n")
     fi
@@ -674,11 +888,11 @@ build () {
 
 start_local_env () {
     if [ $postgres -eq 1 ]; then
-        start_postgres postgres-${app_name} $POSTGRES_PORT
+        start_postgres postgres-${schema_name} $POSTGRES_PORT
     fi
 
-    if [ $skipKeycloak -eq 0 ]; then
-        start_keycloak keycloak-${app_name} $KEYCLOAK_PORT
+    if [ $startKeycloak -eq 1 ]; then
+        start_keycloak keycloak-${keycloak_name} $KEYCLOAK_PORT
     fi
 
     if [ $hsqldb -eq 1 ]; then
@@ -725,35 +939,35 @@ build=0
 clean=0
 prune=0
 schemaBuilding=1
+schemaCliBuilding=0
 update=0
-prune_frontend=0
+pruneFrontend=0
 generate=0
-karafBuilding=1
-skipModel=0
-skipBackend=0
-prune_confirmation=1
-skipFrontend=0
-skipReact=0
-skipKeycloak=0
+generateRoot=0
+buildKaraf=1
+buildModel=1
+buildBackend=1
+pruneConfirmation=1
+buildFrontend=1
+startKeycloak=1
 buildAppModule=0
-skipBackendModels=0
 import=0
 dumpName=''
 schemaUpgrade=0
 watchBundles=1
 buildParallel=0
-resetChecksum=0
+ignoreUpdateChecksum=0
+ignoreGenerateChecksum=0
+ignoreBuildChecksum=0
+quickMode=0
+dockerBuilding=0
 
-FULL_VERSION_NUMBER="SNAPSHOT"
+versionNumber="SNAPSHOT"
+extraMavenArgs=""
+
 original_args=( "$@" )
 
-while [ $# -ne 0 ]; do
-    case "$1" in
-        env)  shift 1; profile=$1; shift 1;;
-        *)    shift 1;
-        ;;
-    esac
-done
+parse_env_args
 
 if [ ! -z $profile ]; then
   if [ ! -f "${MODEL_DIR}/${profile}.properties" ]; then
@@ -764,64 +978,27 @@ if [ ! -z $profile ]; then
 elif [ -f "${MODEL_DIR}/judo.properties" ]; then
 	source ${MODEL_DIR}/judo.properties
 fi
-APP_NAME=${model-name}
+
+if [ -z ${schema_name} ]; then
+    schema_name=$app_name
+fi
+
+if [ -z ${keycloak_name} ]; then
+    keycloak_name=$app_name
+fi
 
 MODEL_DIR=$(cd "$(dirname "${model_dir:-$MODEL_DIR}")"; pwd)/$(basename "${model_dir:-$MODEL_DIR}")
+SCHEMA_DIR=$(cd "$(dirname "${schema_dir:-$MODEL_DIR}")"; pwd)/$(basename "${schema_dir:-$MODEL_DIR}")
 
-set -- "${original_args[@]}"
-while [ $# -ne 0 ]; do
-    case "$1" in
-        env)                            shift 2;;
-        clean)                          clean=1; shift 1;;
-        reset-checksum)                 resetChecksum=1; shift 1;;
+echo "Schema name: ${schema_name} Directory: ${SCHEMA_DIR}"
 
-        prune)
-            git_available=$( git rev-parse --is-inside-work-tree )
-            if [ $? -eq 0 -a "$git_available" == "true" ] ; then
-                prune=1
-            else
-                echo "Prune only supported in git repositories"
-                exit 22
-            fi
-            shift 1
-        ;;
-        -f)                             prune_frontend=1; shift 1;;
-        -y)                             prune_confirmation=0; shift 1;;
+parse_command_args
 
-        update)                         update=1; shift 1;;
-        generate)                       generate=1; shift 1;;
-        dump)                           dump=1; shift 1;;
-        import)                         import=1; shift 1;;
-        -dn | --dump-name)              shift 1; export dumpName=$1; shift 1;;
-        schema-upgrade)                 schemaUpgrade=1; shift 1;;
-        build)                          build=1; shift 1;;
-        -p | --build-parallel)          buildParallel=1; shift 1;;
-        -a | --build-app-module)        buildAppModule=1; skipModel=1; shift 1;;
-        -M | --skip-model)              skipModel=1; shift 1;;
-        -B | --skip-backend)            skipBackend=1; shift 1;;
-        -F | --skip-frontend)           skipFrontend=1; shift 1;;
-        -FR | --skip-react)             skipReact=1; shift 1;;
-        -BM | --skip-backendmodels)     skipBackendModels=1; shift 1;;
-        -KA | --skip-karaf)             karafBuilding=0; shift 1;;
-        -d | --docker)                  dockerBuilding=1; shift 1;;
-        -S | --skip-schema)             schemaBuilding=0; shift 1;;
-        -v | --version)                 shift 1; export FULL_VERSION_NUMBER=$1; shift 1;;
-        reckless)                       build=1; reckless=1; karafBuilding=0; shift 1;;
-        start)                          start=1; shift 1;;
-        -w  | --skip-watch-bundles)     watchBundles=0; shift 1;;
-        -K  | --skip-keycloak)          skipKeycloak=1; shift 1;;
-
-        -o | --options)                 shift 1; while read -d, -r pair; do IFS='=' read -r key val <<<"$pair"; eval "$key"="$val"; done <<<"$1,"; shift 1;;
-        stop)                           stop=1; shift 1;;
-        status)                         status=1; shift 1;;
-
-        *)
-            echo "Unrecognized option: $1"
-            print-help
-            exit 22
-        ;;
-    esac
-done
+if [ "$versionNumber" = "SNAPSHOT" ]; then
+	mavenVersionArg=""
+else
+	mavenVersionArg="-Drevision=$versionNumber"
+fi
 
 case $runtime in
 
@@ -834,7 +1011,6 @@ case $runtime in
 
   karaf | *)
 	karaf=1
-    dockerBuilding=0
     KARAF_PORT=${karaf_port:-8181}
     POSTGRES_PORT=${postgres_port:-5432}
     KEYCLOAK_PORT=${keycloak_port:-8080}
@@ -854,40 +1030,54 @@ case $dbtype in
     ;;
 esac
 
+if [ $stop -eq 1 ]; then
+    if [ $karaf -eq 1 ]; then
+        stop_karaf $KARAF_PORT $KARAF_DIR
+        if [ $postgres -eq 1 ]; then
+            stop_docker_instance postgres-${schema_name}
+        fi
+        stop_docker_instance keycloak-${keycloak_name}
+    fi
+fi
+
 if [ $dump -eq 1 ]; then
-    start_postgres postgres-${app_name} ${POSTGRES_PORT:-5432}
+    start_postgres postgres-${schema_name} ${POSTGRES_PORT:-5432}
     wait_for_port 127.0.0.1 ${POSTGRES_PORT:-5432} 30
-    dump_postgresql postgres-${app_name}
-    stop_docker_instance postgres-${app_name}
+    dump_postgresql postgres-${schema_name}
+    stop_docker_instance postgres-${schema_name}
 fi
 
 if [ $import -eq 1 ]; then
-    remove_docker_instance postgres-${app_name}
-    remove_docker_volume ${app_name}_db
-    start_postgres postgres-${app_name} ${POSTGRES_PORT:-5432}
+    remove_docker_instance postgres-${schema_name}
+    remove_docker_volume ${schema_name}_postgresql_db
+    remove_docker_volume ${schema_name}_postgresql_data
+    start_postgres postgres-${schema_name} ${POSTGRES_PORT:-5432}
     wait_for_port 127.0.0.1 ${POSTGRES_PORT:-5432} 30
-    import_postgres postgres-${app_name}
-    stop_docker_instance postgres-${app_name}
-    start_postgres postgres-${app_name} ${POSTGRES_PORT:-5432}
-fi
-
-if [ $resetChecksum -eq 1 ]; then
-    reset_checksum
+    if [ -z $dumpName ]; then
+        import_postgres postgres-${schema_name}
+    else
+        import_postgres postgres-${schema_name} $dumpName
+    fi
+    stop_docker_instance postgres-${schema_name}
+    start_postgres postgres-${schema_name} ${POSTGRES_PORT:-5432}
 fi
 
 if [ $prune -eq 1 ]; then
     prune_application
-elif [ $clean -eq 1 ]; then
+fi
+
+if [ $clean -eq 1 ]; then
     for compose_name in $(get_compose_envs)
     do
         stop_compose $compose_name
     done
 
-    remove_docker_instance postgres-${app_name}
-    remove_docker_instance keycloak-${app_name}
+    remove_docker_instance postgres-${schema_name}
+    remove_docker_instance keycloak-${keycloak_name}
     remove_docker_network ${app_name}
     remove_docker_volume ${app_name}_certs
-    remove_docker_volume ${app_name}_db
+    remove_docker_volume ${schema_name}_postgresql_db
+    remove_docker_volume ${schema_name}_postgresql_data
     remove_docker_volume ${app_name}_filestore
     if [ $karaf -eq 1 ]; then
         stop_karaf $KARAF_PORT $KARAF_DIR
@@ -899,11 +1089,30 @@ if [ $update -eq 1 ]; then
     sdk selfupdate
     sdk env install
     sdk env
-    mvnd clean install -DgenerateRoot -DskipApplicationBuild -DupdateJudoVersions=true -f ${MODEL_DIR} -U || exit
+    mvnd --purge --stop
+    mvnargs="-DgenerateRoot -DskipApplicationBuild -DupdateJudoVersions=true"
+    if [ $ignoreUpdateChecksum -eq 1 ]; then
+        mvnargs="$mvnargs -DvalidateChecksum=false"
+    fi
+    mvnd clean compile $mvnargs -f ${MODEL_DIR} -U ; exit $?
+fi
+
+if [ $generateRoot -eq 1 ]; then
+    mvnd --purge --stop
+    mvnargs="-DgenerateRoot -DskipApplicationBuild"
+    if [ $ignoreGenerateChecksum -eq 1 ]; then
+        mvnargs="$mvnargs -DvalidateChecksum=false"
+    fi
+    mvnd clean compile $mvnargs -f ${MODEL_DIR} -U ; exit $?
 fi
 
 if [ $generate -eq 1 ]; then
-    mvnd clean install -DgenerateApplication -DskipApplicationBuild -f ${MODEL_DIR} || exit
+    mvnd --purge --stop
+    mvnargs="-DgenerateApplication -DskipApplicationBuild"
+    if [ $ignoreGenerateChecksum -eq 1 ]; then
+        mvnargs="$mvnargs -DvalidateChecksum=false"
+    fi
+    mvnd clean compile $mvnargs -f ${MODEL_DIR} || exit
 fi
 
 if [ $build -eq 1 ]; then
@@ -923,32 +1132,40 @@ if [ $status -eq 1 ]; then
             echo "Karaf is not running"
         fi
         if [ $postgres -eq 1 ]; then
-            docker_instance_running postgres-${app_name}
+            docker_instance_running postgres-${schema_name}
             if [ $? -eq 1 ]; then
                 echo "Postgressql is running"
             else
                 echo "Postgressql is not running"
-                docker_instance_exists postgres-${app_name}
+                docker_instance_exists postgres-${schema_name}
                 if [ $? -eq 1 ]; then
                     echo "Postgressql image exists"
                 else
                     echo "Postgressql image does not exists"
 
-                    docker_volume_exists ${app_name}_db
+                    docker_volume_exists ${app_name}_postgresql_db
                     if [ $? -eq 1 ]; then
-                        echo "Postgressql volume exists"
+                        echo "Postgressql db volume exists"
                     else
-                        echo "Postgressql volume does not exists"
+                        echo "Postgressql db volume does not exists"
                     fi
+
+                    docker_volume_exists ${app_name}_postgresql_data
+                    if [ $? -eq 1 ]; then
+                        echo "Postgressql data volume exists"
+                    else
+                        echo "Postgressql data volume does not exists"
+                    fi
+
                 fi
             fi
         fi
-        docker_instance_running keycloak-${app_name}
+        docker_instance_running keycloak-${keycloak_name}
         if [ $? -eq 1 ]; then
             echo "Keycloak is running"
         else
             echo "Keycloak is not running"
-            docker_instance_exists keycloak-${app_name}
+            docker_instance_exists keycloak-${keycloak_name}
             if [ $? -eq 1 ]; then
                 echo "Keycloak image exists"
             else
@@ -958,19 +1175,10 @@ if [ $status -eq 1 ]; then
     fi
 fi
 
-if [ $stop -eq 1 ]; then
-    if [ $karaf -eq 1 ]; then
-        stop_karaf $KARAF_PORT $KARAF_DIR
-        if [ $postgres -eq 1 ]; then
-            stop_docker_instance postgres-${app_name}
-        fi
-        stop_docker_instance keycloak-${app_name}
-    fi
-fi
 if [ $start -eq 1 ]; then
     if [ $karaf -eq 1 ]; then
         start_local_env
-        (tail -n 20 -f ${KARAF_DIR}/console.out ; echo "Karaf and other services still running\n")
+        (tail -n 200 -f ${KARAF_DIR}/console.out ; echo "Karaf and other services still running\n")
     elif [ $compose -eq 1 ]; then
         dashed_domain=$(get_dashed_ip)
         start_compose $compose_env

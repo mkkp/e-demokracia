@@ -2,19 +2,12 @@
  * When navigate to selected subtypes view page on userOwedSelected
  */
 
-import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
+import { useMemo } from 'react';
 
 import { useJudoNavigation } from '~/components';
-import { processQueryCustomizer } from '~/utilities';
 import { useDialog } from '~/components/dialog';
-
-import {
-  SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
-  ServiceVoteDefinitionVoteDefinition_TableActionsHook,
-} from '~/pages/Service/User/AdminVoteDefinitions/AccessTablePage';
-
-import type { ServiceVoteDefinitionStored } from '~/services/data-api';
+import { processQueryCustomizer } from '~/utilities';
 
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserOwnedRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedRatingVoteDefinitionsImpl';
@@ -23,12 +16,17 @@ import { UserServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl } from '~/servic
 import { UserServiceForUserOwnedYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForUserOwnedYesNoVoteDefinitionsImpl';
 
 import {
+  SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
+  ServiceVoteDefinitionVoteDefinition_TableActionsHook,
+} from '~/pages/Service/User/AdminVoteDefinitions/AccessTablePage/customization';
+import {
   routeToServiceUserAdminVoteDefinitionsAccessViewPage,
   routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage,
   routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage,
   routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage,
   routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage,
 } from '~/routes';
+import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 
 export function registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context: BundleContext) {
   context.registerService<ServiceVoteDefinitionVoteDefinition_TableActionsHook>(
@@ -72,31 +70,39 @@ const customServiceVoteDefinitionVoteDefinition_TableActionsHook: ServiceVoteDef
         if (entityType === 'edemokracia.YesNoVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedYesNoVoteDefinitionsImpl.list(
+            undefined,
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
-          navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+          navigate(routeToServiceUserUserOwnedYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
         } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedYesNoAbstainVoteDefinitionsImpl.list(
+            undefined,
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
-          navigate(routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+          navigate(
+            routeToServiceUserUserOwnedYesNoAbstainVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier),
+          );
         } else if (entityType === 'edemokracia.RatingVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedRatingVoteDefinitionsImpl.list(
+            undefined,
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
-          navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+          navigate(routeToServiceUserUserOwnedRatingVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
         } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
           // Retrieve signedIdentifier from access
           const res = await userServiceForUserOwnedSelectAnswerVoteDefinitionsImpl.list(
+            undefined,
             processQueryCustomizer(idAccessFilterCustomizer),
           );
           // Open view page in access
-          navigate(routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage(res[0].__signedIdentifier));
+          navigate(
+            routeToServiceUserUserOwnedSelectAnswerVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier),
+          );
         } else {
           navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(row.__signedIdentifier));
         }

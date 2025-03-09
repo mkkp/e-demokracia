@@ -8,12 +8,22 @@
 
 import { Density } from './types';
 
+// export const density: Density = {
+//   spacingMultiplier: 0.5,
+//   fontSize: 0.9,
+//   buttonSize: 'small',
+//   inputBaseSize: 'medium',
+//   borderRadius: 20,
+//   dataGridDensity: 'standard',
+//   isListDense: false,
+// };
+
 export const density: Density = {
   spacingMultiplier: 0.5,
-  fontSize: 0.9,
+  fontSize: 1,
   buttonSize: 'small',
   inputBaseSize: 'medium',
-  borderRadius: 20,
+  borderRadius: 5,
   dataGridDensity: 'standard',
   isListDense: false,
 };

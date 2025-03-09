@@ -20,6 +20,78 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Provide-Capability>
+                            osgi.service;effective:=active;objectClass=javax.ws.rs.ext.ExceptionMapper,
+                            osgi.service;effective:=active;objectClass=org.apache.cxf.interceptor.Interceptor
+                        </Provide-Capability>
+                        <Include-Resource>api-documentation-swagger=${project.build.directory}/api-documentation-swagger</Include-Resource>
+                        <Openapi-Content>api-documentation-swagger</Openapi-Content>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.44.3</version>
+                <configuration>
+                    <formats>
+                        <!-- you can define as many formats as you want, each is independent -->
+                        <format>
+                            <!-- define the files to apply to -->
+                            <includes>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                            </includes>
+                            <!-- define the steps to apply to those files -->
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <!-- define a language-specific format -->
+                    <java>
+                        <!-- no need to specify files, inferred automatically, but you can if you want -->
+
+                        <!-- apply a specific flavor of google-java-format and reflow long strings -->
+                        <!--
+                        <googleJavaFormat>
+                            <version>1.8</version>
+                            <style>AOSP</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <formatJavadoc>false</formatJavadoc>
+                        </googleJavaFormat>
+                        -->
+                        <palantirJavaFormat>
+                            <version>2.39.0</version>                     <!-- optional -->
+                            <style>PALANTIR</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                            <formatJavadoc>false</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                        </palantirJavaFormat>
+
+                        <!-- make sure every file has the following copyright header.
+                          optionally, Spotless can set copyright years by digging
+                          through git history (see "license" section below) -->
+                        <licenseHeader>
+                            <content>/* (C)$YEAR */</content>  <!-- or <file>${project.basedir}/license-header</file> -->
+                        </licenseHeader>
+                    </java>
+                    <removeUnusedImports>
+                        <engine>google-java-format</engine>    <!-- optional. Defaults to `google-java-format`. Can be switched to `cleanthat-javaparser-unnecessaryimport` (e.g. to process JDK17 source files with a JDK8+ Runtime) -->
+                    </removeUnusedImports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -27,29 +99,6 @@
                 <artifactId>judo-psm-generator-maven-plugin</artifactId>
                 <version>${judo-meta-psm-version}</version>
 
-                <configuration>
-                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
-                    <destination>${basedir}/target/generated-sources</destination>
-
-                    <uris>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-common:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-api:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-impl:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-osgi:${judo-psm-generator-jaxrs-version}</uri>
-                    </uris>
-                    <type>psm-jaxrs</type>
-                    <contextAccessor>hu.blackbelt.judo.psm.generator.jaxrs.api.StoredVariableHelper</contextAccessor>
-                    <scanPackages>
-                        hu.blackbelt.judo.generator.commons,
-                        hu.blackbelt.judo.psm.generator.jaxrs
-                    </scanPackages>
-                    <templateParameters>
-                        <debugPrint>true</debugPrint>
-                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
-                        <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
-                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
-                    </templateParameters>
-                </configuration>
                 <executions>
                     <execution>
                         <id>execute-psm-rest-generation</id>
@@ -57,7 +106,72 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+
+                            <uris>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-common:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-api:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-impl:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-osgi:${judo-psm-generator-jaxrs-version}</uri>
+                            </uris>
+                            <type>psm-jaxrs</type>
+                            <contextAccessor>hu.blackbelt.judo.psm.generator.jaxrs.api.StoredVariableHelper</contextAccessor>
+                            <scanPackages>
+                                hu.blackbelt.judo.generator.commons,
+                                hu.blackbelt.judo.psm.generator.jaxrs
+                            </scanPackages>
+                            <templateParameters>
+                                <debugPrint>true</debugPrint>
+                                <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                                <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
+                                <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                                <generateOpenApiAnnotations>true</generateOpenApiAnnotations>
+                                <baseUrl>http://localhost:8181</baseUrl>
+                                <authenticationUrl>http://localhost:8080/auth</authenticationUrl>
+                                <specificationVersionNumber>1.0.0</specificationVersionNumber>
+                            </templateParameters>
+                            <validateChecksum>${validateChecksum}</validateChecksum>
+                        </configuration>
                     </execution>
+
+                    <execution>
+                        <id>synchronize-psm-rest-gitignore</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>synchronizeGitignore</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>reset-psm-rest-checksums</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>resetChecksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-psm-rest-checksum</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>checksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
@@ -76,6 +190,28 @@
                                 <source>${basedir}/target/generated-sources</source>
                             </sources>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-maven-plugin</artifactId>
+                <version>2.2.19</version>
+                <executions>
+                    <execution>
+                        <configuration>
+                            <outputFileName>openapi</outputFileName>
+                            <outputPath>${project.build.directory}/api-documentation-swagger</outputPath>
+                            <outputFormat>JSONANDYAML</outputFormat>
+                            <resourcePackages>
+                                <package>${project.groupId}.edemokracia</package>
+                            </resourcePackages>
+                            <prettyPrint>TRUE</prettyPrint>
+                        </configuration>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>resolve</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
@@ -135,6 +271,12 @@
             <groupId>hu.blackbelt.judo.generator</groupId>
             <artifactId>judo-psm-generator-jaxrs-osgi</artifactId>
             <version>${judo-psm-generator-jaxrs-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>2.2.19</version>
         </dependency>
 
     </dependencies>

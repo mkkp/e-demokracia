@@ -38,28 +38,127 @@
                 <groupId>hu.blackbelt.judo.meta</groupId>
                 <artifactId>judo-psm-generator-maven-plugin</artifactId>
                 <version>${judo-meta-psm-version}</version>
-                <configuration>
-                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
-                    <destination>${basedir}/src/main/java</destination>
-                    <uris>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-empty-custom-operation-osgi:${judo-psm-generator-sdk-core-version}</uri>
-                    </uris>
-                    <type>psm-sdk-core</type>
-                    <templateParameters>
-                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
-                        <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
-                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
-                        <emptyCustomOperationOsgiPrefix>${project.groupId}.edemokracia.custom</emptyCustomOperationOsgiPrefix>
-                    </templateParameters>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>execute-psm-sdk-generation</id>
+                        <id>execute-psm-app-generation</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                            <uris>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-empty-custom-operation-osgi:${judo-psm-generator-sdk-core-version}</uri>
+                            </uris>
+                            <type>psm-sdk-core</type>
+                            <templateParameters>
+                                <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                                <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                                <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                                <emptyCustomOperationOsgiPrefix>${project.groupId}.edemokracia.custom</emptyCustomOperationOsgiPrefix>
+                            </templateParameters>
+                            <validateChecksum>${validateChecksum}</validateChecksum>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>synchronize-psm-app-gitignore</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>synchronizeGitignore</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>reset-psm-app-checksums</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>resetChecksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-psm-app-checksum</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>checksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.44.3</version>
+                <configuration>
+                    <formats>
+                        <!-- you can define as many formats as you want, each is independent -->
+                        <format>
+                            <!-- define the files to apply to -->
+                            <includes>
+                                <include>.gitattributes</include>
+                                <include>.gitignore</include>
+                            </includes>
+                            <!-- define the steps to apply to those files -->
+                            <trimTrailingWhitespace/>
+                            <endWithNewline/>
+                            <indent>
+                                <spaces>true</spaces>
+                                <spacesPerTab>4</spacesPerTab>
+                            </indent>
+                        </format>
+                    </formats>
+                    <!-- define a language-specific format -->
+                    <java>
+                        <!-- no need to specify files, inferred automatically, but you can if you want -->
+
+                        <!-- apply a specific flavor of google-java-format and reflow long strings -->
+                        <!--
+                        <googleJavaFormat>
+                            <version>1.8</version>
+                            <style>AOSP</style>
+                            <reflowLongStrings>true</reflowLongStrings>
+                            <formatJavadoc>false</formatJavadoc>
+                        </googleJavaFormat>
+                        -->
+                        <palantirJavaFormat>
+                            <version>2.39.0</version>                     <!-- optional -->
+                            <style>PALANTIR</style>                       <!-- or AOSP/GOOGLE (optional) -->
+                            <formatJavadoc>false</formatJavadoc>          <!-- defaults to false (optional, requires at least Palantir 2.39.0) -->
+                        </palantirJavaFormat>
+
+                        <!-- make sure every file has the following copyright header.
+                          optionally, Spotless can set copyright years by digging
+                          through git history (see "license" section below) -->
+                        <licenseHeader>
+                            <content>/* (C)$YEAR */</content>  <!-- or <file>${project.basedir}/license-header</file> -->
+                        </licenseHeader>
+                    </java>
+                    <removeUnusedImports>
+                        <engine>google-java-format</engine>    <!-- optional. Defaults to `google-java-format`. Can be switched to `cleanthat-javaparser-unnecessaryimport` (e.g. to process JDK17 source files with a JDK8+ Runtime) -->
+                    </removeUnusedImports>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>compile</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -86,7 +185,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.26</version>
+            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
 
@@ -100,12 +199,6 @@
             <groupId>hu.blackbelt.judo</groupId>
             <artifactId>judo-dispatcher-api</artifactId>
             <version>${judo-dispatcher-api-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>hu.blackbelt</groupId>
-            <artifactId>structured-map-proxy</artifactId>
-            <version>${structured-map-proxy-version}</version>
         </dependency>
 
         <dependency>

@@ -3,8 +3,8 @@
  * created issue called with UserIssues 'Create new issue' button.
  */
 
-import { useMemo } from 'react';
 import type { BundleContext } from '@pandino/pandino-api';
+import { useMemo } from 'react';
 
 import { useJudoNavigation } from '~/components';
 import { processQueryCustomizer } from '~/utilities';
@@ -12,10 +12,11 @@ import { processQueryCustomizer } from '~/utilities';
 import {
   SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceCreateIssueInputCreateIssueInput_FormActionsHook,
-} from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
-import { ServiceIssue, ServiceIssueStored } from '~/services/data-api';
-import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+} from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form/customization';
 import { routeToServiceUserUserCreatedIssuesAccessViewPage } from '~/routes';
+import { ServiceIssue, ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
+import { ServiceIssueQueryCustomizer } from '~/services/data-api/rest/ServiceIssueQueryCustomizer';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForUserCreatedIssuesImpl } from '~/services/data-axios/UserServiceForUserCreatedIssuesImpl';
 
 export function registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context: BundleContext) {
@@ -45,16 +46,19 @@ const customServiceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCrea
         const id = (output as any)!.__identifier;
 
         // 2. Retrieve signedIdentifier from access
-        const idAccessFilterCustomizer: any = {
+        const idAccessFilterCustomizer: ServiceIssueQueryCustomizer = {
           _identifier: id,
         };
 
-        const res = await userServiceForUserCreatedIssuesImpl.list(processQueryCustomizer(idAccessFilterCustomizer));
+        const res = await userServiceForUserCreatedIssuesImpl.list(
+          undefined,
+          processQueryCustomizer(idAccessFilterCustomizer),
+        );
 
         await onClose();
 
         // 3. Open view page in access
-        navigate(routeToServiceUserUserCreatedIssuesAccessViewPage(res[0].__signedIdentifier));
+        navigate(routeToServiceUserUserCreatedIssuesAccessViewPage(res.data[0].__signedIdentifier));
       },
     };
   };

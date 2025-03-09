@@ -51,41 +51,8 @@
                                 </configuration>
                             </execution>
 
-                            <execution>
-                                <id>add-jmx-exporter-agent</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>io.prometheus.jmx</groupId>
-                                            <artifactId>jmx_prometheus_javaagent</artifactId>
-                                            <version>0.15.0</version>
-                                            <outputDirectory>target/assembly</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
 
-                            <execution>
-                                <id>add-apm-agent</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>copy</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>co.elastic.apm</groupId>
-                                            <artifactId>elastic-apm-agent</artifactId>
-                                            <version>1.23.0</version>
-                                            <outputDirectory>target/assembly</outputDirectory>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
+
                         </executions>
                     </plugin>
 
@@ -94,22 +61,6 @@
                         <artifactId>maven-resources-plugin</artifactId>
                         <version>3.0.2</version>
                         <executions>
-                            <execution>
-                                <id>copy-jmx-config</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>copy-resources</goal>
-                                </goals>
-                                <configuration>
-                                    <outputDirectory>target/assembly</outputDirectory>
-                                    <resources>
-                                        <resource>
-                                            <directory>${project.basedir}/jmx-exporter</directory>
-                                            <filtering>true</filtering>
-                                        </resource>
-                                    </resources>
-                                </configuration>
-                            </execution>
 
                             <execution>
                                 <id>copy-overrided-files</id>
