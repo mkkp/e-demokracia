@@ -7,8 +7,7 @@ import type { BundleContext } from '@pandino/pandino-api';
 import {
   SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook,
-} from '~/pages/Service/User/UserVoteDefinitions/AccessViewPage';
-
+} from '~/pages/Service/User/UserVoteDefinitions/AccessViewPage/customization';
 import { openVoteDefinitionPage } from './openVoteDefinitionRowFunction';
 
 export function registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context: BundleContext) {

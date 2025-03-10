@@ -1,12 +1,12 @@
-.gitignore,c3e16cb1ed3a02578fea3e9766154c02
+.gitignore,ac8aef8159c84ca3b7bd189758d27006
 README.adoc,68de2f403d2444ee3a752d4ccacc6a65
-app/pom.xml,05058f2dea74ec4f52bcbdb735952dd4
+app/pom.xml,71f0911a9b12e2ba1f41fbdd0d097762
 app/src/main/java/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 app/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 app/src/test/java/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 app/src/test/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 docker/compose-develop/docker-compose.yml,ef6e87e78392d117ad009d5840914d33
-docker/compose-postgresql-https/docker-compose.yml,3702139cd38da96819e841eaf248c946
+docker/compose-postgresql-https/docker-compose.yml,22637d5ca23d60730ec3f7d54d3ada17
 docker/compose-postgresql-https/tls.yml,3e33ab503071f15d06b03da5e179778f
 docker/compose-postgresql-https/traefik.yml,e2486da30d84fc05074097818d2fca6e
 docker/overrided/bin/setenv,9bce3d5543f2207999dd5e0b06d864e5
@@ -14,21 +14,33 @@ docker/pom.xml,772a35b02681adae72ca98447c241976
 docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
+frontend-react/model/.gitignore,710eed4f483e5fca9516675feb6984fe
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,874cb299d089219ef605aead56ba031d
+frontend-react/pom.xml,515b75fc64c629ff2d558164c5db4d99
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
-internal/pom.xml,a954ddcb6ee521bf1616cf02552e9880
-karaf-features/pom.xml,65964f3bbda475c0937f841941ea2851
-karaf-features/src/main/feature/feature.xml,20d7d11bdd8dbc068100bc0b4332a932
-karaf-offline/pom.xml,2f6c99a14e5af7d7f3284ba2a7f8d784
-launcher/Build edemokracia Application without frontend.launch,2ca0a0d87271f846936274c63d068638
-launcher/Build edemokracia Application.launch,06425f6a35aa82b149a92af8ee309827
-launcher/Compile edemokracia Custom Application.launch,589057793117e366005ba03dcbcfe284
-launcher/Run edemokracia Application.launch,c9b310d6660114eb63440620e9fa0173
+interceptors/pom.xml,66afee6d70ef0a58fb1773ce203cd374
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default,862486f63ef3d7cea68a3253d9dceb3f
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogOperationCallInterceptor.java.default,6b0538dd3365a56b5fecd9578c8e5a48
+interceptors/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
+interceptors/src/test/java/gitkeep,68b329da9893e34099c7d8ad5cb9c940
+interceptors/src/test/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
+internal/pom.xml,66848c4ca5e6a235bb214abd9021c4fb
+karaf-features/pom.xml,461339e61d4d63f02852074accc1c6a0
+karaf-features/src/main/feature/feature.xml,1e3eb846f09a118b9553d0af690bafb8
+karaf-offline/pom.xml,a33a958ccb6b6993e814e439201e2025
 model/pom.xml,63585b6fccdfed35f1c1df2f61cb2c58
-pom.xml,d93848880a7550b84005499a5c377beb
-rest/pom.xml,a9d58d72376622f2864cc2429156df40
+pom.xml,726529f8654152f6da706e8c070afde1
+rest/pom.xml,c502d50dbca9099410d5ec0a11d92810
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940
-schema/pom.xml,53bdda5b7540a0f8e0d7966244cef8a7
-sdk/pom.xml,acfa3d4fcbcea63f0aa08871903f635c
+schema/pom.xml,3874a28385f80c7eecdc5a7e31396b32
+sdk/pom.xml,b50ad4da7b9a508826ce5015143dc1a3
+web-root/pom.xml,1916a8c6811631d904888af1922ab18c
+web-root/src/main/resources/bootstrap-table-filter-control.min.js,eb2e4ab82986d70b61b9f314be31c74a
+web-root/src/main/resources/bootstrap-table.min.css,ff605b44ec14bb9ded6d85cc876160f7
+web-root/src/main/resources/bootstrap-table.min.js,83111dec7ffa4260b032908f1cf14766
+web-root/src/main/resources/bootstrap.min.css,e95f40369127d98629cebd2e5c5ff117
+web-root/src/main/resources/bootstrap.min.js,69959eb27a303e141e4ca80e144a93d5
+web-root/src/main/resources/index.html,2bf99fc908feee1be3fa0a9d79b220e8
+web-root/src/main/resources/jquery-3.2.1.slim.min.js,5f48fc77cac90c4778fa24ec9c57f37d
+web-root/src/main/resources/popper.min.js,70d3fda195602fe8b75e0097eed74dde

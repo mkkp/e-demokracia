@@ -7,8 +7,7 @@ import type { BundleContext } from '@pandino/pandino-api';
 import {
   SERVICE_USER_DASHBOARD_HOME_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceDashboardDashboard_View_EditActionsHook,
-} from '~/pages/Service/User/DashboardHome/AccessViewPage';
-
+} from '~/pages/Service/User/DashboardHome/AccessViewPage/customization';
 import { openIssuePage } from './openIssueRowFunction';
 import { openVoteDefinitionPage } from './openVoteDefinitionRowFunction';
 import { openVoteEntryPage } from './openVoteEntryRowFunction';

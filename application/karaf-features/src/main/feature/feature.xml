@@ -12,11 +12,11 @@
     <feature name="edemokracia-application-judo-platform-prototype" version="${project.version}" description="JUDO Platform - edemokracia-application" install="false">
         <feature>judo-platform-default-sdk</feature>
 
-        <bundle>mvn:org.apache.tika/tika-core/1.19.1</bundle>
-        <bundle>mvn:org.apache.tika/tika-parsers/1.19.1</bundle>
+        <bundle>mvn:org.apache.tika/tika-core/1.28.5</bundle>
+        <bundle>mvn:org.apache.tika/tika-parsers/1.28.5</bundle>
         <bundle>mvn:org.apache.pdfbox/pdfbox/2.0.13</bundle>
         <bundle>mvn:org.apache.pdfbox/fontbox/2.0.13</bundle>
-        <bundle>mvn:org.apache.pdfbox/jempbox/1.8.16</bundle>
+        <bundle>mvn:org.apache.pdfbox/jempbox/1.8.17</bundle>
 
         <bundle>mvn:org.json/json/20170516</bundle>
         <bundle>mvn:org.apache.sling/org.apache.sling.commons.johnzon/1.1.2</bundle>
@@ -33,6 +33,8 @@
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-sdk/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-internal/${project.version}</bundle>
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-app/${project.version}</bundle>
+        <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-interceptors/${project.version}</bundle>
+        <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-web-root/${project.version}</bundle>
         
         <bundle>mvn:party.mkkp.edemokracia/edemokracia-application-frontend-react-edemokracia__service__user/${project.version}</bundle>
         

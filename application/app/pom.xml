@@ -38,29 +38,67 @@
                 <groupId>hu.blackbelt.judo.meta</groupId>
                 <artifactId>judo-psm-generator-maven-plugin</artifactId>
                 <version>${judo-meta-psm-version}</version>
-                <configuration>
-                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
-                    <destination>${basedir}/src/main/java</destination>
-                    <uris>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-empty-custom-operation-osgi:${judo-psm-generator-sdk-core-version}</uri>
-                    </uris>
-                    <type>psm-sdk-core</type>
-                    <templateParameters>
-                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
-                        <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
-                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
-                        <emptyCustomOperationOsgiPrefix>${project.groupId}.edemokracia.custom</emptyCustomOperationOsgiPrefix>
-                    </templateParameters>
-                </configuration>
                 <executions>
                     <execution>
-                        <id>execute-psm-sdk-generation</id>
+                        <id>execute-psm-app-generation</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                            <uris>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-empty-custom-operation-osgi:${judo-psm-generator-sdk-core-version}</uri>
+                            </uris>
+                            <type>psm-sdk-core</type>
+                            <templateParameters>
+                                <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                                <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                                <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                                <emptyCustomOperationOsgiPrefix>${project.groupId}.edemokracia.custom</emptyCustomOperationOsgiPrefix>
+                            </templateParameters>
+                            <validateChecksum>${validateChecksum}</validateChecksum>
+                        </configuration>
                     </execution>
+
+                    <execution>
+                        <id>synchronize-psm-app-gitignore</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>synchronizeGitignore</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>reset-psm-app-checksums</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>resetChecksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-psm-app-checksum</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>checksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/src/main/java</destination>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
@@ -86,7 +124,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.30</version>
+            <version>1.18.34</version>
             <scope>provided</scope>
         </dependency>
 
@@ -100,12 +138,6 @@
             <groupId>hu.blackbelt.judo</groupId>
             <artifactId>judo-dispatcher-api</artifactId>
             <version>${judo-dispatcher-api-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>hu.blackbelt</groupId>
-            <artifactId>structured-map-proxy</artifactId>
-            <version>${structured-map-proxy-version}</version>
         </dependency>
 
         <dependency>

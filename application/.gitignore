@@ -39,3 +39,23 @@ app.*.map.json
 
 # Maven
 .flattened-pom.xml
+# JUDO GENERATOR BLOCK START
+README.adoc
+docker/compose-develop/docker-compose.yml
+docker/compose-postgresql-https/docker-compose.yml
+docker/compose-postgresql-https/tls.yml
+docker/compose-postgresql-https/traefik.yml
+docker/overrided/bin/setenv
+frontend-react/README.adoc
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogOperationCallInterceptor.java.default
+schema/README.adoc
+web-root/src/main/resources/bootstrap-table-filter-control.min.js
+web-root/src/main/resources/bootstrap-table.min.css
+web-root/src/main/resources/bootstrap-table.min.js
+web-root/src/main/resources/bootstrap.min.css
+web-root/src/main/resources/bootstrap.min.js
+web-root/src/main/resources/index.html
+web-root/src/main/resources/jquery-3.2.1.slim.min.js
+web-root/src/main/resources/popper.min.js
+# JUDO GENERATOR BLOCK END

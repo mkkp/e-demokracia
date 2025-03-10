@@ -4,15 +4,15 @@ import { useMemo } from 'react';
 import { useJudoNavigation } from '~/components';
 import { processQueryCustomizer } from '~/utilities';
 
-import {
-  CloseDebateOutputVoteDefinitionReference,
-  CloseDebateOutputVoteDefinitionReferenceStored,
-} from '~/services/data-api';
+// import {
+//   CloseDebateOutputVoteDefinitionReference,
+//   CloseDebateOutputVoteDefinitionReferenceStored,
+// } from '~/services/data-api';
 
-import {
-  CloseDebateInputCloseDebateInput_FormActionsHook,
-  SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
-} from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
+// import {
+//   CloseDebateInputCloseDebateInput_FormActionsHook,
+//   SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
+// } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form';
 
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
@@ -21,12 +21,20 @@ import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-a
 import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
 
 import {
+  CloseDebateInputCloseDebateInput_FormActionsHook,
+  SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
+} from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form/customization';
+import {
   routeToServiceUserAdminVoteDefinitionsAccessViewPage,
   routeToServiceUserRatingVoteDefinitionsAccessViewPage,
   routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage,
   routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
   routeToServiceUserYesNoVoteDefinitionsAccessViewPage,
 } from '~/routes';
+import {
+  CloseDebateOutputVoteDefinitionReference,
+  CloseDebateOutputVoteDefinitionReferenceStored,
+} from '~/services/data-api/model/CloseDebateOutputVoteDefinitionReference';
 
 export function registerCloseDebateInputCloseDebateInput_FormActionsHook(context: BundleContext) {
   context.registerService<CloseDebateInputCloseDebateInput_FormActionsHook>(

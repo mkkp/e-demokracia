@@ -67,7 +67,7 @@ services:
       - JUDO_PLATFORM_RDBMS_DB_HOST=postgres
 
   postgres:
-    image: postgres:14.1-alpine
+    image: postgres:latest
     restart: always
     environment:
       - POSTGRES_USER=edemokracia

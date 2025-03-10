@@ -12,9 +12,9 @@ import { processQueryCustomizer } from '~/utilities';
 import {
   SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_CREATE_ISSUE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceCreateIssueInputCreateIssueInput_FormActionsHook,
-} from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form';
+} from '~/dialogs/Service/UserIssues/UserIssues_View_Edit/CreateIssue/Input/Form/customization';
 import { routeToServiceUserIssuesAccessViewPage } from '~/routes';
-import { ServiceIssue, ServiceIssueStored } from '~/services/data-api';
+import { ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForIssuesImpl } from '~/services/data-axios/UserServiceForIssuesImpl';
 

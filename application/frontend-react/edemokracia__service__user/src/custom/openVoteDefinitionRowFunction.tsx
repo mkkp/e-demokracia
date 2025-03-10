@@ -8,8 +8,6 @@ import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 
-import type { ServiceVoteDefinitionStored } from '~/services/data-api';
-
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
 import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
@@ -23,6 +21,7 @@ import {
   routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
   routeToServiceUserYesNoVoteDefinitionsAccessViewPage,
 } from '~/routes';
+import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 
 //export async function openVoteDefinitionPage(row: ServiceVoteDefinitionStored) {
 export const openVoteDefinitionPage = () => {

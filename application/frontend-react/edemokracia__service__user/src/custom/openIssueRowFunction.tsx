@@ -4,12 +4,11 @@ import { useJudoNavigation } from '~/components';
 import { useDialog } from '~/components/dialog';
 import { processQueryCustomizer } from '~/utilities';
 
-import type { ServiceIssueStored } from '~/services/data-api';
-
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForIssuesImpl } from '~/services/data-axios/UserServiceForIssuesImpl';
 
 import { routeToServiceUserIssuesAccessViewPage } from '~/routes';
+import { ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
 
 export const openIssuePage = () => {
   const [createDialog, closeDialog, closeAllDialogs] = useDialog();

@@ -20,6 +20,14 @@
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Provide-Capability>
+                            osgi.service;effective:=active;objectClass=javax.ws.rs.ext.ExceptionMapper,
+                            osgi.service;effective:=active;objectClass=org.apache.cxf.interceptor.Interceptor
+                        </Provide-Capability>
+                    </instructions>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -27,29 +35,6 @@
                 <artifactId>judo-psm-generator-maven-plugin</artifactId>
                 <version>${judo-meta-psm-version}</version>
 
-                <configuration>
-                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
-                    <destination>${basedir}/target/generated-sources</destination>
-
-                    <uris>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-common:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-api:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-impl:${judo-psm-generator-jaxrs-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-osgi:${judo-psm-generator-jaxrs-version}</uri>
-                    </uris>
-                    <type>psm-jaxrs</type>
-                    <contextAccessor>hu.blackbelt.judo.psm.generator.jaxrs.api.StoredVariableHelper</contextAccessor>
-                    <scanPackages>
-                        hu.blackbelt.judo.generator.commons,
-                        hu.blackbelt.judo.psm.generator.jaxrs
-                    </scanPackages>
-                    <templateParameters>
-                        <debugPrint>true</debugPrint>
-                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
-                        <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
-                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
-                    </templateParameters>
-                </configuration>
                 <executions>
                     <execution>
                         <id>execute-psm-rest-generation</id>
@@ -57,7 +42,68 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+
+                            <uris>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-common:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-api:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-impl:${judo-psm-generator-jaxrs-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-jaxrs-osgi:${judo-psm-generator-jaxrs-version}</uri>
+                            </uris>
+                            <type>psm-jaxrs</type>
+                            <contextAccessor>hu.blackbelt.judo.psm.generator.jaxrs.api.StoredVariableHelper</contextAccessor>
+                            <scanPackages>
+                                hu.blackbelt.judo.generator.commons,
+                                hu.blackbelt.judo.psm.generator.jaxrs
+                            </scanPackages>
+                            <templateParameters>
+                                <debugPrint>true</debugPrint>
+                                <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                                <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
+                                <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                            </templateParameters>
+                            <validateChecksum>${validateChecksum}</validateChecksum>
+                        </configuration>
                     </execution>
+
+                    <execution>
+                        <id>synchronize-psm-rest-gitignore</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>synchronizeGitignore</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>reset-psm-rest-checksums</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>resetChecksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-psm-rest-checksum</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>checksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
                 </executions>
             </plugin>
 
@@ -76,28 +122,6 @@
                                 <source>${basedir}/target/generated-sources</source>
                             </sources>
                         </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-maven-plugin</artifactId>
-                <version>2.2.19</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <outputFileName>openapi</outputFileName>
-                            <outputPath>${project.build.directory}/api-documentation-swagger</outputPath>
-                            <outputFormat>JSONANDYAML</outputFormat>
-                            <resourcePackages>
-                                <package>hu.blackbelt.judo.tatami.itests.edemokracia</package>
-                            </resourcePackages>
-                            <prettyPrint>TRUE</prettyPrint>
-                        </configuration>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>resolve</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>

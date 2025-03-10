@@ -4,11 +4,8 @@
 
 import type { BundleContext } from '@pandino/pandino-api';
 
-import {
-  SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
-  ServiceVoteDefinitionVoteDefinition_TableActionsHook,
-} from '~/pages/Service/User/AdminVoteDefinitions/AccessTablePage';
-
+import { ServiceVoteDefinitionVoteDefinition_TableActionsHook } from '~/dialogs/Service/Dashboard/FavoriteVoteDefinitions/AddSelectorPage/customization';
+import { SERVICE_USER_ADMIN_VOTE_DEFINITIONS_ACCESS_TABLE_PAGE_ACTIONS_HOOK_INTERFACE_KEY } from '~/pages/Service/User/AdminVoteDefinitions/AccessTablePage/customization';
 import { openVoteDefinitionPage } from './openVoteDefinitionRowFunction';
 
 export function registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context: BundleContext) {

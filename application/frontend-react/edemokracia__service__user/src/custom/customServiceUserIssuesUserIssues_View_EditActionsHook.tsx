@@ -7,8 +7,7 @@ import type { BundleContext } from '@pandino/pandino-api';
 import {
   SERVICE_USER_USER_ISSUES_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceUserIssuesUserIssues_View_EditActionsHook,
-} from '~/pages/Service/User/UserIssues/AccessViewPage';
-
+} from '~/pages/Service/User/UserIssues/AccessViewPage/customization';
 import { openIssuePage } from './openIssueRowFunction';
 
 export function registerServiceUserIssuesUserIssues_View_EditActionsHook(context: BundleContext) {

@@ -25,33 +25,72 @@
                 <groupId>hu.blackbelt.judo.meta</groupId>
                 <artifactId>judo-psm-generator-maven-plugin</artifactId>
                 <version>${judo-meta-psm-version}</version>
-                <configuration>
-                    <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
-                    <destination>${basedir}/target/generated-sources</destination>
-                    <uris>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-impl:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-osgi:${judo-psm-generator-sdk-core-version}</uri>
-                        <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-internal-wrapper:${judo-psm-generator-sdk-core-version}</uri>
-                    </uris>
-                    <type>psm-sdk-core</type>
-                    <templateParameters>
-                        <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
-                        <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
-                        <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
-                        <internalWrapperPrefix>${project.groupId}.edemokracia.internal</internalWrapperPrefix>
-                        <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
-                        <generateOptionalTypes>true</generateOptionalTypes>
-                        <generatePayloadValidator>true</generatePayloadValidator>
-                    </templateParameters>
-                </configuration>
                 <executions>
+
                     <execution>
-                        <id>execute-psm-sdk-generation</id>
+                        <id>execute-psm-internal-generation</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                            <uris>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-common:${judo-psm-generator-sdk-core-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-impl:${judo-psm-generator-sdk-core-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-osgi:${judo-psm-generator-sdk-core-version}</uri>
+                                <uri>mvn:hu.blackbelt.judo.generator:judo-psm-generator-sdk-core-internal-wrapper:${judo-psm-generator-sdk-core-version}</uri>
+                            </uris>
+                            <type>psm-sdk-core</type>
+                            <templateParameters>
+                                <apiPrefix>${project.groupId}.edemokracia.api</apiPrefix>
+                                <implPrefix>${project.groupId}.edemokracia.impl</implPrefix>
+                                <operationPrefix>${project.groupId}.edemokracia.operation</operationPrefix>
+                                <internalWrapperPrefix>${project.groupId}.edemokracia.internal</internalWrapperPrefix>
+                                <osgiPrefix>${project.groupId}.edemokracia.osgi</osgiPrefix>
+                                <generateOptionalTypes>true</generateOptionalTypes>
+                                <generatePayloadValidator>true</generatePayloadValidator>
+                                <identifierType>java.io.Serializable</identifierType>
+                            </templateParameters>
+                            <validateChecksum>${validateChecksum}</validateChecksum>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>synchronize-internal-sdk-gitignore</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>synchronizeGitignore</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>reset-psm-internal-checksums</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>resetChecksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>generate-internal-sdk-checksum</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>checksum</goal>
+                        </goals>
+                        <configuration>
+                            <psm>mvn:${project.groupId}:edemokracia-application-model:${project.version}!model/${model-name}-psm.model</psm>
+                            <destination>${basedir}/target/generated-sources</destination>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
