@@ -26,7 +26,8 @@ const issuecardSubTheme = (parentTheme: Theme, data?: any) => {
       MuiPaper: {
         styleOverrides: {
           root: {
-            backgroundImage: `url(${issuePng})`,
+            background: alpha(parentTheme.palette.warning.light, 0.04),
+            // backgroundImage: `url(${issuePng})`,
           },
         },
       },
