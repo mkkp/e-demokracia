@@ -24,7 +24,7 @@ interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogOperationCallI
 interceptors/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 interceptors/src/test/java/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 interceptors/src/test/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
-internal/pom.xml,a539ebc404988bd7e859550026942149
+internal/pom.xml,66848c4ca5e6a235bb214abd9021c4fb
 karaf-features/pom.xml,8ea09ebb6fe52535ea45c100dc78cd7b
 karaf-features/src/main/feature/feature.xml,87dd5945f134bd5014ff3f98f8a41e29
 karaf-offline/pom.xml,a33a958ccb6b6993e814e439201e2025
@@ -52,4 +52,4 @@ rest/pom.xml,3be1bdc9cdc8fd42493714a747241e6e
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 schema/pom.xml,3874a28385f80c7eecdc5a7e31396b32
-sdk/pom.xml,1964649ea623e3ac5f0fe1ee9a010993
+sdk/pom.xml,b50ad4da7b9a508826ce5015143dc1a3
