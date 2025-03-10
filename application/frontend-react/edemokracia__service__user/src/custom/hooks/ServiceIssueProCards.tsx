@@ -93,7 +93,7 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceProSt
 }
 
 function proCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
-  return argumentCard(false, row, onRowClick);
+  return argumentCard(false, row, onRowClick, row.upVotes, row.downVotes, undefined, undefined);
 }
 
 function CustomCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
@@ -169,7 +169,7 @@ function CustomCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
         </CardContent>
         <CardActions sx={{ justifyContent: 'end' }}>
           <Button variant={'text'} size="small" onClick={() => onRowClick?.(row)}>
-            Megtekintés
+            {t('argument.card.view', { defaultValue: 'View' })}
           </Button>
         </CardActions>
       </Card>

@@ -7,5 +7,5 @@
 // Template file: actor/src/components-api/components/NamedElement.ts.hbs
 
 export interface NamedElement {
-  name: string;
+    name: string;
 }

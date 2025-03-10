@@ -11,23 +11,20 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import { ImageDisplay } from '~/components/widgets/ImageDisplay';
-import conPng from '~/custom/assets/images/debate-con.png';
-import proPng from '~/custom/assets/images/debate-pro.png';
+import commentPng from '~/custom/assets/images/comment.png';
 import { BoldCardHeader } from '~/custom/components/BoldCardHeader';
 
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
-import { ServiceConStored } from '~/services/data-api/model/ServiceCon';
-import { ServiceProStored } from '~/services/data-api/model/ServicePro';
+import { ServiceCommentStored } from '~/services/data-api/model/ServiceComment';
 
-export function argumentCard(
-  con: boolean,
-  row: ServiceConStored | ServiceProStored,
-  onRowClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
+export function commentCard(
+  row: ServiceCommentStored,
+  onRowClick: ((row: ServiceCommentStored) => void) | undefined,
   numberOfLikes: number | null | undefined,
   numberOfDislikes: number | null | undefined,
-  onLikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
-  onDislikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
+  onLikeClick: ((row: ServiceCommentStored) => void) | undefined,
+  onDislikeClick: ((row: ServiceCommentStored) => void) | undefined,
 ) {
   const { t } = useTranslation();
   const { locale } = useL10N();
@@ -51,7 +48,7 @@ export function argumentCard(
       <Card
         variant="outlined"
         sx={{
-          backgroundImage: `url(${con ? conPng : proPng})`,
+          backgroundImage: `url(${commentPng})`,
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -78,9 +75,9 @@ export function argumentCard(
         <CardContent sx={{ mt: 0, pt: 0 }}>
           <Stack direction="column" spacing={1}>
             <Box>
-              <Typography variant={'h5'}>{row.title}</Typography>
+              <Typography variant={'h5'}>{formatValue(row.created)}</Typography>
             </Box>
-            <Box>{row.description}</Box>
+            <Box>{row.comment}</Box>
           </Stack>
         </CardContent>
         <CardActions sx={{ justifyContent: 'end' }}>
@@ -99,9 +96,6 @@ export function argumentCard(
             onClick={() => onDislikeClick?.(row)}
           >
             {numberOfDislikes || 0}
-          </Button>
-          <Button variant={'text'} size="small" onClick={() => onRowClick?.(row)}>
-            Megtekintés
           </Button>
         </CardActions>
       </Card>

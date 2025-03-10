@@ -7,6 +7,6 @@
 // Template file: actor/src/components-api/components/LabeledElement.ts.hbs
 
 export interface LabeledElement {
-  label?: string | undefined;
-  icon?: string | undefined;
+    label?: string | undefined;
+    icon?: string | undefined;
 }

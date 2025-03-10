@@ -9,7 +9,7 @@
 import type { ReactNode } from 'react';
 
 export interface ConfirmationDialogProps {
-  id: string;
+  id: string,
   confirmationMessage: string | ReactNode;
   title: string | ReactNode;
   resolve: (value: boolean) => void;

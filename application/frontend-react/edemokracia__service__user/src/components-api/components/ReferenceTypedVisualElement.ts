@@ -6,4 +6,5 @@
 // Template name: actor/src/components-api/components/ReferenceTypedVisualElement.ts
 // Template file: actor/src/components-api/components/ReferenceTypedVisualElement.ts.hbs
 
-export interface ReferenceTypedVisualElement {}
+export interface ReferenceTypedVisualElement {
+}
