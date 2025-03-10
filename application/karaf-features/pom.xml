@@ -181,11 +181,6 @@
             <version>${project.version}</version>
         </dependency>
 
-    <dependency>
-        <groupId>party.mkkp.edemokracia</groupId>
-        <artifactId>edemokracia-application-web-root</artifactId>
-        <version>${project.version}</version>
-    </dependency>
 
         <dependency>
             <groupId>party.mkkp.edemokracia</groupId>

@@ -468,7 +468,7 @@ start_keycloak () {
     docker_instance_exists $INSTANCE_NAME
     if [ $? -eq 0 ]; then
       echo "Instance $INSTANCE_NAME is not existing, starting..."
-      keycloak_image=quay.io/keycloak/keycloak:latest
+      keycloak_image=quay.io/keycloak/keycloak:26.1.2
       tcp_port_is_open 127.0.0.1 $KEYCLOAK_PORT
       if [ $? -eq 0 ]
       then
@@ -522,7 +522,7 @@ start_postgres () {
             -e POSTGRES_USER=${schema_name} \
             -e POSTGRES_PASSWORD=${schema_name} \
             -p $POSTGRES_PORT:5432 \
-            postgres:latest || exit
+            postgres:16.2 || exit
     else
         start_docker_instance $INSTANCE_NAME
     fi

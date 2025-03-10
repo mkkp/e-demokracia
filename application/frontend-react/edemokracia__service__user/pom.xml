@@ -47,7 +47,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Web-ContextPath>/${model-name}/${actor-name}</Web-ContextPath>
+                        <Web-ContextPath>/</Web-ContextPath>
                         <Include-Resource>
                             /=${project.basedir}/dist
                         </Include-Resource>
@@ -437,45 +437,6 @@
             </build>
         </profile>
 
-        <profile>
-            <id>replace-base-href</id>
-            <activation>
-                <property>
-                    <name>!local</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.google.code.maven-replacer-plugin</groupId>
-                        <artifactId>replacer</artifactId>
-                        <version>1.5.2</version>
-                        <executions>
-                            <execution>
-                                <id>frontend-index-url-replace</id>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>replace</goal>
-                                </goals>
-                                <configuration>
-                                    <basedir>${project.basedir}/dist</basedir>
-                                    <includes>
-                                        <include>index.html</include>
-                                    </includes>
-                                    <replacements>
-                                        <replacement>
-                                            <token><![CDATA[<base href="/">]]></token>
-                                            <value><![CDATA[<base href="/${model-name}/${actor-name}/">]]></value>
-                                        </replacement>
-                                    </replacements>
-                                    <regex>false</regex>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
     </profiles>
 </project>
 

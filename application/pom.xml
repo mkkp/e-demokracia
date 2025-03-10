@@ -82,6 +82,30 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
+                    <configuration>
+                        <compilerId>eclipse</compilerId>
+                        <source>17</source>
+                        <target>17</target>
+                        <showWarnings>false</showWarnings>
+                        <showDeprecation>false</showDeprecation>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-compiler-eclipse</artifactId>
+                            <version>2.12.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.eclipse.jdt</groupId>
+                            <artifactId>ecj</artifactId>
+                            <version>3.35.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.34</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
@@ -263,6 +287,18 @@
             </modules>
         </profile>
 
+        <profile>
+            <id>build-keycloak-theme</id>
+            <activation>
+                <property>
+                    <name>!skipKeycloakTheme</name>
+                </property>
+            </activation>
+
+            <modules>
+                <module>keycloak-theme</module>
+            </modules>
+        </profile>
 
         <profile>
             <id>build-sdk</id>
@@ -278,7 +314,6 @@
                 <module>app</module>
                 <module>interceptors</module>
                 <module>rest</module>
-                <module>web-root</module>
                 <!-- To define create 'pom.xml.extra-modules.fragment.hbs' file -->
                 <!-- End of 'pom.xml.extra-modules.fragment.hbs' -->
             </modules>

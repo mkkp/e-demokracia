@@ -14,7 +14,11 @@ import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './cust
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook } from './customServiceUserVoteDefinitionUserVoteDefinition_TableActionsHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
 import { registerServiceVoteDefinitionVoteDefinition_TableActionsHook } from './customServiceVoteDefinitionVoteDefinition_TableActionsHook';
-
+import { registerServiceIssueCommentsCards } from './hooks/ServiceIssueCommentCards';
+import { registerServiceIssueConCards } from './hooks/ServiceIssueConCards';
+import { registerServiceIssueProCards } from './hooks/ServiceIssueProCards';
+import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
+import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
@@ -27,5 +31,10 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerServiceDashboardDashboard_View_EditActionsHook(context);
     registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
+    registerServiceIssueProCards(context);
+    registerServiceIssueConCards(context);
+    registerIssuecardSubThemeHook(context);
+    registerServiceIssueCommentsCards(context);
+    registerIssueheaderSubThemeHook(context);
   }
 }

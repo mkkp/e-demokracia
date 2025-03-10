@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32">
+  <defs>
+    <linearGradient id="gradPro" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f8fff8; stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#f8fff8; stop-opacity:1"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" fill="url(#gradPro)"/>
+  <text x="16" y="16" text-anchor="middle" alignment-baseline="middle" fill="#a0f0a0" font-size="12" font-family="Arial" opacity="0.35">+</text>
+</svg>
