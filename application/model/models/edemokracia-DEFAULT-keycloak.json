@@ -1,1 +1,0 @@
-{"clients":[{"bearerOnly":false,"clientId":"edemokracia-admin-Admin","directAccessGrantsEnabled":true,"enabled":true,"name":"edemokracia-admin-Admin","publicClient":true,"redirectUris":["*"]}],"enabled":true,"id":"DEFAULT","loginWithEmailAllowed":true,"realm":"DEFAULT"}

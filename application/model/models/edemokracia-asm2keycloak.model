@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:trace="http:///www.blackbelt.hu/meta/trasformation/trace/asm2keycloak">
-  <trace:Trace sourceUri="asm.model#(psm/(esm/_jUnLgGkqEe25ONJ3V89cVA)/MappedActorType)/MappedTransferObject">
-    <targetUri>edemokracia-keycloak.model#_lh9pkOUNEe25hdVDwGNTng</targetUri>
-  </trace:Trace>
-  <trace:Trace sourceUri="asm.model#(psm/(esm/_gjBT0H8GEe2kLcMqsIbMgQ)/Claim)/TransferObjectAttribute">
-    <targetUri>edemokracia-keycloak.model#_liLE8OUNEe25hdVDwGNTng</targetUri>
-  </trace:Trace>
-</xmi:XMI>

@@ -3872,6 +3872,7 @@
     <attributes xmi:id="User/(esm/_HqzzwG5VEe2wNaja8kBvcQ)/AttributeType" name="comment" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_Hq4FMG5VEe2wNaja8kBvcQ)/AttributeType" name="created" memberType="DERIVED" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_Q31g0G5REe2Q6M99rsfqSQ)/AttributeType" name="createdByName" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_Prx1gP3eEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_F_SdIH2rEe27Ga2Ojs4Fgg)/AttributeType" name="downVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_DnLWQH2rEe27Ga2Ojs4Fgg)/AttributeType" name="upVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <behaviours>REFRESH</behaviours>
@@ -3918,6 +3919,7 @@
     </relations>
     <attributes xmi:id="User/(esm/_O6fpIH2hEe2LTNnGda5kaw)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_1M9fwG5REe2Q6M99rsfqSQ)/AttributeType" name="createdByName" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_HHL-QP3eEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_O6qoQH2hEe2LTNnGda5kaw)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_m2LzIIeaEe2kLcMqsIbMgQ)/AttributeType" name="downVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_O60ZQH2hEe2LTNnGda5kaw)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
@@ -4143,6 +4145,7 @@
     <attributes xmi:id="User/(esm/_Lk5fgFw-Ee6gN-oVBDDIOQ)/AttributeType" name="cityRepresentation" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_DEaFIFw-Ee6gN-oVBDDIOQ)/AttributeType" name="countyRepresentation" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_qC-PAGksEe25ONJ3V89cVA)/AttributeType" name="created" memberType="DERIVED" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_VPyQoP3eEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_eGKLYHiyEe6cB8og8p0UuQ)/AttributeType" name="debateCloseAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_MXXkwOMdEe2Bgcx6em3jZg)/AttributeType" name="defaultVoteType" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_r9r9IOMbEe2Bgcx6em3jZg)/EnumerationType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_qEQBYGksEe25ONJ3V89cVA)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
@@ -4259,6 +4262,7 @@
     </relations>
     <attributes xmi:id="User/(esm/_TOw6sH2hEe2LTNnGda5kaw)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_17TzgG5REe2Q6M99rsfqSQ)/AttributeType" name="createdByName" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_SFiiMP3eEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_TO2aQH2hEe2LTNnGda5kaw)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_1MdVIIeaEe2kLcMqsIbMgQ)/AttributeType" name="downVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_TO8g4H2hEe2LTNnGda5kaw)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
@@ -4305,6 +4309,7 @@
     <attributes xmi:id="User/(esm/_-e-_4H4XEe2cB7_PsKXsHQ)/AttributeType" name="closeAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-ec0YH4XEe2cB7_PsKXsHQ)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_IMGAsHz4Ee6bP4FWw7fjQA)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_9DKpsP3fEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-enzgH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_lXOIkHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_lZsNwHr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -4380,6 +4385,7 @@
     <attributes xmi:id="User/(esm/_-dMQIH4XEe2cB7_PsKXsHQ)/AttributeType" name="closeAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-co2gH4XEe2cB7_PsKXsHQ)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_zH3jgHz4Ee6Q9LyUVjs1Qw)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_JqpuoP3gEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-c0csH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_x0l6IHr9Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_x1FpYHr9Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -4531,6 +4537,7 @@
       <behaviours>REFRESH</behaviours>
     </relations>
     <attributes xmi:id="User/(esm/_p9bnsGksEe25ONJ3V89cVA)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
+    <attributes xmi:id="User/(esm/_2-8vYP3dEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_p-OR4GksEe25ONJ3V89cVA)/AttributeType" name="type" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_RQF7UGkYEe25ONJ3V89cVA)/EnumerationType" isFilterable="true" isRequired="true"/>
     <behaviours>REFRESH</behaviours>
     <packageNameTokens>service</packageNameTokens>
@@ -4749,6 +4756,7 @@
     <attributes xmi:id="User/(esm/_-hI8AH4XEe2cB7_PsKXsHQ)/AttributeType" name="closeAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_BxETwF5IEe6vsex_cZNQbQ)/AttributeType" name="countyRepresentation" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-gmwgH4XEe2cB7_PsKXsHQ)/AttributeType" name="created" memberType="DERIVED" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_6uefsP3eEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-gyWsH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_BwEOMF5IEe6vsex_cZNQbQ)/AttributeType" name="districtRepresentation" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_ByHcoF5IEe6vsex_cZNQbQ)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -4825,6 +4833,7 @@
     <attributes xmi:id="User/(esm/_-b0XIH4XEe2cB7_PsKXsHQ)/AttributeType" name="closeAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-bRkkH4XEe2cB7_PsKXsHQ)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_43eKoHz4Ee6Q9LyUVjs1Qw)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_s62s4P3gEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-bdx0H4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_yJ3UoHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yMLo0Hr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -4853,6 +4862,7 @@
     </relations>
     <attributes xmi:id="User/(esm/_U_NwcFsjEe6Mx9dH3yj5gQ)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_p1e0sFsjEe6Mx9dH3yj5gQ)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_p0SkkP3gEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_U_YIgFsjEe6Mx9dH3yj5gQ)/AttributeType" name="value" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_ON5DcG6bEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <behaviours>REFRESH</behaviours>
     <behaviours>UPDATE</behaviours>
@@ -4891,6 +4901,7 @@
     <attributes xmi:id="User/(esm/_-adFMH4XEe2cB7_PsKXsHQ)/AttributeType" name="closeAt" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-aCOcH4XEe2cB7_PsKXsHQ)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_12P1UHz4Ee6Q9LyUVjs1Qw)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_SoyuUP3gEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-aKKQH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_r_9-MHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_sCH6UHr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -4919,6 +4930,7 @@
     </relations>
     <attributes xmi:id="User/(esm/_TpDikFoiEe6_67aMO2jOsw)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_PuqoQFowEe6_67aMO2jOsw)/AttributeType" name="createdBy" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_k_WO4P3gEe-p66wHlBPO-A)/AttributeType" name="createdByUsername" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_TpQW4FoiEe6_67aMO2jOsw)/AttributeType" name="value" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_2E9NMG6dEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <behaviours>REFRESH</behaviours>
     <behaviours>UPDATE</behaviours>
