@@ -883,6 +883,13 @@ src/containers/YesNoVoteInput/YesNoVoteInput_Table/YesNoVoteInputYesNoVoteInput_
 src/containers/YesNoVoteInput/YesNoVoteInput_Table/customization.ts
 src/containers/YesNoVoteInput/YesNoVoteInput_Table/types.ts
 src/custom/custom-element-types.ts
+src/custom/hooks/components/cards/registerServiceConCon_View_EditConsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceConCon_View_EditProsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceIssueIssue_View_EditCommentsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceIssueIssue_View_EditConsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceIssueIssue_View_EditProsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceProPro_View_EditConsComponentConfigurationHook.tsx.default
+src/custom/hooks/components/cards/registerServiceProPro_View_EditProsComponentConfigurationHook.tsx.default
 src/custom/hooks/default-guest-page-hook-registration.tsx.default
 src/custom/hooks/sub-themes/registerIssuecardSubThemeHook.tsx.default
 src/custom/hooks/sub-themes/registerIssueheaderSubThemeHook.tsx.default

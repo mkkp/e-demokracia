@@ -1,11 +1,5 @@
 package party.mkkp.edemokracia.interceptors;
 
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.accountentity.AccountEntity;
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.accountentity.AccountEntityDao;
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.accountentity.AccountEntityForCreate;
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.accountentity.AccountEntityMask;
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.identityentity.IdentityEntityDao;
-import com.ubives.ubives.api.ubives._default_transferobjecttypes.entities.identityentity.IdentityEntityForCreate;
 import hu.blackbelt.judo.runtime.core.accessmanager.api.AuthenticationInterceptor;
 import hu.blackbelt.judo.sdk.query.StringFilter;
 import org.eclipse.emf.ecore.EOperation;
@@ -21,7 +15,7 @@ import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjec
 import java.util.Map;
 import java.util.Optional;
 
-@Component(property = { "judo.model.name=Ubives" })
+@Component(property = { "judo.model.name=edemokracia" })
 public class CreateAuthenticatedUserAuthenticationInterceptor implements AuthenticationInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(CreateAuthenticatedUserAuthenticationInterceptor.class);
@@ -65,6 +59,7 @@ public class CreateAuthenticatedUserAuthenticationInterceptor implements Authent
                                 .withFirstName(firstName)
                                 .withLastName(lastName)
                                 .withEmail(email)
+                                .withIsAdmin(true)
                     .build()
                 );
             }

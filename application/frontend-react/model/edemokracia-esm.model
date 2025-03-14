@@ -174,7 +174,7 @@
     </elements>
   </elements>
   <elements xsi:type="namespace:Package" xmi:id="_TFt7AGkqEe25ONJ3V89cVA" name="service">
-    <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="User" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
+    <elements xsi:type="accesspoint:ActorType" xmi:id="_jUnLgGkqEe25ONJ3V89cVA" name="User" realm="EDemokracia" principal="_ndA8kGkwEe25ONJ3V89cVA" defaultLanguage="hu-HU" applicationLogo="mkkp-logo.png">
       <claims xmi:id="_gjBT0H8GEe2kLcMqsIbMgQ" claimType="USERNAME" attribute="_TzJu8H8GEe2kLcMqsIbMgQ"/>
       <accesses xmi:id="_vWzZ8G4rEe2siJt-xjHAyw" target="_qI4CsGksEe25ONJ3V89cVA" name="adminCategories" createable="true" updateable="true" deleteable="true"/>
       <accesses xmi:id="_8DntEIXgEe2kLcMqsIbMgQ" target="_a0aoAH2iEe2LTNnGda5kaw" name="adminCounties" createable="true" updateable="true" deleteable="true"/>

@@ -5041,7 +5041,7 @@
   <dataTypes xsi:type="data:NumericType" xmi:id="User/(esm/_7D8Nw2kNEe25ONJ3V89cVA)/NumericType" name="types::Long" operator="User/(esm/_jUnLgGkqEe25ONJ3V89cVA)/NumericOperation" precision="18"/>
   <dataTypes xsi:type="data:TimeType" xmi:id="User/(esm/_7D8NymkNEe25ONJ3V89cVA)/TimeType" name="types::Time" operator="User/(esm/_jUnLgGkqEe25ONJ3V89cVA)/NumericOperation"/>
   <mimeTypes xmi:id="User/(esm/_lWRgEGkQEe25ONJ3V89cVA)/MimeType" type="*" subType="*"/>
-  <authentication xmi:id="User/(esm/_jUnLgGkqEe25ONJ3V89cVA)/Authentication" realm="DEFAULT">
+  <authentication xmi:id="User/(esm/_jUnLgGkqEe25ONJ3V89cVA)/Authentication" realm="EDemokracia">
     <claims xmi:id="User/(esm/_gjBT0H8GEe2kLcMqsIbMgQ)/Claim" type="USERNAME" attributeType="User/(esm/_TzJu8H8GEe2kLcMqsIbMgQ)/AttributeType"/>
   </authentication>
   <pageContainers xmi:id="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormPageContainer" name="CloseDebateInput::CloseDebateInput_Form" label="CloseDebateInput Form" dataElement="User/(esm/_NGvTUG6JEe2wNaja8kBvcQ)/ClassType" onInit="User/(esm/_NG8HoG6JEe2wNaja8kBvcQ)/TransferObjectFormGetTemplateActionDefinition" type="FORM">
