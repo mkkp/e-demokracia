@@ -1044,7 +1044,7 @@
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_5ef0QuRvEe2Bgcx6em3jZg" name="Service - Vote Entry" repPath="#_5ef0QORvEe2Bgcx6em3jZg" changeId="1708296124243">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_5ef0QuRvEe2Bgcx6em3jZg" name="Service - Vote Entry" repPath="#_5ef0QORvEe2Bgcx6em3jZg" changeId="1741769769462">
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -45304,6 +45304,10 @@
                   <styles xmi:type="notation:FontStyle" xmi:id="_RQxj4HjzEe6cB8og8p0UuQ" fontName=".AppleSystemUIFont" fontHeight="8"/>
                   <layoutConstraint xmi:type="notation:Location" xmi:id="_RQxj4XjzEe6cB8og8p0UuQ"/>
                 </children>
+                <children xmi:type="notation:Node" xmi:id="_12KlEP8fEe-tcP6C1Eq6ow" type="3010" element="_1zSQMf8fEe-tcP6C1Eq6ow">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_12KlEf8fEe-tcP6C1Eq6ow" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_12KlEv8fEe-tcP6C1Eq6ow"/>
+                </children>
                 <styles xmi:type="notation:SortingStyle" xmi:id="_iOlXEeR6Ee20cv3f2msZXg"/>
                 <styles xmi:type="notation:FilteringStyle" xmi:id="_iOlXEuR6Ee20cv3f2msZXg"/>
                 <styles xmi:type="notation:DrawerStyle" xmi:id="_iOlXE-R6Ee20cv3f2msZXg"/>
@@ -45750,6 +45754,12 @@
           <target xmi:type="structure:DataMember" href="model/edemokracia.model#_B0QKoF5IEe6vsex_cZNQbQ"/>
           <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_B0QKoF5IEe6vsex_cZNQbQ"/>
           <ownedStyle xmi:type="diagram:Square" uid="_RJlWtXjzEe6cB8og8p0UuQ" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_iKwnBOR6Ee20cv3f2msZXg" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_1zSQMf8fEe-tcP6C1Eq6ow" name="/createdByUsername : String" tooltipText=" &#xA; Name: createdByUsername &#xA; Type: edemokracia::types::String &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_6uefsP3eEe-p66wHlBPO-A"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_6uefsP3eEe-p66wHlBPO-A"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_1zlLIP8fEe-tcP6C1Eq6ow" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_iKwnBOR6Ee20cv3f2msZXg" labelPosition="node"/>
           <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
         </ownedElements>
       </ownedDiagramElements>

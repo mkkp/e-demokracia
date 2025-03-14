@@ -12,12 +12,12 @@ import { Navigation } from './Navigation';
 export const DrawerContent = () => {
   return (
     <SimpleBar
-      sx={ {
+      sx={{
         '& .simplebar-content': {
           display: 'flex',
-          flexDirection: 'column'
-        }
-      } }
+          flexDirection: 'column',
+        },
+      }}
     >
       <Navigation />
     </SimpleBar>

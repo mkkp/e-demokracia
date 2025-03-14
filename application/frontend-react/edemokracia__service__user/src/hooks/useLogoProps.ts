@@ -7,10 +7,10 @@
 // Template file: actor/src/hooks/useLogoProps.ts.hbs
 
 export interface UseLogoProps {
-   subTitle: string;
-   imgSrc: string;
-   iconSrc: string;
- }
+  subTitle: string;
+  imgSrc: string;
+  iconSrc: string;
+}
 
 export function useLogoProps(): UseLogoProps {
   return {
