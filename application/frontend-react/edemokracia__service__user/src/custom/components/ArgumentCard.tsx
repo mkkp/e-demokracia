@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 import { ImageDisplay } from '~/components/widgets/ImageDisplay';
@@ -20,15 +20,18 @@ import { _StringOperation } from '~/services/data-api/common';
 import { ServiceConStored } from '~/services/data-api/model/ServiceCon';
 import { ServiceProStored } from '~/services/data-api/model/ServicePro';
 
-export function argumentCard(
-  con: boolean,
-  row: ServiceConStored | ServiceProStored,
-  onRowClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
-  numberOfLikes: number | null | undefined,
-  numberOfDislikes: number | null | undefined,
-  onLikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
-  onDislikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined,
-) {
+interface ArgumentCardProps {
+  con: boolean;
+  row: ServiceConStored | ServiceProStored;
+  onRowClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined;
+  numberOfLikes: number | null | undefined;
+  numberOfDislikes: number | null | undefined;
+  onLikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined;
+  onDislikeClick: ((row: ServiceConStored | ServiceProStored) => void) | undefined;
+}
+
+export function ArgumentCard(props: ArgumentCardProps) {
+  const { con, row, onRowClick, numberOfLikes, numberOfDislikes, onLikeClick, onDislikeClick } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
 

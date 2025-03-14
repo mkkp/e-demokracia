@@ -16,7 +16,7 @@ import { _StringOperation } from '~/services/data-api/common';
 import { ServiceConStored } from '~/services/data-api/model/ServiceCon';
 
 import { mapCardsFiltersToFilters } from '~/utilities';
-import { argumentCard } from '../components/ArgumentCard';
+import { ArgumentCard } from '../components/ArgumentCard';
 
 export function registerServiceIssueConCards(context: BundleContext) {
   context.registerService<ServiceIssueIssue_View_EditConsComponentCardsContainerConfigHook>(
@@ -29,7 +29,7 @@ export const ConsCardsComponentCardsContainerConfigHook: ServiceIssueIssue_View_
   () => {
     return {
       //      ToolbarElement: CustomToolbar,
-      CardElement: conCard,
+      CardElement: ConCard,
     };
   };
 
@@ -82,6 +82,16 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceConSt
   );
 }
 
-function conCard({ row, columns, onRowClick }: CardProps<ServiceConStored>) {
-  return argumentCard(true, row, onRowClick, row.upVotes, row.downVotes, undefined, undefined);
+function ConCard({ row, columns, onRowClick }: CardProps<ServiceConStored>) {
+  return (
+    <ArgumentCard
+      con={true}
+      row={row}
+      onRowClick={onRowClick}
+      numberOfLikes={row.upVotes}
+      numberOfDislikes={row.downVotes}
+      onDislikeClick={undefined}
+      onLikeClick={undefined}
+    />
+  );
 }

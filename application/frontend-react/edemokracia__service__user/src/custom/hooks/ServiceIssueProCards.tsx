@@ -26,7 +26,7 @@ import { ServiceProStored } from '~/services/data-api/model/ServicePro';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 
 import { mapCardsFiltersToFilters } from '~/utilities';
-import { argumentCard } from '../components/ArgumentCard';
+import { ArgumentCard } from '../components/ArgumentCard';
 
 export function registerServiceIssueProCards(context: BundleContext) {
   context.registerService<ServiceIssueIssue_View_EditProsComponentCardsContainerConfigHook>(
@@ -39,7 +39,7 @@ export const ProsCardsComponentCardsContainerConfigHook: ServiceIssueIssue_View_
   () => {
     return {
       //      ToolbarElement: CustomToolbar,
-      CardElement: proCard,
+      CardElement: ProCard,
     };
   };
 
@@ -92,8 +92,18 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceProSt
   );
 }
 
-function proCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
-  return argumentCard(false, row, onRowClick, row.upVotes, row.downVotes, undefined, undefined);
+function ProCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
+  return (
+    <ArgumentCard
+      con={false}
+      row={row}
+      onRowClick={onRowClick}
+      numberOfLikes={row.upVotes}
+      numberOfDislikes={row.downVotes}
+      onDislikeClick={undefined}
+      onLikeClick={undefined}
+    />
+  );
 }
 
 function CustomCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
