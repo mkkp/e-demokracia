@@ -21,7 +21,7 @@ const issueheaderSubTheme = (parentTheme: Theme, data?: any) => {
   return {
     components: {
       // Define component styling for components here, e.g.:
-      MuiPaper: {
+      MuiCard: {
         styleOverrides: {
           root: {
             background: alpha(parentTheme.palette.info.light, 0.04),
