@@ -1571,7 +1571,7 @@ src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx,49dd74ad73823276f6
 src/layout/Drawer/DrawerContent/Navigation/index.tsx,ca27067c619c78dddaa952e8948902d8
 src/layout/Drawer/DrawerContent/Navigation/menu-items.tsx,1178a89823b6a85807259e54a74282ca
 src/layout/Drawer/DrawerContent/index.tsx,50c879418577b2bbd08497e1fc5eceb5
-src/layout/Drawer/DrawerHeader.tsx,9a16971eb383a79de7833d5ee881b38a
+src/layout/Drawer/DrawerHeader.tsx,0c1c29d861dd6c35f3322f587e795b67
 src/layout/Drawer/HorizontalBar.tsx,e845e1564c2b47b49ee0862832c1da09
 src/layout/Drawer/MiniDrawerStyled.tsx,ddb68ffd0b2824ca299f66b3fc4aa6b0
 src/layout/Drawer/index.tsx,8c1dba1c4bb272cce732266e2727928e
