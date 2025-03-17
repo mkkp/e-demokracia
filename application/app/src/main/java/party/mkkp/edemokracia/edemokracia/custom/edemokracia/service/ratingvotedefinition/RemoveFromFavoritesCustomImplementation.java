@@ -11,6 +11,9 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.ratingvotedefinition;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.VoteDefinitionService;
+
 /**
  * 
  * 
@@ -25,12 +28,13 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.ratingvote
  *  3. To ignore the generation of RemoveFromFavoritesCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.ratingvotedefinition.RemoveFromFavorites.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.ratingvotedefinition.RemoveFromFavorites.class)
 public class RemoveFromFavoritesCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.ratingvotedefinition.RemoveFromFavorites {
+    @Reference
+    VoteDefinitionService voteDefinitionService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.ratingvotedefinition.RatingVoteDefinition _this)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.ratingvotedefinition.RemoveFromFavoritesExchangeFunctionsComponent");
+        voteDefinitionService.removeFromFavorites(_this.identifier().getIdentifier());
     }
-
 }

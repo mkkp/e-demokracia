@@ -11,6 +11,9 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.yesnovotedefinition;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.VoteDefinitionService;
+
 /**
  * 
  * 
@@ -26,12 +29,13 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.yesnovoted
  *  3. To ignore the generation of CloseVoteCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.yesnovotedefinition.CloseVote.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.yesnovotedefinition.CloseVote.class)
 public class CloseVoteCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.yesnovotedefinition.CloseVote {
+    @Reference
+    VoteDefinitionService voteDefinitionService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.yesnovotedefinition.YesNoVoteDefinition _this)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.yesnovotedefinition.CloseVoteExchangeFunctionsComponent");
+        voteDefinitionService.closeVote(_this.identifier().getIdentifier());
     }
-
 }

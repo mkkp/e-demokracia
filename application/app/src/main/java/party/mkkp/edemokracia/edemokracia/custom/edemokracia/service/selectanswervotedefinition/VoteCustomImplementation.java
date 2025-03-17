@@ -32,7 +32,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.selectansw
  *  3. To ignore the generation of VoteCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.selectanswervotedefinition.Vote.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.selectanswervotedefinition.Vote.class)
 public class VoteCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.selectanswervotedefinition.Vote {
 
     @Override
