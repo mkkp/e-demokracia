@@ -103,7 +103,14 @@ export function ArgumentCard(props: ArgumentCardProps) {
           >
             {numberOfDislikes || 0}
           </Button>
-          <Button variant={'text'} size="small" onClick={() => onRowClick?.(row)}>
+          <Button
+            variant={'text'}
+            size="small"
+            onClick={() => {
+              debugger;
+              onRowClick?.(row);
+            }}
+          >
             Megtekintés
           </Button>
         </CardActions>

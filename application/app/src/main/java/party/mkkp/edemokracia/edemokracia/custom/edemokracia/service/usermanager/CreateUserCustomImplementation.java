@@ -11,6 +11,14 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.usermanager;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceprincipaluser.ServicePrincipalUserDao;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUserDao;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUserMask;
+import party.mkkp.edemokracia.edemokracia.services.UserService;
+
+import java.io.Serializable;
+
 /**
  * 
  * 
@@ -34,12 +42,20 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.usermanage
  *  3. To ignore the generation of CreateUserCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser.class)
 public class CreateUserCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.usermanager.CreateUser {
+
+    @Reference
+    UserService userService;
+
+    @Reference
+    ServiceUserDao serviceUserDao;
+
 
     @Override
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUser apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createuserinput.CreateUserInput input)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.usermanager.CreateUserExchangeFunctionsComponent");
+        Serializable userId = userService.createUser(input.getUserName(), input.getEmail(), input.getFirstName(), input.getLastName(), true, input.getPhone());
+        return serviceUserDao.getById(userId, ServiceUserMask.serviceUserMask()).get();
     }
 
 }

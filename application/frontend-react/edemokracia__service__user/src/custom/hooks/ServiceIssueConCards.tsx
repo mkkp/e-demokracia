@@ -82,7 +82,8 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceConSt
   );
 }
 
-function ConCard({ row, columns, onRowClick }: CardProps<ServiceConStored>) {
+function ConCard(props: CardProps<ServiceConStored>) {
+  const { row, columns, onRowClick } = props;
   return (
     <ArgumentCard
       con={true}

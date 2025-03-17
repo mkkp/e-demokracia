@@ -4,6 +4,7 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.comment;
 import org.osgi.service.component.annotations.Reference;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.comment.CommentDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.serviceuser.ServiceUser;
+import party.mkkp.edemokracia.edemokracia.services.CommentService;
 import party.mkkp.edemokracia.edemokracia.services.UserService;
 
 /**
@@ -25,23 +26,17 @@ import party.mkkp.edemokracia.edemokracia.services.UserService;
  *  3. To ignore the generation of VoteDownCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(
-//        immediate = true,
-//        service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.comment.VoteDown.class)
+@org.osgi.service.component.annotations.Component(
+        immediate = true,
+        service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.comment.VoteDown.class)
 public class VoteDownCustomImplementation
         implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.comment.VoteDown {
 
     @Reference
-    UserService userService;
-
-    @Reference
-    CommentDao commentDao;
+    CommentService commentService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.comment.Comment _this) {
-        ServiceUser currentUser = userService.getCurrentUser();
-        // commentDao.queryVotes(
-        throw new java.lang.UnsupportedOperationException(
-                "Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.comment.VoteDownExchangeFunctionsComponent");
+        commentService.voteDown(_this.identifier().getIdentifier());
     }
 }

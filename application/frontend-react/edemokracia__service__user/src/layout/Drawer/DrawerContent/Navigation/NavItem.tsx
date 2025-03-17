@@ -191,7 +191,9 @@ export const NavItem = ({ item, level }: NavItemProps) => {
           /> */}
           <ListItemText
             primary={
-              <Typography fontWeight="inherit">{t(`menuTree.${item.title}`, { defaultValue: item.title })}</Typography>
+              <Typography fontWeight="inherit" variant="inherit" color="inherit">
+                {t(`menuTree.${item.title}`, { defaultValue: item.title })}
+              </Typography>
             }
           />
           {/* // PATCH: END */}

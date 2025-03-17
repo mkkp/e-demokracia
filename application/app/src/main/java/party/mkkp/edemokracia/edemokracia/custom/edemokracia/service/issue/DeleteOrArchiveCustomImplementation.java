@@ -11,6 +11,9 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.IssueService;
+
 /**
  * 
  * 
@@ -29,12 +32,14 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
  *  3. To ignore the generation of DeleteOrArchiveCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.DeleteOrArchive.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.DeleteOrArchive.class)
 public class DeleteOrArchiveCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.DeleteOrArchive {
+
+    @Reference
+    IssueService issueService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue _this)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.issue.DeleteOrArchiveExchangeFunctionsComponent");
+        issueService.deleteOrArchive(_this.identifier().getIdentifier());
     }
-
 }

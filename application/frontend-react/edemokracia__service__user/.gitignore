@@ -126,7 +126,6 @@ src/components/widgets/TrinaryLogicCombobox.tsx
 src/components/widgets/index.tsx
 src/config/general.ts
 src/config/index.ts
-src/config/layout.ts
 src/config/table.ts
 src/containers/CloseDebateInput/CloseDebateInput_Form/CloseDebateInputCloseDebateInput_Form.tsx
 src/containers/CloseDebateInput/CloseDebateInput_Form/CloseDebateInputCloseDebateInput_FormDialogContainer.tsx

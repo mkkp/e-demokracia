@@ -92,7 +92,8 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceProSt
   );
 }
 
-function ProCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
+function ProCard(props: CardProps<ServiceProStored>) {
+  const { row, columns, onRowClick } = props;
   return (
     <ArgumentCard
       con={false}
@@ -103,86 +104,5 @@ function ProCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
       onDislikeClick={undefined}
       onLikeClick={undefined}
     />
-  );
-}
-
-function CustomCard({ row, columns, onRowClick }: CardProps<ServiceProStored>) {
-  const { t } = useTranslation();
-  const { locale } = useL10N();
-
-  const formatValue = useCallback((value: any) => {
-    if (value instanceof Date) {
-      return new Intl.DateTimeFormat(locale, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }).format(value);
-    }
-    if (value === undefined || value === null) {
-      return '';
-    }
-    return value.toString();
-  }, []);
-
-  return (
-    <Grid item sm={12} md={6} lg={4} xl={4}>
-      <Card
-        variant="outlined"
-        sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-      >
-        {/* <BoldCardHeader
-          title={row.authorName}
-          avatar={
-            row.authorPicture ? (
-              <ImageDisplay
-                token={row.authorPicture}
-                fallbackUrl={'avatar-fallback.jpg'}
-                imageCSS={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
-              />
-            ) : (
-              <Avatar sx={{ bgcolor: (theme) => theme.palette.primary.main }}>{row.authorName?.substring(0, 1)}</Avatar>
-            )
-          }
-          subheader={row.institutionName}
-          // subheader={formatValue(row.createdAt)}
-        /> */}
-        <CardContent sx={{ mt: 0, pt: 0 }}>
-          <Stack direction="column" spacing={1}>
-            <Box>
-              <Typography variant={'h5'}>{row.title}</Typography>
-            </Box>
-            {/* <Box>{row.goal}</Box>
-            <Box>
-              <Typography variant={'body1'} sx={{ fontWeight: 'bold' }}>
-                Tantárgy:
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                {row.curriculum?.map((c) => (
-                  <Chip key={c.name} label={c.name} variant="outlined" />
-                ))}
-              </Stack>
-            </Box>
-            <Box>
-              <Typography variant={'body1'} sx={{ fontWeight: 'bold' }}>
-                Célcsoport:
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                {row.audience?.map((c) => (
-                  <Chip key={c.name} label={c.name} variant="outlined" />
-                ))}
-              </Stack>
-            </Box>
-            <Box sx={{ mt: 5 }}>
-              <Typography sx={{ color: 'text.secondary', fontSize: 14 }}>Verzió: {row.version}</Typography>
-            </Box> */}
-          </Stack>
-        </CardContent>
-        <CardActions sx={{ justifyContent: 'end' }}>
-          <Button variant={'text'} size="small" onClick={() => onRowClick?.(row)}>
-            {t('argument.card.view', { defaultValue: 'View' })}
-          </Button>
-        </CardActions>
-      </Card>
-    </Grid>
   );
 }

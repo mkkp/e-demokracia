@@ -11,6 +11,10 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.pro;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.simplevotetype.SimpleVoteType;
+import party.mkkp.edemokracia.edemokracia.services.ArgumentService;
+
 /**
  * 
  * 
@@ -30,12 +34,15 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.pro;
  *  3. To ignore the generation of VoteUpCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.VoteUp.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.VoteUp.class)
 public class VoteUpCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.VoteUp {
+
+    @Reference
+    ArgumentService argumentService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.pro.Pro _this)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.pro.VoteUpExchangeFunctionsComponent");
+        argumentService.proVote(_this.identifier().getIdentifier(), SimpleVoteType.UP);
     }
 
 }

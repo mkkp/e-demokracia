@@ -8,6 +8,8 @@
 
 import { createTheme } from '@mui/material/styles';
 // You can add extra imports by overriding the `actor/src/theme/palette.ts.extra-imports.fragment.hbs` file
+import PlusJakarta from '../custom/assets/fonts/PlusJakartaSans-VariableFont_wght.ttf';
+import './index.css';
 
 export const paletteThemeLight = createTheme({
   // palette: {
@@ -34,7 +36,8 @@ export const paletteThemeLight = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#aa2e25',
+      //main: '#aa2e25',
+      main: '#840605',
     },
     secondary: {
       main: '#ff9100',
@@ -52,7 +55,10 @@ export const paletteThemeLight = createTheme({
     },
     // You can add extra palette attributes by overriding the `actor/src/theme/palette.ts.extra-palette-attributes.fragment.hbs` file
   },
-
+  typography: {
+    fontFamily: 'Plus Jakarta Sans',
+    fontSize: 12,
+  },
   // You can add extra theme attributes by overriding the `actor/src/theme/palette.ts.extra-attributes.fragment.hbs` file
 });
 

@@ -11,6 +11,16 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueDao;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateoutputvotedefinitionreference.CloseDebateOutputVoteDefinitionReferenceDao;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.votetype.VoteType;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.votetypeonclosedebate.VoteTypeOnCloseDebate;
+import party.mkkp.edemokracia.edemokracia.services.IssueService;
+
+import java.io.Serializable;
+import java.util.Optional;
+
 /**
  * 
  * 
@@ -82,12 +92,24 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
  *  3. To ignore the generation of CloseDebateCustomImplementation.java.default file, put it to .generator-ignore file
  *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
  */
-//@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.CloseDebate.class)
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.CloseDebate.class)
 public class CloseDebateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.CloseDebate {
+
+    @Reference
+    IssueService issueService;
+
+    @Reference
+    CloseDebateOutputVoteDefinitionReferenceDao closeDebate;
 
     @Override
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateoutputvotedefinitionreference.CloseDebateOutputVoteDefinitionReference apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.closedebateinput.CloseDebateInput input)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.issue.CloseDebateExchangeFunctionsComponent");
+        if (input.getVoteType() == VoteTypeOnCloseDebate.NO_VOTE) {
+            return null;
+        }
+        VoteType voteType = VoteType.valueOf(input.getVoteType().getName());
+        Optional<Serializable> voteId = issueService.closeDebate(_this.identifier().getIdentifier(),
+                voteType, input.getTitle(), input.getDescription(), input.getCloseAt());
+        return closeDebate.getById(voteId.get()).orElse(null);
     }
 
 }
