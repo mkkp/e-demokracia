@@ -1,0 +1,170 @@
+[
+  {
+    "region": "BU1",
+    "region_name": "Budapest I. kerület"
+  },
+  {
+    "region": "BU2",
+    "region_name": "Budapest II. kerület"
+  },
+  {
+    "region": "BU3",
+    "region_name": "Budapest III. kerület"
+  },
+  {
+    "region": "BU4",
+    "region_name": "Budapest IV. kerület"
+  },
+  {
+    "region": "BU5",
+    "region_name": "Budapest V. kerület"
+  },
+  {
+    "region": "BU6",
+    "region_name": "Budapest VI. kerület"
+  },
+  {
+    "region": "BU7",
+    "region_name": "Budapest VII. kerület"
+  },
+  {
+    "region": "BU8",
+    "region_name": "Budapest VIII. kerület"
+  },
+  {
+    "region": "BU9",
+    "region_name": "Budapest IX. kerület"
+  },
+  {
+    "region": "BU10",
+    "region_name": "Budapest X. kerület"
+  },
+  {
+    "region": "BU11",
+    "region_name": "Budapest XI. kerület"
+  },
+  {
+    "region": "BU12",
+    "region_name": "Budapest XII. kerület"
+  },
+  {
+    "region": "BU13",
+    "region_name": "Budapest XIII. kerület"
+  },
+  {
+    "region": "BU14",
+    "region_name": "Budapest XIV. kerület"
+  },
+  {
+    "region": "BU15",
+    "region_name": "Budapest XV. kerület"
+  },
+  {
+    "region": "BU16",
+    "region_name": "Budapest XVI. kerület"
+  },
+  {
+    "region": "BU17",
+    "region_name": "Budapest XVII. kerület"
+  },
+  {
+    "region": "BU18",
+    "region_name": "Budapest XVIII. kerület"
+  },
+  {
+    "region": "BU19",
+    "region_name": "Budapest XIX. kerület"
+  },
+  {
+    "region": "BU20",
+    "region_name": "Budapest XX. kerület"
+  },
+  {
+    "region": "BU21",
+    "region_name": "Budapest XXI. kerület"
+  },
+  {
+    "region": "BU22",
+    "region_name": "Budapest XXII. kerület"
+  },
+  {
+    "region": "BU23",
+    "region_name": "Budapest XXIII. kerület"
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun"
+  },
+  {
+    "region": "BE",
+    "region_name": "Békés"
+  },
+  {
+    "region": "BA",
+    "region_name": "Baranya"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén"
+  },
+  {
+    "region": "CS",
+    "region_name": "Csongrád"
+  },
+  {
+    "region": "FE",
+    "region_name": "Fejér"
+  },
+  {
+    "region": "GS",
+    "region_name": "Győr-Moson-Sopron"
+  },
+  {
+    "region": "HB",
+    "region_name": "Hajdú-Bihar"
+  },
+  {
+    "region": "HE",
+    "region_name": "Heves"
+  },
+  {
+    "region": "JN",
+    "region_name": "Jász-Nagykun-Szolnok"
+  },
+  {
+    "region": "KE",
+    "region_name": "Komárom-Esztergom"
+  },
+  {
+    "region": "NO",
+    "region_name": "Nógrád"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest"
+  },
+  {
+    "region": "SO",
+    "region_name": "Somogy"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg"
+  },
+  {
+    "region": "TO",
+    "region_name": "Tolna"
+  },
+  {
+    "region": "VA",
+    "region_name": "Vas"
+  },
+  {
+    "region": "VE",
+    "region_name": "Veszprém"
+  },
+  {
+    "region": "ZA",
+    "region_name": "Zala"
+  }
+]

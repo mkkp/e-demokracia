@@ -153,7 +153,7 @@ public class IssueService {
         Issue issue = getIssue(issueId, IssueMask
                 .issueMask()
                 .withStatus());
-        if (issue.getStatus() == IssueStatus.CREATED) {
+        if (issue.getStatus() != IssueStatus.CREATED) {
             return;
         }
         issue.setStatus(IssueStatus.ACTIVE);
@@ -215,50 +215,57 @@ public class IssueService {
             return Optional.empty();
         }
         if (voteType == VoteType.YES_NO) {
+            voteDefinitionId = yesNoVoteDefinitionDao.create(YesNoVoteDefinitionForCreate.builder()
+                    .withTitle(voteTitle)
+                    .withDescription(description)
+                    .withCloseAt(closeAt)
+                    .withStatus(VoteStatus.CREATED)
+                    .withOwner(user)
+                    .withCreatedBy(user)
+                    .build(), YesNoVoteDefinitionMask.yesNoVoteDefinitionMask()).identifier().getIdentifier();
             setVoteDefinitionContainer(
-                    yesNoVoteDefinitionDao.create(YesNoVoteDefinitionForCreate.builder()
-                            .withTitle(voteTitle)
-                            .withDescription(description)
-                            .withCloseAt(closeAt)
-                            .withStatus(VoteStatus.CREATED)
-                            .withOwner(user)
-                            .withCreatedBy(user)
-                            .build(), YesNoVoteDefinitionMask.yesNoVoteDefinitionMask()).identifier().getIdentifier(),
+                    voteDefinitionId,
                     issueId);
 
         } else if (voteType == VoteType.YES_NO_ABSTAIN) {
+            voteDefinitionId =  yesNoAbstainVoteDefinitionDao.create(YesNoAbstainVoteDefinitionForCreate.builder()
+                    .withTitle(voteTitle)
+                    .withDescription(description)
+                    .withCloseAt(closeAt)
+                    .withStatus(VoteStatus.CREATED)
+                    .withOwner(user)
+                    .withCreatedBy(user)
+                    .build(), YesNoAbstainVoteDefinitionMask.yesNoAbstainVoteDefinitionMask()).identifier().getIdentifier();
+
             setVoteDefinitionContainer(
-                    yesNoAbstainVoteDefinitionDao.create(YesNoAbstainVoteDefinitionForCreate.builder()
-                            .withTitle(voteTitle)
-                            .withDescription(description)
-                            .withCloseAt(closeAt)
-                            .withStatus(VoteStatus.CREATED)
-                            .withOwner(user)
-                            .withCreatedBy(user)
-                            .build(), YesNoAbstainVoteDefinitionMask.yesNoAbstainVoteDefinitionMask()).identifier().getIdentifier(),
+                    voteDefinitionId,
                     issueId);
 
         } else if (voteType == VoteType.SELECT_ANSWER) {
+            voteDefinitionId = selectAnswerVoteDefinitionDao.create(SelectAnswerVoteDefinitionForCreate.builder()
+                    .withTitle(voteTitle)
+                    .withDescription(description)
+                    .withCloseAt(closeAt)
+                    .withStatus(VoteStatus.CREATED)
+                    .withOwner(user)
+                    .withCreatedBy(user)
+                    .build(), SelectAnswerVoteDefinitionMask.selectAnswerVoteDefinitionMask()).identifier().getIdentifier();
+
             setVoteDefinitionContainer(
-                    selectAnswerVoteDefinitionDao.create(SelectAnswerVoteDefinitionForCreate.builder()
-                            .withTitle(voteTitle)
-                            .withDescription(description)
-                            .withCloseAt(closeAt)
-                            .withStatus(VoteStatus.CREATED)
-                            .withOwner(user)
-                            .withCreatedBy(user)
-                            .build(), SelectAnswerVoteDefinitionMask.selectAnswerVoteDefinitionMask()).identifier().getIdentifier(),
+                    voteDefinitionId,
                     issueId);
         } else if (voteType == VoteType.RATE) {
+            voteDefinitionId = ratingVoteDefinitionDao.create(RatingVoteDefinitionForCreate.builder()
+                    .withTitle(voteTitle)
+                    .withDescription(description)
+                    .withCloseAt(closeAt)
+                    .withStatus(VoteStatus.CREATED)
+                    .withOwner(user)
+                    .withCreatedBy(user)
+                    .build(), RatingVoteDefinitionMask.ratingVoteDefinitionMask()).identifier().getIdentifier();
+
             setVoteDefinitionContainer(
-                    ratingVoteDefinitionDao.create(RatingVoteDefinitionForCreate.builder()
-                            .withTitle(voteTitle)
-                            .withDescription(description)
-                            .withCloseAt(closeAt)
-                            .withStatus(VoteStatus.CREATED)
-                            .withOwner(user)
-                            .withCreatedBy(user)
-                            .build(), RatingVoteDefinitionMask.ratingVoteDefinitionMask()).identifier().getIdentifier(),
+                    voteDefinitionId,
                     issueId);
         }
 

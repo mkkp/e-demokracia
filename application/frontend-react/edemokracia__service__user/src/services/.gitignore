@@ -39,6 +39,8 @@ data-api/model/RatingVoteInput.ts
 data-api/model/SelectAnswerVoteSelection.ts
 data-api/model/SelectedVoteType.ts
 data-api/model/ServiceCity.ts
+data-api/model/ServiceCloseDebateInputRatingVote.ts
+data-api/model/ServiceCloseDebateInputSelectAnswerVoteSelection.ts
 data-api/model/ServiceComment.ts
 data-api/model/ServiceCon.ts
 data-api/model/ServiceConParent.ts
@@ -130,6 +132,14 @@ data-api/rest/ServiceCityMaskBuilder.ts
 data-api/rest/ServiceCityQueryCustomizer.ts
 data-api/rest/ServiceCityQueryCustomizerSerializer.ts
 data-api/rest/ServiceCitySerializer.ts
+data-api/rest/ServiceCloseDebateInputRatingVoteMaskBuilder.ts
+data-api/rest/ServiceCloseDebateInputRatingVoteQueryCustomizer.ts
+data-api/rest/ServiceCloseDebateInputRatingVoteQueryCustomizerSerializer.ts
+data-api/rest/ServiceCloseDebateInputRatingVoteSerializer.ts
+data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionMaskBuilder.ts
+data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionQueryCustomizer.ts
+data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionQueryCustomizerSerializer.ts
+data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionSerializer.ts
 data-api/rest/ServiceCommentMaskBuilder.ts
 data-api/rest/ServiceCommentQueryCustomizer.ts
 data-api/rest/ServiceCommentQueryCustomizerSerializer.ts
@@ -275,6 +285,8 @@ data-api/rest/requestResponse.ts
 data-api/rest/serialization.ts
 data-axios/AccessServiceImpl.ts
 data-axios/AxiosProvider.ts
+data-axios/CloseDebateInputServiceForRatingVoteImpl.ts
+data-axios/CloseDebateInputServiceForSelectAnswerVoteSelectionsImpl.ts
 data-axios/CloseDebateInputServiceImpl.ts
 data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl.ts
 data-axios/CreateArgumentInputServiceImpl.ts
@@ -286,6 +298,8 @@ data-axios/RatingVoteInputServiceImpl.ts
 data-axios/SelectAnswerVoteSelectionServiceImpl.ts
 data-axios/ServiceCityServiceForDistrictsImpl.ts
 data-axios/ServiceCityServiceImpl.ts
+data-axios/ServiceCloseDebateInputRatingVoteServiceImpl.ts
+data-axios/ServiceCloseDebateInputSelectAnswerVoteSelectionServiceImpl.ts
 data-axios/ServiceCommentServiceForCreatedByImpl.ts
 data-axios/ServiceCommentServiceForVotesImpl.ts
 data-axios/ServiceCommentServiceImpl.ts
@@ -437,6 +451,8 @@ data-axios/YesNoAbstainVoteInputServiceImpl.ts
 data-axios/YesNoVoteInputServiceImpl.ts
 data-service/AccessService.ts
 data-service/CloseDebateInputService.ts
+data-service/CloseDebateInputServiceForRatingVote.ts
+data-service/CloseDebateInputServiceForSelectAnswerVoteSelections.ts
 data-service/CloseDebateOutputVoteDefinitionReferenceService.ts
 data-service/CreateArgumentInputService.ts
 data-service/CreateCommentInputService.ts
@@ -445,6 +461,8 @@ data-service/RatingVoteInputService.ts
 data-service/SelectAnswerVoteSelectionService.ts
 data-service/ServiceCityService.ts
 data-service/ServiceCityServiceForDistricts.ts
+data-service/ServiceCloseDebateInputRatingVoteService.ts
+data-service/ServiceCloseDebateInputSelectAnswerVoteSelectionService.ts
 data-service/ServiceCommentService.ts
 data-service/ServiceCommentServiceForCreatedBy.ts
 data-service/ServiceCommentServiceForVotes.ts

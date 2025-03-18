@@ -988,7 +988,7 @@ if [ -z ${keycloak_name} ]; then
 fi
 
 MODEL_DIR=$(cd "$(dirname "${model_dir:-$MODEL_DIR}")"; pwd)/$(basename "${model_dir:-$MODEL_DIR}")
-SCHEMA_DIR=$(cd "$(dirname "${schema_dir:-$MODEL_DIR}")"; pwd)/$(basename "${schema_dir:-$MODEL_DIR}")
+SCHEMA_DIR=$(cd "$(dirname "${schema_dir:-$APP_DIR}")"; pwd)/$(basename "${schema_dir:schema}")
 
 echo "Schema name: ${schema_name} Directory: ${SCHEMA_DIR}"
 
