@@ -14,12 +14,17 @@ import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './cust
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook } from './customServiceUserVoteDefinitionUserVoteDefinition_TableActionsHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
 import { registerServiceVoteDefinitionVoteDefinition_TableActionsHook } from './customServiceVoteDefinitionVoteDefinition_TableActionsHook';
-import { registerServiceIssueCommentsCards } from './hooks/ServiceIssueCommentCards';
-import { registerServiceIssueConCards } from './hooks/ServiceIssueConCards';
-import { registerServiceIssueProCards } from './hooks/ServiceIssueProCards';
+import { registerServiceIssueCommentsCards } from './hooks/components/cards/ServiceIssueCommentCards';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
+import { registerServiceConCon_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditConsComponentConfigurationHook';
+import { registerServiceConCon_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditProsComponentConfigurationHook';
+import { registerServiceIssueIssue_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditConsComponentConfigurationHook';
+import { registerServiceIssueIssue_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditProsComponentConfigurationHook';
+import { registerServiceProPro_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceProPro_View_EditConsComponentConfigurationHook';
+import { registerServiceProPro_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceProPro_View_EditProsComponentConfigurationHook';
+import { registerServiceIssueIssue_View_EditCommentsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditCommentsComponentConfigurationHook';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
@@ -31,8 +36,19 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerServiceDashboardDashboard_View_EditActionsHook(context);
     registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
-    registerServiceIssueProCards(context);
-    registerServiceIssueConCards(context);
+    // registerServiceIssueProCards(context);
+    // registerServiceIssueConCards(context);
+    // registerConConCards(context);
+    // registerProConCards(context);
+    // registerConProCards(context);
+    // registerProProCards(context);
+    registerServiceConCon_View_EditConsComponentCardsContainerConfig(context);
+    registerServiceConCon_View_EditProsComponentCardsContainerConfig(context);
+    registerServiceIssueIssue_View_EditConsComponentCardsContainerConfig(context);
+    registerServiceIssueIssue_View_EditProsComponentCardsContainerConfig(context);
+    registerServiceProPro_View_EditConsComponentCardsContainerConfig(context);
+    registerServiceProPro_View_EditProsComponentCardsContainerConfig(context);
+    registerServiceIssueIssue_View_EditCommentsComponentCardsContainerConfig(context);
     registerIssuecardSubThemeHook(context);
     registerServiceIssueCommentsCards(context);
     registerIssueheaderSubThemeHook(context);

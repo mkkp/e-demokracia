@@ -60,7 +60,7 @@ public class UserService {
         User currentAccount = userDao
                 .query()
                 .filterByUserName(StringFilter.equalTo(variables.getActorUserName()))
-                .maskedBy(UserMask.userMask())
+                .maskedBy(UserMask.userMask().withUserName().withIsAdmin().withEmail())
                 .selectOne()
                 .orElseThrow(() -> new IllegalArgumentException("User does not exists"));
         return currentAccount;

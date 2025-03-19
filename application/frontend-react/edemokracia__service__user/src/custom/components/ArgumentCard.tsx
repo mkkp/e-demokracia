@@ -50,7 +50,6 @@ export function ArgumentCard(props: ArgumentCardProps) {
   }, []);
 
   return (
-    <Grid item sm={12} md={12} lg={12} xl={12}>
       <Card
         variant="outlined"
         sx={{
@@ -76,7 +75,7 @@ export function ArgumentCard(props: ArgumentCardProps) {
               </Avatar>
             )
           }
-          subheader={row.createdByName}
+          subheader={row.createdByUsername}
         />
         <CardContent sx={{ mt: 0, pt: 0 }}>
           <Stack direction="column" spacing={1}>
@@ -107,7 +106,6 @@ export function ArgumentCard(props: ArgumentCardProps) {
             variant={'text'}
             size="small"
             onClick={() => {
-              debugger;
               onRowClick?.(row);
             }}
           >
@@ -115,6 +113,5 @@ export function ArgumentCard(props: ArgumentCardProps) {
           </Button>
         </CardActions>
       </Card>
-    </Grid>
   );
 }

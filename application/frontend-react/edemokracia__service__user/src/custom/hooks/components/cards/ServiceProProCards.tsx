@@ -9,35 +9,35 @@ import { CardsFilter, CardsFilterDefinition } from '~/components/widgets';
 
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
-import { ServiceCommentStored } from '~/services/data-api/model/ServiceComment';
 
 import {
-  SERVICE_ISSUE_ISSUE_VIEW_EDIT_COMMENTS_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-  ServiceIssueIssue_View_EditCommentsComponentCardsContainerConfigHook,
-} from '~/containers/Service/Issue/Issue_View_Edit/components/ServiceIssueIssue_View_EditCommentsComponent/customization';
+  SERVICE_PRO_PRO_VIEW_EDIT_PROS_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+  ServiceProPro_View_EditProsComponentCardsContainerConfigHook,
+} from '~/containers/Service/Pro/Pro_View_Edit/components/ServiceProPro_View_EditProsComponent/customization';
+import { ServiceProStored } from '~/services/data-api/model/ServicePro';
 import { mapCardsFiltersToFilters } from '~/utilities';
-import { commentCard } from '../components/CommentCard';
+import { ArgumentCard } from '../../../components/ArgumentCard';
 
-export function registerServiceIssueCommentsCards(context: BundleContext) {
-  context.registerService<ServiceIssueIssue_View_EditCommentsComponentCardsContainerConfigHook>(
-    SERVICE_ISSUE_ISSUE_VIEW_EDIT_COMMENTS_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-    CommentsCardsComponentCardsContainerConfigHook,
+export function registerProProCards(context: BundleContext) {
+  context.registerService<ServiceProPro_View_EditProsComponentCardsContainerConfigHook>(
+    SERVICE_PRO_PRO_VIEW_EDIT_PROS_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+    ProsCardsComponentCardsContainerConfigHook,
   );
 }
 
-export const CommentsCardsComponentCardsContainerConfigHook: ServiceIssueIssue_View_EditCommentsComponentCardsContainerConfigHook =
+export const ProsCardsComponentCardsContainerConfigHook: ServiceProPro_View_EditProsComponentCardsContainerConfigHook =
   () => {
     return {
-      //      ToolbarElement: CustomToolbar,
-      CardElement: conCard,
+      // ToolbarElement: CustomToolbar,
+      CardElement: ProCard,
     };
   };
 
-function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceCommentStored>) {
+function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceProStored>) {
   const { t } = useTranslation();
   const { locale } = useL10N();
 
-  const [filterDefs, setFilterDefs] = useState<CardsFilterDefinition<ServiceCommentStored>[]>([]);
+  const [filterDefs, setFilterDefs] = useState<CardsFilterDefinition<ServiceProStored>[]>([]);
 
   const collator = useMemo(() => new Intl.Collator([], { numeric: true }), []);
 
@@ -49,8 +49,8 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceComme
             type: FilterType.string,
             inputType: 'text',
             operator: _StringOperation.like,
-            field: 'comment',
-            label: t('authorProductsCardsFilter.Title', { defaultValue: 'Cím' }),
+            field: 'title',
+            label: t('cardsFilter.Title', { defaultValue: 'Cím' }),
             allowSearch: true,
             searchLabel: 'Keresés címben',
           },
@@ -82,6 +82,17 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceComme
   );
 }
 
-function conCard({ row, columns, onRowClick }: CardProps<ServiceCommentStored>) {
-  return commentCard(row, onRowClick, row.upVotes, row.downVotes, undefined, undefined);
+function ProCard(props: CardProps<ServiceProStored, any>) {
+  const { row, columns, onRowClick } = props;
+  return (
+    <ArgumentCard
+      con={false}
+      row={row}
+      onRowClick={onRowClick}
+      numberOfLikes={row.upVotes}
+      numberOfDislikes={row.downVotes}
+      onDislikeClick={undefined}
+      onLikeClick={undefined}
+    />
+  );
 }

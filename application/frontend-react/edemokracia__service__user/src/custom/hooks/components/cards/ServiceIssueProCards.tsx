@@ -26,7 +26,7 @@ import { ServiceProStored } from '~/services/data-api/model/ServicePro';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 
 import { mapCardsFiltersToFilters } from '~/utilities';
-import { ArgumentCard } from '../components/ArgumentCard';
+import { ArgumentCard } from '../../../components/ArgumentCard';
 
 export function registerServiceIssueProCards(context: BundleContext) {
   context.registerService<ServiceIssueIssue_View_EditProsComponentCardsContainerConfigHook>(
@@ -92,7 +92,7 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceProSt
   );
 }
 
-function ProCard(props: CardProps<ServiceProStored>) {
+function ProCard(props: CardProps<ServiceProStored, any>) {
   const { row, columns, onRowClick } = props;
   return (
     <ArgumentCard

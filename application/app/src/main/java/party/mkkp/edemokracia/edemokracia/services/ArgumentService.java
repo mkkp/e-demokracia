@@ -6,12 +6,12 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.con.ConForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.pro.ProForCreate;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.simplevote.SimpleVoteForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.User;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.con.ConDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.pro.ProDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.simplevote.SimpleVote;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.simplevote.SimpleVoteDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.simplevote.SimpleVoteForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.simplevotetype.SimpleVoteType;
 
 import java.io.Serializable;
@@ -66,30 +66,31 @@ public class ArgumentService {
                 .build());
     }
 
-    public void conVote(Serializable commentId, SimpleVoteType voteType) {
-        User user = userService.getCurrentUserEntity();
-
-        Optional<SimpleVote> vote = conDao.queryVotes(commentId).filterByCreatedByUsername(StringFilter.equalTo(user.getUserName())).selectOne();
+    public void conVote(Serializable conId, SimpleVoteType voteType) {
+        var user = userService.getCurrentUserEntity();
+        var vote = conDao.queryVotes(conId).filterByCreatedByUsername(StringFilter.equalTo(user.getUserName())).selectOne();
         vote.ifPresent((v) -> {
             simpleVoteDao.delete(v);
-            simpleVoteDao.create(SimpleVoteForCreate.builder()
-                    .withCreated(LocalDateTime.now())
-                    .withType(voteType)
-                    .build());
         });
+        conEntityDao.createVotes(conEntityDao.getById(conId).get(), SimpleVoteForCreate.builder()
+                .withCreated(LocalDateTime.now())
+                .withType(voteType)
+                .withUser(user)
+                .build());
+
     }
 
-    public void proVote(Serializable commentId, SimpleVoteType voteType) {
+    public void proVote(Serializable proId, SimpleVoteType voteType) {
         User user = userService.getCurrentUserEntity();
-
-        Optional<SimpleVote> vote = proDao.queryVotes(commentId).filterByCreatedByUsername(StringFilter.equalTo(user.getUserName())).selectOne();
+        Optional<SimpleVote> vote = proDao.queryVotes(proId).filterByCreatedByUsername(StringFilter.equalTo(user.getUserName())).selectOne();
         vote.ifPresent((v) -> {
             simpleVoteDao.delete(v);
-            simpleVoteDao.create(SimpleVoteForCreate.builder()
-                    .withCreated(LocalDateTime.now())
-                    .withType(voteType)
-                    .build());
         });
+        proEntityDao.createVotes(proEntityDao.getById(proId).get(), SimpleVoteForCreate.builder()
+                .withCreated(LocalDateTime.now())
+                .withType(voteType)
+                .withUser(user)
+                .build());
     }
 
 }

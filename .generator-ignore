@@ -20,3 +20,4 @@
 .generator-ignore
 judo.properties
 generator-parameter.properties
+judo.sh

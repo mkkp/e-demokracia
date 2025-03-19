@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -18,14 +17,18 @@ import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { ServiceCommentStored } from '~/services/data-api/model/ServiceComment';
 
-export function commentCard(
+
+interface CommentCardProps {
   row: ServiceCommentStored,
   onRowClick: ((row: ServiceCommentStored) => void) | undefined,
   numberOfLikes: number | null | undefined,
   numberOfDislikes: number | null | undefined,
   onLikeClick: ((row: ServiceCommentStored) => void) | undefined,
   onDislikeClick: ((row: ServiceCommentStored) => void) | undefined,
-) {
+}
+
+export function CommentCard(props : CommentCardProps) {
+  const { row, onRowClick, numberOfLikes, numberOfDislikes, onLikeClick, onDislikeClick} = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
 
@@ -44,7 +47,6 @@ export function commentCard(
   }, []);
 
   return (
-    <Grid item sm={12} md={12} lg={12} xl={12}>
       <Card
         variant="outlined"
         sx={{
@@ -70,7 +72,7 @@ export function commentCard(
               </Avatar>
             )
           }
-          subheader={row.createdByName}
+          subheader={row.createdByUsername}
         />
         <CardContent sx={{ mt: 0, pt: 0 }}>
           <Stack direction="column" spacing={1}>
@@ -99,6 +101,5 @@ export function commentCard(
           </Button>
         </CardActions>
       </Card>
-    </Grid>
   );
 }

@@ -22,6 +22,7 @@ import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjec
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueType;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeMask;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.pro.ProForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionMask;
@@ -311,7 +312,7 @@ public class IssueService {
 
         User user = userService.getCurrentUserEntity();
 
-        issueDao.createCons(issue, ConForCreate.builder()
+        issueDao.createPros(issue, ProForCreate.builder()
                 .withTitle(title)
                 .withDescription(description)
                 .withCreated(LocalDateTime.now())

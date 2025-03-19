@@ -15,8 +15,9 @@ import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { ServiceConStored } from '~/services/data-api/model/ServiceCon';
 
+import { ServiceIssueIssue_View_EditConsComponentRowActionDefinitions } from '~/containers/Service/Issue/Issue_View_Edit/components/ServiceIssueIssue_View_EditConsComponent/types';
 import { mapCardsFiltersToFilters } from '~/utilities';
-import { ArgumentCard } from '../components/ArgumentCard';
+import { ArgumentCard } from '../../../components/ArgumentCard';
 
 export function registerServiceIssueConCards(context: BundleContext) {
   context.registerService<ServiceIssueIssue_View_EditConsComponentCardsContainerConfigHook>(
@@ -82,8 +83,8 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceConSt
   );
 }
 
-function ConCard(props: CardProps<ServiceConStored>) {
-  const { row, columns, onRowClick } = props;
+function ConCard(props: CardProps<ServiceConStored, ServiceIssueIssue_View_EditConsComponentRowActionDefinitions>) {
+  const { row, columns, onRowClick, actions } = props;
   return (
     <ArgumentCard
       con={true}
@@ -91,8 +92,8 @@ function ConCard(props: CardProps<ServiceConStored>) {
       onRowClick={onRowClick}
       numberOfLikes={row.upVotes}
       numberOfDislikes={row.downVotes}
-      onDislikeClick={undefined}
-      onLikeClick={undefined}
+      onDislikeClick={() => actions.consVoteDownForConAction?.(row)}
+      onLikeClick={() => actions.consVoteUpForConAction?.(row)}
     />
   );
 }

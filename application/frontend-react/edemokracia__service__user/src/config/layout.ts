@@ -6,7 +6,7 @@
 // Template name: actor/src/config/layout.ts
 // Template file: actor/src/config/layout.ts.hbs
 
-export const DIVIDER_HEIGHT = 30;
+export const DIVIDER_HEIGHT = 70;
 export const DRAWER_WIDTH = 260;
 export const MINI_DRAWER_WIDTH = 60;
 export const SUBMENU_MIN_WIDTH = 200;
