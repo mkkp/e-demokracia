@@ -11,6 +11,9 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.votedefinition;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.VoteService;
+
 /**
  * 
  * 
@@ -36,10 +39,12 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.votedefini
  */
  @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.votedefinition.VoteYesNo.class)
 public class VoteYesNoCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.votedefinition.VoteYesNo {
+    @Reference
+    VoteService voteService;
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.votedefinition.VoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.yesnovoteinput.YesNoVoteInput input)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.votedefinition.VoteYesNoExchangeFunctionsComponent");
+        var vote = input.getValue().get();
+        voteService.vote(_this.identifier().getIdentifier(), vote);
     }
-
 }

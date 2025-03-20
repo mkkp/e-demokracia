@@ -73,7 +73,6 @@ const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesCompone
     />
   );
 };
-
 const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCard: FC<
   CardProps<
     ServiceIssueStored,

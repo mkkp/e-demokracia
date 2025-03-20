@@ -45,9 +45,4 @@ public class VoteCustomImplementation implements party.mkkp.edemokracia.edemokra
         voteService.vote(_this.identifier().getIdentifier(), vote);
     }
 
-    @Override
-    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.ratingvotedefinition.RatingVoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.ratingvoteinput.RatingVoteInput input)  {
-        throw new java.lang.UnsupportedOperationException("Operation not implemented: party.mkkp.edemokracia.edemokracia.osgi.edemokracia.service.ratingvotedefinition.VoteExchangeFunctionsComponent");
-    }
-
 }

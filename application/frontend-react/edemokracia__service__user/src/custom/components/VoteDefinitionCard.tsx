@@ -1,4 +1,5 @@
 import { Icon, useTheme } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -7,21 +8,21 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Ribbon } from 'react-ribbons';
 import { MdiIcon } from '~/components';
 
-import { Ribbon, RibbonContainer } from 'react-ribbons';
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
-import { IssueStatus } from '~/services/data-api/model/IssueStatus';
-import { ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
+import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
+import { VoteStatus } from '~/services/data-api/model/VoteStatus';
 
-interface IssueCardProps {
-  row: ServiceIssueStored;
-  onRowClick: ((row: ServiceIssueStored) => void) | undefined;
+interface VoteDefinitionCardProps {
+  row: ServiceVoteDefinitionStored;
+  onRowClick: ((row: ServiceVoteDefinitionStored) => void) | undefined;
 }
 
-export function IssueCard(props: IssueCardProps) {
+export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
   const { row, onRowClick } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
@@ -42,19 +43,16 @@ export function IssueCard(props: IssueCardProps) {
 
   var ribbonBg = theme.palette.info.light;
   var ribbonColor = theme.palette.secondary.dark;
-  var ribbonText = t('enumerations.IssueStatus.' + row.status?.toString());
+  var ribbonText = t('enumerations.VoteStatus.' + row.status?.toString());
 
-  if (row.status == IssueStatus.CREATED) {
+  if (row.status == VoteStatus.CREATED) {
     ribbonBg = theme.palette.success.light;
     ribbonColor = theme.palette.secondary.dark;
-  } else if (row.status == IssueStatus.ACTIVE) {
+  } else if (row.status == VoteStatus.ACTIVE) {
     ribbonBg = theme.palette.primary.light;
     ribbonColor = theme.palette.secondary.dark;
-  } else if (row.status == IssueStatus.CLOSED) {
+  } else if (row.status == VoteStatus.CLOSED) {
     ribbonBg = theme.palette.secondary.light;
-    ribbonColor = theme.palette.primary.dark;
-  } else if (row.status == IssueStatus.VOTING) {
-    ribbonBg = theme.palette.info.main;
     ribbonColor = theme.palette.primary.dark;
   }
 
@@ -146,7 +144,7 @@ export function IssueCard(props: IssueCardProps) {
           p: 4,
           zIndex: 1,
           opacity: 0.9,
-          background: `linear-gradient(180deg, transparent 0%,${theme.palette.primary.light} 90%)`,
+          background: `linear-gradient(180deg, transparent 0%,${theme.palette.info.light} 90%)`,
         }}
       >
         {/* Weather Icon */}
@@ -219,54 +217,5 @@ export function IssueCard(props: IssueCardProps) {
         </CardActions>
       </CardContent>
     </Card>
-    //    </RibbonContainer>
-
-    // <Card
-    //   variant="outlined"
-    //   // sx={{
-    //   //   backgroundImage: `url(${commentPng})`,
-    //   //   height: '100%',
-    //   //   display: 'flex',
-    //   //   flexDirection: 'column',
-    //   //   justifyContent: 'space-between',
-    //   // }}
-    // >
-    //   <BoldCardHeader
-    //     title={row.title}
-    //     avatar={
-    //       null ? (
-    //         <ImageDisplay
-    //           token={''}
-    //           fallbackUrl={'avatar-fallback.jpg'}
-    //           imageCSS={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
-    //         />
-    //       ) : (
-    //         <Avatar sx={{ bgcolor: (theme) => theme.palette.primary.main }}>
-    //           {row.createdByUsername?.substring(0, 1)}
-    //         </Avatar>
-    //       )
-    //     }
-    //     subheader={row.createdByUsername}
-    //   />
-    //   <CardContent sx={{ mt: 0, pt: 0 }}>
-    //     <Stack direction="column" spacing={1}>
-    //       <Box>
-    //         <Typography variant={'h5'}>{formatValue(row.created)}</Typography>
-    //       </Box>
-    //       <Box>{row.description}</Box>
-    //     </Stack>
-    //   </CardContent>
-    //   <CardActions sx={{ justifyContent: 'end' }}>
-    //   <Button
-    //       variant={'text'}
-    //       size="small"
-    //       onClick={() => {
-    //         onRowClick?.(row);
-    //       }}
-    //     >
-    //       Megtekintés
-    //     </Button>
-    //   </CardActions>
-    // </Card>
   );
 }

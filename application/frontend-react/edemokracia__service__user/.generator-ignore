@@ -19,3 +19,4 @@
 ###
 .generator-ignore
 .gitignore
+pnpm-lock.yaml
