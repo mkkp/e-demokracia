@@ -103,10 +103,10 @@ public class CreateIssueCustomImplementation implements party.mkkp.edemokracia.e
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createissueinput.CreateIssueInput input)  {
         Serializable issueId = issueService.createIssueForCurrentUser(input.getTitle(),
                 input.getDescription(),
-                input.getIssueType().isPresent() ? input.getIssueType().get().identifier().getIdentifier() : null,
-                input.getCounty().isPresent() ? input.getCounty().get().identifier().getIdentifier() : null,
-                input.getCity().isPresent() ? input.getCity().get().identifier().getIdentifier() : null,
-                input.getDistrict().isPresent() ? input.getDistrict().get().identifier().getIdentifier() : null,
+                input.getIssueType() != null && input.getIssueType().isPresent() ? input.getIssueType().get().identifier().getIdentifier() : null,
+                input.getCounty() != null && input.getCounty().isPresent() ? input.getCounty().get().identifier().getIdentifier() : null,
+                input.getCity() != null && input.getCity().isPresent() ? input.getCity().get().identifier().getIdentifier() : null,
+                input.getDistrict() != null && input.getDistrict().isPresent() ? input.getDistrict().get().identifier().getIdentifier() : null,
                 input.getDebateCloseAt());
 
         return issueDao.getById(issueId).get();

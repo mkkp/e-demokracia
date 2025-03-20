@@ -23,6 +23,9 @@ public class CommentService {
     CommentDao commentDao;
 
     @Reference
+    party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.comment.CommentDao commentEntityDao;
+
+    @Reference
     UserService userService;
 
     @Reference
@@ -30,15 +33,16 @@ public class CommentService {
 
     public void vote(Serializable commentId, SimpleVoteType voteType) {
         User user = userService.getCurrentUserEntity();
-
         Optional<SimpleVote> vote = commentDao.queryVotes(commentId).filterByCreatedByUsername(StringFilter.equalTo(user.getUserName())).selectOne();
         vote.ifPresent((v) -> {
             simpleVoteDao.delete(v);
-            simpleVoteDao.create(SimpleVoteForCreate.builder()
-                    .withCreated(LocalDateTime.now())
-                    .withType(voteType)
-                    .build());
         });
+        commentEntityDao.createVotes(commentEntityDao.getById(commentId).get(), party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.simplevote.SimpleVoteForCreate.builder()
+                .withCreated(LocalDateTime.now())
+                .withType(voteType)
+                .withUser(user)
+                .build());
+
     }
 
     public void voteUp(Serializable commentId) {

@@ -16,7 +16,7 @@ frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/.gitignore,710eed4f483e5fca9516675feb6984fe
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,825dfe26daf2ff2be427e68ed908e936
+frontend-react/pom.xml,55d2075c3c32e4b14bfc4f558bca3013
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 interceptors/pom.xml,66afee6d70ef0a58fb1773ce203cd374
 interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default,862486f63ef3d7cea68a3253d9dceb3f
@@ -47,7 +47,7 @@ keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/the
 keycloak-theme/test-theme-with-compose.sh,448be1b09af6e06708caa4927c9ae224
 keycloak-theme/test-users-realm.json,c1beaa49d916a47b8fc5ca262c21bb71
 model/pom.xml,63585b6fccdfed35f1c1df2f61cb2c58
-pom.xml,c1f913fcb6cc340ed9b90d690eef0937
+pom.xml,0daffd16fd298363398c0e86c510961a
 rest/pom.xml,3be1bdc9cdc8fd42493714a747241e6e
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940

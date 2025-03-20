@@ -85,14 +85,14 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceComme
 function conCard({ row, columns, onRowClick }: CardProps<ServiceCommentStored, any>) {
   return (
     <Grid item sm={12} md={6} lg={4} xl={4}>
-      <CommentCard 
+      <CommentCard
         row={row}
         onRowClick={onRowClick}
         numberOfLikes={row.upVotes}
-        numberOfDislikes={row.downVotes} 
-        onLikeClick={undefined} 
-        onDislikeClick={undefined}>        
-      </CommentCard>
+        numberOfDislikes={row.downVotes}
+        onLikeClick={undefined}
+        onDislikeClick={undefined}
+      ></CommentCard>
     </Grid>
   );
 }

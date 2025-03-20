@@ -50,68 +50,68 @@ export function ArgumentCard(props: ArgumentCardProps) {
   }, []);
 
   return (
-      <Card
-        variant="outlined"
-        sx={{
-          backgroundImage: `url(${con ? conPng : proPng})`,
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
-        <BoldCardHeader
-          title={row.createdByName}
-          avatar={
-            null ? (
-              <ImageDisplay
-                token={''}
-                fallbackUrl={'avatar-fallback.jpg'}
-                imageCSS={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
-              />
-            ) : (
-              <Avatar sx={{ bgcolor: (theme) => theme.palette.primary.main }}>
-                {row.createdByName?.substring(0, 1)}
-              </Avatar>
-            )
-          }
-          subheader={row.createdByUsername}
-        />
-        <CardContent sx={{ mt: 0, pt: 0 }}>
-          <Stack direction="column" spacing={1}>
-            <Box>
-              <Typography variant={'h5'}>{row.title}</Typography>
-            </Box>
-            <Box>{row.description}</Box>
-          </Stack>
-        </CardContent>
-        <CardActions sx={{ justifyContent: 'end' }}>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<MdiIcon path="thumb-up" />}
-            onClick={() => onLikeClick?.(row)}
-          >
-            {numberOfLikes || 0}
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<MdiIcon path="thumb-down" />}
-            onClick={() => onDislikeClick?.(row)}
-          >
-            {numberOfDislikes || 0}
-          </Button>
-          <Button
-            variant={'text'}
-            size="small"
-            onClick={() => {
-              onRowClick?.(row);
-            }}
-          >
-            Megtekintés
-          </Button>
-        </CardActions>
-      </Card>
+    <Card
+      variant="outlined"
+      sx={{
+        backgroundImage: `url(${con ? conPng : proPng})`,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      }}
+    >
+      <BoldCardHeader
+        title={row.createdByName}
+        avatar={
+          null ? (
+            <ImageDisplay
+              token={''}
+              fallbackUrl={'avatar-fallback.jpg'}
+              imageCSS={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
+            />
+          ) : (
+            <Avatar sx={{ bgcolor: (theme) => theme.palette.primary.main }}>
+              {row.createdByName?.substring(0, 1)}
+            </Avatar>
+          )
+        }
+        subheader={row.createdByUsername}
+      />
+      <CardContent sx={{ mt: 0, pt: 0 }}>
+        <Stack direction="column" spacing={1}>
+          <Box>
+            <Typography variant={'h5'}>{row.title}</Typography>
+          </Box>
+          <Box>{row.description}</Box>
+        </Stack>
+      </CardContent>
+      <CardActions sx={{ justifyContent: 'end' }}>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<MdiIcon path="thumb-up" />}
+          onClick={() => onLikeClick?.(row)}
+        >
+          {numberOfLikes || 0}
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<MdiIcon path="thumb-down" />}
+          onClick={() => onDislikeClick?.(row)}
+        >
+          {numberOfDislikes || 0}
+        </Button>
+        <Button
+          variant={'text'}
+          size="small"
+          onClick={() => {
+            onRowClick?.(row);
+          }}
+        >
+          Megtekintés
+        </Button>
+      </CardActions>
+    </Card>
   );
 }

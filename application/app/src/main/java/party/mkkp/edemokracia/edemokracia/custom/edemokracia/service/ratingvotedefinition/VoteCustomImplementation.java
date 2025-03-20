@@ -11,6 +11,9 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.ratingvotedefinition;
 
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.VoteService;
+
 /**
  * 
  * 
@@ -32,6 +35,15 @@ package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.ratingvote
  */
 @org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.ratingvotedefinition.Vote.class)
 public class VoteCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.ratingvotedefinition.Vote {
+
+    @Reference
+    VoteService voteService;
+
+    @Override
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.ratingvotedefinition.RatingVoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.ratingvoteinput.RatingVoteInput input)  {
+        var vote = input.getValue().get();
+        voteService.vote(_this.identifier().getIdentifier(), vote);
+    }
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.ratingvotedefinition.RatingVoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.ratingvoteinput.RatingVoteInput input)  {
