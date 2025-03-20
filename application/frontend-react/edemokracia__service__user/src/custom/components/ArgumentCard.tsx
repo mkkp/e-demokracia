@@ -1,3 +1,4 @@
+import { useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -34,6 +35,11 @@ export function ArgumentCard(props: ArgumentCardProps) {
   const { con, row, onRowClick, numberOfLikes, numberOfDislikes, onLikeClick, onDislikeClick } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
+  const theme = useTheme();
+  var bgColor = theme.palette.success.light;
+  if (con) {
+      var bgColor = theme.palette.error.light;
+  }
 
   const formatValue = useCallback((value: any) => {
     if (value instanceof Date) {
@@ -58,6 +64,7 @@ export function ArgumentCard(props: ArgumentCardProps) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        background: `linear-gradient(180deg, transparent 0%,${bgColor} 400%)`,        
       }}
     >
       <BoldCardHeader
@@ -77,7 +84,10 @@ export function ArgumentCard(props: ArgumentCardProps) {
         }
         subheader={row.createdByUsername}
       />
-      <CardContent sx={{ mt: 0, pt: 0 }}>
+      <CardContent sx={{ 
+        mt: 0, 
+        pt: 0,
+        }}>
         <Stack direction="column" spacing={1}>
           <Box>
             <Typography variant={'h5'}>{row.title}</Typography>
@@ -115,3 +125,4 @@ export function ArgumentCard(props: ArgumentCardProps) {
     </Card>
   );
 }
+

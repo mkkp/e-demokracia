@@ -26,8 +26,11 @@ const issuecardSubTheme = (parentTheme: Theme, data?: any) => {
       MuiCard: {
         styleOverrides: {
           root: {
-            background: alpha(parentTheme.palette.warning.light, 0.04),
+            //background: alpha(parentTheme.palette.warning.light, 0.04),
             // backgroundImage: `url(${issuePng})`,
+            border: `12px dashed ${parentTheme.palette.warning}`,
+            background: `linear-gradient(180deg, transparent 0%,${parentTheme.palette.info.light} 1300%)`,
+
           },
         },
       },
