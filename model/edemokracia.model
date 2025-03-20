@@ -756,18 +756,6 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMAWYEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu5yoI4jEe29qs15q2b6yw" formatValue="true"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMQWYEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvBHYI4jEe29qs15q2b6yw" formatValue="true"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMgWYEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvIcII4jEe29qs15q2b6yw" formatValue="true"/>
-                  <rowOperations xmi:id="_bqs_0AWYEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_bqs_0QWYEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_bqs_0gWYEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_bqs_0wWYEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_bqs_1AWYEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_bqs_1QWYEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_bqs_1gWYEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_bqs_1wWYEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
                 </components>
               </tabs>
               <tabs xmi:id="_wvlRsGBVEe6M1JBD8stPIg" name="favoriteVotesGroup" label="Favorite votes" iconName="star" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="4" stretch="NONE" row="1" fit="LOOSE">
@@ -794,18 +782,6 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhKc4QWYEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu5yoI4jEe29qs15q2b6yw" formatValue="true"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhKc4gWYEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvBHYI4jEe29qs15q2b6yw" formatValue="true"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhLD8AWYEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvIcII4jEe29qs15q2b6yw" formatValue="true"/>
-                  <rowOperations xmi:id="_lI4KcAWYEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_lI4KcQWYEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_lI4KcgWYEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_lI4KcwWYEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_lI4KdAWYEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_lI4KdQWYEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_lI4KdgWYEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                    <operationForm xmi:id="_lI4KdwWYEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                  </rowOperations>
                 </components>
               </tabs>
             </components>
@@ -2427,18 +2403,6 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_tAqesAWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu2vUI4jEe29qs15q2b6yw" formatValue="true"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_tAqesQWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_tAqesgWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
-                <rowOperations xmi:id="_uyHOMAWbEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_uyHOMQWbEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_uyH1QAWbEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_uyH1QQWbEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_uyH1QgWbEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_uyH1QwWbEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_uyH1RAWbEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_uyH1RQWbEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
               </components>
             </tabs>
             <tabs xmi:id="_4APk0F5FEe6vsex_cZNQbQ" name="ActiveGlobalVoteDefinitionsGroup" label="Active Global Votes" iconName="earth" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2470,18 +2434,6 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQQWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu2vUI4jEe29qs15q2b6yw" formatValue="true"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQgWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_xdyxUAWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
-                <rowOperations xmi:id="_zcU6kAWbEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_zcU6kQWbEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_zcU6kgWbEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_zcU6kwWbEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_zcU6lAWbEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_zcU6lQWbEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
-                <rowOperations xmi:id="_zcVhoAWbEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_zcVhoQWbEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                </rowOperations>
               </components>
             </tabs>
             <tabs xmi:id="_8O7y0F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerActivityArea" label="Active votes bv my activity areas" iconName="map-search" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="true" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2515,18 +2467,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_5qEPMQWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_5qE2QAWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_5qE2QQWbEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ" formatValue="true"/>
-                    <rowOperations xmi:id="_72MIgAWbEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_72MIgQWbEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_72MIggWbEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_72MIgwWbEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_72MIhAWbEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_72MIhQWbEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_72MvkAWbEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_72MvkQWbEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
                 <tabs xmi:id="__jKxcF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCityGroup" label="City" iconName="city" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2558,18 +2498,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MQWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu2vUI4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MgWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MwWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
-                    <rowOperations xmi:id="__NCvkAWbEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="__NCvkQWbEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="__NCvkgWbEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="__NCvkwWbEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="__NCvlAWbEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="__NCvlQWbEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="__NCvlgWbEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="__NCvlwWbEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
                 <tabs xmi:id="_APhhIF5LEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityDistrictGroup" label="District" iconName="home-city" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2601,18 +2529,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8AWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8QWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8gWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ" formatValue="true"/>
-                    <rowOperations xmi:id="_CJPa8AWcEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_CJPa8QWcEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_CJPa8gWcEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_CJPa8wWcEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_CJPa9AWcEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_CJPa9QWcEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_CJPa9gWcEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_CJPa9wWcEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
               </components>
@@ -2648,18 +2564,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAAWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAQWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAgWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ" formatValue="true"/>
-                    <rowOperations xmi:id="_GNodcAWcEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_GNodcQWcEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_GNodcgWcEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_GNodcwWcEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_GNoddAWcEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_GNoddQWcEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_GNoddgWcEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_GNoddwWcEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
                 <tabs xmi:id="_CEZ_IF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCityGroup" label="City" iconName="city" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2691,18 +2595,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_I4C1QQWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_I4C1QgWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_I4DcUAWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ" formatValue="true"/>
-                    <rowOperations xmi:id="_KJDKIAWcEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_KJDKIQWcEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_KJDKIgWcEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_KJDKIwWcEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_KJDKJAWcEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_KJDKJQWcEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_KJDKJgWcEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_KJDKJwWcEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
                 <tabs xmi:id="_Cwu5oF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentDistrictGroup" label="District" iconName="home-city" layout="HORIZONTAL" horizontal="LEFT" vertical="TOP" frame="false" col="12" stretch="NONE" row="20" fit="LOOSE">
@@ -2734,18 +2626,6 @@
                     <columns xsi:type="ui:DataColumn" xmi:id="_L7lewQWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nu-rII4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_L7lewgWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_nvFY0I4jEe29qs15q2b6yw" formatValue="true"/>
                     <columns xsi:type="ui:DataColumn" xmi:id="_L7lewwWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" visible="true" sort="NONE" sortPrecedence="0" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ" formatValue="true"/>
-                    <rowOperations xmi:id="_N0DcQAWcEfC6R8DzhDT-HQ" name="voteRatingTableOperation" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_N0DcQQWcEfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteRating" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_N0DcQgWcEfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperation" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_N0DcQwWcEfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteSelectAnswer" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_N0DcRAWcEfC6R8DzhDT-HQ" name="voteYesNoTableOperation" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_N0DcRQWcEfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNo" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_N0EDUAWcEfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperation" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_N0EDUQWcEfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" col="12" stretch="NONE" row="1" fit="LOOSE" onBlur="false" operation="voteYesNoAbstain" generateActionsHook="false" generateVisualPropertiesHook="false"/>
-                    </rowOperations>
                   </components>
                 </tabs>
               </components>
