@@ -6,7 +6,7 @@
     <semanticResources>target/classes/model/edemokracia-esm2psm.model</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_7FNZEGkNEe25ONJ3V89cVA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']"/>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7F3gYGkNEe25ONJ3V89cVA" name="Model Tree" repPath="#_7Fj-YGkNEe25ONJ3V89cVA" changeId="1742462988533">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7F3gYGkNEe25ONJ3V89cVA" name="Model Tree" repPath="#_7Fj-YGkNEe25ONJ3V89cVA" changeId="1742503364291">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']"/>
         <target xmi:type="namespace:Model" href="model/edemokracia.model#_7D8NwGkNEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -18,7 +18,7 @@
         <description xmi:type="description_2:EditionTableDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='DataTypeTable']"/>
         <target xmi:type="namespace:Model" href="model/edemokracia.model#_7D8NwGkNEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7GOsx2kNEe25ONJ3V89cVA" name="Annotation Table" repPath="#_7GOFsGkNEe25ONJ3V89cVA" changeId="1694246032700">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7GOsx2kNEe25ONJ3V89cVA" name="Annotation Table" repPath="#_7GOFsGkNEe25ONJ3V89cVA" changeId="1742503420512">
         <description xmi:type="description_2:EditionTableDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='AnnotationTable']"/>
         <target xmi:type="namespace:Model" href="model/edemokracia.model#_7D8NwGkNEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -397,7 +397,7 @@
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ClassTree']"/>
         <target xmi:type="structure:TransferObjectType" href="model/edemokracia.model#_qCREY2ksEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_qCixNGksEe25ONJ3V89cVA" name="Issue View / Edit Page" repPath="#_qCixMGksEe25ONJ3V89cVA" changeId="1742463028523">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_qCixNGksEe25ONJ3V89cVA" name="Issue View / Edit Page" repPath="#_qCixMGksEe25ONJ3V89cVA" changeId="1742503452178">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']"/>
         <target xmi:type="ui:TransferObjectView" href="model/edemokracia.model#_qCa1YGksEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -773,7 +773,7 @@
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ClassTree']"/>
         <target xmi:type="structure:TransferObjectType" href="model/edemokracia.model#_-b_9Un4XEe2cB7_PsKXsHQ"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_-cJuU34XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition View / Edit Page" repPath="#_-cJHQH4XEe2cB7_PsKXsHQ" changeId="1708288019549">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_-cJuU34XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition View / Edit Page" repPath="#_-cJHQH4XEe2cB7_PsKXsHQ" changeId="1742506592949">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']"/>
         <target xmi:type="ui:TransferObjectView" href="model/edemokracia.model#_-cGrAH4XEe2cB7_PsKXsHQ"/>
       </ownedRepresentationDescriptors>
@@ -817,7 +817,7 @@
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ClassTree']"/>
         <target xmi:type="structure:TransferObjectType" href="model/edemokracia.model#_-f-eY34XEe2cB7_PsKXsHQ"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_-gIPZH4XEe2cB7_PsKXsHQ" name="VoteDefinition View / Edit Page" repPath="#_-gIPYH4XEe2cB7_PsKXsHQ" changeId="1698979016637">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_-gIPZH4XEe2cB7_PsKXsHQ" name="VoteDefinition View / Edit Page" repPath="#_-gIPYH4XEe2cB7_PsKXsHQ" changeId="1742506497567">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']"/>
         <target xmi:type="ui:TransferObjectView" href="model/edemokracia.model#_-gFzIH4XEe2cB7_PsKXsHQ"/>
       </ownedRepresentationDescriptors>
@@ -928,7 +928,7 @@
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ClassTree']"/>
         <target xmi:type="structure:TransferObjectType" href="model/edemokracia.model#_3MbZEIyNEe2VSOmaAz6G9Q"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_3M-LoIyNEe2VSOmaAz6G9Q" name="Dashboard View / Edit Page" repPath="#_3M9kkIyNEe2VSOmaAz6G9Q" changeId="1742489419693">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_3M-LoIyNEe2VSOmaAz6G9Q" name="Dashboard View / Edit Page" repPath="#_3M9kkIyNEe2VSOmaAz6G9Q" changeId="1742509403975">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']"/>
         <target xmi:type="ui:TransferObjectView" href="model/edemokracia.model#_3M7vYIyNEe2VSOmaAz6G9Q"/>
       </ownedRepresentationDescriptors>
@@ -3608,6 +3608,46 @@
             </ownedStyle>
             <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
           </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3_tlYAXLEfC37oc_cfa43g" name="/currentUserVoteCreated : Timestamp">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_ittdoAWaEfC6R8DzhDT-HQ"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_ittdoAWaEfC6R8DzhDT-HQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_tlYQXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3_uMcAXLEfC37oc_cfa43g" name="/currentUserRatingVoteValue : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_zE0O8AWaEfC6R8DzhDT-HQ"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_zE0O8AWaEfC6R8DzhDT-HQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_uMcQXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3_uMcwXLEfC37oc_cfa43g" name="/currentUserSelectAnswerVoteValue : String">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#__RVPIAWaEfC6R8DzhDT-HQ"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#__RVPIAWaEfC6R8DzhDT-HQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_uMdAXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3_uMdgXLEfC37oc_cfa43g" name="/currentUserYesNoAbstainVoteValue : YesNoAbstainVoteValue">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_V9xx4AWbEfC6R8DzhDT-HQ"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_V9xx4AWbEfC6R8DzhDT-HQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_uMdwXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3_uMeQXLEfC37oc_cfa43g" name="/currentUserYesNoVoteValue : YesNoVoteValue">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_uMegXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
           <ownedTreeItems xmi:type="tree:DTreeItem" uid="_WFU1a-RxEe2Bgcx6em3jZg" name="issue : Issue [0..1]">
             <target xmi:type="structure:OneWayRelationMember" href="model/edemokracia.model#_S75mQORxEe2Bgcx6em3jZg"/>
             <semanticElements xmi:type="structure:OneWayRelationMember" href="model/edemokracia.model#_S75mQORxEe2Bgcx6em3jZg"/>
@@ -6027,10 +6067,24 @@
       </cells>
       <currentStyle xmi:type="table:DTableElementStyle" uid="_7GOFtGkNEe25ONJ3V89cVA" labelSize="10" defaultForegroundStyle="true"/>
     </lines>
-    <columns xmi:type="table:DFeatureColumn" uid="_7GOFtWkNEe25ONJ3V89cVA" label="Annotation name" cells="_7GOFuWkNEe25ONJ3V89cVA _7GOsw2kNEe25ONJ3V89cVA" width="200" featureName="name">
+    <lines xmi:type="table:DLine" uid="_8uAggAXLEfC37oc_cfa43g" label="Annotation useRichText">
+      <target xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+      <semanticElements xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+      <originMapping xmi:type="description_2:LineMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='AnnotationTable']/@ownedLineMappings[name='annotation']"/>
+      <cells xmi:type="table:DCell" uid="_8uAgiAXLEfC37oc_cfa43g" label="useRichText" column="_7GOFtWkNEe25ONJ3V89cVA">
+        <target xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+        <semanticElements xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+      </cells>
+      <cells xmi:type="table:DCell" uid="_8uAgigXLEfC37oc_cfa43g" label="hu.blackbelt.judo.meta.esm.ui.VisualElement" column="_7GOFt2kNEe25ONJ3V89cVA">
+        <target xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+        <semanticElements xmi:type="namespace:Annotation" href="model/edemokracia.model#_8t-rUAXLEfC37oc_cfa43g"/>
+      </cells>
+      <currentStyle xmi:type="table:DTableElementStyle" uid="_8uAggQXLEfC37oc_cfa43g" labelSize="10" defaultForegroundStyle="true"/>
+    </lines>
+    <columns xmi:type="table:DFeatureColumn" uid="_7GOFtWkNEe25ONJ3V89cVA" label="Annotation name" cells="_7GOFuWkNEe25ONJ3V89cVA _7GOsw2kNEe25ONJ3V89cVA _8uAgiAXLEfC37oc_cfa43g" width="200" featureName="name">
       <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='AnnotationTable']/@ownedColumnMappings[name='name']"/>
     </columns>
-    <columns xmi:type="table:DFeatureColumn" uid="_7GOFt2kNEe25ONJ3V89cVA" label="Class name" cells="_7GOswWkNEe25ONJ3V89cVA _7GOsxWkNEe25ONJ3V89cVA" width="200" featureName="className">
+    <columns xmi:type="table:DFeatureColumn" uid="_7GOFt2kNEe25ONJ3V89cVA" label="Class name" cells="_7GOswWkNEe25ONJ3V89cVA _7GOsxWkNEe25ONJ3V89cVA _8uAgigXLEfC37oc_cfa43g" width="450" featureName="className">
       <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='AnnotationTable']/@ownedColumnMappings[name='className']"/>
     </columns>
     <description xmi:type="description_2:EditionTableDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='AnnotationTable']"/>
@@ -19651,12 +19705,60 @@
         </ownedStyle>
         <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
       </ownedTreeItems>
-      <ownedTreeItems xmi:type="tree:DTreeItem" uid="_8bcgkAVtEfC6R8DzhDT-HQ" name="Description (H)">
+      <ownedTreeItems xmi:type="tree:DTreeItem" uid="_8bcgkAVtEfC6R8DzhDT-HQ" name="Description (H)" expanded="true">
         <target xmi:type="ui:Group" href="model/edemokracia.model#_bK6uYP1GEe-TYLB4WrW7MA"/>
-        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_8bhZGAVtEfC6R8DzhDT-HQ">
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_8bhZGAVtEfC6R8DzhDT-HQ" name="categories">
           <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_LRJ3AId9Ee2kLcMqsIbMgQ"/>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4GQXMEfC37oc_cfa43g">
+            <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_LRJ3AId9Ee2kLcMqsIbMgQ"/>
+            <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_LRJ3AId9Ee2kLcMqsIbMgQ"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4GgXMEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+          </ownedTreeItems>
           <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_LRJ3AId9Ee2kLcMqsIbMgQ"/>
-          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_8bhZGQVtEfC6R8DzhDT-HQ" labelColor="209,209,209" backgroundColor="209,209,209"/>
+          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_8bhZGQVtEfC6R8DzhDT-HQ" labelSize="10"/>
+          <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
+        </ownedTreeItems>
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-RAAXMEfC37oc_cfa43g" name="County   ▶   county : County [0..1]">
+          <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQxkdvUEe2Bgcx6em3jZg"/>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4GwXMEfC37oc_cfa43g">
+            <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQxkdvUEe2Bgcx6em3jZg"/>
+            <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQxkdvUEe2Bgcx6em3jZg"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4HAXMEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+          </ownedTreeItems>
+          <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQxkdvUEe2Bgcx6em3jZg"/>
+          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-RAQXMEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
+          <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
+        </ownedTreeItems>
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4EAXMEfC37oc_cfa43g" name="City   ▶   city : City [0..1]">
+          <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQKgNvUEe2Bgcx6em3jZg"/>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4HQXMEfC37oc_cfa43g">
+            <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQKgNvUEe2Bgcx6em3jZg"/>
+            <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQKgNvUEe2Bgcx6em3jZg"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4HgXMEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+          </ownedTreeItems>
+          <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPQKgNvUEe2Bgcx6em3jZg"/>
+          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4EQXMEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
+          <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
+        </ownedTreeItems>
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4EwXMEfC37oc_cfa43g" name="District   ▶   district : District [0..1]">
+          <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPRYodvUEe2Bgcx6em3jZg"/>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4HwXMEfC37oc_cfa43g">
+            <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPRYodvUEe2Bgcx6em3jZg"/>
+            <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPRYodvUEe2Bgcx6em3jZg"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4IAXMEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+          </ownedTreeItems>
+          <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_pPRYodvUEe2Bgcx6em3jZg"/>
+          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4FAXMEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
+          <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
+        </ownedTreeItems>
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_FF-4FgXMEfC37oc_cfa43g" name="Description   ▶   description : Text">
+          <target xmi:type="ui:DataField" href="model/edemokracia.model#_BwVU0GkwEe25ONJ3V89cVA"/>
+          <semanticElements xmi:type="ui:DataField" href="model/edemokracia.model#_BwVU0GkwEe25ONJ3V89cVA"/>
+          <ownedStyle xmi:type="tree:TreeItemStyle" uid="_FF-4FwXMEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/datafield.gif"/>
           <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
         </ownedTreeItems>
         <semanticElements xmi:type="ui:Group" href="model/edemokracia.model#_bK6uYP1GEe-TYLB4WrW7MA"/>
@@ -39607,17 +39709,35 @@
             </ownedTreeItems>
             <ownedTreeItems xmi:type="tree:DTreeItem" uid="_0SLBBVtuEe6Mx9dH3yj5gQ" name="Value   ▶   /userVoteEntry : SelectAnswerVoteEntry [0..1]" expanded="true">
               <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
-              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_RAKSnltzEe6Mx9dH3yj5gQ" name="ValueRepresentation   ▶   /valueRepresentation : String">
-                <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAJEcFtzEe6Mx9dH3yj5gQ"/>
-                <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAJEcFtzEe6Mx9dH3yj5gQ"/>
-                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_RAKSn1tzEe6Mx9dH3yj5gQ" labelSize="10"/>
-                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='Column']"/>
+              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGG6UAXTEfC37oc_cfa43g" name="Columns">
+                <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGG6WQXTEfC37oc_cfa43g">
+                  <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAJEcFtzEe6Mx9dH3yj5gQ"/>
+                  <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAJEcFtzEe6Mx9dH3yj5gQ"/>
+                  <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGG6WgXTEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+                  <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']/@subItemMappings[name='Column']"/>
+                </ownedTreeItems>
+                <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGG6UQXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                  <labelFormat>bold</labelFormat>
+                </ownedStyle>
+                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
               </ownedTreeItems>
-              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_RAKSm1tzEe6Mx9dH3yj5gQ" name="Created   ▶   created : Timestamp">
-                <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAIdYFtzEe6Mx9dH3yj5gQ"/>
-                <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_RAIdYFtzEe6Mx9dH3yj5gQ"/>
-                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_RAKSnFtzEe6Mx9dH3yj5gQ" labelSize="10"/>
-                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='Column']"/>
+              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGG6UwXTEfC37oc_cfa43g" name="Table actions">
+                <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGG6VAXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                  <labelFormat>bold</labelFormat>
+                </ownedStyle>
+                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ATableActions']"/>
+              </ownedTreeItems>
+              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGG6VgXTEfC37oc_cfa43g" name="Row actions">
+                <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
+                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGG6VwXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                  <labelFormat>bold</labelFormat>
+                </ownedStyle>
+                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']"/>
               </ownedTreeItems>
               <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJy1FtuEe6Mx9dH3yj5gQ"/>
               <ownedStyle xmi:type="tree:TreeItemStyle" uid="_0SLBBltuEe6Mx9dH3yj5gQ" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
@@ -39679,6 +39799,12 @@
           </ownedTreeItems>
           <ownedTreeItems xmi:type="tree:DTreeItem" uid="_0SLA8FtuEe6Mx9dH3yj5gQ" name="Issue   ▶   issue : Issue [0..1]">
             <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJLyltuEe6Mx9dH3yj5gQ"/>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGG6YQXTEfC37oc_cfa43g">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJLyltuEe6Mx9dH3yj5gQ"/>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJLyltuEe6Mx9dH3yj5gQ"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGG6YgXTEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+            </ownedTreeItems>
             <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_0SJLyltuEe6Mx9dH3yj5gQ"/>
             <ownedStyle xmi:type="tree:TreeItemStyle" uid="_0SLA8VtuEe6Mx9dH3yj5gQ" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/button.gif"/>
             <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
@@ -39691,11 +39817,35 @@
           </ownedTreeItems>
           <ownedTreeItems xmi:type="tree:DTreeItem" uid="_EcP_9nz6Ee6Q9LyUVjs1Qw" name="Owner   ▶   owner : ServiceUser [0..1]" expanded="true">
             <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
-            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_IszPMnz6Ee6Q9LyUVjs1Qw" name="Representation   ▶   /representation : String">
-              <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_EKycgHz6Ee6Q9LyUVjs1Qw"/>
-              <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_EKycgHz6Ee6Q9LyUVjs1Qw"/>
-              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_IszPM3z6Ee6Q9LyUVjs1Qw" labelSize="10"/>
-              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='Column']"/>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGHhYAXTEfC37oc_cfa43g" name="Columns">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGIIcwXTEfC37oc_cfa43g">
+                <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_EKycgHz6Ee6Q9LyUVjs1Qw"/>
+                <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_EKycgHz6Ee6Q9LyUVjs1Qw"/>
+                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGIIdAXTEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']/@subItemMappings[name='Column']"/>
+              </ownedTreeItems>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGHhYQXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+            </ownedTreeItems>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGHhYwXTEfC37oc_cfa43g" name="Table actions">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGHhZAXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ATableActions']"/>
+            </ownedTreeItems>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGIIcAXTEfC37oc_cfa43g" name="Row actions">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGIIcQXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']"/>
             </ownedTreeItems>
             <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_EKuyIHz6Ee6Q9LyUVjs1Qw"/>
             <ownedStyle xmi:type="tree:TreeItemStyle" uid="_EcP_93z6Ee6Q9LyUVjs1Qw" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
@@ -39709,17 +39859,35 @@
           </ownedTreeItems>
           <ownedTreeItems xmi:type="tree:DTreeItem" uid="_jwr5sFtwEe6Mx9dH3yj5gQ" name="VoteSelections   ▶   voteSelections : SelectAnswerVoteSelection [0..*]" expanded="true">
             <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
-            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_jwsgwFtwEe6Mx9dH3yj5gQ" name="Description   ▶   description : String">
-              <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwqrkFtwEe6Mx9dH3yj5gQ"/>
-              <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwqrkFtwEe6Mx9dH3yj5gQ"/>
-              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_jwsgwVtwEe6Mx9dH3yj5gQ" labelSize="10"/>
-              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='Column']"/>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGIvgAXTEfC37oc_cfa43g" name="Columns">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGJWkAXTEfC37oc_cfa43g">
+                <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwqrkFtwEe6Mx9dH3yj5gQ"/>
+                <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwqrkFtwEe6Mx9dH3yj5gQ"/>
+                <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGJWkQXTEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+                <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']/@subItemMappings[name='Column']"/>
+              </ownedTreeItems>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGIvgQXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
             </ownedTreeItems>
-            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_jwsgw1twEe6Mx9dH3yj5gQ" name="Title   ▶   title : String">
-              <target xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwrSoFtwEe6Mx9dH3yj5gQ"/>
-              <semanticElements xmi:type="ui:DataColumn" href="model/edemokracia.model#_jwrSoFtwEe6Mx9dH3yj5gQ"/>
-              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_jwsgxFtwEe6Mx9dH3yj5gQ" labelSize="10"/>
-              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='Column']"/>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGIvgwXTEfC37oc_cfa43g" name="Table actions">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGIvhAXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ATableActions']"/>
+            </ownedTreeItems>
+            <ownedTreeItems xmi:type="tree:DTreeItem" uid="_ZGIvhgXTEfC37oc_cfa43g" name="Row actions">
+              <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
+              <ownedStyle xmi:type="tree:TreeItemStyle" uid="_ZGIvhwXTEfC37oc_cfa43g" labelSize="10" showIcon="false">
+                <labelFormat>bold</labelFormat>
+              </ownedStyle>
+              <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']"/>
             </ownedTreeItems>
             <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_jwqEgFtwEe6Mx9dH3yj5gQ"/>
             <ownedStyle xmi:type="tree:TreeItemStyle" uid="_jwr5sVtwEe6Mx9dH3yj5gQ" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/referencefield.gif"/>
@@ -40327,11 +40495,17 @@
         </ownedTreeItems>
         <ownedTreeItems xmi:type="tree:DTreeItem" uid="_mtsHkFoWEe6_67aMO2jOsw" name="Issue   ▶   issue : Issue [0..1]">
           <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_mQ0lYFoWEe6_67aMO2jOsw"/>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_K4jPcAXTEfC37oc_cfa43g">
+            <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_mQ0lYFoWEe6_67aMO2jOsw"/>
+            <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_mQ0lYFoWEe6_67aMO2jOsw"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_K4jPcQXTEfC37oc_cfa43g" labelColor="209,209,209" backgroundColor="209,209,209"/>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3AColumns']"/>
+          </ownedTreeItems>
           <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_mQ0lYFoWEe6_67aMO2jOsw"/>
           <ownedStyle xmi:type="tree:TreeItemStyle" uid="_mtsHkVoWEe6_67aMO2jOsw" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/button.gif"/>
           <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']"/>
         </ownedTreeItems>
-        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_PL49kI4oEe29qs15q2b6yw" name="Created   ▶   created : Timestamp">
+        <ownedTreeItems xmi:type="tree:DTreeItem" uid="_PL49kI4oEe29qs15q2b6yw" name="Created   ▶   /created : Timestamp">
           <target xmi:type="ui:DataField" href="model/edemokracia.model#_T5a18I4jEe29qs15q2b6yw"/>
           <semanticElements xmi:type="ui:DataField" href="model/edemokracia.model#_T5a18I4jEe29qs15q2b6yw"/>
           <ownedStyle xmi:type="tree:TreeItemStyle" uid="_PL49kY4oEe29qs15q2b6yw" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/datafield.gif"/>
@@ -41608,6 +41782,30 @@
                 </ownedTreeItems>
                 <ownedTreeItems xmi:type="tree:DTreeItem" uid="_TYIstQWYEfC6R8DzhDT-HQ" name="Row actions" expanded="true">
                   <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_ZesvsGBWEe6M1JBD8stPIg"/>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_77lcvgXZEfC37oc_cfa43g" name="voteRating(RatingVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUYAXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUYAXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_77lcvwXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_77lcwQXZEfC37oc_cfa43g" name="voteSelectAnswer(SelectAnswerVoteSelection[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUYgXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUYgXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_77lcwgXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_77lcxAXZEfC37oc_cfa43g" name="voteYesNo(YesNoVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUZAXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_74VUZAXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_77lcxQXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_77lcxwXZEfC37oc_cfa43g" name="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_74V7cAXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_74V7cAXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_77lcyAXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
                   <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_ZesvsGBWEe6M1JBD8stPIg"/>
                   <ownedStyle xmi:type="tree:TreeItemStyle" uid="_TYIstgWYEfC6R8DzhDT-HQ" labelSize="10" showIcon="false">
                     <labelFormat>bold</labelFormat>
@@ -41778,6 +41976,30 @@
                 </ownedTreeItems>
                 <ownedTreeItems xmi:type="tree:DTreeItem" uid="_TYRPkwWYEfC6R8DzhDT-HQ" name="Row actions" expanded="true">
                   <target xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_vp60sGBWEe6M1JBD8stPIg"/>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_5hGXVgXZEfC37oc_cfa43g" name="voteRating(RatingVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_5diF4AXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_5diF4AXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_5hGXVwXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_5hGXWQXZEfC37oc_cfa43g" name="voteSelectAnswer(SelectAnswerVoteSelection[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_5dis8AXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_5dis8AXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_5hGXWgXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_5hGXXAXZEfC37oc_cfa43g" name="voteYesNo(YesNoVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_5dis8gXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_5dis8gXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_5hGXXQXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
+                  <ownedTreeItems xmi:type="tree:DTreeItem" uid="_5hGXXwXZEfC37oc_cfa43g" name="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])">
+                    <target xmi:type="ui:TableOperation" href="model/edemokracia.model#_5djUAAXZEfC37oc_cfa43g"/>
+                    <semanticElements xmi:type="ui:TableOperation" href="model/edemokracia.model#_5djUAAXZEfC37oc_cfa43g"/>
+                    <ownedStyle xmi:type="tree:TreeItemStyle" uid="_5hGXYAXZEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/operationform.gif"/>
+                    <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectViewTree']/@subItemMappings[name='TransferObjectViewTree%3AComponent']/@subItemMappings[name='TransferObjectViewTreeTable%3A%3ARowActions']/@subItemMappings[name='TableOperation']"/>
+                  </ownedTreeItems>
                   <semanticElements xmi:type="ui:TabularReferenceField" href="model/edemokracia.model#_vp60sGBWEe6M1JBD8stPIg"/>
                   <ownedStyle xmi:type="tree:TreeItemStyle" uid="_TYRPlAWYEfC6R8DzhDT-HQ" labelSize="10" showIcon="false">
                     <labelFormat>bold</labelFormat>

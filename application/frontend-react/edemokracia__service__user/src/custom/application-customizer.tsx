@@ -7,6 +7,7 @@
 // Template file: actor/src/custom/application-customizer.tsx.hbs
 
 import type { BundleContext } from '@pandino/pandino-api';
+import { registerServiceIssueIssueRichTextEditorConfig } from './components/IssueRichTextEditor';
 import { registerCloseDebateInputCloseDebateInput_FormActionsHook } from './customCloseDebateInputCloseDebateInput_FormActionsHook';
 import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './customServiceCreateIssueInputCreateIssueInput_FormActionsHook';
 import { registerServiceDashboardDashboard_View_EditActionsHook } from './customServiceDashboardDashboard_View_EditActionsHook';
@@ -106,5 +107,6 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerIssuecardSubThemeHook(context);
     registerServiceIssueCommentsCards(context);
     registerIssueheaderSubThemeHook(context);
+    registerServiceIssueIssueRichTextEditorConfig(context);
   }
 }

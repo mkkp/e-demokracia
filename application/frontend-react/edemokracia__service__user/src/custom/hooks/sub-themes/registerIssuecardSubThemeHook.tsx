@@ -30,7 +30,6 @@ const issuecardSubTheme = (parentTheme: Theme, data?: any) => {
             // backgroundImage: `url(${issuePng})`,
             border: `12px dashed ${parentTheme.palette.warning}`,
             background: `linear-gradient(180deg, transparent 0%,${parentTheme.palette.info.light} 1300%)`,
-
           },
         },
       },

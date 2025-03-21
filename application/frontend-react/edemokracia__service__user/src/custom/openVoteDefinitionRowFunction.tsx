@@ -15,7 +15,7 @@ import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-a
 import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
 
 import {
-  routeToServiceUserAdminVoteDefinitionsAccessViewPage,
+  //  routeToServiceUserAdminVoteDefinitionsAccessViewPage,
   routeToServiceUserRatingVoteDefinitionsAccessViewPage,
   routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage,
   routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
@@ -54,7 +54,9 @@ export const openVoteDefinitionPage = () => {
       _identifier: id,
     };
 
-    if (entityType === 'edemokracia.YesNoVoteDefinition') {
+    console.log("Entity type " + entityType);
+
+    if (entityType === 'YesNoVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForYesNoVoteDefinitionsImpl.list(
         undefined,
@@ -62,7 +64,7 @@ export const openVoteDefinitionPage = () => {
       );
       // Open view page in access
       navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
-    } else if (entityType === 'edemokracia.YesNoAbstainVoteDefinition') {
+    } else if (entityType === 'YesNoAbstainVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
         undefined,
@@ -70,7 +72,7 @@ export const openVoteDefinitionPage = () => {
       );
       // Open view page in access
       navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
-    } else if (entityType === 'edemokracia.RatingVoteDefinition') {
+    } else if (entityType === 'RatingVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForRatingVoteDefinitionsImpl.list(
         undefined,
@@ -78,7 +80,7 @@ export const openVoteDefinitionPage = () => {
       );
       // Open view page in access
       navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
-    } else if (entityType === 'edemokracia.SelectAnswerVoteDefinition') {
+    } else if (entityType === 'SelectAnswerVoteDefinition') {
       // Retrieve signedIdentifier from access
       const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
         undefined,
@@ -86,8 +88,9 @@ export const openVoteDefinitionPage = () => {
       );
       // Open view page in access
       navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
-    } else {
-      navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(row.__signedIdentifier));
     }
+    //else {
+    //  navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(row.__signedIdentifier));
+    //}
   };
 };

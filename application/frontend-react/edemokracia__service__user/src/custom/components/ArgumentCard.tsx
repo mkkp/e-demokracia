@@ -38,7 +38,7 @@ export function ArgumentCard(props: ArgumentCardProps) {
   const theme = useTheme();
   var bgColor = theme.palette.success.light;
   if (con) {
-      var bgColor = theme.palette.error.light;
+    var bgColor = theme.palette.error.light;
   }
 
   const formatValue = useCallback((value: any) => {
@@ -64,7 +64,7 @@ export function ArgumentCard(props: ArgumentCardProps) {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        background: `linear-gradient(180deg, transparent 0%,${bgColor} 400%)`,        
+        background: `linear-gradient(180deg, transparent 0%,${bgColor} 400%)`,
       }}
     >
       <BoldCardHeader
@@ -84,10 +84,12 @@ export function ArgumentCard(props: ArgumentCardProps) {
         }
         subheader={row.createdByUsername}
       />
-      <CardContent sx={{ 
-        mt: 0, 
-        pt: 0,
-        }}>
+      <CardContent
+        sx={{
+          mt: 0,
+          pt: 0,
+        }}
+      >
         <Stack direction="column" spacing={1}>
           <Box>
             <Typography variant={'h5'}>{row.title}</Typography>
@@ -125,4 +127,3 @@ export function ArgumentCard(props: ArgumentCardProps) {
     </Card>
   );
 }
-

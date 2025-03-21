@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20250113_194711_0c9beb92_develop">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20250222_040632_f239deeb_develop">
   <elements xsi:type="namespace:Package" xmi:id="_7D8Nz2kNEe25ONJ3V89cVA" name="measures">
     <elements xsi:type="measure:Measure" xmi:id="_7D81AmkNEe25ONJ3V89cVA" name="Acceleration">
       <units xmi:id="_7D81A2kNEe25ONJ3V89cVA" name="metrePerSecondSquared" symbol="m/s²"/>
@@ -1011,7 +1011,7 @@
           <components xsi:type="ui:TabularReferenceField" xmi:id="_pPRYodvUEe2Bgcx6em3jZg" name="district" label="District" iconName="home-city" col="4" relationFeature="_ZTn0QNvUEe2Bgcx6em3jZg">
             <columns xsi:type="ui:DataColumn" xmi:id="_pPR_stvUEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_AHgwkIXyEe2kLcMqsIbMgQ"/>
           </components>
-          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" label="Description" iconName="text_fields" row="8" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
+          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" appliedAnnotations="_8t-rUAXLEfC37oc_cfa43g" label="Description" iconName="text_fields" row="8" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_6kmaIId8Ee2kLcMqsIbMgQ" name="attachments" label="" iconName="" row="10" relationFeature="_qXz2kGksEe25ONJ3V89cVA" smallTable="true" representationComponent="tag">
           <columns xsi:type="ui:DataColumn" xmi:id="_6kmaIYd8Ee2kLcMqsIbMgQ" name="link" label="Link" iconName="text_fields" dataFeature="_p6HN8GksEe25ONJ3V89cVA"/>
@@ -1474,7 +1474,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_DZzr8IXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" dataFeature="_-ezZsH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZ5ykIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-e-_4H4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" performableActions="_Vd5qAnsAEe6bP4FWw7fjQA _Vd5qA3sAEe6bP4FWw7fjQA _Vd5qBHsAEe6bP4FWw7fjQA _Vd5qBXsAEe6bP4FWw7fjQA _Vd5qBnsAEe6bP4FWw7fjQA">
+      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" performableActions="_Vd5qAnsAEe6bP4FWw7fjQA _Vd5qA3sAEe6bP4FWw7fjQA _Vd5qBHsAEe6bP4FWw7fjQA _Vd5qBXsAEe6bP4FWw7fjQA _Vd5qBnsAEe6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-eROMH4XEe2cB7_PsKXsHQ">
         <components xsi:type="ui:Group" xmi:id="_NHnv0FsoEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true">
           <components xsi:type="ui:Group" xmi:id="_NHnv0VsoEe6Mx9dH3yj5gQ" name="userVote" label="" hiddenBy="_YYB_AFsmEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_NHnv0lsoEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
@@ -2756,7 +2756,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_T58aYI4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_T5o4YI4jEe29qs15q2b6yw" name="description" label="Description" iconName="text_fields" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-gFzIH4XEe2cB7_PsKXsHQ" name="VoteDefinition_View_Edit" label="VoteDefinition View / Edit" iconName="vote" layout="VERTICAL">
+      <view xmi:id="_-gFzIH4XEe2cB7_PsKXsHQ" name="VoteDefinition_View_Edit" label="VoteDefinition View / Edit" iconName="vote" layout="VERTICAL" titleFrom="ATTRIBUTE" titleAttribute="_-gbxYH4XEe2cB7_PsKXsHQ" openInDialog="true" dialogSize="LG" autoCloseOnSave="true">
         <components xsi:type="ui:Group" xmi:id="_3IYooI4kEe29qs15q2b6yw" name="group" frame="true">
           <components xsi:type="ui:DataField" xmi:id="_T5STEI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
           <components xsi:type="ui:DataField" xmi:id="_T5260I4jEe29qs15q2b6yw" name="closeAt" label="CloseAt" iconName="schedule" col="4" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
@@ -3999,5 +3999,6 @@
   </elements>
   <annotations xmi:id="_7D81XmkNEe25ONJ3V89cVA" name="dashboard" className="hu.blackbelt.judo.meta.esm.accesspoint.Access" elements="_GgaEAIyPEe2VSOmaAz6G9Q"/>
   <annotations xmi:id="_7D81X2kNEe25ONJ3V89cVA" name="profile" className="hu.blackbelt.judo.meta.esm.accesspoint.Access" elements="_NDSZcFvYEe6bTb-1BwQgmA"/>
+  <annotations xmi:id="_8t-rUAXLEfC37oc_cfa43g" name="useRichText" className="hu.blackbelt.judo.meta.esm.ui.VisualElement" elements="_BwVU0GkwEe25ONJ3V89cVA"/>
   <mimeTypes xmi:id="_lWRgEGkQEe25ONJ3V89cVA" type="*" subType="*"/>
 </namespace:Model>

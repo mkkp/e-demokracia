@@ -25,7 +25,7 @@ import {
   SERVICE_ISSUE_ISSUE_VIEW_EDIT_CLOSE_DEBATE_INPUT_FORM_ACTIONS_HOOK_INTERFACE_KEY,
 } from '~/dialogs/Service/Issue/Issue_View_Edit/CloseDebate/Input/Form/customization';
 import {
-  routeToServiceUserAdminVoteDefinitionsAccessViewPage,
+  //  routeToServiceUserAdminVoteDefinitionsAccessViewPage,
   routeToServiceUserRatingVoteDefinitionsAccessViewPage,
   routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage,
   routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
@@ -114,9 +114,10 @@ const customCloseDebateInputCloseDebateInput_FormActionsHook: CloseDebateInputCl
         );
         // Open view page in access
         navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
-      } else {
-        navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(signedId));
       }
+      // else {
+      //   navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(signedId));
+      // }
     },
   };
 };
