@@ -54,7 +54,7 @@ export const openVoteDefinitionPage = () => {
       _identifier: id,
     };
 
-    console.log("Entity type " + entityType);
+    console.log('Entity type ' + entityType);
 
     if (entityType === 'YesNoVoteDefinition') {
       // Retrieve signedIdentifier from access
