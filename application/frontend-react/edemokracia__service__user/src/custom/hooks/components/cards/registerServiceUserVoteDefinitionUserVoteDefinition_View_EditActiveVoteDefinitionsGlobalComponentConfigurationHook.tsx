@@ -86,7 +86,15 @@ const ServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitions
   // elements are handled properly on all devices.
   return (
     <Grid item sm={12} md={6} lg={4} xl={4}>
-      <VoteDefinitionCard row={row} onRowClick={onRowClick}></VoteDefinitionCard>
+      <VoteDefinitionCard
+        row={row}
+        onRowClick={onRowClick}
+        revokeVote={actions.activeVoteDefinitionsGlobalRevokeVoteForVoteDefinitionAction}
+        voteRatingAction={actions.activeVoteDefinitionsGlobalVoteRatingAction}
+        voteSelectAnswerAction={actions.activeVoteDefinitionsGlobalVoteSelectAnswerAction}
+        voteYesNoAction={actions.activeVoteDefinitionsGlobalVoteYesNoAction}
+        voteYesNoAbstainAction={actions.activeVoteDefinitionsGlobalVoteYesNoAbstainAction}
+      ></VoteDefinitionCard>
     </Grid>
   );
 };

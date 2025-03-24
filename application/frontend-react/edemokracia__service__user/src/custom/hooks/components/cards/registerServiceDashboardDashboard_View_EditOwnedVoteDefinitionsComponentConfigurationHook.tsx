@@ -86,7 +86,15 @@ const ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentCard: FC<
   // elements are handled properly on all devices.
   return (
     <Grid item sm={12} md={6} lg={4} xl={4}>
-      <VoteDefinitionCard row={row} onRowClick={onRowClick}></VoteDefinitionCard>
+      <VoteDefinitionCard
+        row={row}
+        onRowClick={onRowClick}
+        revokeVote={undefined}
+        voteRatingAction={actions.ownedVoteDefinitionsVoteRatingAction}
+        voteSelectAnswerAction={actions.ownedVoteDefinitionsVoteSelectAnswerAction}
+        voteYesNoAction={actions.ownedVoteDefinitionsVoteYesNoAction}
+        voteYesNoAbstainAction={actions.ownedVoteDefinitionsVoteYesNoAbstainAction}
+      ></VoteDefinitionCard>
     </Grid>
   );
 };

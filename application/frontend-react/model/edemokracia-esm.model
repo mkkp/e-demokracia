@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20250113_194711_0c9beb92_develop">
+<namespace:Model xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:accesspoint="http://blackbelt.hu/judo/meta/esm/accesspoint" xmlns:measure="http://blackbelt.hu/judo/meta/esm/measure" xmlns:namespace="http://blackbelt.hu/judo/meta/esm/namespace" xmlns:structure="http://blackbelt.hu/judo/meta/esm/structure" xmlns:type="http://blackbelt.hu/judo/meta/esm/type" xmlns:ui="http://blackbelt.hu/judo/meta/esm/ui" xsi:schemaLocation="http://blackbelt.hu/judo/meta/esm/accesspoint http://blackbelt.hu/judo/meta/esm#//accesspoint http://blackbelt.hu/judo/meta/esm/measure http://blackbelt.hu/judo/meta/esm#//measure http://blackbelt.hu/judo/meta/esm/namespace http://blackbelt.hu/judo/meta/esm#//namespace http://blackbelt.hu/judo/meta/esm/structure http://blackbelt.hu/judo/meta/esm#//structure http://blackbelt.hu/judo/meta/esm/type http://blackbelt.hu/judo/meta/esm#//type http://blackbelt.hu/judo/meta/esm/ui http://blackbelt.hu/judo/meta/esm#//ui" xmi:id="_7D8NwGkNEe25ONJ3V89cVA" name="edemokracia" metaVersion="1.2.0.20250222_040632_f239deeb_develop">
   <elements xsi:type="namespace:Package" xmi:id="_7D8Nz2kNEe25ONJ3V89cVA" name="measures">
     <elements xsi:type="measure:Measure" xmi:id="_7D81AmkNEe25ONJ3V89cVA" name="Acceleration">
       <units xmi:id="_7D81A2kNEe25ONJ3V89cVA" name="metrePerSecondSquared" symbol="m/s²"/>
@@ -659,7 +659,7 @@
           <tabs xmi:id="_P5VicFw5Ee6gN-oVBDDIOQ" name="issues" label="Issues" iconName="wechat" frame="true" row="20">
             <components xsi:type="ui:TabBar" xmi:id="_CR_JgIyUEe2VSOmaAz6G9Q" name="IssueTabBar" row="20" orientation="VERTICAL">
               <tabs xmi:id="_E0b4IIyUEe2VSOmaAz6G9Q" name="myissues" label="My issues" iconName="account-circle" row="20">
-                <components xsi:type="ui:TabularReferenceField" xmi:id="_CTqMYFw4Ee6gN-oVBDDIOQ" name="ownedIssues" label="" iconName="" row="20" relationFeature="_OQ7kkIyQEe2VSOmaAz6G9Q" representationComponent="card" rowsPerPage="36">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_CTqMYFw4Ee6gN-oVBDDIOQ" name="ownedIssues" label="" iconName="" row="20" relationFeature="_OQ7kkIyQEe2VSOmaAz6G9Q" representationComponent="card" rowsPerPage="15" selectorRowsPerPage="15">
                   <columns xsi:type="ui:DataColumn" xmi:id="_CTsBk1w4Ee6gN-oVBDDIOQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_L-LswFw_Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_L-LFsFw_Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
@@ -694,7 +694,7 @@
                 </components>
               </tabs>
               <tabs xmi:id="_wto7cFw4Ee6gN-oVBDDIOQ" name="favoriteIssues" label="Favorite Issues" iconName="star" row="20">
-                <components xsi:type="ui:TabularReferenceField" xmi:id="_7sPXAFw4Ee6gN-oVBDDIOQ" name="favoriteIssues" label="" iconName="" row="20" relationFeature="_Fp_g8Fw2Ee6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_7sPXAFw4Ee6gN-oVBDDIOQ" name="favoriteIssues" label="" iconName="" row="20" relationFeature="_Fp_g8Fw2Ee6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="15" selectorRowsPerPage="15">
                   <columns xsi:type="ui:DataColumn" xmi:id="_7sRMMVw4Ee6gN-oVBDDIOQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_StOXoFw_Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_StNwkFw_Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
@@ -733,7 +733,7 @@
           <tabs xmi:id="_bFZdMGBVEe6M1JBD8stPIg" name="votes" label="Votes" iconName="vote" frame="true" row="20">
             <components xsi:type="ui:TabBar" xmi:id="_ju2mUGBVEe6M1JBD8stPIg" name="votesTabBar" row="20" orientation="VERTICAL">
               <tabs xmi:id="_rK5hIGBVEe6M1JBD8stPIg" name="myVotesGroup" label="My votes" iconName="account-circle" row="20">
-                <components xsi:type="ui:TabularReferenceField" xmi:id="_ZesvsGBWEe6M1JBD8stPIg" name="ownedVoteDefinitions" label="" iconName="" row="20" relationFeature="_LYtscGBWEe6M1JBD8stPIg" representationComponent="card" selectorRowsPerPage="36">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_ZesvsGBWEe6M1JBD8stPIg" name="ownedVoteDefinitions" label="" iconName="" row="20" relationFeature="_LYtscGBWEe6M1JBD8stPIg" representationComponent="card" rowsPerPage="15" selectorRowsPerPage="15">
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZexBImBWEe6M1JBD8stPIg" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UV5HEe6vsex_cZNQbQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZexoMWBWEe6M1JBD8stPIg" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZeyPQGBWEe6M1JBD8stPIg" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
@@ -756,6 +756,11 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMAWYEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu5yoI4jEe29qs15q2b6yw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMQWYEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nvBHYI4jEe29qs15q2b6yw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_ZTFoMgWYEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvIcII4jEe29qs15q2b6yw"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_4JO8gAg2EfC37oc_cfa43g" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_4JPjkAg2EfC37oc_cfa43g" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_4JQKoAg2EfC37oc_cfa43g" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_4JQKoQg2EfC37oc_cfa43g" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_4JQxsAg2EfC37oc_cfa43g" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
                   <rowOperations xmi:id="_74VUYAXZEfC37oc_cfa43g" name="voteRatingTableOperationForOwned" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_74VUYQXZEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
                   </rowOperations>
@@ -768,10 +773,13 @@
                   <rowOperations xmi:id="_74V7cAXZEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForOwned" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_74V7cQXZEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
                   </rowOperations>
+                  <rowOperations xmi:id="_V1E0EAanEfC37oc_cfa43g" name="revokeVoteTableOperationForOwned" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                    <operationForm xmi:id="_V1E0EQanEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
+                  </rowOperations>
                 </components>
               </tabs>
-              <tabs xmi:id="_wvlRsGBVEe6M1JBD8stPIg" name="favoriteVotesGroup" label="Favorite votes" iconName="star" col="4">
-                <components xsi:type="ui:TabularReferenceField" xmi:id="_vp60sGBWEe6M1JBD8stPIg" name="favoriteVoteDefinitions" label="" iconName="" row="20" relationFeature="_-60oYGBVEe6M1JBD8stPIg" representationComponent="card" selectorRowsPerPage="36">
+              <tabs xmi:id="_wvlRsGBVEe6M1JBD8stPIg" name="favoriteVotesGroup" label="Favorite votes" iconName="star" row="20">
+                <components xsi:type="ui:TabularReferenceField" xmi:id="_vp60sGBWEe6M1JBD8stPIg" name="favoriteVoteDefinitions" label="" iconName="" row="20" relationFeature="_-60oYGBVEe6M1JBD8stPIg" representationComponent="card" rowsPerPage="15" selectorRowsPerPage="15">
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp94A2BWEe6M1JBD8stPIg" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UV5HEe6vsex_cZNQbQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp-fEWBWEe6M1JBD8stPIg" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_vp-fE2BWEe6M1JBD8stPIg" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
@@ -794,17 +802,25 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhKc4QWYEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu5yoI4jEe29qs15q2b6yw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhKc4gWYEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nvBHYI4jEe29qs15q2b6yw"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_hhLD8AWYEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvIcII4jEe29qs15q2b6yw"/>
-                  <rowOperations xmi:id="_5diF4AXZEfC37oc_cfa43g" name="voteRatingTableOperationForOwned" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
+                  <columns xsi:type="ui:DataColumn" xmi:id="_6TBTgAg2EfC37oc_cfa43g" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_6TB6kAg2EfC37oc_cfa43g" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_6TB6kQg2EfC37oc_cfa43g" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_6TChoAg2EfC37oc_cfa43g" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_6TDIsAg2EfC37oc_cfa43g" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
+                  <rowOperations xmi:id="_5diF4AXZEfC37oc_cfa43g" name="voteRatingTableOperationForFavorite" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_5diF4QXZEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
                   </rowOperations>
-                  <rowOperations xmi:id="_5dis8AXZEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForOwned" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
+                  <rowOperations xmi:id="_5dis8AXZEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForFavorite" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_5dis8QXZEfC37oc_cfa43g" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
                   </rowOperations>
-                  <rowOperations xmi:id="_5dis8gXZEfC37oc_cfa43g" name="voteYesNoTableOperationForOwned" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
+                  <rowOperations xmi:id="_5dis8gXZEfC37oc_cfa43g" name="voteYesNoTableOperationForFavorite" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_5dis8wXZEfC37oc_cfa43g" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
                   </rowOperations>
-                  <rowOperations xmi:id="_5djUAAXZEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForOwned" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
+                  <rowOperations xmi:id="_5djUAAXZEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForFavorite" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
                     <operationForm xmi:id="_5djUAQXZEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                  </rowOperations>
+                  <rowOperations xmi:id="_Z1xpYAanEfC37oc_cfa43g" name="revokeVoteTableOperationForFavorite" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                    <operationForm xmi:id="_Z1xpYQanEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
                   </rowOperations>
                 </components>
               </tabs>
@@ -1465,6 +1481,12 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_M3mCIAN6EfCp66wHlBPO-A" name="rateStep" dataType="_7D8NxGkNEe25ONJ3V89cVA" required="true" defaultExpression="1&#xA;" binding="_7XNUkAN5EfCp66wHlBPO-A" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_M3vzIAN6EfCp66wHlBPO-A"/>
       </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_FJZ08Ag8EfC37oc_cfa43g" name="numberOfVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::RatingVoteEntry)!count()" memberType="DERIVED">
+        <inherited xmi:id="_FJi-4Ag8EfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_U-k94Ag8EfC37oc_cfa43g" name="sumOfRating" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::RatingVoteEntry)!sum(v | v.value)" memberType="DERIVED">
+        <inherited xmi:id="_U-k94Qg8EfC37oc_cfa43g"/>
+      </attributes>
       <mapping xmi:id="_-dzUIH4XEe2cB7_PsKXsHQ" target="_FKa1oG6MEe2wNaja8kBvcQ"/>
       <operations xmi:id="_RhhvUI4UEe29qs15q2b6yw" name="vote" customImplementation="false" body="var edemokracia::VoteDefinition vote = this as edemokracia::VoteDefinition;&#xA;var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;var edemokracia::RatingVoteEntry voteEntry = new edemokracia::RatingVoteEntry(&#xA;&#x9;value = input.value,&#xA;&#x9;voteDefinition = vote,&#xA;&#x9;user = user&#x9;&#xA;);&#xA;" binding="voteRating">
         <input xmi:id="_RhjkgI4UEe29qs15q2b6yw" lower="1" upper="1" target="_LEKjoH5YEe2kLcMqsIbMgQ" name="input"/>
@@ -1498,7 +1520,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_DZzr8IXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" dataFeature="_-ezZsH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_DZ5ykIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-e-_4H4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" performableActions="_Vd5qAnsAEe6bP4FWw7fjQA _Vd5qA3sAEe6bP4FWw7fjQA _Vd5qBHsAEe6bP4FWw7fjQA _Vd5qBXsAEe6bP4FWw7fjQA _Vd5qBnsAEe6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-eROMH4XEe2cB7_PsKXsHQ">
+      <view xmi:id="_-dfLEH4XEe2cB7_PsKXsHQ" name="RatingVoteDefinition_View_Edit" label="RatingVoteDefinition View / Edit" layout="VERTICAL" performableActions="_Vd5qAnsAEe6bP4FWw7fjQA _Vd5qA3sAEe6bP4FWw7fjQA _Vd5qBHsAEe6bP4FWw7fjQA _Vd5qBXsAEe6bP4FWw7fjQA _Vd5qBnsAEe6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-eROMH4XEe2cB7_PsKXsHQ" dialogSize="LG" autoCloseOnSave="true">
         <components xsi:type="ui:Group" xmi:id="_NHnv0FsoEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true">
           <components xsi:type="ui:Group" xmi:id="_NHnv0VsoEe6Mx9dH3yj5gQ" name="userVote" label="" hiddenBy="_YYB_AFsmEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_NHnv0lsoEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
@@ -1640,6 +1662,9 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_JqpuoP3gEe-p66wHlBPO-A" name="createdByUsername" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.userName" memberType="DERIVED">
         <inherited xmi:id="_Jqpuof3gEe-p66wHlBPO-A"/>
       </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_8dXccAg8EfC37oc_cfa43g" name="numberOfVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::RatingVoteEntry)!count()" memberType="DERIVED">
+        <inherited xmi:id="_8dXccQg8EfC37oc_cfa43g"/>
+      </attributes>
       <mapping xmi:id="_-ca0EH4XEe2cB7_PsKXsHQ" target="_-PRocG6LEe2wNaja8kBvcQ"/>
       <operations xmi:id="__FsxEH5YEe2kLcMqsIbMgQ" name="vote" customImplementation="false" body="var edemokracia::SelectAnswerVoteDefinition vote = this as edemokracia::SelectAnswerVoteDefinition;&#xA;var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;if (vote.isSelectAnswerType) {&#xA;&#x9;var edemokracia::SelectAnswerVoteEntry voteEntry = new edemokracia::SelectAnswerVoteEntry(&#xA;&#x9;&#x9;value = input,&#xA;&#x9;&#x9;voteDefinition = vote,&#xA;&#x9;&#x9;user = user&#xA;&#x9;);&#xA;}&#xA;" binding="voteSelectAnswer">
         <input xmi:id="_IqQQgH5ZEe2kLcMqsIbMgQ" lower="1" upper="1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="input" rangeType="DERIVED" rangeExpression="self.voteSelections"/>
@@ -1671,7 +1696,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A_aGEIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" dataFeature="_-dAp8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A_rL0IXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-dMQIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" performableActions="_JTH2l3r9Ee6bP4FWw7fjQA _JTH2lXr9Ee6bP4FWw7fjQA _JTH2k3r9Ee6bP4FWw7fjQA _JTH2knr9Ee6bP4FWw7fjQA _JTH2lnr9Ee6bP4FWw7fjQA">
+      <view xmi:id="_-cGrAH4XEe2cB7_PsKXsHQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL" performableActions="_JTH2l3r9Ee6bP4FWw7fjQA _JTH2lXr9Ee6bP4FWw7fjQA _JTH2k3r9Ee6bP4FWw7fjQA _JTH2knr9Ee6bP4FWw7fjQA _JTH2lnr9Ee6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-cdQUH4XEe2cB7_PsKXsHQ" dialogSize="LG" autoCloseOnSave="true">
         <components xsi:type="ui:Group" xmi:id="_0SJy0FtuEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA">
           <components xsi:type="ui:Group" xmi:id="_0SJy0VtuEe6Mx9dH3yj5gQ" name="userVote" label="" hiddenBy="_jNc7sFtuEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_0SJy0ltuEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
@@ -1728,7 +1753,7 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_vVuuYFtpEe6Mx9dH3yj5gQ" lower="1" upper="1" target="_p1aUIGksEe25ONJ3V89cVA" name="owner" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_5-GhoG6gEe2wNaja8kBvcQ" getterExpression="">
         <inherited xmi:id="_vV6UkFtpEe6Mx9dH3yj5gQ"/>
       </relations>
-      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_MSzPwFtsEe6Mx9dH3yj5gQ" lower="1" upper="1" target="_pSF7gFtqEe6Mx9dH3yj5gQ" name="value" defaultExpression="" rangeExpression="self.voteDefinition!asType(edemokracia::SelectAnswerVoteDefinition).voteSelections" relationKind="AGGREGATION" memberType="MAPPED" rangeType="DERIVED" binding="_fvDlYG6hEe2wNaja8kBvcQ" getterExpression="">
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_MSzPwFtsEe6Mx9dH3yj5gQ" lower="1" upper="1" target="_pSF7gFtqEe6Mx9dH3yj5gQ" name="value" defaultExpression="" rangeExpression="self.voteDefinition!asType(edemokracia::SelectAnswerVoteDefinition).voteSelections" relationKind="AGGREGATION" memberType="MAPPED" rangeType="DERIVED" binding="_pPWLkAhAEfC37oc_cfa43g" getterExpression="">
         <inherited xmi:id="_MS_dAFtsEe6Mx9dH3yj5gQ"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_ZameYFtqEe6Mx9dH3yj5gQ" name="created" dataType="_7D8NyWkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_1F3Js26HEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
@@ -1757,6 +1782,9 @@
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_EXYb4FttEe6Mx9dH3yj5gQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_ca44MG6cEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_EXfwoFttEe6Mx9dH3yj5gQ"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_KJRy0Ag9EfC37oc_cfa43g" name="sumOfVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression=" self.entries!count()" memberType="DERIVED">
+        <inherited xmi:id="_KJaVsAg9EfC37oc_cfa43g"/>
       </attributes>
       <mapping xmi:id="_yZMp8FtqEe6Mx9dH3yj5gQ" target="_Xwdl4G6bEe2wNaja8kBvcQ"/>
       <form xmi:id="_pSKM8FtqEe6Mx9dH3yj5gQ" name="SelectAnswerVoteSelection_Form" label="SelectAnswerVoteSelection Form" layout="VERTICAL">
@@ -1969,6 +1997,15 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_dmHCgFrbEe6gN-oVBDDIOQ" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResidentDistrict" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_3x3fYFrIEe6_67aMO2jOsw" getterExpression="">
         <inherited xmi:id="_dmMiEFrbEe6gN-oVBDDIOQ"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_3QoJQAglEfC37oc_cfa43g" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssues" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_ngtTwAglEfC37oc_cfa43g" getterExpression="">
+        <inherited xmi:id="_3QxTMAglEfC37oc_cfa43g"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_t7_fsAgmEfC37oc_cfa43g" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInActivity" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_S1WpkAgmEfC37oc_cfa43g" getterExpression="">
+        <inherited xmi:id="_t8MUAAgmEfC37oc_cfa43g"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="__Ew-gAgmEfC37oc_cfa43g" target="_qCREY2ksEe25ONJ3V89cVA" name="activeIssuesInResident" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_gctQEAgmEfC37oc_cfa43g" getterExpression="">
+        <inherited xmi:id="__E46UAgmEfC37oc_cfa43g"/>
+      </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_xxzysFrOEe6_67aMO2jOsw" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.userName" memberType="DERIVED">
         <inherited xmi:id="_xx-x0FrOEe6_67aMO2jOsw"/>
       </attributes>
@@ -1980,11 +2017,11 @@
       </operations>
       <form xmi:id="_jK51vVq4Ee6_67aMO2jOsw" name="UserIssues_Form" label="UserIssues Form" layout="VERTICAL"/>
       <table xmi:id="_jK51vlq4Ee6_67aMO2jOsw" name="UserIssues_Table" label="UserIssues Table"/>
-      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" performableActions="_jK51w1q4Ee6_67aMO2jOsw">
+      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" performableActions="_jK51w1q4Ee6_67aMO2jOsw" dialogSize="LG">
         <components xsi:type="ui:Group" xmi:id="_AMMw8FrVEe6gN-oVBDDIOQ" name="root">
           <components xsi:type="ui:TabBar" xmi:id="_MLBlUFrTEe6_67aMO2jOsw" name="tabBar" row="20">
-            <tabs xmi:id="_jK51xlq4Ee6_67aMO2jOsw" name="ownedIssuesGroup" label="Owned issues" iconName="account-box" frame="true" row="20">
-              <components xsi:type="ui:TabularReferenceField" xmi:id="_h5rm8FrPEe6_67aMO2jOsw" name="ownedIssues" label="" iconName="" row="10" relationFeature="_jK5OoVq4Ee6_67aMO2jOsw" representationComponent="card" rowsPerPage="36">
+            <tabs xmi:id="_jK51xlq4Ee6_67aMO2jOsw" name="ownedIssuesGroup" label="Owned issues" iconName="account-box" row="20">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_h5rm8FrPEe6_67aMO2jOsw" name="ownedIssues" label="" iconName="" row="10" relationFeature="_jK5OoVq4Ee6_67aMO2jOsw" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
                 <columns xsi:type="ui:DataColumn" xmi:id="_JF8G4FrXEe6gN-oVBDDIOQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_3_u-sVypEe6iZvXMSZbCNQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_3_u-sFypEe6iZvXMSZbCNQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
@@ -2018,231 +2055,109 @@
                 </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="_QrpoIFrkEe6gN-oVBDDIOQ" name="activeGlobalIssues" label="Active global issues" iconName="earth" frame="true" row="20">
-              <components xsi:type="ui:Group" xmi:id="_ZNCGQFrXEe6gN-oVBDDIOQ" name="activeGlobal" label="" row="20">
-                <components xsi:type="ui:TabularReferenceField" xmi:id="_ylgcV1rVEe6gN-oVBDDIOQ" name="activeIssuesGlobal" label="" iconName="" row="20" relationFeature="_NM0voFrKEe6_67aMO2jOsw" representationComponent="card" rowsPerPage="36">
-                  <columns xsi:type="ui:DataColumn" xmi:id="_pMksIFrXEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qKFV4FraEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_qKF88FraEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVphYAUjEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVqIcAUjEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVqIcQUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVqvgAUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVqvgQUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVqvggUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVrWkAUjEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVrWkQUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVr9oAUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVr9oQUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVr9ogUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVsksAUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVsksQUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVtLwAUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVtLwQUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVtLwgUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVty0AUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVty0QUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVuZ4AUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVuZ4QUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVuZ4gUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_AVvA8AUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                  <rowOperations xmi:id="_B8duMAUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                    <operationForm xmi:id="_B8duMQUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                  </rowOperations>
-                  <rowOperations xmi:id="_B8duMgUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                    <operationForm xmi:id="_B8duMwUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                  </rowOperations>
-                </components>
+            <tabs xmi:id="_QrpoIFrkEe6gN-oVBDDIOQ" name="activeGlobalIssues" label="Active global issues" iconName="earth" row="20">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_ylgcV1rVEe6gN-oVBDDIOQ" name="activeGobalIssues" label="" iconName="" row="20" relationFeature="_NM0voFrKEe6_67aMO2jOsw" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sAgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sQgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvLhwAgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0AgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0QgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4AgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4QgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvNW8AgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AAgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AQgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvOlEAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIAgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIQgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvQaQAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYQgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvSPcAgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gAgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gQgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvTdkAgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvUEoAgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <rowOperations xmi:id="_B8duMAUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_B8duMQUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
+                </rowOperations>
+                <rowOperations xmi:id="_B8duMgUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_B8duMwUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
+                </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="_ylgcVFrVEe6gN-oVBDDIOQ" name="activeIssuesByActivityArea" label="Active issues by my activity areas" iconName="map-search" frame="true" row="10">
-              <components xsi:type="ui:TabBar" xmi:id="_W_R1QFrXEe6gN-oVBDDIOQ" name="tabBar" row="10" orientation="VERTICAL">
-                <tabs xmi:id="_4JbF8FrXEe6gN-oVBDDIOQ" name="activeByActivityInCounty" label="County" iconName="castle" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_7CQ7UFrXEe6gN-oVBDDIOQ" name="activeIssuesInActivityCounties" label="" iconName="" row="20" relationFeature="_aMsB4FrWEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_jUVwUFw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GQdN4FrfEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IyBLsFrfEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IyBywVrfEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F070kAUjEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F070kQUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F08boAUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F08boQUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F08bogUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09CsAUjEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09CsQUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09CsgUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09CswUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09pwAUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09pwQUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09pwgUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F09pwwUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-Q0AUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-Q0QUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-Q0gUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-Q0wUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-34AUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-34QUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-34gUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_F0-34wUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_u6ZqQFraEe6gN-oVBDDIOQ" name="activeByActivityInCity" label="City" iconName="city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_zR1kkFraEe6gN-oVBDDIOQ" name="activeIssuesInActivityCities" label="" iconName="" row="20" relationFeature="_jlpVUFrWEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_mrZywVw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_mrZywFw-Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_8B99cVraEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_-wziQFraEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_-w0JUFraEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxTfEAUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxTfEQUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUGIAUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUGIQUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUGIgUjEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUGIwUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUtMAUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUtMQUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUtMgUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxUtMwUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxVUQAUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxVUQQUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxVUQgUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxVUQwUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxV7UAUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxV7UQUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxV7UgUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxV7UwUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxV7VAUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_IxWiYAUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                    <rowOperations xmi:id="_Kr908AUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_Kr908QUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_Kr908gUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_Kr908wUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_od5rcFrbEe6gN-oVBDDIOQ" name="activeByActivityInDistrict" label="District" iconName="home-city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_tRA1IFrbEe6gN-oVBDDIOQ" name="activeIssuesInActivityDistricts" label="" iconName="" row="20" relationFeature="_riB9EFrWEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_tvLXgFw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_tvKwcFw-Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_tvLXgVw-Ee6gN-oVBDDIOQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLqPQFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_zIeXwFrbEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_1PoRgFrbEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_1Po4kVrbEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJau0AUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJau0QUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJbV4AUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJbV4QUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJbV4gUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJbV4wUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJb88AUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJb88QUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJb88gUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJb88wUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJckAAUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJckAQUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJckAgUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJckAwUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJckBAUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJdLEAUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJdLEQUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJdLEgUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_NJdLEwUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                    <rowOperations xmi:id="_PGRdEAUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_PGRdEQUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_PGRdEgUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_PGRdEwUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
+            <tabs xmi:id="_ylgcVFrVEe6gN-oVBDDIOQ" name="activeIssuesByActivityArea" label="Active issues by my activity areas" iconName="map-search" row="10">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_7CQ7UFrXEe6gN-oVBDDIOQ" name="activeIssuesInActivity" label="" iconName="" row="20" relationFeature="_t7_fsAgmEfC37oc_cfa43g" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
+                <columns xsi:type="ui:DataColumn" xmi:id="_CidX8AgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AAgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AQgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CiemEAgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIAgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIQgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cif0MAgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQAgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQQgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihCUAgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYQgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CiiQcAgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CijekAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikssAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwAgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwQgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cil60AgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4AgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4QgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CinI8AgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <rowOperations xmi:id="_FVKJEAgoEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_FVKJEQgoEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
+                </rowOperations>
+                <rowOperations xmi:id="_FVKJEggoEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_FVKJEwgoEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
+                </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="_RR4bUFrcEe6gN-oVBDDIOQ" name="activeIssuesByResidentArea" label="Active issues by my resident area" iconName="home-circle" frame="true" row="20">
-              <components xsi:type="ui:TabBar" xmi:id="_l86f8FrcEe6gN-oVBDDIOQ" name="tabBar" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_BZzvYFrcEe6gN-oVBDDIOQ" name="activeByResidentInCounty" label="County" iconName="castle" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzvYVrcEe6gN-oVBDDIOQ" name="activeIssuesInResidentCounty" label="" iconName="" row="20" relationFeature="_KOPO4FrbEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Va_wUVrdEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_cLtPIFrdEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_cLtPIlrdEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <rowOperations xmi:id="_SuBm4AUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_SuBm4QUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_SuBm4gUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_SuBm4wUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_BZzIUFrcEe6gN-oVBDDIOQ" name="activeByResidentInCity" label="City" iconName="city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzIUVrcEe6gN-oVBDDIOQ" name="activeIssuesInResidentCity" label="" iconName="" row="20" relationFeature="_T07cUFrbEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_2-ZgIFw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_0yPKkFw-Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SRGAIFrdEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Xc9BAFrdEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Xc9oEFrdEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Pw0AUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Pw0QUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Pw0gUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Pw0wUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7QX4AUjEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7QX4QUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7QX4gUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7QX4wUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7QX5AUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Q-8AUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Q-8QUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Q-8gUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7Q-8wUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7RmAAUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7RmAQUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7RmAgUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7RmAwUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7SNEAUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7SNEQUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_V7SNEgUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                    <rowOperations xmi:id="_XZB9cAUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_XZB9cQUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_XZB9cgUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_XZB9cwUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_BZzIV1rcEe6gN-oVBDDIOQ" name="activeByResidentInDistrict" label="District" iconName="home-city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzIWFrcEe6gN-oVBDDIOQ" name="activeIssuesInResidentDistrict" label="" iconName="" row="20" relationFeature="_dmHCgFrbEe6gN-oVBDDIOQ" representationComponent="card" rowsPerPage="36">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9a5pgFw-Ee6gN-oVBDDIOQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9a4bYFw-Ee6gN-oVBDDIOQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_DYMuYFw_Ee6gN-oVBDDIOQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLqPQFw-Ee6gN-oVBDDIOQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_TzAe0VrdEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_ZqUQcFrdEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_ZqU3gVrdEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0yOMAUjEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0yOMQUjEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0y1QAUjEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0y1QQUjEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0y1QgUjEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0y1QwUjEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0y1RAUjEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0zcUAUjEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0zcUQUjEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0zcUgUjEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z0zcUwUjEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00DYAUjEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00DYQUjEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00DYgUjEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00DYwUjEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00DZAUjEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00qcAUjEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00qcQUjEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Z00qcgUjEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                    <rowOperations xmi:id="_bWss4AUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_bWss4QUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_bWss4gUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
-                      <operationForm xmi:id="_bWss4wUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
+            <tabs xmi:id="_RR4bUFrcEe6gN-oVBDDIOQ" name="activeIssuesByResidentArea" label="Active issues by my resident area" iconName="home-circle" row="20">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzvYVrcEe6gN-oVBDDIOQ" name="activeIssuesInResident" label="" iconName="" row="20" relationFeature="__Ew-gAgmEfC37oc_cfa43g" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5y2MAgpEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5zdQAgpEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUAgpEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUQgpEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50rYAgpEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScAgpEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScQgpEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i515gAgpEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i515gQgpEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i52gkAgpEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoAgpEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoQgpEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53usAgpEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i54VwAgpEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5480AgpEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4AgpEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4QgpEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i56K8AgpEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i56yAAgpEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i57ZEAgpEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i58AIAgpEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i58nMAgpEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQAgpEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQQgpEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i591UAgpEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <rowOperations xmi:id="_SuBm4AUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_SuBm4QUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
+                </rowOperations>
+                <rowOperations xmi:id="_SuBm4gUjEfC37oc_cfa43g" name="removeFromFavoritesTableOperation" label="removeFromFavorites()" operation="_O-iGEFxEEe6ma86ynyYZNw">
+                  <operationForm xmi:id="_SuBm4wUjEfC37oc_cfa43g" name="removeFromFavorites" label="RemoveFromFavorites" iconName="chevron_right" operation="removeFromFavorites"/>
+                </rowOperations>
               </components>
             </tabs>
           </components>
@@ -2392,13 +2307,19 @@
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_omfCAF5EEe6vsex_cZNQbQ" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResidentDistrict" updateable="true" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_tYojYF45Ee6vsex_cZNQbQ" getterExpression="">
         <inherited xmi:id="_omr2UF5EEe6vsex_cZNQbQ"/>
       </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ooo9cAgrEfC37oc_cfa43g" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInResident" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_CQD5AAgrEfC37oc_cfa43g" getterExpression="">
+        <inherited xmi:id="_oowSMAgrEfC37oc_cfa43g"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_0Jjb4AgrEfC37oc_cfa43g" target="_-f-eY34XEe2cB7_PsKXsHQ" name="activeVoteDefinitionsInActivity" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_QNp1QAgrEfC37oc_cfa43g" getterExpression="">
+        <inherited xmi:id="_0JrXsAgrEfC37oc_cfa43g"/>
+      </relations>
       <mapping xmi:id="_stHH4F4-Ee6vsex_cZNQbQ" target="_BuSFMGkWEe25ONJ3V89cVA"/>
       <form xmi:id="_gTgt8F4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_Form" label="UserVoteDefinition Form" layout="VERTICAL"/>
       <table xmi:id="_gTjKMF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_Table" label="UserVoteDefinition Table"/>
       <view xmi:id="_gTanUF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_View_Edit" label="UserVoteDefinition View / Edit" layout="VERTICAL">
         <components xsi:type="ui:Group" xmi:id="_aZHu8F5FEe6vsex_cZNQbQ" name="root" col="4">
           <components xsi:type="ui:TabBar" xmi:id="_w3mHIF5FEe6vsex_cZNQbQ" name="tabBar" row="20">
-            <tabs xmi:id="_0O9rkF5FEe6vsex_cZNQbQ" name="OwnedVoteDefinitionsGroup" label="Owned Votes" iconName="account-box" frame="true" row="20">
+            <tabs xmi:id="_0O9rkF5FEe6vsex_cZNQbQ" name="OwnedVoteDefinitionsGroup" label="Owned Votes" iconName="account-box" row="20">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_GBBigF5HEe6vsex_cZNQbQ" name="ownedVoteDefinitions" label="" iconName="" row="20" relationFeature="_7OZ8MF5AEe6vsex_cZNQbQ" representationComponent="card">
                 <columns xsi:type="ui:DataColumn" xmi:id="_ytoJwF5HEe6vsex_cZNQbQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UV5HEe6vsex_cZNQbQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBCwoF5HEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
@@ -2410,38 +2331,41 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBDXsF5HEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBD-wl5HEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_GBD-wV5HEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAnbYAWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcAWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcQWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcgWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgAWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgQWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAopggWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgwWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkAWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkQWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkgWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3oAWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3oQWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3ogWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesAWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesQWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesgWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                <rowOperations xmi:id="_TJxuEAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForOwned" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_TJxuEQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAnbYAWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsf3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcAWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE3SQAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcQWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIQWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAoCcgWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_itzkQAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgAWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4QWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgQWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEQWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAopggWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-g2oIH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAopgwWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkAWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkQWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_mapjMI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tApQkgWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbh_kI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3oAWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT_GAI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3oQWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt1pUI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAp3ogWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuyd4I4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesAWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu5yoI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesQWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nvBHYI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_tAqesgWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvIcII4jEe29qs15q2b6yw"/>
+                <rowOperations xmi:id="_lkeT4AahEfC37oc_cfa43g" name="voteRatingTableOperationForOwned" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_lkeT4QahEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
                 </rowOperations>
-                <rowOperations xmi:id="_TJxuEgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForOwned" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_TJxuEwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
+                <rowOperations xmi:id="_lke68AahEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForOwned" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_lke68QahEfC37oc_cfa43g" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
                 </rowOperations>
-                <rowOperations xmi:id="_TJxuFAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForOwned" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_TJxuFQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
+                <rowOperations xmi:id="_lke68gahEfC37oc_cfa43g" name="voteYesNoTableOperationForOwned" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_lke68wahEfC37oc_cfa43g" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
                 </rowOperations>
-                <rowOperations xmi:id="_TJxuFgY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForOwned" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_TJxuFwY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                <rowOperations xmi:id="_lke69AahEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForOwned" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_lke69QahEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                </rowOperations>
+                <rowOperations xmi:id="_VtfFsAakEfC37oc_cfa43g" name="revokeVoteTableOperationForOwned" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                  <operationForm xmi:id="_VtfFsQakEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
                 </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="_4APk0F5FEe6vsex_cZNQbQ" name="ActiveGlobalVoteDefinitionsGroup" label="Active Global Votes" iconName="earth" frame="true" row="20">
+            <tabs xmi:id="_4APk0F5FEe6vsex_cZNQbQ" name="ActiveGlobalVoteDefinitionsGroup" label="Active Global Votes" iconName="earth" row="20">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_XdUIUF5JEe6vsex_cZNQbQ" name="activeVoteDefinitionsGlobal" label="" iconName="" row="20" relationFeature="_HCMTUF5BEe6vsex_cZNQbQ" representationComponent="card">
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdaO8F5JEe6vsex_cZNQbQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UV5HEe6vsex_cZNQbQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdUvYF5JEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
@@ -2450,304 +2374,133 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdVWcF5JEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdV9gV5JEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_XdV9gF5JEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xduf4AWbEfC6R8DzhDT-HQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvG8AWbEfC6R8DzhDT-HQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvG8QWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAAWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAQWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAgWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAwWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEAWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEQWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEgWbEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IAWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IQWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IgWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMAWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMQWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMgWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQAWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQQWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQgWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_xdyxUAWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                <rowOperations xmi:id="_VCN2YAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveGlobal" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_VCN2YQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xduf4AWbEfC6R8DzhDT-HQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvG8AWbEfC6R8DzhDT-HQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvG8QWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsf3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAAWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE3SQAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAQWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIQWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAgWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_itzkQAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdvuAwWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4QWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEAWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEQWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEQWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-g2oIH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdwVEgWbEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IAWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IQWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoV5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdw8IgWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_mapjMI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMAWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbh_kI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMQWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT_GAI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdxjMgWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt1pUI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQAWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuyd4I4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQQWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu5yoI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdyKQgWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nvBHYI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_xdyxUAWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvIcII4jEe29qs15q2b6yw"/>
+                <rowOperations xmi:id="_nEWLMAahEfC37oc_cfa43g" name="voteRatingTableOperationForActiveGlobal" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_nEWLMQahEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
                 </rowOperations>
-                <rowOperations xmi:id="_VCN2YgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveGlobal" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_VCN2YwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
+                <rowOperations xmi:id="_nEWLMgahEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForActiveGlobal" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_nEWLMwahEfC37oc_cfa43g" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
                 </rowOperations>
-                <rowOperations xmi:id="_VCN2ZAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveGlobal" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_VCN2ZQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
+                <rowOperations xmi:id="_nEWLNAahEfC37oc_cfa43g" name="voteYesNoTableOperationForActiveGlobal" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_nEWLNQahEfC37oc_cfa43g" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
                 </rowOperations>
-                <rowOperations xmi:id="_VCN2ZgY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveGlobal" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                  <operationForm xmi:id="_VCN2ZwY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                <rowOperations xmi:id="_nEWyQAahEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForActiveGlobal" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_nEWyQQahEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                </rowOperations>
+                <rowOperations xmi:id="_aQ_tIAakEfC37oc_cfa43g" name="revokeVoteTableOperationForActiveGlobal" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                  <operationForm xmi:id="_aQ_tIQakEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
                 </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="_8O7y0F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerActivityArea" label="Active votes bv my activity areas" iconName="map-search" frame="true" row="20">
-              <components xsi:type="ui:TabBar" xmi:id="_75CCAF5KEe6vsex_cZNQbQ" name="tabBar" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_-qljoF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCountiesGroup" label="County" iconName="castle" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_SV-JIF5LEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityCounties" label="" iconName="" row="20" relationFeature="_O_SswF5BEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV_XSF5LEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV-wMF5LEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV_XRV5LEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV_XRF5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV-wMV5LEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV-wNF5LEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_SV-wM15LEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p8TYAWbEfC6R8DzhDT-HQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p86cAWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p9hgAWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p-IkAWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p-IkQWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p-voAWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p_WsAWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5p_9wAWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qAk0AWbEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qBy8AWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qCaAAWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qCaAQWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qDBEAWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qDBEQWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qDoIAWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qDoIQWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qEPMAWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qEPMQWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qE2QAWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_5qE2QQWbEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
-                    <rowOperations xmi:id="_WV2BcAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveActivityCounty" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_WV2BcQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_WV2BcgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveActivityCounty" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_WV2BcwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_WV2BdAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveActivityCounty" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_WV2BdQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_WV2ogAY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveActivityCounty" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_WV2ogQY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="__jKxcF5KEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityCityGroup" label="City" iconName="city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_59d3wF5LEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityCities" label="" iconName="" row="20" relationFeature="_b8NPIF5BEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Lyib4F5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59fs8l5LEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59ee0F5LEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59fF515LEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59fF5l5LEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59ee0V5LEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59ee1F5LEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_59fF6F5LEe6vsex_cZNQbQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UV5HEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_ZLxG0F5MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fFY8AWbEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fFY8QWbEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fFY8gWbEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGAAAWbEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGAAQWbEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGAAgWbEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGAAwWbEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGnEAWbEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGnEQWbEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fGnEgWbEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fHOIAWbEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fHOIQWbEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fHOIgWbEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fHOIwWbEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MAWbEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MQWbEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MgWbEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_9fH1MwWbEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <rowOperations xmi:id="_YfgcoAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveActivityCity" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_YfgcoQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_YfgcogY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveActivityCity" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_YfgcowY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_YfgcpAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveActivityCity" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_YfgcpQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_YfgcpgY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveActivityCity" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_YfgcpwY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_APhhIF5LEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsInActivityDistrictGroup" label="District" iconName="home-city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_GD1zsF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivityDistricts" label="" iconName="" row="20" relationFeature="_kXCGYF5BEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B1F5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B1l5MEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B015MEe6vsex_cZNQbQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD1zsV5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B0V5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD3B0F5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD1zsl5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD2awF5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_GD1ztF5MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsHVoAWcEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsH8sAWcEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsH8sQWcEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsH8sgWcEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsH8swWcEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsIjwAWcEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsIjwQWcEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsIjwgWcEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJK0AWcEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJK0QWcEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJK0gWcEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJK0wWcEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJx4AWcEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJx4QWcEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsJx4gWcEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8AWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8QWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_AsKY8gWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
-                    <rowOperations xmi:id="_an8IwAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveActivityDistrict" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_an8IwQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_an8IwgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveActivityDistrict" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_an8IwwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_an8v0AY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveActivityDistrict" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_an8v0QY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_an9W4AY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveActivityDistrict" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_an9W4QY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
+            <tabs xmi:id="_8O7y0F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerActivityArea" label="Active votes bv my activity areas" iconName="map-search" row="20">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_SV-JIF5LEe6vsex_cZNQbQ" name="activeVoteDefinitionsInActivity" label="" iconName="" row="20" relationFeature="_0Jjb4AgrEfC37oc_cfa43g" representationComponent="card">
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkqxoAgsEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkrYsAgsEfC37oc_cfa43g" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkrYsQgsEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qkr_wAgsEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qksm0AgsEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qksm0QgsEfC37oc_cfa43g" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QktN4AgsEfC37oc_cfa43g" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QktN4QgsEfC37oc_cfa43g" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qkt08AgsEfC37oc_cfa43g" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkucAAgsEfC37oc_cfa43g" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkucAQgsEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkvDEAgsEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkvqIAgsEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkvqIQgsEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkwRMAgsEfC37oc_cfa43g" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkwRMQgsEfC37oc_cfa43g" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qkw4QAgsEfC37oc_cfa43g" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkxfUAgsEfC37oc_cfa43g" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkxfUQgsEfC37oc_cfa43g" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkyGYAgsEfC37oc_cfa43g" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkytcAgsEfC37oc_cfa43g" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkytcQgsEfC37oc_cfa43g" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkzUgAgsEfC37oc_cfa43g" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_QkzUgQgsEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qkz7kAgsEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qk0ioAgsEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Qk0ioQgsEfC37oc_cfa43g" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
+                <rowOperations xmi:id="_oksjoAahEfC37oc_cfa43g" name="voteRatingTableOperationForActiveActivityCounties" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_oksjoQahEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
+                </rowOperations>
+                <rowOperations xmi:id="_oksjogahEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForActiveActivityCounties" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_oksjowahEfC37oc_cfa43g" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
+                </rowOperations>
+                <rowOperations xmi:id="_oksjpAahEfC37oc_cfa43g" name="voteYesNoTableOperationForActiveActivityCounties" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_oksjpQahEfC37oc_cfa43g" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
+                </rowOperations>
+                <rowOperations xmi:id="_oksjpgahEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForActiveActivityCounties" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_oksjpwahEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                </rowOperations>
+                <rowOperations xmi:id="_dCtm0AakEfC37oc_cfa43g" name="revokeVoteTableOperationForActiveActivityCounties" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                  <operationForm xmi:id="_dCtm0QakEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
+                </rowOperations>
               </components>
             </tabs>
-            <tabs xmi:id="__3U10F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" label="Active votes by my resident area" iconName="castle" frame="true" row="20">
-              <components xsi:type="ui:TabBar" xmi:id="_9cDT8F5KEe6vsex_cZNQbQ" name="tabBar" row="20" orientation="VERTICAL">
-                <tabs xmi:id="_BgLQsF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCountyGroup" label="County" iconName="castle" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_fhZzMF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentCounty" label="" iconName="" row="20" relationFeature="_yd4FQF5BEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhbBWV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQF5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhbBVl5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhbBVV5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQV5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhaaRF5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_fhaaQ15MEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeFycAWcEfC6R8DzhDT-HQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeGZgAWcEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeGZgQWcEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeGZggWcEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeI1wAWcEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeI1wQWcEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeI1wgWcEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeJc0AWcEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeJc0QWcEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeJc0gWcEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKD4AWcEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKD4QWcEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKD4gWcEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKq8AWcEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKq8QWcEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKq8gWcEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeKq8wWcEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAAWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAQWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_EeLSAgWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
-                    <rowOperations xmi:id="_cfaAsAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveResidentCounty" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_cfaAsQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_cfanwAY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveResidentCounty" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_cfanwQY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_cfanwgY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveResidentCounty" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_cfanwwY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_cfanxAY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveResidentCounty" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_cfanxQY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_CEZ_IF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentCityGroup" label="City" iconName="city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_yjuNkF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentCity" label="" iconName="" row="20" relationFeature="_9qDp0F5BEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yjvbsV5MEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yjvbs15MEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yjuNkV5MEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yju0qV5MEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yju0qF5MEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yjuNkl5MEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_yjuNlV5MEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_Lu9G8F5NEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I3_x8AWcEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4AZAAWcEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4AZAQWcEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4AZAgWcEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BAEAWcEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BAEQWcEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BAEgWcEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BAEwWcEfC6R8DzhDT-HQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BnIAWcEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BnIQWcEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4BnIgWcEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4COMAWcEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4COMQWcEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4COMgWcEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4COMwWcEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4C1QAWcEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4C1QQWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4C1QgWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_I4DcUAWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
-                    <rowOperations xmi:id="_eEehEAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveResidentCity" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_eEehEQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_eEehEgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveResidentCity" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_eEehEwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_eEehFAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveResidentCity" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_eEehFQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_eEehFgY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveResidentCity" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_eEehFwY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
-                <tabs xmi:id="_Cwu5oF5LEe6vsex_cZNQbQ" name="ActiveDebatesInResidentDistrictGroup" label="District" iconName="home-city" row="20">
-                  <components xsi:type="ui:TabularReferenceField" xmi:id="_BdNKUF5NEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResidentDistrict" label="" iconName="" row="20" relationFeature="_omfCAF5EEe6vsex_cZNQbQ" representationComponent="card">
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdOYcV5NEe6vsex_cZNQbQ" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdOYc15NEe6vsex_cZNQbQ" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdOYcF5NEe6vsex_cZNQbQ" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMV5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNKUV5NEe6vsex_cZNQbQ" name="title" label="Title" iconName="format-size" dataFeature="_-ggC0H4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNxaF5NEe6vsex_cZNQbQ" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INzD0OR8Ee20cv3f2msZXg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNxZ15NEe6vsex_cZNQbQ" name="numberOfVotes" label="NumberOfVotes" iconName="calculator" dataFeature="_MEksoORyEe2Bgcx6em3jZg"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNKUl5NEe6vsex_cZNQbQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_-grpAH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNKVV5NEe6vsex_cZNQbQ" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hN0gH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_BdNKVF5NEe6vsex_cZNQbQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-hCOUH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7ibcAWcEfC6R8DzhDT-HQ" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7ibcQWcEfC6R8DzhDT-HQ" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jCgAWcEfC6R8DzhDT-HQ" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jCgQWcEfC6R8DzhDT-HQ" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jCggWcEfC6R8DzhDT-HQ" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jpkAWcEfC6R8DzhDT-HQ" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jpkQWcEfC6R8DzhDT-HQ" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jpkgWcEfC6R8DzhDT-HQ" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7jpkwWcEfC6R8DzhDT-HQ" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7kQoAWcEfC6R8DzhDT-HQ" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7kQoQWcEfC6R8DzhDT-HQ" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7kQogWcEfC6R8DzhDT-HQ" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7k3sAWcEfC6R8DzhDT-HQ" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7k3sQWcEfC6R8DzhDT-HQ" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7lewAWcEfC6R8DzhDT-HQ" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7lewQWcEfC6R8DzhDT-HQ" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7lewgWcEfC6R8DzhDT-HQ" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
-                    <columns xsi:type="ui:DataColumn" xmi:id="_L7lewwWcEfC6R8DzhDT-HQ" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
-                    <rowOperations xmi:id="_fd0SkAY8EfC6R8DzhDT-HQ" name="voteRatingTableOperationForActiveResidentDistrict" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_fd0SkQY8EfC6R8DzhDT-HQ" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_fd0SkgY8EfC6R8DzhDT-HQ" name="voteSelectAnswerTableOperationForActiveResidentDistrict" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_fd0SkwY8EfC6R8DzhDT-HQ" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_fd0SlAY8EfC6R8DzhDT-HQ" name="voteYesNoTableOperationForActiveResidentDistrict" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_fd0SlQY8EfC6R8DzhDT-HQ" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
-                    </rowOperations>
-                    <rowOperations xmi:id="_fd0SlgY8EfC6R8DzhDT-HQ" name="voteYesNoAbstainTableOperationForActiveResidentDistrict" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
-                      <operationForm xmi:id="_fd0SlwY8EfC6R8DzhDT-HQ" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
-                    </rowOperations>
-                  </components>
-                </tabs>
+            <tabs xmi:id="__3U10F5FEe6vsex_cZNQbQ" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" label="Active votes by my resident area" iconName="castle" row="20">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_fhZzMF5MEe6vsex_cZNQbQ" name="activeVoteDefinitionsInResident" label="" iconName="" row="20" relationFeature="_ooo9cAgrEfC37oc_cfa43g" representationComponent="card">
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2w9YAgsEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_BzJ-cF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2xkcAgsEfC37oc_cfa43g" name="closeAt" label="CloseAt" iconName="calendar-clock" dataFeature="_-hI8AH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2yLgAgsEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_BxETwF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2yykAgsEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_-gmwgH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2yykQgsEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_6uefsP3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2zZoAgsEfC37oc_cfa43g" name="currentUserRatingVoteValue" label="CurrentUserRatingVoteValue" iconName="numeric" dataFeature="_zE0O8AWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V20AsAgsEfC37oc_cfa43g" name="currentUserSelectAnswerVoteValue" label="CurrentUserSelectAnswerVoteValue" iconName="format-size" dataFeature="__RVPIAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V20AsQgsEfC37oc_cfa43g" name="currentUserVoteCreated" label="CurrentUserVoteCreated" iconName="calendar-clock" dataFeature="_ittdoAWaEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V20nwAgsEfC37oc_cfa43g" name="currentUserYesNoAbstainVoteValue" label="CurrentUserYesNoAbstainVoteValue" iconName="format-list-numbered" dataFeature="_V9xx4AWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V20nwQgsEfC37oc_cfa43g" name="currentUserYesNoVoteValue" label="CurrentUserYesNoVoteValue" iconName="format-list-numbered" dataFeature="_dnxCEAWbEfC6R8DzhDT-HQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V21O0AgsEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_-gyWsH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2114AgsEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_BwEOMF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V2114QgsEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_ByHcoF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V22c8AgsEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_B0QKoF5IEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V23EAAgsEfC37oc_cfa43g" name="isNotRatingType" label="IsNotRatingType" iconName="toggle-switch" dataFeature="_maoVEI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V23EAQgsEfC37oc_cfa43g" name="isNotSelectAnswerType" label="IsNotSelectAnswerType" iconName="toggle-switch" dataFeature="_zbgxcI4oEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V23rEAgsEfC37oc_cfa43g" name="isNotYesNoAbstainType" label="IsNotYesNoAbstainType" iconName="toggle-switch" dataFeature="_DT-e8I4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V23rEQgsEfC37oc_cfa43g" name="isNotYesNoType" label="IsNotYesNoType" iconName="toggle-switch" dataFeature="_Tt0bMI4pEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V24SIAgsEfC37oc_cfa43g" name="isRatingType" label="IsRatingType" iconName="toggle-switch" dataFeature="_nuvakI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V245MAgsEfC37oc_cfa43g" name="isSelectAnswerType" label="IsSelectAnswerType" iconName="toggle-switch" dataFeature="_nu2vUI4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V245MQgsEfC37oc_cfa43g" name="isYesNoAbstainType" label="IsYesNoAbstainType" iconName="toggle-switch" dataFeature="_nu-rII4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V25gQAgsEfC37oc_cfa43g" name="isYesNoType" label="IsYesNoType" iconName="toggle-switch" dataFeature="_nvFY0I4jEe29qs15q2b6yw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V26HUAgsEfC37oc_cfa43g" name="numberOfVotes" label="NumberOfVotes" iconName="numeric" dataFeature="_MEiQYORyEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V26HUQgsEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_hPs6UF5HEe6vsex_cZNQbQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V26uYAgsEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_-g9V0H4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V26uYQgsEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_V27VcAgsEfC37oc_cfa43g" name="voteType" label="VoteType" iconName="format-list-numbered" dataFeature="_INwnkOR8Ee20cv3f2msZXg"/>
+                <rowOperations xmi:id="_tJpVgAahEfC37oc_cfa43g" name="voteRatingTableOperationForActiveResidentCounty" label="voteRating(RatingVoteInput[1..1])" operation="_7fNK0I4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_tJpVgQahEfC37oc_cfa43g" name="voteRating" label="VoteRating" iconName="chevron_right" operation="voteRating"/>
+                </rowOperations>
+                <rowOperations xmi:id="_tJpVggahEfC37oc_cfa43g" name="voteSelectAnswerTableOperationForActiveResidentCounty" label="voteSelectAnswer(SelectAnswerVoteSelection[1..1])" operation="_7fPnEI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_tJpVgwahEfC37oc_cfa43g" name="voteSelectAnswer" label="VoteSelectAnswer" iconName="chevron_right" operation="voteSelectAnswer"/>
+                </rowOperations>
+                <rowOperations xmi:id="_tJpVhAahEfC37oc_cfa43g" name="voteYesNoTableOperationForActiveResidentCounty" label="voteYesNo(YesNoVoteInput[1..1])" operation="_7fTRcI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_tJp8kAahEfC37oc_cfa43g" name="voteYesNo" label="VoteYesNo" iconName="chevron_right" operation="voteYesNo"/>
+                </rowOperations>
+                <rowOperations xmi:id="_tJp8kQahEfC37oc_cfa43g" name="voteYesNoAbstainTableOperationForActiveResidentCounty" label="voteYesNoAbstain(YesNoAbstainVoteInput[1..1])" operation="_7fWUwI4XEe29qs15q2b6yw">
+                  <operationForm xmi:id="_tJp8kgahEfC37oc_cfa43g" name="voteYesNoAbstain" label="VoteYesNoAbstain" iconName="chevron_right" operation="voteYesNoAbstain"/>
+                </rowOperations>
+                <rowOperations xmi:id="_pAj44AakEfC37oc_cfa43g" name="revokeVoteTableOperationForActiveResidentCounty" label="revokeVote()" operation="_O3MjUAakEfC37oc_cfa43g">
+                  <operationForm xmi:id="_pAj44QakEfC37oc_cfa43g" name="revokeVote" label="RevokeVote" iconName="chevron_right" operation="revokeVote"/>
+                </rowOperations>
               </components>
             </tabs>
           </components>
@@ -2757,6 +2510,9 @@
     <elements xsi:type="structure:TransferObjectType" xmi:id="_-f-eY34XEe2cB7_PsKXsHQ" name="VoteDefinition">
       <relations xsi:type="structure:OneWayRelationMember" xmi:id="_S75mQORxEe2Bgcx6em3jZg" upper="1" target="_qCREY2ksEe25ONJ3V89cVA" name="issue" defaultExpression="" rangeExpression="" memberType="MAPPED" binding="_3hvfIFoMEe6_67aMO2jOsw" getterExpression="self!container(edemokracia::Issue)">
         <inherited xmi:id="_S78CgORxEe2Bgcx6em3jZg"/>
+      </relations>
+      <relations xsi:type="structure:OneWayRelationMember" xmi:id="_1NAJAAhDEfC_AYKT2-_f7Q" target="_pSF7gFtqEe6Mx9dH3yj5gQ" name="voteSelections" defaultExpression="" rangeExpression="" relationKind="AGGREGATION" memberType="DERIVED" getterExpression="self.selectAnswerVoteDefinition.voteSelections">
+        <inherited xmi:id="_1NMWQAhDEfC_AYKT2-_f7Q"/>
       </relations>
       <attributes xsi:type="structure:DataMember" xmi:id="_-gbxYH4XEe2cB7_PsKXsHQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_-ggC0H4XEe2cB7_PsKXsHQ"/>
@@ -2855,6 +2611,9 @@
       <operations xmi:id="_7fWUwI4XEe29qs15q2b6yw" name="voteYesNoAbstain" customImplementation="false" body="var edemokracia::YesNoAbstainVoteDefinition vote = this as edemokracia::YesNoAbstainVoteDefinition;&#xA;&#xA;if (vote.isYesNoAbstainType) {&#xA;&#x9;var edemokracia::YesNoAbstainVoteEntry voteEntry = new edemokracia::YesNoAbstainVoteEntry(&#xA;&#x9;&#x9;value = input.value,&#xA;&#x9;&#x9;voteDefinition = vote,&#xA;&#x9;&#x9;user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#x9;&#xA;&#x9;);&#xA;}&#xA;" binding="voteYesNoAbstain">
         <input xmi:id="_7fYJ8I4XEe29qs15q2b6yw" lower="1" upper="1" target="_-1U_0HWyEe2LTNnGda5kaw" name="input"/>
         <inherited xmi:id="_7fW70I4XEe29qs15q2b6yw"/>
+      </operations>
+      <operations xmi:id="_O3MjUAakEfC37oc_cfa43g" name="revokeVote" customImplementation="false" body="//" binding="voteYesNoAbstain">
+        <inherited xmi:id="_O3MjUgakEfC37oc_cfa43g"/>
       </operations>
       <form xmi:id="_-gL5wH4XEe2cB7_PsKXsHQ" name="VoteDefinition_Form" label="VoteDefinition Form" iconName="vote" layout="VERTICAL">
         <components xsi:type="ui:DataField" xmi:id="_T5VWYI4jEe29qs15q2b6yw" name="title" label="Title" iconName="text_fields" col="4" dataFeature="_-gbxYH4XEe2cB7_PsKXsHQ"/>
@@ -3011,6 +2770,18 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_s62s4P3gEe-p66wHlBPO-A" name="createdByUsername" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.owner.userName" memberType="DERIVED">
         <inherited xmi:id="_s62s4f3gEe-p66wHlBPO-A"/>
       </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_rmHZMAhBEfC37oc_cfa43g" name="numberOfNoVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::YesNoAbstainVoteEntry)!filter(e | e.value == edemokracia::YesNoAbstainVoteValue#NO)!count()" memberType="DERIVED">
+        <inherited xmi:id="_rmHZMQhBEfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_rnSd4AhBEfC37oc_cfa43g" name="numberOfYesVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::YesNoAbstainVoteEntry)!filter(e | e.value == edemokracia::YesNoAbstainVoteValue#YES)!count()" memberType="DERIVED">
+        <inherited xmi:id="_rnSd4QhBEfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_5TCcMAhBEfC37oc_cfa43g" name="numberOfAbstainVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::YesNoAbstainVoteEntry)!filter(e | e.value == edemokracia::YesNoAbstainVoteValue#ABSTAIN)!count()" memberType="DERIVED">
+        <inherited xmi:id="_5TCcMQhBEfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_gAY2wAhCEfC_AYKT2-_f7Q" name="numberOfVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::RatingVoteEntry)!count()" memberType="DERIVED">
+        <inherited xmi:id="_gAY2wQhCEfC_AYKT2-_f7Q"/>
+      </attributes>
       <mapping xmi:id="_-bEJMH4XEe2cB7_PsKXsHQ" target="_4Aej4G6LEe2wNaja8kBvcQ"/>
       <operations xmi:id="_gxwFgH4YEe2cB7_PsKXsHQ" name="vote" customImplementation="false" body="var edemokracia::YesNoAbstainVoteDefinition vote = this as edemokracia::YesNoAbstainVoteDefinition;&#xA;&#xA;if (vote.isYesNoAbstainType) {&#xA;&#x9;var edemokracia::YesNoAbstainVoteEntry voteEntry = new edemokracia::YesNoAbstainVoteEntry(&#xA;&#x9;&#x9;value = input.value,&#xA;&#x9;&#x9;voteDefinition = vote,&#xA;&#x9;&#x9;user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#x9;&#xA;&#x9;);&#xA;}&#xA;" binding="voteYesNoAbstain">
         <input xmi:id="_gxx6sH4YEe2cB7_PsKXsHQ" lower="1" upper="1" target="_-1U_0HWyEe2LTNnGda5kaw" name="input"/>
@@ -3042,7 +2813,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A-I6wIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" dataFeature="_-bow8H4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A-b1sIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-b0XIH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" performableActions="_9jf_BnsCEe6bP4FWw7fjQA _9jf_BXsCEe6bP4FWw7fjQA _9jf_BHsCEe6bP4FWw7fjQA _9jf_A3sCEe6bP4FWw7fjQA _9jf_AnsCEe6bP4FWw7fjQA">
+      <view xmi:id="_-awAIH4XEe2cB7_PsKXsHQ" name="YesNoAbstainVoteDefinition_View_Edit" label="YesNoAbstainVoteDefinition View / Edit" layout="VERTICAL" performableActions="_9jf_BnsCEe6bP4FWw7fjQA _9jf_BXsCEe6bP4FWw7fjQA _9jf_BHsCEe6bP4FWw7fjQA _9jf_A3sCEe6bP4FWw7fjQA _9jf_AnsCEe6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-bGlcH4XEe2cB7_PsKXsHQ" dialogSize="LG" autoCloseOnSave="true">
         <components xsi:type="ui:Group" xmi:id="_7M-INFsnEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true">
           <components xsi:type="ui:Group" xmi:id="_7M-INVsnEe6Mx9dH3yj5gQ" name="userVote" label="" hiddenBy="_vqb5EFsnEe6Mx9dH3yj5gQ">
             <components xsi:type="ui:Group" xmi:id="_7M-INlsnEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
@@ -3182,6 +2953,15 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_SoyuUP3gEe-p66wHlBPO-A" name="createdByUsername" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.userName" memberType="DERIVED">
         <inherited xmi:id="_SoyuUf3gEe-p66wHlBPO-A"/>
       </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_CFSKYAhBEfC37oc_cfa43g" name="numberOfVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::RatingVoteEntry)!count()" memberType="DERIVED">
+        <inherited xmi:id="_CFSKYQhBEfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_EiJOYAhBEfC37oc_cfa43g" name="numberOfYesVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::YesNoVoteEntry)!filter(e | e.value == edemokracia::YesNoVoteValue#YES)!count()" memberType="DERIVED">
+        <inherited xmi:id="_EiJOYQhBEfC37oc_cfa43g"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_GSZrEAhBEfC37oc_cfa43g" name="numberOfNoVotes" dataType="_7D8NxGkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.voteEntries!asCollection(edemokracia::YesNoVoteEntry)!filter(e | e.value == edemokracia::YesNoVoteValue#NO)!count()" memberType="DERIVED">
+        <inherited xmi:id="_GSZrEQhBEfC37oc_cfa43g"/>
+      </attributes>
       <mapping xmi:id="_-Z5EgH4XEe2cB7_PsKXsHQ" target="_tA1hUG6dEe2wNaja8kBvcQ"/>
       <operations xmi:id="_fNe2YH4YEe2cB7_PsKXsHQ" name="vote" customImplementation="false" body="var edemokracia::YesNoVoteDefinition vote = this as edemokracia::YesNoVoteDefinition;&#xA;var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;if (vote.isYesNoType) {&#xA;&#x9;var edemokracia::YesNoVoteEntry voteEntry = new edemokracia::YesNoVoteEntry(&#xA;&#x9;&#x9;value = input.value,&#xA;&#x9;&#x9;voteDefinition = vote,&#xA;&#x9;&#x9;user = user&#x9;&#xA;&#x9;);&#xA;}&#xA;" binding="voteYesNo">
         <input xmi:id="_fNgEgH4YEe2cB7_PsKXsHQ" lower="1" upper="1" target="_-1R8gHWyEe2LTNnGda5kaw" name="input" rangeExpression=""/>
@@ -3213,7 +2993,7 @@
         <columns xsi:type="ui:DataColumn" xmi:id="_A8kNcIXrEe2kLcMqsIbMgQ" name="status" label="Status" iconName="list" dataFeature="_-aSGEH4XEe2cB7_PsKXsHQ"/>
         <columns xsi:type="ui:DataColumn" xmi:id="_A80sIIXrEe2kLcMqsIbMgQ" name="closeAt" label="CloseAt" iconName="schedule" dataFeature="_-adFMH4XEe2cB7_PsKXsHQ"/>
       </table>
-      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" performableActions="_uXiyNnsCEe6bP4FWw7fjQA _uXiyNXsCEe6bP4FWw7fjQA _uXiyNHsCEe6bP4FWw7fjQA _uXiyM3sCEe6bP4FWw7fjQA _uXiyMnsCEe6bP4FWw7fjQA" dialogSize="LG">
+      <view xmi:id="_-ZmwoH4XEe2cB7_PsKXsHQ" name="YesNoVoteDefinition_View_Edit" label="YesNoVoteDefinition View / Edit" layout="VERTICAL" performableActions="_uXiyNnsCEe6bP4FWw7fjQA _uXiyNXsCEe6bP4FWw7fjQA _uXiyNHsCEe6bP4FWw7fjQA _uXiyM3sCEe6bP4FWw7fjQA _uXiyMnsCEe6bP4FWw7fjQA" titleFrom="ATTRIBUTE" titleAttribute="_-Z65sH4XEe2cB7_PsKXsHQ" dialogSize="LG" autoCloseOnSave="true">
         <components xsi:type="ui:Group" xmi:id="_dZi8oFscEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" frame="true">
           <components xsi:type="ui:Group" xmi:id="_K-cscFouEe6_67aMO2jOsw" name="userVote" label="" hiddenBy="_spEpcFotEe6_67aMO2jOsw">
             <components xsi:type="ui:Group" xmi:id="_8uozYFsgEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
@@ -3612,8 +3392,8 @@
     <view xmi:id="_-PhgEG6LEe2wNaja8kBvcQ" name="SelectAnswerVoteDefinition_View_Edit" label="SelectAnswerVoteDefinition View / Edit" layout="VERTICAL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_QmC0UG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry" createable="true" updateable="true" deleteable="true">
-    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_fvDlYG6hEe2wNaja8kBvcQ" lower="1" upper="1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="value" defaultExpression="" rangeExpression="" binding="_fvDlYG6hEe2wNaja8kBvcQ" getterExpression="">
-      <inherited xmi:id="_fvGosG6hEe2wNaja8kBvcQ"/>
+    <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_pPWLkAhAEfC37oc_cfa43g" lower="1" upper="1" target="_Xwdl4G6bEe2wNaja8kBvcQ" name="value" defaultExpression="" rangeExpression="" partner="_pPadAAhAEfC37oc_cfa43g" primary="true">
+      <inherited xmi:id="_pPZO4AhAEfC37oc_cfa43g"/>
     </relations>
     <generalizations xmi:id="_ji0nYG6gEe2wNaja8kBvcQ" target="_1F3JsG6HEe2wNaja8kBvcQ"/>
     <mapping xmi:id="_QmECcG6gEe2wNaja8kBvcQ" target="_QmC0UG6gEe2wNaja8kBvcQ"/>
@@ -3622,6 +3402,9 @@
     <view xmi:id="_QmKwIG6gEe2wNaja8kBvcQ" name="SelectAnswerVoteEntry_View_Edit" label="SelectAnswerVoteEntry View / Edit" layout="VERTICAL"/>
   </elements>
   <elements xsi:type="structure:EntityType" xmi:id="_Xwdl4G6bEe2wNaja8kBvcQ" name="SelectAnswerVoteSelection" createable="true" updateable="true" deleteable="true">
+    <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_pPadAAhAEfC37oc_cfa43g" target="_QmC0UG6gEe2wNaja8kBvcQ" name="entries" defaultExpression="" rangeExpression="" partner="_pPWLkAhAEfC37oc_cfa43g">
+      <inherited xmi:id="_pPc5QAhAEfC37oc_cfa43g"/>
+    </relations>
     <attributes xsi:type="structure:DataMember" xmi:id="_ca44MG6cEe2wNaja8kBvcQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_ca44MG6cEe2wNaja8kBvcQ" getterExpression="">
       <inherited xmi:id="_ca77gG6cEe2wNaja8kBvcQ"/>
     </attributes>
@@ -3742,6 +3525,21 @@
     <relations xsi:type="structure:OneWayRelationMember" xmi:id="_I6ZPQF46Ee6vsex_cZNQbQ" target="_0n43QG5mEe2wNaja8kBvcQ" name="activeVoteDefinitionsGlobal" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_I6ZPQF46Ee6vsex_cZNQbQ" getterExpression="edemokracia::VoteDefinition!filter(i | i.issue.scope == edemokracia::IssueScope#GLOBAL and i.status == edemokracia::VoteStatus#ACTIVE)">
       <inherited xmi:id="_I6eu0F46Ee6vsex_cZNQbQ"/>
     </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_ngtTwAglEfC37oc_cfa43g" target="_GDYW0GkOEe25ONJ3V89cVA" name="activeIssues" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_ngtTwAglEfC37oc_cfa43g" getterExpression="self.ownedIssues!filter(i | i.status == edemokracia::IssueStatus#ACTIVE)">
+      <inherited xmi:id="_ngyzUAglEfC37oc_cfa43g"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_S1WpkAgmEfC37oc_cfa43g" target="_GDYW0GkOEe25ONJ3V89cVA" name="activeIssuesInActivity" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_S1WpkAgmEfC37oc_cfa43g" getterExpression="self.activityDistricts.issues!filter(i | i.status == edemokracia::IssueStatus#ACTIVE or i.status == edemokracia::IssueStatus#VOTING)">
+      <inherited xmi:id="_S1cwMAgmEfC37oc_cfa43g"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_gctQEAgmEfC37oc_cfa43g" target="_GDYW0GkOEe25ONJ3V89cVA" name="activeIssuesInResident" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_gctQEAgmEfC37oc_cfa43g" getterExpression="self.residentDistrict.issues!filter(i | i.status == edemokracia::IssueStatus#ACTIVE or i.status == edemokracia::IssueStatus#VOTING)">
+      <inherited xmi:id="_gcz9wAgmEfC37oc_cfa43g"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_CQD5AAgrEfC37oc_cfa43g" target="_0n43QG5mEe2wNaja8kBvcQ" name="activeVoteDefinitionsResident" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_CQD5AAgrEfC37oc_cfa43g" getterExpression="self.residentCounty.issues!filter(i | i.status == edemokracia::IssueStatus#VOTING).currentVoteDefinition">
+      <inherited xmi:id="_CQKmsAgrEfC37oc_cfa43g"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_QNp1QAgrEfC37oc_cfa43g" target="_0n43QG5mEe2wNaja8kBvcQ" name="activeVoteDefinitionsInActivity" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_QNp1QAgrEfC37oc_cfa43g" getterExpression="self.activityDistricts.issues!filter(i | i.status == edemokracia::IssueStatus#VOTING).currentVoteDefinition">
+      <inherited xmi:id="_QNwi8AgrEfC37oc_cfa43g"/>
+    </relations>
     <attributes xsi:type="structure:DataMember" xmi:id="_vX4k8G5gEe2wNaja8kBvcQ" name="userName" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_vX4k8G5gEe2wNaja8kBvcQ" getterExpression="" identifier="true">
       <inherited xmi:id="_vX5zEG5gEe2wNaja8kBvcQ"/>
     </attributes>
@@ -3786,6 +3584,9 @@
     </relations>
     <relations xsi:type="structure:TwoWayRelationMember" xmi:id="_jkYF8F43Ee6vsex_cZNQbQ" target="_BuSFMGkWEe25ONJ3V89cVA" name="usersFavoritedBy" defaultExpression="" rangeExpression="" partner="_jkR_UF43Ee6vsex_cZNQbQ">
       <inherited xmi:id="_jkbwUF43Ee6vsex_cZNQbQ"/>
+    </relations>
+    <relations xsi:type="structure:OneWayRelationMember" xmi:id="_EUNGwAhGEfC_AYKT2-_f7Q" upper="1" target="_-PRocG6LEe2wNaja8kBvcQ" name="selectAnswerVoteDefinition" defaultExpression="" rangeExpression="" memberType="DERIVED" binding="_EUNGwAhGEfC_AYKT2-_f7Q" getterExpression="self!asType(SelectAnswerVoteDefinition)">
+      <inherited xmi:id="_EUeMgAhGEfC_AYKT2-_f7Q"/>
     </relations>
     <attributes xsi:type="structure:DataMember" xmi:id="_rQEeYG6JEe2wNaja8kBvcQ" name="title" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" binding="_rQEeYG6JEe2wNaja8kBvcQ" getterExpression="">
       <inherited xmi:id="_rQEeYW6JEe2wNaja8kBvcQ"/>

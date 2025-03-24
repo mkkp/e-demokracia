@@ -43,7 +43,7 @@ public class VoteSelectAnswerCustomImplementation implements party.mkkp.edemokra
 
     @Override
     public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.votedefinition.VoteDefinition _this, party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervoteselection.SelectAnswerVoteSelection input)  {
-//        var vote = input.getValue().get();
-//        voteService.vote(_this.identifier().getIdentifier(), vote);
+        var vote = input;
+        voteService.vote(_this.identifier().getIdentifier(), vote);
     }
 }

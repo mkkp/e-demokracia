@@ -10,7 +10,7 @@ import {
   SERVICE_DASHBOARD_DASHBOARD_VIEW_EDIT_FAVORITE_VOTE_DEFINITIONS_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
   type ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentCardsContainerConfigHook,
 } from '~/containers/Service/Dashboard/Dashboard_View_Edit/components/ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent/customization';
-import { ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentRowActionDefinitions } from '~/containers/Service/Dashboard/Dashboard_View_Edit/components/ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent/types';
+import { type ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentRowActionDefinitions } from '~/containers/Service/Dashboard/Dashboard_View_Edit/components/ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponent/types';
 import { VoteDefinitionCard } from '~/custom/components/VoteDefinitionCard';
 import { useViewData } from '~/hooks';
 import { type ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
@@ -86,7 +86,15 @@ const ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentCard: F
   // elements are handled properly on all devices.
   return (
     <Grid item sm={12} md={6} lg={4} xl={4}>
-      <VoteDefinitionCard row={row} onRowClick={onRowClick}></VoteDefinitionCard>
+      <VoteDefinitionCard
+        row={row}
+        onRowClick={onRowClick}
+        revokeVote={undefined}
+        voteRatingAction={actions.favoriteVoteDefinitionsVoteRatingAction}
+        voteSelectAnswerAction={actions.favoriteVoteDefinitionsVoteSelectAnswerAction}
+        voteYesNoAction={actions.favoriteVoteDefinitionsVoteYesNoAction}
+        voteYesNoAbstainAction={actions.favoriteVoteDefinitionsVoteYesNoAbstainAction}
+      ></VoteDefinitionCard>
     </Grid>
   );
 };

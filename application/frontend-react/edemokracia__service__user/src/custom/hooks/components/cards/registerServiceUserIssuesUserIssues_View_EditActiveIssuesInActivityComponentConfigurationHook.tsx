@@ -7,32 +7,32 @@ import { type Filter, FilterType } from '~/components-api';
 import type { ActionbarElementProps, CardProps, ToolbarElementProps } from '~/components-api/components/CardsContainer';
 import { CardsFilter, type CardsFilterDefinition } from '~/components/widgets/CardsFilter';
 import {
-  SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-  type ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfigHook,
-} from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent/customization';
-import { type ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentRowActionDefinitions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent/types';
+  SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_ACTIVITY_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+  type ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfigHook,
+} from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponent/customization';
+import { type ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentRowActionDefinitions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponent/types';
 import { IssueCard } from '~/custom/components/IssueCard';
 import { useViewData } from '~/hooks';
 import { type ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
 import { mapCardsFiltersToFilters } from '~/utilities';
 
 /**
- * XMIID: User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable
- * Name: activeIssuesInResidentCounty
+ * XMIID: User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable
+ * Name: activeIssuesInActivity
  *
  * Notes:
  * Don't forget to remove unused hooks, and related imports afterwards to reduce build time and bundle size!
  */
-export function registerServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfig(
+export function registerServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfig(
   context: BundleContext,
 ) {
-  context.registerService<ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfigHook>(
-    SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_RESIDENT_COUNTY_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-    serviceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfig,
+  context.registerService<ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfigHook>(
+    SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_ACTIVITY_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+    serviceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfig,
   );
 }
 
-const serviceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfig: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCardsContainerConfigHook =
+const serviceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfig: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCardsContainerConfigHook =
   () => {
     // call other hooks here
     const { t } = useTranslation();
@@ -42,13 +42,13 @@ const serviceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
     return {
       // layout: 'horizontal',
       // showPagination: true,
-      // ToolbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentToolbar,
-      // ActionbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentActionBar,
-      CardElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCard,
+      // ToolbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentToolbar,
+      // ActionbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentActionBar,
+      CardElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCard,
     };
   };
 
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentActionBar: FC<
+const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentActionBar: FC<
   ActionbarElementProps<ServiceIssueStored>
 > = (props) => {
   const { actions, columns, isLoading, refresh, handleSortModelChange, sortModel } = props;
@@ -56,7 +56,7 @@ const ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
   return <div>{/* Implement your ActionBar here */}</div>;
 };
 
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentToolbar: FC<
+const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentToolbar: FC<
   ToolbarElementProps<ServiceIssueStored>
 > = ({ handleFiltersChange }: ToolbarElementProps<ServiceIssueStored>) => {
   // We can call other hooks here
@@ -74,10 +74,10 @@ const ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponent
   );
 };
 
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentCard: FC<
+const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentCard: FC<
   CardProps<
     ServiceIssueStored,
-    ServiceUserIssuesUserIssues_View_EditActiveIssuesInResidentCountyComponentRowActionDefinitions
+    ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityComponentRowActionDefinitions
   >
 > = ({ row, columns, onRowClick, actions }) => {
   // We can call other hooks here

@@ -16,14 +16,30 @@ import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
+import { SelectableAnswerVote } from './SelectableAnswerVote';
+import { YesNoAbstainVote } from './YesNoAbstainVote';
+import { YesNoVote } from './YesNoVote';
 
 interface VoteDefinitionCardProps {
   row: ServiceVoteDefinitionStored;
   onRowClick: ((row: ServiceVoteDefinitionStored) => void) | undefined;
+  voteRatingAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  voteSelectAnswerAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  voteYesNoAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  voteYesNoAbstainAction?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  revokeVote?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
 export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
-  const { row, onRowClick } = props;
+  const {
+    row,
+    onRowClick,
+    voteRatingAction,
+    voteSelectAnswerAction,
+    voteYesNoAction,
+    voteYesNoAbstainAction,
+    revokeVote,
+  } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
   const theme = useTheme();
@@ -166,17 +182,25 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         </Box> */}
 
         {/* Text Content */}
-        <Typography
-          variant="overline"
-          component="div"
-          sx={{
-            letterSpacing: 2,
-            fontWeight: 700,
-            color: 'secondary.light',
-          }}
-        >
-          {title}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <MdiIcon
+            path="map-marker"
+            sx={{
+              color: 'secondary.light',
+            }}
+          />
+          <Typography
+            variant="overline"
+            component="div"
+            sx={{
+              letterSpacing: 2,
+              fontWeight: 700,
+              color: 'secondary.light',
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
 
         <Typography
           variant="h5"
@@ -202,7 +226,16 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         >
           {row.description}
         </Typography>
-        <CardActions sx={{ justifyContent: 'end' }}>
+        <CardActions sx={{ justifyContent: 'center' }}>
+          <SelectableAnswerVote
+            voteDefinition={row}
+            vote={voteSelectAnswerAction}
+            revoke={revokeVote}
+          ></SelectableAnswerVote>
+          <YesNoAbstainVote voteDefinition={row} vote={voteYesNoAbstainAction} revoke={revokeVote}></YesNoAbstainVote>
+          <YesNoVote voteDefinition={row} vote={voteYesNoAction} revoke={revokeVote}></YesNoVote>
+        </CardActions>
+        <CardActions sx={{ justifyContent: 'center' }}>
           <Button
             sx={{}}
             variant={'contained'}
@@ -212,7 +245,7 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
               onRowClick?.(row);
             }}
           >
-            Megtekintés
+            {t('view', { defaultValue: 'Megtekintés' }) as string}
           </Button>
         </CardActions>
       </CardContent>

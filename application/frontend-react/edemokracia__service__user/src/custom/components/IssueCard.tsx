@@ -168,17 +168,25 @@ export function IssueCard(props: IssueCardProps) {
         </Box> */}
 
         {/* Text Content */}
-        <Typography
-          variant="overline"
-          component="div"
-          sx={{
-            letterSpacing: 2,
-            fontWeight: 700,
-            color: 'secondary.light',
-          }}
-        >
-          {title}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <MdiIcon
+            path="map-marker"
+            sx={{
+              color: 'secondary.light',
+            }}
+          />
+          <Typography
+            variant="overline"
+            component="div"
+            sx={{
+              letterSpacing: 2,
+              fontWeight: 700,
+              color: 'secondary.light',
+            }}
+          >
+            {title}
+          </Typography>
+        </Box>
 
         <Typography
           variant="h5"

@@ -86,7 +86,15 @@ const ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsC
   // elements are handled properly on all devices.
   return (
     <Grid item sm={12} md={6} lg={4} xl={4}>
-      <VoteDefinitionCard row={row} onRowClick={onRowClick}></VoteDefinitionCard>
+      <VoteDefinitionCard
+        row={row}
+        onRowClick={onRowClick}
+        revokeVote={actions.ownedVoteDefinitionsRevokeVoteForVoteDefinitionAction}
+        voteRatingAction={actions.ownedVoteDefinitionsVoteRatingAction}
+        voteSelectAnswerAction={actions.ownedVoteDefinitionsVoteSelectAnswerAction}
+        voteYesNoAction={actions.ownedVoteDefinitionsVoteYesNoAction}
+        voteYesNoAbstainAction={actions.ownedVoteDefinitionsVoteYesNoAbstainAction}
+      ></VoteDefinitionCard>
     </Grid>
   );
 };

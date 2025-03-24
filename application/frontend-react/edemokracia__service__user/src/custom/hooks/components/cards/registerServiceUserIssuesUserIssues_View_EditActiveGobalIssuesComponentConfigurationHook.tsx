@@ -7,32 +7,32 @@ import { type Filter, FilterType } from '~/components-api';
 import type { ActionbarElementProps, CardProps, ToolbarElementProps } from '~/components-api/components/CardsContainer';
 import { CardsFilter, type CardsFilterDefinition } from '~/components/widgets/CardsFilter';
 import {
-  SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-  type ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfigHook,
-} from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponent/customization';
-import { type ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentRowActionDefinitions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponent/types';
+  SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_GOBAL_ISSUES_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+  type ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfigHook,
+} from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponent/customization';
+import { type ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentRowActionDefinitions } from '~/containers/Service/UserIssues/UserIssues_View_Edit/components/ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponent/types';
 import { IssueCard } from '~/custom/components/IssueCard';
 import { useViewData } from '~/hooks';
 import { type ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
 import { mapCardsFiltersToFilters } from '~/utilities';
 
 /**
- * XMIID: User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable
- * Name: activeIssuesInActivityCounties
+ * XMIID: User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable
+ * Name: activeGobalIssues
  *
  * Notes:
  * Don't forget to remove unused hooks, and related imports afterwards to reduce build time and bundle size!
  */
-export function registerServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfig(
+export function registerServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfig(
   context: BundleContext,
 ) {
-  context.registerService<ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfigHook>(
-    SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_ISSUES_IN_ACTIVITY_COUNTIES_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
-    serviceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfig,
+  context.registerService<ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfigHook>(
+    SERVICE_USER_ISSUES_USER_ISSUES_VIEW_EDIT_ACTIVE_GOBAL_ISSUES_COMPONENT_CARDS_CONTAINER_CONFIG_HOOK_INTERFACE_KEY,
+    serviceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfig,
   );
 }
 
-const serviceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfig: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCardsContainerConfigHook =
+const serviceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfig: ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCardsContainerConfigHook =
   () => {
     // call other hooks here
     const { t } = useTranslation();
@@ -42,13 +42,13 @@ const serviceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesCompone
     return {
       // layout: 'horizontal',
       // showPagination: true,
-      // ToolbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentToolbar,
-      // ActionbarElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentActionBar,
-      CardElement: ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCard,
+      // ToolbarElement: ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentToolbar,
+      // ActionbarElement: ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentActionBar,
+      CardElement: ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCard,
     };
   };
 
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentActionBar: FC<
+const ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentActionBar: FC<
   ActionbarElementProps<ServiceIssueStored>
 > = (props) => {
   const { actions, columns, isLoading, refresh, handleSortModelChange, sortModel } = props;
@@ -56,7 +56,7 @@ const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesCompone
   return <div>{/* Implement your ActionBar here */}</div>;
 };
 
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentToolbar: FC<
+const ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentToolbar: FC<
   ToolbarElementProps<ServiceIssueStored>
 > = ({ handleFiltersChange }: ToolbarElementProps<ServiceIssueStored>) => {
   // We can call other hooks here
@@ -73,11 +73,9 @@ const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesCompone
     />
   );
 };
-const ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentCard: FC<
-  CardProps<
-    ServiceIssueStored,
-    ServiceUserIssuesUserIssues_View_EditActiveIssuesInActivityCountiesComponentRowActionDefinitions
-  >
+
+const ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentCard: FC<
+  CardProps<ServiceIssueStored, ServiceUserIssuesUserIssues_View_EditActiveGobalIssuesComponentRowActionDefinitions>
 > = ({ row, columns, onRowClick, actions }) => {
   // We can call other hooks here
 

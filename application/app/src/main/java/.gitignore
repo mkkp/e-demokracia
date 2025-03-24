@@ -38,6 +38,7 @@
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/selectanswervotedefinition/VoteCustomImplementation.java.default
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/userissues/CreateIssueCustomImplementation.java.default
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/usermanager/CreateUserCustomImplementation.java.default
+/party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/votedefinition/RevokeVoteCustomImplementation.java.default
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/votedefinition/VoteRatingCustomImplementation.java.default
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/votedefinition/VoteSelectAnswerCustomImplementation.java.default
 /party/mkkp/edemokracia/edemokracia/custom/edemokracia/service/votedefinition/VoteYesNoAbstainCustomImplementation.java.default
