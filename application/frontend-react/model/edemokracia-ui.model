@@ -5888,6 +5888,12 @@
     <attributes xmi:id="User/(esm/_MEiQYORyEe2Bgcx6em3jZg)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_hPs6UF5HEe6vsex_cZNQbQ)/AttributeType" name="scope" memberType="DERIVED" dataType="User/(esm/_frL5cFqrEe6_67aMO2jOsw)/EnumerationType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-g9V0H4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
+    <attributes xmi:id="User/(esm/_VR5uAAj2EfC_AYKT2-_f7Q)/AttributeType" name="sumOfRating" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_3L2gcAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoAbstainVoteOfAbstain" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_tL8hwAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoAbstainVoteOfNo" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_tPpWAAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoAbstainVoteOfYes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_doHAcAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoVoteOfNo" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_diCNoAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoVoteOfYes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-gbxYH4XEe2cB7_PsKXsHQ)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_INwnkOR8Ee20cv3f2msZXg)/AttributeType" name="voteType" memberType="DERIVED" dataType="User/(esm/_r9r9IOMbEe2Bgcx6em3jZg)/EnumerationType" isFilterable="true"/>
     <behaviours>REFRESH</behaviours>

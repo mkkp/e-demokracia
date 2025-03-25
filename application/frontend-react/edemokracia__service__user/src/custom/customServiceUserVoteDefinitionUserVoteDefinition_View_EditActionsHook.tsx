@@ -8,6 +8,7 @@ import {
   SERVICE_USER_USER_VOTE_DEFINITIONS_ACCESS_VIEW_PAGE_ACTIONS_HOOK_INTERFACE_KEY,
   ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook,
 } from '~/pages/Service/User/UserVoteDefinitions/AccessViewPage/customization';
+import { getExtraVoteDefinitionlMask } from './customUserVoteDefinitionMask';
 import { openVoteDefinitionPage } from './openVoteDefinitionRowFunction';
 
 export function registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context: BundleContext) {
@@ -20,6 +21,10 @@ export function registerServiceUserVoteDefinitionUserVoteDefinition_View_EditAct
 const customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook: ServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook =
   () => {
     return {
+      getActiveVoteDefinitionsInActivityMask: getExtraVoteDefinitionlMask,
+      getOwnedVoteDefinitionsMask: getExtraVoteDefinitionlMask,
+      getActiveVoteDefinitionsInResidentMask: getExtraVoteDefinitionlMask,
+      getActiveVoteDefinitionsGlobalMask: getExtraVoteDefinitionlMask,
       ownedVoteDefinitionsOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsGlobalOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsInResidentCityOpenPageAction: openVoteDefinitionPage(),

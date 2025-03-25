@@ -16,6 +16,7 @@ import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
+import VoteResultsCard, { AnswerItem } from './VoteResultCard';
 
 interface SelectableAnswerVoteProps {
   voteDefinition: ServiceVoteDefinitionStored;
@@ -30,62 +31,28 @@ export function SelectableAnswerVote(props: SelectableAnswerVoteProps) {
   const theme = useTheme();
 
   if (voteDefinition.isSelectAnswerType) {
-    if (voteDefinition.currentUserSelectAnswerVoteValue) {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              fontWeight: 900,
-              lineHeight: 1.2,
-              my: 1.5,
-              padding: 2,
-            }}
-          >
-            {t('myvote', { defaultValue: 'Szavazatom:' }) as string}
-          </Typography>
+    if (voteDefinition.status == VoteStatus.ACTIVE) {
+      const answers = voteDefinition.voteSelections?.map((answer) => (
+        {
+          label: answer.title,
+          count: answer.sumOfVotes
+        }
+      )) as AnswerItem[];
 
-          <Chip
-            label={voteDefinition.currentUserSelectAnswerVoteValue}
-            // variant="outlined"
-            color="warning"
-            onClick={() => {
-              props.revoke?.(props.voteDefinition);
-            }}
-          />
-        </div>
-      );
-    } else if (voteDefinition.status == VoteStatus.ACTIVE) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Button
-            sx={{}}
-            variant={'contained'}
-            size="small"
-            startIcon={<MdiIcon path="vote" />}
-            onClick={() => {
-              vote?.(props.voteDefinition);
-            }}
-          >
-            {t('vote', { defaultValue: 'Szavazok' }) as string}
-          </Button>
-        </div>
+        <VoteResultsCard 
+          answers={answers}
+          maxItems={8}
+          voteDefinition={voteDefinition}
+          vote={vote}
+          revoke={revoke}
+          voteValue={                    
+            voteDefinition.currentUserSelectAnswerVoteValue ? voteDefinition.currentUserSelectAnswerVoteValue as string : undefined
+            }
+        />
       );
     }
-  } else {
+    } else {
     return <></>;
   }
 }

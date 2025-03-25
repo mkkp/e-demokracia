@@ -1,4 +1,4 @@
-import { Icon, useTheme } from '@mui/material';
+import { Chip, Divider, Icon, useTheme } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -95,6 +95,11 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         overflow: 'hidden',
         bgcolor: theme.palette.grey[600],
         boxShadow: theme.shadows[6],
+        display: 'flex',
+        flexDirection: 'column',
+        // opacity: 0.9,
+        // background: `linear-gradient(180deg, transparent 0%,${theme.palette.info.light} 190%)`,
+
       }}
     >
       <Ribbon side="right" type="corner" size="large" backgroundColor={ribbonBg} withStripes={false}>
@@ -155,7 +160,7 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          // justifyContent: 'flex-end',
           color: 'common.white',
           p: 4,
           zIndex: 1,
@@ -226,7 +231,11 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         >
           {row.description}
         </Typography>
-        <CardActions sx={{ justifyContent: 'center' }}>
+        <Box 
+          sx={{
+            m: 2
+          }
+          }>
           <SelectableAnswerVote
             voteDefinition={row}
             vote={voteSelectAnswerAction}
@@ -234,8 +243,24 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           ></SelectableAnswerVote>
           <YesNoAbstainVote voteDefinition={row} vote={voteYesNoAbstainAction} revoke={revokeVote}></YesNoAbstainVote>
           <YesNoVote voteDefinition={row} vote={voteYesNoAction} revoke={revokeVote}></YesNoVote>
-        </CardActions>
-        <CardActions sx={{ justifyContent: 'center' }}>
+        </Box>
+      </CardContent>
+      <CardActions sx={{ 
+        justifyContent: 'center',
+        p: 0
+      }}>
+        <Box sx={{
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    boxSizing: 'border-box',
+                    p: 2,
+                    opacity: 0.9,
+                    background: `${theme.palette.info.light}`,
+        }}
+        >
           <Button
             sx={{}}
             variant={'contained'}
@@ -247,8 +272,8 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           >
             {t('view', { defaultValue: 'Megtekintés' }) as string}
           </Button>
-        </CardActions>
-      </CardContent>
+        </Box>
+      </CardActions>
     </Card>
   );
 }

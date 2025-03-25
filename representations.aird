@@ -6,7 +6,7 @@
     <semanticResources>target/classes/model/edemokracia-esm2psm.model</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_7FNZEGkNEe25ONJ3V89cVA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']"/>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7F3gYGkNEe25ONJ3V89cVA" name="Model Tree" repPath="#_7Fj-YGkNEe25ONJ3V89cVA" changeId="1742777533666">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_7F3gYGkNEe25ONJ3V89cVA" name="Model Tree" repPath="#_7Fj-YGkNEe25ONJ3V89cVA" changeId="1742851934497">
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']"/>
         <target xmi:type="namespace:Model" href="model/edemokracia.model#_7D8NwGkNEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -661,7 +661,7 @@
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_NNbwwH2pEe27Ga2Ojs4Fgg" name="Service - Vote Definition" repPath="#_NNbJsH2pEe27Ga2Ojs4Fgg" changeId="1742774809842">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_NNbwwH2pEe27Ga2Ojs4Fgg" name="Service - Vote Definition" repPath="#_NNbJsH2pEe27Ga2Ojs4Fgg" changeId="1742851934497">
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -940,7 +940,7 @@
         <description xmi:type="description_1:TreeDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='TransferObjectTableTree']"/>
         <target xmi:type="ui:TransferObjectTable" href="model/edemokracia.model#_3NM1IIyNEe2VSOmaAz6G9Q"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_yLYEkIyOEe2VSOmaAz6G9Q" name="Service - Dashboard" repPath="#_yLXdgIyOEe2VSOmaAz6G9Q" changeId="1742764258094">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_yLYEkIyOEe2VSOmaAz6G9Q" name="Service - Dashboard" repPath="#_yLXdgIyOEe2VSOmaAz6G9Q" changeId="1742851934497">
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -1500,7 +1500,7 @@
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Model" href="model/edemokracia.model#_7D8NwGkNEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
-      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_yyjRkF49Ee6vsex_cZNQbQ" name="Service - User Vote Definitions" repPath="#_yyiDcF49Ee6vsex_cZNQbQ" changeId="1742775069801">
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_yyjRkF49Ee6vsex_cZNQbQ" name="Service - User Vote Definitions" repPath="#_yyiDcF49Ee6vsex_cZNQbQ" changeId="1742851933674">
         <description xmi:type="description_3:DiagramDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']"/>
         <target xmi:type="namespace:Package" href="model/edemokracia.model#_TFt7AGkqEe25ONJ3V89cVA"/>
       </ownedRepresentationDescriptors>
@@ -3734,6 +3734,54 @@
             <target xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
             <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
             <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3_uMegXLEfC37oc_cfa43g" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_dwHs8Aj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfYes : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_dwHs8Qj1EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_dwHs9gj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfNo : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_dwHs9wj1EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_tYODMAj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfYes : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_tYODMQj1EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_tYNcUQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfNo : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_tYNcUgj1EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_3UNyQAj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfAbstain : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_3UNyQQj1EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
+              <labelFormat>italic</labelFormat>
+            </ownedStyle>
+            <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
+          </ownedTreeItems>
+          <ownedTreeItems xmi:type="tree:DTreeItem" uid="_VaPx6gj2EfC_AYKT2-_f7Q" name="/sumOfRating : Integer">
+            <target xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+            <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+            <ownedStyle xmi:type="tree:TreeItemStyle" uid="_VaPx6wj2EfC_AYKT2-_f7Q" labelSize="10" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png">
               <labelFormat>italic</labelFormat>
             </ownedStyle>
             <actualMapping xmi:type="description_1:TreeItemMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='ModelTree']/@subItemMappings[name='ModelTree%3A%3AModel']/@subItemMappings[name='ModelTree%3A%3AClass']/@subItemMappings[name='ModelTree%3A%3AAttribute']"/>
@@ -38447,6 +38495,30 @@
                   <styles xmi:type="notation:FontStyle" xmi:id="_dskplAWbEfC6R8DzhDT-HQ" fontName=".AppleSystemUIFont" fontHeight="8"/>
                   <layoutConstraint xmi:type="notation:Location" xmi:id="_dskplQWbEfC6R8DzhDT-HQ"/>
                 </children>
+                <children xmi:type="notation:Node" xmi:id="_dx51oAj1EfC_AYKT2-_f7Q" type="3010" element="_dtaXNQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx51oQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx51ogj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_dx51pgj1EfC_AYKT2-_f7Q" type="3010" element="_dtaXOQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx51pwj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx51qAj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taD2Qwj1EfC_AYKT2-_f7Q" type="3010" element="_tVam2gj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taD2RAj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taD2RQj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taD2QAj1EfC_AYKT2-_f7Q" type="3010" element="_tVam2Aj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taD2QQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taD2Qgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_3WVSIwj1EfC_AYKT2-_f7Q" type="3010" element="_3Ra8_gj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_3WVSJAj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_3WVSJQj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_VcnwQAj2EfC_AYKT2-_f7Q" type="3010" element="_VXYq9gj2EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_VcnwQQj2EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_VcnwQgj2EfC_AYKT2-_f7Q"/>
+                </children>
                 <styles xmi:type="notation:SortingStyle" xmi:id="_-oObg34XEe2cB7_PsKXsHQ"/>
                 <styles xmi:type="notation:FilteringStyle" xmi:id="_-oObhH4XEe2cB7_PsKXsHQ"/>
                 <styles xmi:type="notation:DrawerStyle" xmi:id="_-oObhX4XEe2cB7_PsKXsHQ"/>
@@ -39105,6 +39177,42 @@
           <target xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
           <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
           <ownedStyle xmi:type="diagram:Square" uid="_drJGOQWbEfC6R8DzhDT-HQ" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dtaXNQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dtaXNgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dtaXOQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dtaXOgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tVam2gj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tVam2wj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tVam2Aj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tVam2Qj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_3Ra8_gj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfAbstain : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfAbstain &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_3Ra8_wj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_VXYq9gj2EfC_AYKT2-_f7Q" name="/sumOfRating : Integer" tooltipText=" &#xA; Name: sumOfRating &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_VXYq9wj2EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_oSIbko4jEe29qs15q2b6yw" labelPosition="node"/>
           <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
         </ownedElements>
       </ownedDiagramElements>
@@ -43748,6 +43856,30 @@
                   <styles xmi:type="notation:FontStyle" xmi:id="_dslQoQWbEfC6R8DzhDT-HQ" fontName=".AppleSystemUIFont" fontHeight="8"/>
                   <layoutConstraint xmi:type="notation:Location" xmi:id="_dslQogWbEfC6R8DzhDT-HQ"/>
                 </children>
+                <children xmi:type="notation:Node" xmi:id="_dx6csAj1EfC_AYKT2-_f7Q" type="3010" element="_dwTTIQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx6csQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx6csgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_dx6ctgj1EfC_AYKT2-_f7Q" type="3010" element="_dwTTJQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx6ctwj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx6cuAj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taEdUwj1EfC_AYKT2-_f7Q" type="3010" element="_tYYbQwj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taEdVAj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taEdVQj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taEdUAj1EfC_AYKT2-_f7Q" type="3010" element="_tYYbQQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taEdUQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taEdUgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_3WVSIAj1EfC_AYKT2-_f7Q" type="3010" element="_3UYxaAj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_3WVSIQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_3WVSIgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_VcoXUwj2EfC_AYKT2-_f7Q" type="3010" element="_VaaJxwj2EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_VcoXVAj2EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_VcoXVQj2EfC_AYKT2-_f7Q"/>
+                </children>
                 <styles xmi:type="notation:SortingStyle" xmi:id="_AE46TF5SEe6vsex_cZNQbQ"/>
                 <styles xmi:type="notation:FilteringStyle" xmi:id="_AE46TV5SEe6vsex_cZNQbQ"/>
                 <styles xmi:type="notation:DrawerStyle" xmi:id="_AE46Tl5SEe6vsex_cZNQbQ" collapsed="true"/>
@@ -43761,6 +43893,10 @@
                 <children xmi:type="notation:Node" xmi:id="_AE6IhF5SEe6vsex_cZNQbQ" visible="false" type="3010" element="__6V3KF5REe6vsex_cZNQbQ">
                   <styles xmi:type="notation:FontStyle" xmi:id="_AE6IhV5SEe6vsex_cZNQbQ" fontName=".AppleSystemUIFont" fontHeight="8"/>
                   <layoutConstraint xmi:type="notation:Location" xmi:id="_AE6Ihl5SEe6vsex_cZNQbQ"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_gWTmsAjiEfC_AYKT2-_f7Q" visible="false" type="3010" element="_gVK-SAjiEfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_gWTmsQjiEfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_gWTmsgjiEfC_AYKT2-_f7Q"/>
                 </children>
                 <styles xmi:type="notation:SortingStyle" xmi:id="_AE5hVV5SEe6vsex_cZNQbQ"/>
                 <styles xmi:type="notation:FilteringStyle" xmi:id="_AE5hVl5SEe6vsex_cZNQbQ"/>
@@ -45179,6 +45315,42 @@
           <ownedStyle xmi:type="diagram:Square" uid="_drzNlgWbEfC6R8DzhDT-HQ" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
           <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
         </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dwTTIQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dwTTIgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dwTTJQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dwTTJgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tYYbQwj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tYYbRAj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tYYbQQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tYYbQgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_3UYxaAj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfAbstain : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfAbstain &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_3UYxaQj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_VaaJxwj2EfC_AYKT2-_f7Q" name="/sumOfRating : Integer" tooltipText=" &#xA; Name: sumOfRating &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_VaaJyAj2EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_ukPJWYyPEe2VSOmaAz6G9Q" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
       </ownedDiagramElements>
       <ownedDiagramElements xmi:type="diagram:DNodeList" uid="__6V3Il5REe6vsex_cZNQbQ" visible="false" width="20">
         <target xmi:type="structure:TransferObjectType" href="model/edemokracia.model#_-f-eY34XEe2cB7_PsKXsHQ"/>
@@ -45197,6 +45369,12 @@
           <ownedStyle xmi:type="diagram:Square" uid="__6V3KV5REe6vsex_cZNQbQ" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/one-to-one-1-dir.png" labelAlignment="LEFT" labelPosition="node">
             <description xmi:type="style:SquareDescription" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferRelationCompartment']/@subNodeMappings[name='TransferRelation']/@style"/>
           </ownedStyle>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferRelationCompartment']/@subNodeMappings[name='TransferRelation']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_gVK-SAjiEfC_AYKT2-_f7Q" name="/voteSelections : SelectAnswerVoteSelection [0..*]" visible="false" tooltipText=" &#xA; Name: voteSelections &#xA; Target: edemokracia::service::SelectAnswerVoteSelection &#xA; Cardinality: [0..*] &#xA; Default value:  &#xA; Read-only: true &#xA; Create is allowed: false &#xA; Update is allowed: false &#xA; Delete is allowed: false &#xA;">
+          <target xmi:type="structure:OneWayRelationMember" href="model/edemokracia.model#_1NAJAAhDEfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:OneWayRelationMember" href="model/edemokracia.model#_1NAJAAhDEfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_gVK-SQjiEfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/aggregation.png" labelAlignment="LEFT" description="_ukPwaIyPEe2VSOmaAz6G9Q" labelPosition="node"/>
           <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferRelationCompartment']/@subNodeMappings[name='TransferRelation']"/>
         </ownedElements>
       </ownedDiagramElements>
@@ -74496,12 +74674,36 @@
                   <styles xmi:type="notation:FontStyle" xmi:id="_dskpkQWbEfC6R8DzhDT-HQ" fontName=".AppleSystemUIFont" fontHeight="8"/>
                   <layoutConstraint xmi:type="notation:Location" xmi:id="_dskpkgWbEfC6R8DzhDT-HQ"/>
                 </children>
+                <children xmi:type="notation:Node" xmi:id="_dx7DwAj1EfC_AYKT2-_f7Q" type="3010" element="_dsRuzQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx7DwQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx7Dwgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_dx7Dxgj1EfC_AYKT2-_f7Q" type="3010" element="_dsSV0gj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_dx7Dxwj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_dx7DyAj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taEdWQj1EfC_AYKT2-_f7Q" type="3010" element="_tUSlcwj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taEdWgj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taEdWwj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_taEdVgj1EfC_AYKT2-_f7Q" type="3010" element="_tUSlcQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_taEdVwj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_taEdWAj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_3WUrEAj1EfC_AYKT2-_f7Q" type="3010" element="_3QRtfQj1EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_3WUrEQj1EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_3WUrEgj1EfC_AYKT2-_f7Q"/>
+                </children>
+                <children xmi:type="notation:Node" xmi:id="_VcoXUAj2EfC_AYKT2-_f7Q" type="3010" element="_VWO0aQj2EfC_AYKT2-_f7Q">
+                  <styles xmi:type="notation:FontStyle" xmi:id="_VcoXUQj2EfC_AYKT2-_f7Q" fontName=".AppleSystemUIFont" fontHeight="8"/>
+                  <layoutConstraint xmi:type="notation:Location" xmi:id="_VcoXUgj2EfC_AYKT2-_f7Q"/>
+                </children>
                 <styles xmi:type="notation:SortingStyle" xmi:id="_NSSN2V5AEe6vsex_cZNQbQ"/>
                 <styles xmi:type="notation:FilteringStyle" xmi:id="_NSSN2l5AEe6vsex_cZNQbQ"/>
                 <styles xmi:type="notation:DrawerStyle" xmi:id="_NSSN215AEe6vsex_cZNQbQ"/>
               </children>
               <styles xmi:type="notation:ShapeStyle" xmi:id="_NSSN1V5AEe6vsex_cZNQbQ" fontName=".AppleSystemUIFont" fontHeight="10"/>
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NSSN1l5AEe6vsex_cZNQbQ" width="341" height="484"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NSSN1l5AEe6vsex_cZNQbQ" width="341" height="588"/>
             </children>
             <children xmi:type="notation:Node" xmi:id="_NSSN3F5AEe6vsex_cZNQbQ" visible="false" type="3009" element="_NIjDBV5AEe6vsex_cZNQbQ">
               <children xmi:type="notation:Node" xmi:id="_NSSN315AEe6vsex_cZNQbQ" visible="false" type="5004"/>
@@ -74549,7 +74751,7 @@
                 <styles xmi:type="notation:DrawerStyle" xmi:id="_NSSN615AEe6vsex_cZNQbQ"/>
               </children>
               <styles xmi:type="notation:ShapeStyle" xmi:id="_NSSN5V5AEe6vsex_cZNQbQ" fontName=".AppleSystemUIFont" fontHeight="8" italic="true"/>
-              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NSSN5l5AEe6vsex_cZNQbQ" y="484" width="341" height="111"/>
+              <layoutConstraint xmi:type="notation:Bounds" xmi:id="_NSSN5l5AEe6vsex_cZNQbQ" y="588" width="341" height="95"/>
             </children>
             <children xmi:type="notation:Node" xmi:id="_NSS04F5AEe6vsex_cZNQbQ" visible="false" type="3009" element="_NIkRIF5AEe6vsex_cZNQbQ">
               <children xmi:type="notation:Node" xmi:id="_NSS0415AEe6vsex_cZNQbQ" visible="false" type="5004"/>
@@ -74659,7 +74861,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_D974JV5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_D974Jl5BEe6vsex_cZNQbQ" points="[-101, 62, -377, -98]$[-101, 240, -377, 80]$[276, 240, 0, 80]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_D974LV5BEe6vsex_cZNQbQ" id="(1.0,0.43636363636363634)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_D974Ll5BEe6vsex_cZNQbQ" id="(0.0,0.7083027484143763)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_D974Ll5BEe6vsex_cZNQbQ" id="(0.0,0.6208824933506104)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_Nj8JEF5BEe6vsex_cZNQbQ" type="4001" element="_Ls2rpF5BEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_Nj8JFF5BEe6vsex_cZNQbQ" type="6001">
@@ -74675,7 +74877,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_Nj8JEl5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_Nj8JE15BEe6vsex_cZNQbQ" points="[0, 0, -352, -102]$[0, 102, -352, 0]$[352, 102, 0, 0]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Nj8JGl5BEe6vsex_cZNQbQ" id="(0.6274509803921569,1.0)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Nj8JG15BEe6vsex_cZNQbQ" id="(0.0,0.7160016913319239)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_Nj8JG15BEe6vsex_cZNQbQ" id="(0.0,0.6276312161044215)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_V3QDE15BEe6vsex_cZNQbQ" type="4001" element="_UAIweF5BEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_V3QDF15BEe6vsex_cZNQbQ" type="6001">
@@ -74691,7 +74893,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_V3QDFV5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_V3QDFl5BEe6vsex_cZNQbQ" points="[102, -74, -276, -323]$[182, -74, -196, -323]$[182, -166, -196, -415]$[378, -166, 0, -415]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_V3QDHV5BEe6vsex_cZNQbQ" id="(0.5,1.0)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_V3QDHl5BEe6vsex_cZNQbQ" id="(0.0,0.8314858350951374)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_V3QDHl5BEe6vsex_cZNQbQ" id="(0.0,0.728862057411586)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_gwNJoF5BEe6vsex_cZNQbQ" type="4001" element="_e4lgvF5BEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_gwNJpF5BEe6vsex_cZNQbQ" type="6001">
@@ -74707,7 +74909,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_gwNJol5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_gwNJo15BEe6vsex_cZNQbQ" points="[0, -53, -276, 156]$[60, -53, -216, 156]$[60, -170, -216, 39]$[276, -170, 0, 39]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_gwNwtF5BEe6vsex_cZNQbQ" id="(1.0,0.7)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_gwNwtV5BEe6vsex_cZNQbQ" id="(0.0,0.04619365750528541)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_gwNwtV5BEe6vsex_cZNQbQ" id="(0.0,0.04049233652286589)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_paagsF5BEe6vsex_cZNQbQ" type="4001" element="_niEfBF5BEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_paagtF5BEe6vsex_cZNQbQ" type="6001">
@@ -74723,7 +74925,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_paagsl5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_paags15BEe6vsex_cZNQbQ" points="[84, 12, -276, 164]$[124, 12, -236, 164]$[124, -152, -236, 0]$[360, -152, 0, 0]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_paagul5BEe6vsex_cZNQbQ" id="(0.5882352941176471,0.0)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_paagu15BEe6vsex_cZNQbQ" id="(0.0,0.015397885835095139)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_paagu15BEe6vsex_cZNQbQ" id="(0.0,0.013497445507621966)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_5BjNo15BEe6vsex_cZNQbQ" type="4001" element="_3IZTtF5BEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_5BjNp15BEe6vsex_cZNQbQ" type="6001">
@@ -74739,7 +74941,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_5BjNpV5BEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_5BjNpl5BEe6vsex_cZNQbQ" points="[0, -24, -276, 160]$[100, -24, -176, 160]$[100, -84, -176, 100]$[276, -84, 0, 100]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5BjNrV5BEe6vsex_cZNQbQ" id="(1.0,0.6545454545454545)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5BjNrl5BEe6vsex_cZNQbQ" id="(0.0,0.07698942917547569)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_5BjNrl5BEe6vsex_cZNQbQ" id="(0.0,0.06748722753810982)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_C0CbYF5CEe6vsex_cZNQbQ" type="4001" element="_A6L96F5CEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_C0CbZF5CEe6vsex_cZNQbQ" type="6001">
@@ -74755,7 +74957,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_C0CbYl5CEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_C0CbY15CEe6vsex_cZNQbQ" points="[-32, 22, -308, -100]$[-32, 56, -308, -66]$[276, 56, 0, -66]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_C0Cbal5CEe6vsex_cZNQbQ" id="(1.0,0.8)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_C0Cba15CEe6vsex_cZNQbQ" id="(0.0,0.5928186046511629)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_C0Cba15CEe6vsex_cZNQbQ" id="(0.0,0.5196516520434458)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_tsNls15EEe6vsex_cZNQbQ" type="4001" element="_rxSxKF5EEe6vsex_cZNQbQ" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_tsNlt15EEe6vsex_cZNQbQ" type="6001">
@@ -74771,7 +74973,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_tsNltV5EEe6vsex_cZNQbQ" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_tsNltl5EEe6vsex_cZNQbQ" points="[-52, 38, -328, -163]$[-52, 120, -328, -81]$[276, 120, 0, -81]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tsNlvV5EEe6vsex_cZNQbQ" id="(1.0,0.6545454545454545)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tsNlvl5EEe6vsex_cZNQbQ" id="(0.0,0.6929048625792812)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_tsNlvl5EEe6vsex_cZNQbQ" id="(0.0,0.6073850478429884)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_q-D8swgrEfC37oc_cfa43g" type="4001" element="_q5_VEAgrEfC37oc_cfa43g" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_q-EjwAgrEfC37oc_cfa43g" type="6001">
@@ -74787,7 +74989,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_q-D8tQgrEfC37oc_cfa43g" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_q-D8tggrEfC37oc_cfa43g" points="[0, 16, -276, 16]$[276, 16, 0, 16]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_q-EjxggrEfC37oc_cfa43g" id="(1.0,0.7636363636363637)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_q-EjxwgrEfC37oc_cfa43g" id="(0.0,0.3904)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_q-EjxwgrEfC37oc_cfa43g" id="(0.0,0.3422159887798037)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_47cdkAgrEfC37oc_cfa43g" type="4001" element="_42-NRAgrEfC37oc_cfa43g" source="_jatvcF4-Ee6vsex_cZNQbQ" target="_NSRmwF5AEe6vsex_cZNQbQ">
           <children xmi:type="notation:Node" xmi:id="_47cdlAgrEfC37oc_cfa43g" type="6001">
@@ -74803,7 +75005,7 @@
           <styles xmi:type="notation:FontStyle" xmi:id="_47cdkggrEfC37oc_cfa43g" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_47cdkwgrEfC37oc_cfa43g" points="[0, -16, -276, 0]$[276, -16, 0, 0]"/>
           <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_47cdmggrEfC37oc_cfa43g" id="(1.0,0.8)"/>
-          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_47cdmwgrEfC37oc_cfa43g" id="(0.0,0.3712)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_47cdmwgrEfC37oc_cfa43g" id="(0.0,0.3253856942496493)"/>
         </edges>
         <edges xmi:type="notation:Edge" xmi:id="_4iZXgAhDEfC_AYKT2-_f7Q" type="4001" element="_4cwChAhDEfC_AYKT2-_f7Q" source="_NSRmwF5AEe6vsex_cZNQbQ" target="_hE7AcAhDEfC_AYKT2-_f7Q">
           <children xmi:type="notation:Node" xmi:id="_4iZXhAhDEfC_AYKT2-_f7Q" type="6001">
@@ -74818,7 +75020,7 @@
           <styles xmi:type="notation:ConnectorStyle" xmi:id="_4iZXgQhDEfC_AYKT2-_f7Q" routing="Rectilinear"/>
           <styles xmi:type="notation:FontStyle" xmi:id="_4iZXgghDEfC_AYKT2-_f7Q" fontColor="4408901" fontName=".AppleSystemUIFont" fontHeight="8"/>
           <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_4iZXgwhDEfC_AYKT2-_f7Q" points="[0, -20, 276, -20]$[-276, -20, 0, -20]"/>
-          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4ialoAhDEfC_AYKT2-_f7Q" id="(0.0,0.9664)"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4ialoAhDEfC_AYKT2-_f7Q" id="(0.0,0.847124824684432)"/>
           <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_4ialoQhDEfC_AYKT2-_f7Q" id="(1.0,0.5378151260504201)"/>
         </edges>
       </data>
@@ -75598,6 +75800,42 @@
           <target xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
           <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_dnxCEAWbEfC6R8DzhDT-HQ"/>
           <ownedStyle xmi:type="diagram:Square" uid="_dqeX0AWbEfC6R8DzhDT-HQ" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dsRuzQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_diCNoAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dsRuzgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_dsSV0gj1EfC_AYKT2-_f7Q" name="/sumOfYesNoVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_doHAcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_dsSV0wj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tUSlcwj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfYes : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfYes &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tPpWAAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tUSldAj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_tUSlcQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfNo : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfNo &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_tL8hwAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_tUSlcgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_3QRtfQj1EfC_AYKT2-_f7Q" name="/sumOfYesNoAbstainVoteOfAbstain : Integer" tooltipText=" &#xA; Name: sumOfYesNoAbstainVoteOfAbstain &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_3L2gcAj1EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_3QRtfgj1EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
+          <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
+        </ownedElements>
+        <ownedElements xmi:type="diagram:DNodeListElement" uid="_VWO0aQj2EfC_AYKT2-_f7Q" name="/sumOfRating : Integer" tooltipText=" &#xA; Name: sumOfRating &#xA; Type: edemokracia::types::Integer &#xA; Default value:  &#xA; Required: false &#xA; Read-only: true &#xA; Identifier: false &#xA;">
+          <target xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <semanticElements xmi:type="structure:DataMember" href="model/edemokracia.model#_VR5uAAj2EfC_AYKT2-_f7Q"/>
+          <ownedStyle xmi:type="diagram:Square" uid="_VWO0agj2EfC_AYKT2-_f7Q" iconPath="/hu.blackbelt.judo.meta.esm.designer/icons/attribute_ro.png" labelAlignment="LEFT" description="_NIh05l5AEe6vsex_cZNQbQ" labelPosition="node"/>
           <actualMapping xmi:type="description_3:NodeMapping" href="platform:/plugin/hu.blackbelt.judo.meta.esm.designer/description/esm.odesign#//@ownedViewpoints[name='viewpointModelling']/@ownedRepresentations[name='diagramEntity']/@additionalLayers[name='ServiceLayer']/@containerMappings[name='TransferObjectType']/@subContainerMappings[name='TransferAttributeCompartment']/@subNodeMappings[name='TransferAttribute']"/>
         </ownedElements>
       </ownedDiagramElements>

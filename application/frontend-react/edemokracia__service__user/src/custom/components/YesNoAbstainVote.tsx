@@ -1,12 +1,12 @@
-import { Button, Chip, Icon, useTheme } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { MdiIcon } from '~/components';
 
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
+
+import VoteResultsCard from './VoteResultCard';
 
 interface YesNoAbstainVoteProps {
   voteDefinition: ServiceVoteDefinitionStored;
@@ -14,75 +14,43 @@ interface YesNoAbstainVoteProps {
   revoke?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
+
 export function YesNoAbstainVote(props: YesNoAbstainVoteProps) {
   const { voteDefinition, vote, revoke } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
   const theme = useTheme();
 
-  console.log(voteDefinition);
-
   if (voteDefinition.isYesNoAbstainType) {
-    if (voteDefinition.currentUserYesNoAbstainVoteValue) {
+    if (voteDefinition.status == VoteStatus.ACTIVE) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              fontWeight: 900,
-              lineHeight: 1.2,
-              my: 1.5,
-              padding: 2,
-            }}
-          >
-            {t('myvote', { defaultValue: 'Szavazatom:' }) as string}
-          </Typography>
-
-          <Chip
-            label={
-              t('enumerations.YesNoAbstainVoteValue.' + voteDefinition.currentUserYesNoAbstainVoteValue, {
-                defaultValue: voteDefinition.currentUserYesNoAbstainVoteValue,
-              }) as string
+        <VoteResultsCard 
+          answers={[
+            { label: (t('enumerations.YesNoAbstainVoteValue.YES', {
+              defaultValue: 'Igen',
+            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfYes || 0 },
+            { label: (t('enumerations.YesNoAbstainVoteValue.NO', {
+              defaultValue: 'Nem',
+            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfNo || 0 },
+            { label: (t('enumerations.YesNoAbstainVoteValue.ABSTAIN', {
+              defaultValue: 'Tartózkodás',
+            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfAbstain || 0 },
+          ]}
+          maxItems={8}
+          voteDefinition={voteDefinition}
+          vote={vote}
+          revoke={revoke}
+          voteValue={                    
+            voteDefinition.currentUserYesNoAbstainVoteValue ? t('enumerations.YesNoAbstainVoteValue.' + voteDefinition.currentUserYesNoAbstainVoteValue, {
+                  defaultValue: voteDefinition.currentUserYesNoAbstainVoteValue,
+              }) as string : undefined
             }
-            // variant="outlined"
-            color="warning"
-            onClick={() => {
-              props.revoke?.(props.voteDefinition);
-            }}
-          />
-        </div>
-      );
-    } else if (voteDefinition.status == VoteStatus.ACTIVE) {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Button
-            sx={{}}
-            variant={'contained'}
-            size="small"
-            startIcon={<MdiIcon path="vote" />}
-            onClick={() => {
-              vote?.(props.voteDefinition);
-            }}
-          >
-            {t('vote', { defaultValue: 'Szavazok' }) as string}
-          </Button>
-        </div>
+        />
       );
     }
   } else {
     return <></>;
   }
 }
+
+

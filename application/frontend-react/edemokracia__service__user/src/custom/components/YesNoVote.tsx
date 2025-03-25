@@ -1,12 +1,11 @@
-import { Button, Chip, Icon, useTheme } from '@mui/material';
-import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { MdiIcon } from '~/components';
 
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
+import VoteResultsCard from './VoteResultCard';
 
 interface YesNoVoteProps {
   voteDefinition: ServiceVoteDefinitionStored;
@@ -23,66 +22,31 @@ export function YesNoVote(props: YesNoVoteProps) {
   console.log(voteDefinition);
 
   if (voteDefinition.isYesNoType) {
-    if (voteDefinition.currentUserYesNoVoteValue) {
+    if (voteDefinition.status == VoteStatus.ACTIVE) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Typography
-            variant="h5"
-            component="div"
-            sx={{
-              fontWeight: 900,
-              lineHeight: 1.2,
-              my: 1.5,
-              padding: 2,
-            }}
-          >
-            {t('myvote', { defaultValue: 'Szavazatom:' }) as string}
-          </Typography>
-
-          <Chip
-            label={
-              t('enumerations.YesNoVoteValue.' + voteDefinition.currentUserYesNoVoteValue, {
-                defaultValue: voteDefinition.currentUserYesNoVoteValue,
-              }) as string
-            }
-            // variant="outlined"
-            color="warning"
-            onClick={() => {
-              props.revoke?.(props.voteDefinition);
-            }}
-          />
-        </div>
-      );
-    } else if (voteDefinition.status == VoteStatus.ACTIVE) {
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            height: '100%',
-          }}
-        >
-          <Button
-            sx={{}}
-            variant={'contained'}
-            size="small"
-            startIcon={<MdiIcon path="vote" />}
-            onClick={() => {
-              vote?.(props.voteDefinition);
-            }}
-          >
-            {t('vote', { defaultValue: 'Szavazok' }) as string}
-          </Button>
-        </div>
+        <VoteResultsCard 
+          answers={[
+            { label: (t('enumerations.YesNoVoteValue.YES', {
+              defaultValue: 'Igen',
+            }) as string), count: props.voteDefinition.sumOfYesNoVoteOfYes || 0 },
+            { label: (t('enumerations.YesNoVoteValue.NO', {
+              defaultValue: 'Nem',
+            }) as string), count: props.voteDefinition.sumOfYesNoVoteOfNo || 0 },
+          ]}
+          maxItems={8}
+          voteDefinition={voteDefinition}
+          vote={vote}
+          revoke={revoke}
+          voteValue={
+            voteDefinition.currentUserYesNoVoteValue ? t('enumerations.YesNoVoteValue.' + voteDefinition.currentUserYesNoVoteValue, {
+                  defaultValue: voteDefinition.currentUserYesNoVoteValue,
+            }) as string : undefined
+          }
+        />
       );
     }
   } else {
     return <></>;
   }
+    
 }
