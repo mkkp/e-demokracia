@@ -24,23 +24,31 @@ export function YesNoVote(props: YesNoVoteProps) {
   if (voteDefinition.isYesNoType) {
     if (voteDefinition.status == VoteStatus.ACTIVE) {
       return (
-        <VoteResultsCard 
+        <VoteResultsCard
           answers={[
-            { label: (t('enumerations.YesNoVoteValue.YES', {
-              defaultValue: 'Igen',
-            }) as string), count: props.voteDefinition.sumOfYesNoVoteOfYes || 0 },
-            { label: (t('enumerations.YesNoVoteValue.NO', {
-              defaultValue: 'Nem',
-            }) as string), count: props.voteDefinition.sumOfYesNoVoteOfNo || 0 },
+            {
+              label: t('enumerations.YesNoVoteValue.YES', {
+                defaultValue: 'Igen',
+              }) as string,
+              count: props.voteDefinition.sumOfYesNoVoteOfYes || 0,
+            },
+            {
+              label: t('enumerations.YesNoVoteValue.NO', {
+                defaultValue: 'Nem',
+              }) as string,
+              count: props.voteDefinition.sumOfYesNoVoteOfNo || 0,
+            },
           ]}
           maxItems={8}
           voteDefinition={voteDefinition}
           vote={vote}
           revoke={revoke}
           voteValue={
-            voteDefinition.currentUserYesNoVoteValue ? t('enumerations.YesNoVoteValue.' + voteDefinition.currentUserYesNoVoteValue, {
+            voteDefinition.currentUserYesNoVoteValue
+              ? (t('enumerations.YesNoVoteValue.' + voteDefinition.currentUserYesNoVoteValue, {
                   defaultValue: voteDefinition.currentUserYesNoVoteValue,
-            }) as string : undefined
+                }) as string)
+              : undefined
           }
         />
       );
@@ -48,5 +56,4 @@ export function YesNoVote(props: YesNoVoteProps) {
   } else {
     return <></>;
   }
-    
 }

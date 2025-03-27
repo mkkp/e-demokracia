@@ -40,6 +40,7 @@ data-api/model/Initializer.ts
 data-api/model/Issue.ts
 data-api/model/IssueAttachment.ts
 data-api/model/IssueCategory.ts
+data-api/model/IssueLink.ts
 data-api/model/IssueScope.ts
 data-api/model/IssueStatus.ts
 data-api/model/IssueType.ts
@@ -51,7 +52,6 @@ data-api/model/SelectAnswerVoteEntry.ts
 data-api/model/SelectAnswerVoteSelection.ts
 data-api/model/SelectedVoteType.ts
 data-api/model/ServiceCity.ts
-data-api/model/ServiceCloseDebateInputRatingVote.ts
 data-api/model/ServiceCloseDebateInputSelectAnswerVoteSelection.ts
 data-api/model/ServiceComment.ts
 data-api/model/ServiceCon.ts
@@ -64,6 +64,7 @@ data-api/model/ServiceDistrict.ts
 data-api/model/ServiceIssue.ts
 data-api/model/ServiceIssueAttachment.ts
 data-api/model/ServiceIssueCategory.ts
+data-api/model/ServiceIssueLink.ts
 data-api/model/ServiceIssueType.ts
 data-api/model/ServicePro.ts
 data-api/model/ServiceProParent.ts
@@ -135,7 +136,6 @@ data-api/rest/DistrictMaskBuilder.ts
 data-api/rest/DistrictQueryCustomizer.ts
 data-api/rest/DistrictQueryCustomizerSerializer.ts
 data-api/rest/DistrictSerializer.ts
-data-api/rest/FilterByAttachmentType.ts
 data-api/rest/FilterByIssueScope.ts
 data-api/rest/FilterByIssueStatus.ts
 data-api/rest/FilterBySimpleVoteType.ts
@@ -163,6 +163,10 @@ data-api/rest/IssueCategoryMaskBuilder.ts
 data-api/rest/IssueCategoryQueryCustomizer.ts
 data-api/rest/IssueCategoryQueryCustomizerSerializer.ts
 data-api/rest/IssueCategorySerializer.ts
+data-api/rest/IssueLinkMaskBuilder.ts
+data-api/rest/IssueLinkQueryCustomizer.ts
+data-api/rest/IssueLinkQueryCustomizerSerializer.ts
+data-api/rest/IssueLinkSerializer.ts
 data-api/rest/IssueMaskBuilder.ts
 data-api/rest/IssueQueryCustomizer.ts
 data-api/rest/IssueQueryCustomizerSerializer.ts
@@ -196,10 +200,6 @@ data-api/rest/ServiceCityMaskBuilder.ts
 data-api/rest/ServiceCityQueryCustomizer.ts
 data-api/rest/ServiceCityQueryCustomizerSerializer.ts
 data-api/rest/ServiceCitySerializer.ts
-data-api/rest/ServiceCloseDebateInputRatingVoteMaskBuilder.ts
-data-api/rest/ServiceCloseDebateInputRatingVoteQueryCustomizer.ts
-data-api/rest/ServiceCloseDebateInputRatingVoteQueryCustomizerSerializer.ts
-data-api/rest/ServiceCloseDebateInputRatingVoteSerializer.ts
 data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionMaskBuilder.ts
 data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionQueryCustomizer.ts
 data-api/rest/ServiceCloseDebateInputSelectAnswerVoteSelectionQueryCustomizerSerializer.ts
@@ -244,6 +244,10 @@ data-api/rest/ServiceIssueCategoryMaskBuilder.ts
 data-api/rest/ServiceIssueCategoryQueryCustomizer.ts
 data-api/rest/ServiceIssueCategoryQueryCustomizerSerializer.ts
 data-api/rest/ServiceIssueCategorySerializer.ts
+data-api/rest/ServiceIssueLinkMaskBuilder.ts
+data-api/rest/ServiceIssueLinkQueryCustomizer.ts
+data-api/rest/ServiceIssueLinkQueryCustomizerSerializer.ts
+data-api/rest/ServiceIssueLinkSerializer.ts
 data-api/rest/ServiceIssueMaskBuilder.ts
 data-api/rest/ServiceIssueQueryCustomizer.ts
 data-api/rest/ServiceIssueQueryCustomizerSerializer.ts
@@ -368,7 +372,6 @@ data-axios/AxiosProvider.ts
 data-axios/CityServiceForDistrictsImpl.ts
 data-axios/CityServiceForIssuesImpl.ts
 data-axios/CityServiceImpl.ts
-data-axios/CloseDebateInputServiceForRatingVoteImpl.ts
 data-axios/CloseDebateInputServiceForSelectAnswerVoteSelectionsImpl.ts
 data-axios/CloseDebateInputServiceImpl.ts
 data-axios/CloseDebateOutputVoteDefinitionReferenceServiceImpl.ts
@@ -376,8 +379,11 @@ data-axios/CommentServiceForCreatedByImpl.ts
 data-axios/CommentServiceForVotesImpl.ts
 data-axios/CommentServiceImpl.ts
 data-axios/ConServiceForCommentsImpl.ts
+data-axios/ConServiceForConImpl.ts
 data-axios/ConServiceForConsImpl.ts
 data-axios/ConServiceForCreatedByImpl.ts
+data-axios/ConServiceForIssueImpl.ts
+data-axios/ConServiceForProImpl.ts
 data-axios/ConServiceForProsImpl.ts
 data-axios/ConServiceForVotesImpl.ts
 data-axios/ConServiceImpl.ts
@@ -393,6 +399,7 @@ data-axios/IssueAttachmentServiceImpl.ts
 data-axios/IssueCategoryServiceForOwnerImpl.ts
 data-axios/IssueCategoryServiceForSubcategoriesImpl.ts
 data-axios/IssueCategoryServiceImpl.ts
+data-axios/IssueLinkServiceImpl.ts
 data-axios/IssueServiceForAttachmentsImpl.ts
 data-axios/IssueServiceForCategoriesImpl.ts
 data-axios/IssueServiceForCityImpl.ts
@@ -403,6 +410,7 @@ data-axios/IssueServiceForCreatedByImpl.ts
 data-axios/IssueServiceForCurrentVoteDefinitionImpl.ts
 data-axios/IssueServiceForDistrictImpl.ts
 data-axios/IssueServiceForIssueTypeImpl.ts
+data-axios/IssueServiceForLinksImpl.ts
 data-axios/IssueServiceForOwnerImpl.ts
 data-axios/IssueServiceForProsImpl.ts
 data-axios/IssueServiceForUsersFavoritedByImpl.ts
@@ -412,8 +420,11 @@ data-axios/IssueTypeServiceImpl.ts
 data-axios/JudoAxiosProvider.ts
 data-axios/JudoAxiosService.ts
 data-axios/ProServiceForCommentsImpl.ts
+data-axios/ProServiceForConImpl.ts
 data-axios/ProServiceForConsImpl.ts
 data-axios/ProServiceForCreatedByImpl.ts
+data-axios/ProServiceForIssueImpl.ts
+data-axios/ProServiceForProImpl.ts
 data-axios/ProServiceForProsImpl.ts
 data-axios/ProServiceForVotesImpl.ts
 data-axios/ProServiceImpl.ts
@@ -435,7 +446,6 @@ data-axios/SelectAnswerVoteSelectionServiceForEntriesImpl.ts
 data-axios/SelectAnswerVoteSelectionServiceImpl.ts
 data-axios/ServiceCityServiceForDistrictsImpl.ts
 data-axios/ServiceCityServiceImpl.ts
-data-axios/ServiceCloseDebateInputRatingVoteServiceImpl.ts
 data-axios/ServiceCloseDebateInputSelectAnswerVoteSelectionServiceImpl.ts
 data-axios/ServiceCommentServiceForCreatedByImpl.ts
 data-axios/ServiceCommentServiceForVotesImpl.ts
@@ -467,6 +477,7 @@ data-axios/ServiceIssueAttachmentServiceImpl.ts
 data-axios/ServiceIssueCategoryServiceForOwnerImpl.ts
 data-axios/ServiceIssueCategoryServiceForSubcategoriesImpl.ts
 data-axios/ServiceIssueCategoryServiceImpl.ts
+data-axios/ServiceIssueLinkServiceImpl.ts
 data-axios/ServiceIssueServiceForAttachmentsImpl.ts
 data-axios/ServiceIssueServiceForCategoriesImpl.ts
 data-axios/ServiceIssueServiceForCityImpl.ts
@@ -476,6 +487,7 @@ data-axios/ServiceIssueServiceForCountyImpl.ts
 data-axios/ServiceIssueServiceForCreatedByImpl.ts
 data-axios/ServiceIssueServiceForDistrictImpl.ts
 data-axios/ServiceIssueServiceForIssueTypeImpl.ts
+data-axios/ServiceIssueServiceForLinksImpl.ts
 data-axios/ServiceIssueServiceForOwnerImpl.ts
 data-axios/ServiceIssueServiceForProsImpl.ts
 data-axios/ServiceIssueServiceImpl.ts
@@ -644,7 +656,6 @@ data-service/CityService.ts
 data-service/CityServiceForDistricts.ts
 data-service/CityServiceForIssues.ts
 data-service/CloseDebateInputService.ts
-data-service/CloseDebateInputServiceForRatingVote.ts
 data-service/CloseDebateInputServiceForSelectAnswerVoteSelections.ts
 data-service/CloseDebateOutputVoteDefinitionReferenceService.ts
 data-service/CommentService.ts
@@ -652,8 +663,11 @@ data-service/CommentServiceForCreatedBy.ts
 data-service/CommentServiceForVotes.ts
 data-service/ConService.ts
 data-service/ConServiceForComments.ts
+data-service/ConServiceForCon.ts
 data-service/ConServiceForCons.ts
 data-service/ConServiceForCreatedBy.ts
+data-service/ConServiceForIssue.ts
+data-service/ConServiceForPro.ts
 data-service/ConServiceForPros.ts
 data-service/ConServiceForVotes.ts
 data-service/CountyService.ts
@@ -668,6 +682,7 @@ data-service/IssueAttachmentService.ts
 data-service/IssueCategoryService.ts
 data-service/IssueCategoryServiceForOwner.ts
 data-service/IssueCategoryServiceForSubcategories.ts
+data-service/IssueLinkService.ts
 data-service/IssueService.ts
 data-service/IssueServiceForAttachments.ts
 data-service/IssueServiceForCategories.ts
@@ -679,6 +694,7 @@ data-service/IssueServiceForCreatedBy.ts
 data-service/IssueServiceForCurrentVoteDefinition.ts
 data-service/IssueServiceForDistrict.ts
 data-service/IssueServiceForIssueType.ts
+data-service/IssueServiceForLinks.ts
 data-service/IssueServiceForOwner.ts
 data-service/IssueServiceForPros.ts
 data-service/IssueServiceForUsersFavoritedBy.ts
@@ -686,8 +702,11 @@ data-service/IssueServiceForVoteDefinitions.ts
 data-service/IssueTypeService.ts
 data-service/ProService.ts
 data-service/ProServiceForComments.ts
+data-service/ProServiceForCon.ts
 data-service/ProServiceForCons.ts
 data-service/ProServiceForCreatedBy.ts
+data-service/ProServiceForIssue.ts
+data-service/ProServiceForPro.ts
 data-service/ProServiceForPros.ts
 data-service/ProServiceForVotes.ts
 data-service/RatingVoteInputService.ts
@@ -708,7 +727,6 @@ data-service/SelectAnswerVoteSelectionService.ts
 data-service/SelectAnswerVoteSelectionServiceForEntries.ts
 data-service/ServiceCityService.ts
 data-service/ServiceCityServiceForDistricts.ts
-data-service/ServiceCloseDebateInputRatingVoteService.ts
 data-service/ServiceCloseDebateInputSelectAnswerVoteSelectionService.ts
 data-service/ServiceCommentService.ts
 data-service/ServiceCommentServiceForCreatedBy.ts
@@ -740,6 +758,7 @@ data-service/ServiceIssueAttachmentService.ts
 data-service/ServiceIssueCategoryService.ts
 data-service/ServiceIssueCategoryServiceForOwner.ts
 data-service/ServiceIssueCategoryServiceForSubcategories.ts
+data-service/ServiceIssueLinkService.ts
 data-service/ServiceIssueService.ts
 data-service/ServiceIssueServiceForAttachments.ts
 data-service/ServiceIssueServiceForCategories.ts
@@ -750,6 +769,7 @@ data-service/ServiceIssueServiceForCounty.ts
 data-service/ServiceIssueServiceForCreatedBy.ts
 data-service/ServiceIssueServiceForDistrict.ts
 data-service/ServiceIssueServiceForIssueType.ts
+data-service/ServiceIssueServiceForLinks.ts
 data-service/ServiceIssueServiceForOwner.ts
 data-service/ServiceIssueServiceForPros.ts
 data-service/ServiceIssueTypeService.ts

@@ -14,7 +14,6 @@ interface YesNoAbstainVoteProps {
   revoke?: (row: ServiceVoteDefinitionStored) => Promise<void>;
 }
 
-
 export function YesNoAbstainVote(props: YesNoAbstainVoteProps) {
   const { voteDefinition, vote, revoke } = props;
   const { t } = useTranslation();
@@ -24,27 +23,38 @@ export function YesNoAbstainVote(props: YesNoAbstainVoteProps) {
   if (voteDefinition.isYesNoAbstainType) {
     if (voteDefinition.status == VoteStatus.ACTIVE) {
       return (
-        <VoteResultsCard 
+        <VoteResultsCard
           answers={[
-            { label: (t('enumerations.YesNoAbstainVoteValue.YES', {
-              defaultValue: 'Igen',
-            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfYes || 0 },
-            { label: (t('enumerations.YesNoAbstainVoteValue.NO', {
-              defaultValue: 'Nem',
-            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfNo || 0 },
-            { label: (t('enumerations.YesNoAbstainVoteValue.ABSTAIN', {
-              defaultValue: 'Tartózkodás',
-            }) as string), count: props.voteDefinition.sumOfYesNoAbstainVoteOfAbstain || 0 },
+            {
+              label: t('enumerations.YesNoAbstainVoteValue.YES', {
+                defaultValue: 'Igen',
+              }) as string,
+              count: props.voteDefinition.sumOfYesNoAbstainVoteOfYes || 0,
+            },
+            {
+              label: t('enumerations.YesNoAbstainVoteValue.NO', {
+                defaultValue: 'Nem',
+              }) as string,
+              count: props.voteDefinition.sumOfYesNoAbstainVoteOfNo || 0,
+            },
+            {
+              label: t('enumerations.YesNoAbstainVoteValue.ABSTAIN', {
+                defaultValue: 'Tartózkodás',
+              }) as string,
+              count: props.voteDefinition.sumOfYesNoAbstainVoteOfAbstain || 0,
+            },
           ]}
           maxItems={8}
           voteDefinition={voteDefinition}
           vote={vote}
           revoke={revoke}
-          voteValue={                    
-            voteDefinition.currentUserYesNoAbstainVoteValue ? t('enumerations.YesNoAbstainVoteValue.' + voteDefinition.currentUserYesNoAbstainVoteValue, {
+          voteValue={
+            voteDefinition.currentUserYesNoAbstainVoteValue
+              ? (t('enumerations.YesNoAbstainVoteValue.' + voteDefinition.currentUserYesNoAbstainVoteValue, {
                   defaultValue: voteDefinition.currentUserYesNoAbstainVoteValue,
-              }) as string : undefined
-            }
+                }) as string)
+              : undefined
+          }
         />
       );
     }
@@ -52,5 +62,3 @@ export function YesNoAbstainVote(props: YesNoAbstainVoteProps) {
     return <></>;
   }
 }
-
-

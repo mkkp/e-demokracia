@@ -1,7 +1,7 @@
+import { Box, Button, Card, CardContent, CardHeader, Chip, Typography, useTheme } from '@mui/material';
 import React from 'react';
-import { Card, CardContent, CardHeader, Typography, Box, useTheme, Button, Chip } from '@mui/material';
-import { MdiIcon } from '~/components';
 import { useTranslation } from 'react-i18next';
+import { MdiIcon } from '~/components';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 
 export interface AnswerItem {
@@ -32,10 +32,9 @@ const DEFAULT_COLORS = [
   '#9E9E9E', // grey
 ];
 
-const VoteResultsCard: React.FC<VoteResultsCardProps> = ({ 
-  answers, 
-  maxItems = 10
-  ,
+const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
+  answers,
+  maxItems = 10,
   voteDefinition,
   vote,
   revoke,
@@ -43,34 +42,30 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
 }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  
+
   // Process answers
   const processedAnswers = answers
-//    .sort((a, b) => b.count - a.count)
+    //    .sort((a, b) => b.count - a.count)
     .slice(0, maxItems)
     .map((answer, index) => ({
       ...answer,
       color: answer.color || DEFAULT_COLORS[index % DEFAULT_COLORS.length],
     }));
 
-  function answerColor(voteValue: string | undefined): string | undefined { 
+  function answerColor(voteValue: string | undefined): string | undefined {
     if (!voteValue) {
-        return undefined;
+      return undefined;
     }
-    const ret = processedAnswers
-    .filter((answer) => 
-        answer.label == voteValue
-    );
+    const ret = processedAnswers.filter((answer) => answer.label == voteValue);
     if (ret.length > 0) {
-        return ret[0].color
+      return ret[0].color;
     } else {
-        return undefined;
+      return undefined;
     }
- }
-
+  }
 
   const total = processedAnswers.reduce((sum, answer) => sum + answer.count, 0);
-  const maxCount = Math.max(...processedAnswers.map(a => a.count), 0);
+  const maxCount = Math.max(...processedAnswers.map((a) => a.count), 0);
 
   const getWidth = (value: number): string => {
     if (maxCount === 0) return '0%';
@@ -126,94 +121,92 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
             </Box>
           ))}
         </Box> */}
-        <Typography variant="body2"               
-            sx={{
-                fontWeight: 900,
-                lineHeight: 1.2,
-                my: 1.5,
-                padding: 2,
-              }}
+        <Typography
+          variant="body2"
+          sx={{
+            fontWeight: 900,
+            lineHeight: 1.2,
+            my: 1.5,
+            padding: 2,
+          }}
         >
           {t('totalVotes', { defaultValue: 'Összesen:' })} {maxCount !== 0 && total}
           {maxCount === 0 && t('noVotes', { defaultValue: 'Nincsen szavazat' })}
         </Typography>
-        <Box 
-            sx={{
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              p: 2, // Inner padding
-              boxSizing: 'border-box'
-            }}
-          >
-        {/* voteDefinition.currentUserYesNoAbstainVoteValue */}
-          {voteValue  && (
+        <Box
+          sx={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            p: 2, // Inner padding
+            boxSizing: 'border-box',
+          }}
+        >
+          {/* voteDefinition.currentUserYesNoAbstainVoteValue */}
+          {voteValue && (
             <Box
-                sx={{
-                    height: '100%',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    p: 2, // Inner padding
-                    boxSizing: 'border-box'
-                }}              
+              sx={{
+                height: '100%',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                p: 2, // Inner padding
+                boxSizing: 'border-box',
+              }}
             >
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{
-                        fontWeight: 900,
-                        lineHeight: 1.2,
-                        my: 1.5,
-                        padding: 2,
-                    }}
-                >
-                    {t('myvote', { defaultValue: 'Szavazatom:' }) as string}
-                </Typography>
-                <Chip
-                    label={
-                        voteValue
-                    }
-                    sx={{
-                        backgroundColor: chipColor,
-                        margin: 1,
-                        fontWeight: 'bold',
-                        '&:hover': {
-                          opacity: 0.9
-                        }
-                      }}
-                    // variant="outlined"
-                    //color='warning'
-                    //color={answerColor(voteValue) ? answerColor(voteValue) : 'warning' }
-                    onDelete={() => {
-                        revoke?.(voteDefinition);
-                    }}
-                />
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{
+                  fontWeight: 900,
+                  lineHeight: 1.2,
+                  my: 1.5,
+                  padding: 2,
+                }}
+              >
+                {t('myvote', { defaultValue: 'Szavazatom:' }) as string}
+              </Typography>
+              <Chip
+                label={voteValue}
+                sx={{
+                  backgroundColor: chipColor,
+                  margin: 1,
+                  fontWeight: 'bold',
+                  '&:hover': {
+                    opacity: 0.9,
+                  },
+                }}
+                // variant="outlined"
+                //color='warning'
+                //color={answerColor(voteValue) ? answerColor(voteValue) : 'warning' }
+                onDelete={() => {
+                  revoke?.(voteDefinition);
+                }}
+              />
             </Box>
-            )}
-            {!voteValue && (
+          )}
+          {!voteValue && (
             <Box>
-                <Button
-                    sx={{}}
-                    variant={'contained'}
-                    size="small"
-                    startIcon={<MdiIcon path="vote" />}
-                    onClick={() => {
-                        vote?.(voteDefinition);
-                    }}
-                >
-                    {t('vote', { defaultValue: 'Szavazok' }) as string}
-                </Button>
+              <Button
+                sx={{}}
+                variant={'contained'}
+                size="small"
+                startIcon={<MdiIcon path="vote" />}
+                onClick={() => {
+                  vote?.(voteDefinition);
+                }}
+              >
+                {t('vote', { defaultValue: 'Szavazok' }) as string}
+              </Button>
             </Box>
-            )}
+          )}
         </Box>
       </CardContent>
     </Card>
   );
 };
-
 
 export default VoteResultsCard;

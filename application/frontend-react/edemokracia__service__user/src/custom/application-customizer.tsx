@@ -35,6 +35,8 @@ import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityComponentConfigurationHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentComponentConfigurationHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentConfigurationHook';
+import { registerServiceIssueAttachmentsRelationFormPageActionsHook } from './hooks/dialogs/registerServiceIssueAttachmentsRelationFormPageActionsHook';
+import { registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook } from './hooks/dialogs/registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
@@ -86,5 +88,8 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceIssueCommentsCards(context);
     registerIssueheaderSubThemeHook(context);
     registerServiceIssueIssueRichTextEditorConfig(context);
+    //    registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook(context);
+    registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
+    registerServiceIssueAttachmentsRelationFormPageActionsHook(context);
   }
 }
