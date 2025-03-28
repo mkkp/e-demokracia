@@ -37,7 +37,7 @@ data-api/model/District.ts,b9f65992d00801f4bcd368fc3328a6b7
 data-api/model/EnumerationOperation.ts,6e9d36ab1b3dccf5d7ea9e1b6168d5c2
 data-api/model/Initializer.ts,4d52dd9b066a26c6fbaf9adf8801aed1
 data-api/model/Issue.ts,7bcc4595d991d2219d3093ec3bc1e508
-data-api/model/IssueAttachment.ts,1667aaa74b864a3cc3bac690ca0671c2
+data-api/model/IssueAttachment.ts,43e744f4c56a47671f558115a2cda949
 data-api/model/IssueCategory.ts,6c8a07cd90a2f99a497292f50525d6f0
 data-api/model/IssueLink.ts,6d9f0a52e5bd6524ec0f48611aca442f
 data-api/model/IssueScope.ts,8773a30f075234c26dfd59fa66efbc27
@@ -61,7 +61,7 @@ data-api/model/ServiceCreateUserInput.ts,c2882a5ec4ae0e7eb067b69895e807bc
 data-api/model/ServiceDashboard.ts,93ab94d41deb0fe640b34bd16c251d87
 data-api/model/ServiceDistrict.ts,db1cc55564e3c227cc9295ec892d5a81
 data-api/model/ServiceIssue.ts,8494ec4cb4b15a0d79f016f28f453746
-data-api/model/ServiceIssueAttachment.ts,61d6cdcf3f339fe4b7493b2636305ea1
+data-api/model/ServiceIssueAttachment.ts,b250457db868a06e77a6089ba66de1b2
 data-api/model/ServiceIssueCategory.ts,d353826e03acddd283400f4b27ee3926
 data-api/model/ServiceIssueLink.ts,bbe9a282df355d906232ecbaf78751b1
 data-api/model/ServiceIssueType.ts,b004cef5978477ca9ab9ec8bfb4e6e30
@@ -155,9 +155,9 @@ data-api/rest/InitializerQueryCustomizer.ts,45d4937ddd6940f1f823db61a5a41938
 data-api/rest/InitializerQueryCustomizerSerializer.ts,87842e9d7887c181438a3ace454d48c0
 data-api/rest/InitializerSerializer.ts,829ed9c27961770f7dd221f968311bab
 data-api/rest/IssueAttachmentMaskBuilder.ts,30a6086961475ca2a3a4bafd61f3b4db
-data-api/rest/IssueAttachmentQueryCustomizer.ts,b04ea2d18ed5f75aea7d0e58b6ebff50
-data-api/rest/IssueAttachmentQueryCustomizerSerializer.ts,786c8f069733ea8aae0513f34d2dad34
-data-api/rest/IssueAttachmentSerializer.ts,53097f7adff7680c6d9997b04e5515e6
+data-api/rest/IssueAttachmentQueryCustomizer.ts,af95aa7fef3f20375d433f1dc5f83a1d
+data-api/rest/IssueAttachmentQueryCustomizerSerializer.ts,930dc5991af91fb563409dd484f49d33
+data-api/rest/IssueAttachmentSerializer.ts,4cd5a9d0175b8833e54c93e091b7c8d3
 data-api/rest/IssueCategoryMaskBuilder.ts,21207c64e9d6ced02f60f632052203b6
 data-api/rest/IssueCategoryQueryCustomizer.ts,d3fa0cff2733a6336323feb01790e5be
 data-api/rest/IssueCategoryQueryCustomizerSerializer.ts,d4ecf76afa2186cd471531c4c035e189
@@ -236,9 +236,9 @@ data-api/rest/ServiceDistrictQueryCustomizer.ts,c8a4cddad273b96a162d750b5873ef80
 data-api/rest/ServiceDistrictQueryCustomizerSerializer.ts,923c9b9492c48d2deb7090952a277539
 data-api/rest/ServiceDistrictSerializer.ts,753d766bc2eb577f7ff72bf793504a0e
 data-api/rest/ServiceIssueAttachmentMaskBuilder.ts,1c0b6e70d86491090bd2746520082a53
-data-api/rest/ServiceIssueAttachmentQueryCustomizer.ts,04d3fadcaaa9340f7e434575ec79a1f5
-data-api/rest/ServiceIssueAttachmentQueryCustomizerSerializer.ts,c4bd06bae58ebd1111a4f6ff831fbd17
-data-api/rest/ServiceIssueAttachmentSerializer.ts,7abc72e02931a2166b7275d671508983
+data-api/rest/ServiceIssueAttachmentQueryCustomizer.ts,3aec36ad16ad28235e3a1d3f069504c7
+data-api/rest/ServiceIssueAttachmentQueryCustomizerSerializer.ts,1284dae51c48431dbcc4f64e47f061cc
+data-api/rest/ServiceIssueAttachmentSerializer.ts,ded295aaddaf59b24607efe64f018322
 data-api/rest/ServiceIssueCategoryMaskBuilder.ts,e85ed4a0c722d019b5417380ff2bd98f
 data-api/rest/ServiceIssueCategoryQueryCustomizer.ts,a45cde571b372f85e2e2588b8ecc0bf0
 data-api/rest/ServiceIssueCategoryQueryCustomizerSerializer.ts,e0c854c3cc66ff86714b42b8e3983f05

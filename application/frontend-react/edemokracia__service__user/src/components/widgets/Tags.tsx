@@ -221,7 +221,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
       value={values}
       disableClearable={true}
       getOptionKey={(option) => option[identifierAttribute]}
-      getOptionLabel={(option) => option[autoCompleteAttribute]}
+      getOptionLabel={(option) => option[autoCompleteAttribute] ?? ''}
       isOptionEqualToValue={(option, value) => option[identifierAttribute] === value[identifierAttribute]}
       onOpen={
         onAutoCompleteSearch
@@ -236,27 +236,28 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
       renderTags={(tagValue, getTagProps) =>
         tagValue.map((option, index) => {
           const { key, ...rest } = getTagProps({ index });
-          let deleteButton = (<></>);
+          let deleteButton = <></>;
           if (isBinary) {
-            if (! readOnly) {
-              deleteButton = (<Button
-                id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
-                onClick={(event: any) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  if (typeof onValueChange === 'function') {
-                    onValueChange(values as any, [], [option]);
-                  }            
-                }}
-              >
-                <MdiIcon path="delete-forever" sx={{ mr: 0.5 }} />
-              </Button>
+            if (!readOnly) {
+              deleteButton = (
+                <Button
+                  id={`${id}-delete`}
+                  onClick={(event: any) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (typeof onValueChange === 'function') {
+                      onValueChange(values as any, [], [option]);
+                    }
+                  }}
+                >
+                  <MdiIcon path="delete-forever" sx={{ mr: 0.5 }} />
+                </Button>
               );
             }
             return (
-              <ButtonGroup key={key} size="small" variant="outlined" sx={{ marginRight: 1}}>
+              <ButtonGroup key={key} size="small" variant="outlined" sx={{ marginRight: 1 }}>
                 <Button
-                  id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-download"
+                  id={`${id}-download`}
                   startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
                   onClick={(event: any) => {
                     event.preventDefault();
@@ -270,7 +271,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
                   {extractFileNameFromToken(option[autoCompleteAttribute])}
                 </Button>
                 <Button
-                  id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
+                  id={`${id}-view`}
                   onClick={(event: any) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -280,7 +281,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
                   <MdiIcon path="eye" sx={{ mr: 0.5 }} />
                 </Button>
                 <Button
-                  id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)-view"
+                  id={`${id}-view`}
                   onClick={(event: any) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -289,7 +290,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
                 >
                   <MdiIcon path="download" sx={{ mr: 0.5 }} />
                 </Button>
-                { deleteButton }
+                {deleteButton}
               </ButtonGroup>
             );
           } else {

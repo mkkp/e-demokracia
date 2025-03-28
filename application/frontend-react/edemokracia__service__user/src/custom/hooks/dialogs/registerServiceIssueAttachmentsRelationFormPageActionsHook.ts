@@ -63,7 +63,6 @@ const ServiceIssueAttachmentsRelationFormPageActionsHook: ServiceIssueAttachment
 
   return {
     // implement actions here
-
     //     async createAction(openCreated) {
     // //      console.log(data.file);
     // //      storeDiff("name", extractFileNameFromToken(data.file, ''));
@@ -76,14 +75,13 @@ const ServiceIssueAttachmentsRelationFormPageActionsHook: ServiceIssueAttachment
     //   console.log(data.file);
     //   storeDiff("name", extractFileNameFromToken(data.file, ''));
     // },
-    async postCreateAction(data, res, onSubmit, onClose, openCreated) {
-      console.log(data);
-      console.log(extractFileNameFromToken(data.file, ''));
-      storeDiff("name", extractFileNameFromToken(data.file, ''));
-      await onSubmit(res);
-    },
-    
-     /*
+    // async postCreateAction(data, res, onSubmit, onClose, openCreated) {
+    //   console.log(data);
+    //   console.log(extractFileNameFromToken(data.file, ''));
+    //   storeDiff("name", extractFileNameFromToken(data.file, ''));
+    //   await onSubmit(res);
+    // },
+    /*
 onSubmit: (
     result?: ServiceIssueAttachmentStored,
     reason?: DialogResultReason,

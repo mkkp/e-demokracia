@@ -4324,7 +4324,7 @@
     <behaviours>REFRESH</behaviours>
   </dataElements>
   <dataElements xsi:type="data:ClassType" xmi:id="User/(esm/_GDYW0GkOEe25ONJ3V89cVA)/ClassType" name="Issue" transferObjectTypeName="_default_transferobjecttypes::Issue" isOptional="true" simpleName="Issue">
-    <relations xmi:id="User/(esm/_ApO68GkREe25ONJ3V89cVA)/RelationType" name="attachments" target="User/(esm/_4hFkkGkPEe25ONJ3V89cVA)/ClassType" isOrderable="true" isFilterable="true" relationKind="COMPOSITION">
+    <relations xmi:id="User/(esm/_ApO68GkREe25ONJ3V89cVA)/RelationType" name="attachments" target="User/(esm/_4hFkkGkPEe25ONJ3V89cVA)/ClassType" relationKind="COMPOSITION">
       <behaviours>LIST</behaviours>
       <behaviours>REFRESH</behaviours>
     </relations>
@@ -4421,7 +4421,6 @@
   </dataElements>
   <dataElements xsi:type="data:ClassType" xmi:id="User/(esm/_4hFkkGkPEe25ONJ3V89cVA)/ClassType" name="IssueAttachment" transferObjectTypeName="_default_transferobjecttypes::IssueAttachment" isOptional="true" simpleName="IssueAttachment">
     <attributes xmi:id="User/(esm/_7nYKoGkQEe25ONJ3V89cVA)/AttributeType" name="file" isReadOnly="false" dataType="User/(esm/_4spe4GkQEe25ONJ3V89cVA)/BinaryType"/>
-    <attributes xmi:id="User/(esm/_y_22oAqhEfCg6KyzoKeaQg)/AttributeType" name="name" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <behaviours>REFRESH</behaviours>
   </dataElements>
   <dataElements xsi:type="data:ClassType" xmi:id="User/(esm/_K7jW8GkfEe25ONJ3V89cVA)/ClassType" name="IssueCategory" transferObjectTypeName="_default_transferobjecttypes::IssueCategory" isOptional="true" simpleName="IssueCategory">
@@ -5237,7 +5236,7 @@
     </operations>
     <operations xmi:id="User/(esm/_7GF6QHkGEe6cB8og8p0UuQ)/OperationType" name="deleteOrArchive"/>
     <operations xmi:id="User/(esm/_O-iGEFxEEe6ma86ynyYZNw)/OperationType" name="removeFromFavorites"/>
-    <relations xmi:id="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType" name="attachments" target="User/(esm/_p5aDVGksEe25ONJ3V89cVA)/ClassType" isOrderable="true" isFilterable="true">
+    <relations xmi:id="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType" name="attachments" target="User/(esm/_p5aDVGksEe25ONJ3V89cVA)/ClassType">
       <behaviours>LIST</behaviours>
       <behaviours>CREATE</behaviours>
       <behaviours>VALIDATE_CREATE</behaviours>
@@ -5347,7 +5346,6 @@
   </dataElements>
   <dataElements xsi:type="data:ClassType" xmi:id="User/(esm/_p5aDVGksEe25ONJ3V89cVA)/ClassType" name="service::IssueAttachment" transferObjectTypeName="service::IssueAttachment" isOptional="true" isForCreateOrUpdateType="true" simpleName="IssueAttachment">
     <attributes xmi:id="User/(esm/_p6zKcGksEe25ONJ3V89cVA)/AttributeType" name="file" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_4spe4GkQEe25ONJ3V89cVA)/BinaryType"/>
-    <attributes xmi:id="User/(esm/_cFMRsAqhEfCg6KyzoKeaQg)/AttributeType" name="name" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <behaviours>REFRESH</behaviours>
     <behaviours>DELETE</behaviours>
     <behaviours>TEMPLATE</behaviours>
@@ -9784,9 +9782,7 @@
         <frame xmi:id="User/(esm/_bK6uYP1GEe-TYLB4WrW7MA)/GroupFrame"/>
       </children>
       <children xsi:type="ui:Table" xmi:id="User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable" name="attachments" sourceId="_6kmaIId8Ee2kLcMqsIbMgQ" label="" fit="LOOSE" col="12.0" row="10.0" disabled="true" dataElement="User/(esm/_qXz2kGksEe25ONJ3V89cVA)/RelationType" crudOperationsDisplayed="1" relationName="attachments" selectorRowsPerPage="10" checkboxSelection="DISABLED" representationComponent="TAG">
-        <columns xmi:id="User/(esm/_haYNsAqhEfCg6KyzoKeaQg)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)" name="name" label="Name" col="2.0" format="%s" attributeType="User/(esm/_cFMRsAqhEfCg6KyzoKeaQg)/AttributeType"/>
         <columns xmi:id="User/(esm/_6knBMId8Ee2kLcMqsIbMgQ)/TableColumn/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)" name="file" label="File" col="2.0" format="%s" attributeType="User/(esm/_p6zKcGksEe25ONJ3V89cVA)/AttributeType" width="500px"/>
-        <filters xmi:id="User/(esm/_haYNsAqhEfCg6KyzoKeaQg)/TableColumnFilter/(discriminator/User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceFieldRelationDefinedTable)" name="name::Filter" label="Name" attributeType="User/(esm/_cFMRsAqhEfCg6KyzoKeaQg)/AttributeType"/>
         <tableActionButtonGroup xmi:id="User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableButtonGroup" name="service::Issue::Issue_View_Edit::attachments::PageActions" label="Actions">
           <buttons xmi:id="User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableFilterButton" name="service::Issue::Issue_View_Edit::attachments::Filter" label="Set Filters" buttonStyle="text">
             <icon xmi:id="User/(esm/_6kmaIId8Ee2kLcMqsIbMgQ)/TabularReferenceTableFilterButtonIcon" name="attachments::Icon" iconName="filter"/>

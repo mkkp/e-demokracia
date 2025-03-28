@@ -35,6 +35,5 @@ const serviceIssueAttachmentIssueAttachment_FormActionsHook: ServiceIssueAttachm
 
   return {
     // implement actions here
-    
   };
 };

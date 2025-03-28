@@ -1085,7 +1085,6 @@
           <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" appliedAnnotations="_8t-rUAXLEfC37oc_cfa43g" label="Description" iconName="text_fields" row="8" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_6kmaIId8Ee2kLcMqsIbMgQ" name="attachments" label="" iconName="" checkboxSelection="DISABLED" row="10" relationFeature="_qXz2kGksEe25ONJ3V89cVA" representationComponent="tag">
-          <columns xsi:type="ui:DataColumn" xmi:id="_haYNsAqhEfCg6KyzoKeaQg" name="name" label="Name" iconName="format-size" dataFeature="_cFMRsAqhEfCg6KyzoKeaQg"/>
           <columns xsi:type="ui:DataColumn" xmi:id="_6knBMId8Ee2kLcMqsIbMgQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA" width="500px"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_XsnTcAqXEfCg6KyzoKeaQg" name="links" label="Links" iconName="table_rows" row="4" relationFeature="_qGr3gAqWEfCg6KyzoKeaQg" representationComponent="tag">
@@ -1165,9 +1164,6 @@
     <elements xsi:type="structure:TransferObjectType" xmi:id="_p5aDVGksEe25ONJ3V89cVA" name="IssueAttachment">
       <attributes xsi:type="structure:DataMember" xmi:id="_p6zKcGksEe25ONJ3V89cVA" name="file" dataType="_4spe4GkQEe25ONJ3V89cVA" defaultExpression="" binding="_7nYKoGkQEe25ONJ3V89cVA" getterExpression="" memberType="MAPPED">
         <inherited xmi:id="_p7DCEGksEe25ONJ3V89cVA"/>
-      </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_cFMRsAqhEfCg6KyzoKeaQg" name="name" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" binding="_y_22oAqhEfCg6KyzoKeaQg" getterExpression="" memberType="MAPPED">
-        <inherited xmi:id="_cFYe8AqhEfCg6KyzoKeaQg"/>
       </attributes>
       <mapping xmi:id="_p5-rEGksEe25ONJ3V89cVA" target="_4hFkkGkPEe25ONJ3V89cVA"/>
       <form xmi:id="_p5sXMGksEe25ONJ3V89cVA" name="IssueAttachment_Form" label="IssueAttachment Form" iconName="attachment" layout="VERTICAL" generateVisualPropertiesHook="true" generateActionsHook="true">
@@ -3339,9 +3335,6 @@
   <elements xsi:type="structure:EntityType" xmi:id="_4hFkkGkPEe25ONJ3V89cVA" name="IssueAttachment" createable="true" updateable="true" deleteable="true">
     <attributes xsi:type="structure:DataMember" xmi:id="_7nYKoGkQEe25ONJ3V89cVA" name="file" dataType="_4spe4GkQEe25ONJ3V89cVA" defaultExpression="" binding="_7nYKoGkQEe25ONJ3V89cVA" getterExpression="">
       <inherited xmi:id="_7nZYwGkQEe25ONJ3V89cVA"/>
-    </attributes>
-    <attributes xsi:type="structure:DataMember" xmi:id="_y_22oAqhEfCg6KyzoKeaQg" name="name" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" binding="_y_22oAqhEfCg6KyzoKeaQg" getterExpression="">
-      <inherited xmi:id="_zADD4AqhEfCg6KyzoKeaQg"/>
     </attributes>
     <mapping xmi:id="_4hGLoGkPEe25ONJ3V89cVA" target="_4hFkkGkPEe25ONJ3V89cVA"/>
     <form xmi:id="_4hM5UGkPEe25ONJ3V89cVA" name="IssueAttachment_Form" label="IssueAttachment Form" layout="VERTICAL"/>
