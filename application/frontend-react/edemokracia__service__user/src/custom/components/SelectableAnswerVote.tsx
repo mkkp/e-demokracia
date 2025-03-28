@@ -32,27 +32,27 @@ export function SelectableAnswerVote(props: SelectableAnswerVoteProps) {
 
   if (voteDefinition.isSelectAnswerType) {
     if (voteDefinition.status == VoteStatus.ACTIVE) {
-      const answers = voteDefinition.voteSelections?.map((answer) => (
-        {
-          label: answer.title,
-          count: answer.sumOfVotes
-        }
-      )) as AnswerItem[];
+      const answers = voteDefinition.voteSelections?.map((answer) => ({
+        label: answer.title,
+        count: answer.sumOfVotes,
+      })) as AnswerItem[];
 
       return (
-        <VoteResultsCard 
+        <VoteResultsCard
           answers={answers}
           maxItems={8}
           voteDefinition={voteDefinition}
           vote={vote}
           revoke={revoke}
-          voteValue={                    
-            voteDefinition.currentUserSelectAnswerVoteValue ? voteDefinition.currentUserSelectAnswerVoteValue as string : undefined
-            }
+          voteValue={
+            voteDefinition.currentUserSelectAnswerVoteValue
+              ? (voteDefinition.currentUserSelectAnswerVoteValue as string)
+              : undefined
+          }
         />
       );
     }
-    } else {
+  } else {
     return <></>;
   }
 }

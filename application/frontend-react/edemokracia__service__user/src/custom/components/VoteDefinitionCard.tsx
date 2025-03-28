@@ -99,7 +99,6 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         flexDirection: 'column',
         // opacity: 0.9,
         // background: `linear-gradient(180deg, transparent 0%,${theme.palette.info.light} 190%)`,
-
       }}
     >
       <Ribbon side="right" type="corner" size="large" backgroundColor={ribbonBg} withStripes={false}>
@@ -231,11 +230,11 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         >
           {row.description}
         </Typography>
-        <Box 
+        <Box
           sx={{
-            m: 2
-          }
-          }>
+            m: 2,
+          }}
+        >
           <SelectableAnswerVote
             voteDefinition={row}
             vote={voteSelectAnswerAction}
@@ -245,21 +244,24 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           <YesNoVote voteDefinition={row} vote={voteYesNoAction} revoke={revokeVote}></YesNoVote>
         </Box>
       </CardContent>
-      <CardActions sx={{ 
-        justifyContent: 'center',
-        p: 0
-      }}>
-        <Box sx={{
-                    height: '100%',
-                    width: '100%',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    boxSizing: 'border-box',
-                    p: 2,
-                    opacity: 0.9,
-                    background: `${theme.palette.info.light}`,
+      <CardActions
+        sx={{
+          justifyContent: 'center',
+          p: 0,
         }}
+      >
+        <Box
+          sx={{
+            height: '100%',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            boxSizing: 'border-box',
+            p: 2,
+            opacity: 0.9,
+            background: `${theme.palette.info.light}`,
+          }}
         >
           <Button
             sx={{}}
