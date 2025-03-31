@@ -12,28 +12,10 @@
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.userissues;
 
 import org.osgi.service.component.annotations.Reference;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.city.City;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.city.CityDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.city.CityMask;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.county.County;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.county.CountyDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.county.CountyMask;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.district.District;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.district.DistrictDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.district.DistrictMask;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.*;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueType;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeMask;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.User;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia.issuestatus.IssueStatus;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.IssueDao;
 import party.mkkp.edemokracia.edemokracia.services.IssueService;
-import party.mkkp.edemokracia.edemokracia.services.UserService;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * 

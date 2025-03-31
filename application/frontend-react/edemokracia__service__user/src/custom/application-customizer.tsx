@@ -9,12 +9,7 @@
 import type { BundleContext } from '@pandino/pandino-api';
 import { registerServiceIssueIssueRichTextEditorConfig } from './components/IssueRichTextEditor';
 import { registerCloseDebateInputCloseDebateInput_FormActionsHook } from './customCloseDebateInputCloseDebateInput_FormActionsHook';
-import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './customServiceCreateIssueInputCreateIssueInput_FormActionsHook';
-import { registerServiceDashboardDashboard_View_EditActionsHook } from './customServiceDashboardDashboard_View_EditActionsHook';
-import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './customServiceUserIssuesUserIssues_View_EditActionsHook';
-import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook } from './customServiceUserVoteDefinitionUserVoteDefinition_TableActionsHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
-import { registerServiceVoteDefinitionVoteDefinition_TableActionsHook } from './customServiceVoteDefinitionVoteDefinition_TableActionsHook';
 import { registerServiceIssueCommentsCards } from './hooks/components/cards/ServiceIssueCommentCards';
 import { registerServiceConCon_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditConsComponentConfigurationHook';
 import { registerServiceConCon_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditProsComponentConfigurationHook';
@@ -35,8 +30,9 @@ import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInActivityComponentConfigurationHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVoteDefinitionsInResidentComponentConfigurationHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentConfigurationHook';
-import { registerServiceIssueAttachmentsRelationFormPageActionsHook } from './hooks/dialogs/registerServiceIssueAttachmentsRelationFormPageActionsHook';
-import { registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook } from './hooks/dialogs/registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook';
+import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './hooks/containers/registerServiceCreateIssueInputCreateIssueInput_FormActionsHook';
+import { registerServiceDashboardDashboard_View_EditActionsHook } from './hooks/containers/registerServiceDashboardDashboard_View_EditActionsHook';
+import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './hooks/containers/registerServiceUserIssuesUserIssues_View_EditActionsHook';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
@@ -44,19 +40,11 @@ import { ApplicationCustomizer } from './interfaces';
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
     // register your implementations here
-    registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
-    registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
-    registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context);
-    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook(context);
-    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
-    registerServiceDashboardDashboard_View_EditActionsHook(context);
+    //    registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
+    //    registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context);
+    //    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook(context);
+    //    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
-    // registerServiceIssueProCards(context);
-    // registerServiceIssueConCards(context);
-    // registerConConCards(context);
-    // registerProConCards(context);
-    // registerConProCards(context);
-    // registerProProCards(context);
     registerServiceConCon_View_EditConsComponentCardsContainerConfig(context);
     registerServiceConCon_View_EditProsComponentCardsContainerConfig(context);
     registerServiceIssueIssue_View_EditConsComponentCardsContainerConfig(context);
@@ -88,8 +76,10 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceIssueCommentsCards(context);
     registerIssueheaderSubThemeHook(context);
     registerServiceIssueIssueRichTextEditorConfig(context);
-    //    registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook(context);
     registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
-    registerServiceIssueAttachmentsRelationFormPageActionsHook(context);
+    registerServiceDashboardDashboard_View_EditActionsHook(context);
+    registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
+    registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
   }
 }

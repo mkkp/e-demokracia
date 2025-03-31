@@ -681,7 +681,7 @@
       <table xmi:id="_3NM1IIyNEe2VSOmaAz6G9Q" name="Dashboard_Table" label="Dashboard Table">
         <columns xsi:type="ui:DataColumn" xmi:id="_Z48P4IyYEe2VSOmaAz6G9Q" name="welcome" label="Welcome" iconName="text_fields" dataFeature="_OIqfwIyYEe2VSOmaAz6G9Q"/>
       </table>
-      <view xmi:id="_3M7vYIyNEe2VSOmaAz6G9Q" name="Dashboard_View_Edit" label="Dashboard View / Edit" layout="VERTICAL">
+      <view xmi:id="_3M7vYIyNEe2VSOmaAz6G9Q" name="Dashboard_View_Edit" label="Dashboard View / Edit" layout="VERTICAL" generateActionsHook="true" generateVisualPropertiesHook="true">
         <components xsi:type="ui:DataField" xmi:id="_Z44lgIyYEe2VSOmaAz6G9Q" name="welcome" label="" iconName="" dataFeature="_OIqfwIyYEe2VSOmaAz6G9Q" textWidget="TEXT"/>
         <components xsi:type="ui:TabBar" xmi:id="_ekzRUFw5Ee6gN-oVBDDIOQ" name="Selector" row="20">
           <tabs xmi:id="_P5VicFw5Ee6gN-oVBDDIOQ" name="issues" label="Issues" iconName="wechat" frame="true" row="20">
@@ -695,24 +695,24 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_CTragFw4Ee6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_CTqzcFw4Ee6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_CTraglw4Ee6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uJsAUQEfCPqa4KXymcqg" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uwwAUQEfCPqa4KXymcqg" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uwwQUQEfCPqa4KXymcqg" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-vX0AUQEfCPqa4KXymcqg" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-v-4AUQEfCPqa4KXymcqg" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-wl8AUQEfCPqa4KXymcqg" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-wl8QUQEfCPqa4KXymcqg" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-xNAAUQEfCPqa4KXymcqg" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-x0EAUQEfCPqa4KXymcqg" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-x0EQUQEfCPqa4KXymcqg" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-ybIAUQEfCPqa4KXymcqg" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zCMAUQEfCPqa4KXymcqg" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zCMQUQEfCPqa4KXymcqg" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zpQAUQEfCPqa4KXymcqg" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-0QUAUQEfCPqa4KXymcqg" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-0QUQUQEfCPqa4KXymcqg" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-03YAUQEfCPqa4KXymcqg" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_r-1ecAUQEfCPqa4KXymcqg" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uJsAUQEfCPqa4KXymcqg" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uwwAUQEfCPqa4KXymcqg" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-uwwQUQEfCPqa4KXymcqg" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-vX0AUQEfCPqa4KXymcqg" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-v-4AUQEfCPqa4KXymcqg" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-wl8AUQEfCPqa4KXymcqg" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-wl8QUQEfCPqa4KXymcqg" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-xNAAUQEfCPqa4KXymcqg" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-x0EAUQEfCPqa4KXymcqg" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-x0EQUQEfCPqa4KXymcqg" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-ybIAUQEfCPqa4KXymcqg" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zCMAUQEfCPqa4KXymcqg" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zCMQUQEfCPqa4KXymcqg" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-zpQAUQEfCPqa4KXymcqg" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-0QUAUQEfCPqa4KXymcqg" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-0QUQUQEfCPqa4KXymcqg" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-03YAUQEfCPqa4KXymcqg" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_r-1ecAUQEfCPqa4KXymcqg" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
                   <rowOperations xmi:id="_v6W40AUQEfCPqa4KXymcqg" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                     <operationForm xmi:id="_v6W40QUQEfCPqa4KXymcqg" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                   </rowOperations>
@@ -730,24 +730,24 @@
                   <columns xsi:type="ui:DataColumn" xmi:id="_7sP-EVw4Ee6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_7sP-EFw4Ee6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
                   <columns xsi:type="ui:DataColumn" xmi:id="_7sQlIFw4Ee6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHeQoAUQEfCPqa4KXymcqg" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHe3sAUQEfCPqa4KXymcqg" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHfewAUQEfCPqa4KXymcqg" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHfewQUQEfCPqa4KXymcqg" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgF0AUQEfCPqa4KXymcqg" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgF0QUQEfCPqa4KXymcqg" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgs4AUQEfCPqa4KXymcqg" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgs4QUQEfCPqa4KXymcqg" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHhT8AUQEfCPqa4KXymcqg" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHh7AAUQEfCPqa4KXymcqg" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHh7AQUQEfCPqa4KXymcqg" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHiiEAUQEfCPqa4KXymcqg" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHiiEQUQEfCPqa4KXymcqg" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjJIAUQEfCPqa4KXymcqg" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjJIQUQEfCPqa4KXymcqg" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjwMAUQEfCPqa4KXymcqg" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjwMQUQEfCPqa4KXymcqg" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                  <columns xsi:type="ui:DataColumn" xmi:id="_yHkXQAUQEfCPqa4KXymcqg" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHeQoAUQEfCPqa4KXymcqg" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHe3sAUQEfCPqa4KXymcqg" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHfewAUQEfCPqa4KXymcqg" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHfewQUQEfCPqa4KXymcqg" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgF0AUQEfCPqa4KXymcqg" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgF0QUQEfCPqa4KXymcqg" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgs4AUQEfCPqa4KXymcqg" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHgs4QUQEfCPqa4KXymcqg" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHhT8AUQEfCPqa4KXymcqg" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHh7AAUQEfCPqa4KXymcqg" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHh7AQUQEfCPqa4KXymcqg" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHiiEAUQEfCPqa4KXymcqg" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHiiEQUQEfCPqa4KXymcqg" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjJIAUQEfCPqa4KXymcqg" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjJIQUQEfCPqa4KXymcqg" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjwMAUQEfCPqa4KXymcqg" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHjwMQUQEfCPqa4KXymcqg" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                  <columns xsi:type="ui:DataColumn" xmi:id="_yHkXQAUQEfCPqa4KXymcqg" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
                   <rowOperations xmi:id="_0XLpcAUQEfCPqa4KXymcqg" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                     <operationForm xmi:id="_0XLpcQUQEfCPqa4KXymcqg" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                   </rowOperations>
@@ -1003,6 +1003,33 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_VPyQoP3eEe-p66wHlBPO-A" name="createdByUsername" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.userName" memberType="DERIVED">
         <inherited xmi:id="_VPyQof3eEe-p66wHlBPO-A"/>
       </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_caygUAzoEfCg6KyzoKeaQg" name="isNotIssueScopeCity" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="true&#xA;&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_caygUQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_cfwf4AzoEfCg6KyzoKeaQg" name="isIssueScopeCounty" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="false&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_cfwf4QzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_ckhEEAzoEfCg6KyzoKeaQg" name="isIssueScopeCity" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="false&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_ckhEEQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_cpPzEAzoEfCg6KyzoKeaQg" name="isNotIssueScopeCounty" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="true&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_cpPzEQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_ct3NUAzoEfCg6KyzoKeaQg" name="isIssueScopeGlobal" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="true&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_ct3NUQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_cyw7cAzoEfCg6KyzoKeaQg" name="isNotIssueScopeGlobal" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="false&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_cyw7cQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_c3VSYAzoEfCg6KyzoKeaQg" name="isIssueScopeDistrict" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="false&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_c3VSYQzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_c8Jg8AzoEfCg6KyzoKeaQg" name="isNotIssueScopeDistrict" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="true&#xA;&#xA;" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_c8Jg8QzoEfCg6KyzoKeaQg"/>
+      </attributes>
+      <attributes xsi:type="structure:DataMember" xmi:id="_mPAMYAzoEfCg6KyzoKeaQg" name="isseScope" dataType="_frL5cFqrEe6_67aMO2jOsw" required="true" defaultExpression="self.scope" getterExpression="" memberType="TRANSIENT">
+        <inherited xmi:id="_mPAMYQzoEfCg6KyzoKeaQg"/>
+      </attributes>
       <mapping xmi:id="_qC2TMGksEe25ONJ3V89cVA" target="_GDYW0GkOEe25ONJ3V89cVA"/>
       <operations xmi:id="_1qtJ0IycEe2VSOmaAz6G9Q" name="createComment" customImplementation="false" body="var edemokracia::Issue issue = this as edemokracia::Issue;&#xA;var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any()&#xA;&#xA;issue.comments  += new edemokracia::Comment(&#xA;&#x9;&#x9;comment = input.comment,&#xA;&#x9;&#x9;created = edemokracia::types::Timestamp!now(),&#xA;&#x9;&#x9;createdBy = user&#xA;);" binding="createComment">
         <input xmi:id="_1qwNIIycEe2VSOmaAz6G9Q" lower="1" upper="1" target="_kYFn8Ie5Ee2kLcMqsIbMgQ" name="input"/>
@@ -1056,12 +1083,12 @@
           </components>
         </components>
         <components xsi:type="ui:Group" xmi:id="_wB_RsG47Ee2siJt-xjHAyw" name="issue" label="Issue" iconName="clipboard" subTheme="issueHeader" frame="true">
-          <components xsi:type="ui:DataField" xmi:id="_BvyiQGkwEe25ONJ3V89cVA" name="title" label="Title" iconName="text_fields" col="6" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+          <components xsi:type="ui:DataField" xmi:id="_BvyiQGkwEe25ONJ3V89cVA" name="title" label="Title" iconName="text_fields" col="6" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
           <components xsi:type="ui:TabularReferenceField" xmi:id="_FHpVENvSEe2Bgcx6em3jZg" name="issueType" label="Issue Type" iconName="folder-open" col="4" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="_V_8twNu4Ee2Bgcx6em3jZg">
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8IdvSEe2Bgcx6em3jZg" name="title" label="Title" iconName="text_fields" dataFeature="_R2-tQNu4Ee2Bgcx6em3jZg"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_FHp8INvSEe2Bgcx6em3jZg" name="description" label="Description" iconName="text_fields" dataFeature="_R2x48Nu4Ee2Bgcx6em3jZg"/>
           </components>
-          <components xsi:type="ui:DataField" xmi:id="_h1CAMOMdEe2Bgcx6em3jZg" name="defaultVoteType" label="Default Vote Type" iconName="list" col="3" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
+          <components xsi:type="ui:DataField" xmi:id="_h1CAMOMdEe2Bgcx6em3jZg" name="defaultVoteType" label="Default Vote Type" iconName="list" col="3" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
           <components xsi:type="ui:DataField" xmi:id="_Bw7xwGkwEe25ONJ3V89cVA" name="status" label="Status" iconName="list" col="3" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
           <components xsi:type="ui:DataField" xmi:id="_BvJpEGkwEe25ONJ3V89cVA" name="created" label="Created" iconName="schedule" col="3" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
           <components xsi:type="ui:TabularReferenceField" xmi:id="_plsB8Id8Ee2kLcMqsIbMgQ" name="owner" label="Owner" iconName="account" col="3" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="_qYS-wGksEe25ONJ3V89cVA">
@@ -1073,16 +1100,17 @@
             <columns xsi:type="ui:DataColumn" xmi:id="_LRJ3AYd9Ee2kLcMqsIbMgQ" name="title" label="Title" iconName="text_fields" dataFeature="_qJnCgGksEe25ONJ3V89cVA"/>
             <columns xsi:type="ui:DataColumn" xmi:id="_LRJ3Aod9Ee2kLcMqsIbMgQ" name="description" label="Description" iconName="text_fields" dataFeature="_qKOtkGksEe25ONJ3V89cVA"/>
           </components>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQxkdvUEe2Bgcx6em3jZg" name="county" label="County" iconName="castle" col="4" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="_286p0NvTEe2Bgcx6em3jZg">
+          <components xsi:type="ui:DataField" xmi:id="_0i_2cAzoEfCg6KyzoKeaQg" name="isseScope" label="IsseScope" iconName="format-list-numbered" col="8" dataFeature="_mPAMYAzoEfCg6KyzoKeaQg"/>
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQxkdvUEe2Bgcx6em3jZg" name="county" label="County" iconName="castle" col="4" hiddenBy="_cpPzEAzoEfCg6KyzoKeaQg" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" requiredBy="_cfwf4AzoEfCg6KyzoKeaQg" relationFeature="_286p0NvTEe2Bgcx6em3jZg">
             <columns xsi:type="ui:DataColumn" xmi:id="_pPRYoNvUEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_NdiWgIXyEe2kLcMqsIbMgQ"/>
           </components>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQKgNvUEe2Bgcx6em3jZg" name="city" label="City" iconName="city" col="4" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="__tg8wNvTEe2Bgcx6em3jZg">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPQKgNvUEe2Bgcx6em3jZg" name="city" label="City" iconName="city" col="8" hiddenBy="_cpPzEAzoEfCg6KyzoKeaQg" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" requiredBy="_ckhEEAzoEfCg6KyzoKeaQg" relationFeature="__tg8wNvTEe2Bgcx6em3jZg">
             <columns xsi:type="ui:DataColumn" xmi:id="_pPQxkNvUEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_0F3joIXxEe2kLcMqsIbMgQ"/>
           </components>
-          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPRYodvUEe2Bgcx6em3jZg" name="district" label="District" iconName="home-city" col="4" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" relationFeature="_ZTn0QNvUEe2Bgcx6em3jZg">
+          <components xsi:type="ui:TabularReferenceField" xmi:id="_pPRYodvUEe2Bgcx6em3jZg" name="district" label="District" iconName="home-city" col="8" hiddenBy="_c8Jg8AzoEfCg6KyzoKeaQg" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" requiredBy="_c3VSYAzoEfCg6KyzoKeaQg" relationFeature="_ZTn0QNvUEe2Bgcx6em3jZg">
             <columns xsi:type="ui:DataColumn" xmi:id="_pPR_stvUEe2Bgcx6em3jZg" name="representation" label="Representation" iconName="text_fields" dataFeature="_AHgwkIXyEe2kLcMqsIbMgQ"/>
           </components>
-          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" appliedAnnotations="_8t-rUAXLEfC37oc_cfa43g" label="Description" iconName="text_fields" row="8" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_qEQBYGksEe25ONJ3V89cVA" textMultiLine="true"/>
+          <components xsi:type="ui:DataField" xmi:id="_BwVU0GkwEe25ONJ3V89cVA" name="description" appliedAnnotations="_8t-rUAXLEfC37oc_cfa43g" label="Description" iconName="text_fields" row="8" enabledBy="_w10JMM65Ee6ddqBfFzCBZg" dataFeature="_w10JMM65Ee6ddqBfFzCBZg" textMultiLine="true"/>
         </components>
         <components xsi:type="ui:TabularReferenceField" xmi:id="_6kmaIId8Ee2kLcMqsIbMgQ" name="attachments" label="" iconName="" checkboxSelection="DISABLED" row="10" relationFeature="_qXz2kGksEe25ONJ3V89cVA" representationComponent="tag">
           <columns xsi:type="ui:DataColumn" xmi:id="_6knBMId8Ee2kLcMqsIbMgQ" name="file" label="File" iconName="file-document-outline" dataFeature="_p6zKcGksEe25ONJ3V89cVA" width="500px"/>
@@ -2034,7 +2062,7 @@
       </operations>
       <form xmi:id="_jK51vVq4Ee6_67aMO2jOsw" name="UserIssues_Form" label="UserIssues Form" layout="VERTICAL"/>
       <table xmi:id="_jK51vlq4Ee6_67aMO2jOsw" name="UserIssues_Table" label="UserIssues Table"/>
-      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" performableActions="_jK51w1q4Ee6_67aMO2jOsw" dialogSize="LG">
+      <view xmi:id="_jK51wFq4Ee6_67aMO2jOsw" name="UserIssues_View_Edit" label="UserIssues View / Edit" layout="VERTICAL" performableActions="_jK51w1q4Ee6_67aMO2jOsw" dialogSize="LG" generateActionsHook="true" generateVisualPropertiesHook="true">
         <components xsi:type="ui:Group" xmi:id="_AMMw8FrVEe6gN-oVBDDIOQ" name="root">
           <components xsi:type="ui:TabBar" xmi:id="_MLBlUFrTEe6_67aMO2jOsw" name="tabBar" row="20">
             <tabs xmi:id="_jK51xlq4Ee6_67aMO2jOsw" name="ownedIssuesGroup" label="Owned issues" iconName="account-box" row="20">
@@ -2046,24 +2074,24 @@
                 <columns xsi:type="ui:DataColumn" xmi:id="_LF2JIFrXEe6gN-oVBDDIOQ" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_oGiJwFraEe6gN-oVBDDIOQ" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_oGj-8VraEe6gN-oVBDDIOQ" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fXUUAUiEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fcM0AUiEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fcz4AUiEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fda8AUiEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fda8QUiEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fepEAUiEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1ffQIAUiEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1ff3MAUiEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fgeQAUiEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fgeQQUiEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fhFUAUiEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fhsYAUiEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fhsYQUiEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fiTcAUiEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fiTcQUiEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fi6gAUiEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fi6gQUiEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_1fjhkAUiEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fXUUAUiEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fcM0AUiEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fcz4AUiEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fda8AUiEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fda8QUiEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fepEAUiEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1ffQIAUiEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1ff3MAUiEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fgeQAUiEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fgeQQUiEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fhFUAUiEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fhsYAUiEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fhsYQUiEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fiTcAUiEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fiTcQUiEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fi6gAUiEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fi6gQUiEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_1fjhkAUiEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
                 <rowOperations xmi:id="_322wIAUiEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                   <operationForm xmi:id="_322wIQUiEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                 </rowOperations>
@@ -2074,31 +2102,31 @@
             </tabs>
             <tabs xmi:id="_QrpoIFrkEe6gN-oVBDDIOQ" name="activeGlobalIssues" label="Active global issues" iconName="earth" row="20">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_ylgcV1rVEe6gN-oVBDDIOQ" name="activeGobalIssues" label="" iconName="" row="20" relationFeature="_NM0voFrKEe6_67aMO2jOsw" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sAgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sQgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvLhwAgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0AgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0QgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4AgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4QgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvNW8AgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AAgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AQgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvOlEAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIAgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIQgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvQaQAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYQgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvSPcAgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gAgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gQgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvTdkAgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_KvUEoAgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sAgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvK6sQgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvLhwAgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0AgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMI0QgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4AgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvMv4QgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvNW8AgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLqPQFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AAgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvN-AQgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvOlEAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIAgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPMIQgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvPzMQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvQaQAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRBUQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvRoYQgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvSPcAgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gAgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvS2gQgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvTdkAgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_KvUEoAgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                 <rowOperations xmi:id="_B8duMAUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                   <operationForm xmi:id="_B8duMQUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                 </rowOperations>
@@ -2109,31 +2137,31 @@
             </tabs>
             <tabs xmi:id="_ylgcVFrVEe6gN-oVBDDIOQ" name="activeIssuesByActivityArea" label="Active issues by my activity areas" iconName="map-search" row="10">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_7CQ7UFrXEe6gN-oVBDDIOQ" name="activeIssuesInActivity" label="" iconName="" row="20" relationFeature="_t7_fsAgmEfC37oc_cfa43g" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
-                <columns xsi:type="ui:DataColumn" xmi:id="_CidX8AgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AAgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AQgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CiemEAgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIAgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIQgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cif0MAgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQAgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQQgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CihCUAgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYQgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CiiQcAgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CijekAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CikssAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwAgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwQgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cil60AgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4AgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4QgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_CinI8AgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CidX8AgoEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AAgoEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cid_AQgoEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CiemEAgoEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIAgoEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CifNIQgoEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cif0MAgoEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQAgoEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLqPQFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CigbQQgoEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihCUAgoEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYAgoEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CihpYQgoEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CiiQcAgoEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gAgoEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cii3gQgoEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CijekAgoEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoAgoEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikFoQgoEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CikssAgoEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwAgoEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CilTwQgoEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cil60AgoEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4AgoEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_Cimh4QgoEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_CinI8AgoEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                 <rowOperations xmi:id="_FVKJEAgoEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                   <operationForm xmi:id="_FVKJEQgoEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                 </rowOperations>
@@ -2144,31 +2172,31 @@
             </tabs>
             <tabs xmi:id="_RR4bUFrcEe6gN-oVBDDIOQ" name="activeIssuesByResidentArea" label="Active issues by my resident area" iconName="home-circle" row="20">
               <components xsi:type="ui:TabularReferenceField" xmi:id="_BZzvYVrcEe6gN-oVBDDIOQ" name="activeIssuesInResident" label="" iconName="" row="20" relationFeature="__Ew-gAgmEfC37oc_cfa43g" representationComponent="card" rowsPerPage="36" selectorRowsPerPage="15">
-                <columns xsi:type="ui:DataColumn" xmi:id="_i5y2MAgpEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk5fgFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i5zdQAgpEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEaFIFw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUAgpEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qC-PAGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUQgpEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQoP3eEe-p66wHlBPO-A"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i50rYAgpEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYHiyEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScAgpEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXXkwOMdEe2Bgcx6em3jZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScQgpEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEQBYGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i515gAgpEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLnL8Fw-Ee6gN-oVBDDIOQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i515gQgpEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMM65Ee6ddqBfFzCBZg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i52gkAgpEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nERS0FxLEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoAgpEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4HkGEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoQgpEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4HkHEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i53usAgpEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVP0sHkAEe6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i54VwAgpEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i5480AgpEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90HnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4AgpEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4QgpEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i56K8AgpEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIHnqEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i56yAAgpEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0Kj-MFxMEe6ma86ynyYZNw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i57ZEAgpEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TBoOsHj5Ee6cB8og8p0UuQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i58AIAgpEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcHnpEe6IpMjJEx4KXg"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i58nMAgpEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaGVoIewEe2kLcMqsIbMgQ"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQAgpEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ8vYFqtEe6_67aMO2jOsw"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQQgpEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qE5hoGksEe25ONJ3V89cVA"/>
-                <columns xsi:type="ui:DataColumn" xmi:id="_i591UAgpEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDkr8GksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5y2MAgpEfC37oc_cfa43g" name="cityRepresentation" label="CityRepresentation" iconName="format-size" dataFeature="_Lk77wFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5zdQAgpEfC37oc_cfa43g" name="countyRepresentation" label="CountyRepresentation" iconName="format-size" dataFeature="_DEfksFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUAgpEfC37oc_cfa43g" name="created" label="Created" iconName="calendar-clock" dataFeature="_qDNfkGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50EUQgpEfC37oc_cfa43g" name="createdByUsername" label="CreatedByUsername" iconName="format-size" dataFeature="_VPyQof3eEe-p66wHlBPO-A"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i50rYAgpEfC37oc_cfa43g" name="debateCloseAt" label="DebateCloseAt" iconName="calendar-clock" dataFeature="_eGKLYXiyEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScAgpEfC37oc_cfa43g" name="defaultVoteType" label="DefaultVoteType" iconName="format-list-numbered" dataFeature="_MXb2MOMdEe2Bgcx6em3jZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i51ScQgpEfC37oc_cfa43g" name="description" label="Description" iconName="format-size" dataFeature="_qEf5AGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i515gAgpEfC37oc_cfa43g" name="districtRepresentation" label="DistrictRepresentation" iconName="format-size" dataFeature="_QLqPQFw-Ee6gN-oVBDDIOQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i515gQgpEfC37oc_cfa43g" name="isEditable" label="IsEditable" iconName="toggle-switch" dataFeature="_w10JMc65Ee6ddqBfFzCBZg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i52gkAgpEfC37oc_cfa43g" name="isFavorite" label="IsFavorite" iconName="toggle-switch" dataFeature="_nEc5AFxLEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoAgpEfC37oc_cfa43g" name="isIssueActive" label="IsIssueActive" iconName="toggle-switch" dataFeature="_Z0Np4XkGEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53HoQgpEfC37oc_cfa43g" name="isIssueDeletable" label="IsIssueDeletable" iconName="toggle-switch" dataFeature="_Cylr4XkHEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i53usAgpEfC37oc_cfa43g" name="isIssueDraft" label="IsIssueDraft" iconName="toggle-switch" dataFeature="_nVoPMHkAEe6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i54VwAgpEfC37oc_cfa43g" name="isIssueInVoting" label="IsIssueInVoting" iconName="toggle-switch" dataFeature="_THS4UXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i5480AgpEfC37oc_cfa43g" name="isIssueNotActive" label="IsIssueNotActive" iconName="toggle-switch" dataFeature="_vLG90XnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4AgpEfC37oc_cfa43g" name="isIssueNotDeletable" label="IsIssueNotDeletable" iconName="toggle-switch" dataFeature="_vQa7oXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i55j4QgpEfC37oc_cfa43g" name="isIssueNotDraft" label="IsIssueNotDraft" iconName="toggle-switch" dataFeature="_vOwHsXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i56K8AgpEfC37oc_cfa43g" name="isIssueNotInVoting" label="IsIssueNotInVoting" iconName="toggle-switch" dataFeature="_W7QSIXnqEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i56yAAgpEfC37oc_cfa43g" name="isNotFavorite" label="IsNotFavorite" iconName="toggle-switch" dataFeature="_0KwygFxMEe6ma86ynyYZNw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i57ZEAgpEfC37oc_cfa43g" name="isVoteClosable" label="IsVoteClosable" iconName="toggle-switch" dataFeature="_TB_bEHj5Ee6cB8og8p0UuQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i58AIAgpEfC37oc_cfa43g" name="isVoteNotClosable" label="IsVoteNotClosable" iconName="toggle-switch" dataFeature="_vNCQcXnpEe6IpMjJEx4KXg"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i58nMAgpEfC37oc_cfa43g" name="representation" label="Representation" iconName="format-size" dataFeature="_eaKAAIewEe2kLcMqsIbMgQ"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQAgpEfC37oc_cfa43g" name="scope" label="Scope" iconName="format-list-numbered" dataFeature="_FZ_LoFqtEe6_67aMO2jOsw"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i59OQQgpEfC37oc_cfa43g" name="status" label="Status" iconName="format-list-numbered" dataFeature="_qFJZQGksEe25ONJ3V89cVA"/>
+                <columns xsi:type="ui:DataColumn" xmi:id="_i591UAgpEfC37oc_cfa43g" name="title" label="Title" iconName="format-size" dataFeature="_qDz8gGksEe25ONJ3V89cVA"/>
                 <rowOperations xmi:id="_SuBm4AUjEfC37oc_cfa43g" name="addToFavoritesTableOperation" label="addToFavorites()" operation="_O-RAUFxEEe6ma86ynyYZNw">
                   <operationForm xmi:id="_SuBm4QUjEfC37oc_cfa43g" name="addToFavorites" label="AddToFavorites" iconName="chevron_right" operation="addToFavorites"/>
                 </rowOperations>
@@ -2333,7 +2361,7 @@
       <mapping xmi:id="_stHH4F4-Ee6vsex_cZNQbQ" target="_BuSFMGkWEe25ONJ3V89cVA"/>
       <form xmi:id="_gTgt8F4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_Form" label="UserVoteDefinition Form" layout="VERTICAL"/>
       <table xmi:id="_gTjKMF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_Table" label="UserVoteDefinition Table"/>
-      <view xmi:id="_gTanUF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_View_Edit" label="UserVoteDefinition View / Edit" layout="VERTICAL">
+      <view xmi:id="_gTanUF4-Ee6vsex_cZNQbQ" name="UserVoteDefinition_View_Edit" label="UserVoteDefinition View / Edit" layout="VERTICAL" generateActionsHook="true" generateVisualPropertiesHook="true">
         <components xsi:type="ui:Group" xmi:id="_aZHu8F5FEe6vsex_cZNQbQ" name="root" col="4">
           <components xsi:type="ui:TabBar" xmi:id="_w3mHIF5FEe6vsex_cZNQbQ" name="tabBar" row="20">
             <tabs xmi:id="_0O9rkF5FEe6vsex_cZNQbQ" name="OwnedVoteDefinitionsGroup" label="Owned Votes" iconName="account-box" row="20">
@@ -3773,7 +3801,7 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_LM9iYAp3EfC_AYKT2-_f7Q" name="isNonSelectableAnswerVote" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="true" getterExpression="" memberType="TRANSIENT">
       <inherited xmi:id="_LNAlsAp3EfC_AYKT2-_f7Q"/>
     </attributes>
-    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Form" label="Close debate" iconName="" layout="VERTICAL" dialogSize="MD">
+    <form xmi:id="_NG8HoG6JEe2wNaja8kBvcQ" name="CloseDebateInput_Form" label="Close debate" iconName="" subTheme="closeDebate" layout="VERTICAL" dialogSize="MD" generateVisualPropertiesHook="true" generateActionsHook="true">
       <components xsi:type="ui:Group" xmi:id="_-U_QAIfTEe2u0fVmwtP5bA" name="Vote properties" label="Close debate" iconName="wechat" frame="true">
         <components xsi:type="ui:DataField" xmi:id="_yfDhAH5VEe2kLcMqsIbMgQ" name="voteType" label="VoteType" iconName="list" col="4" onBlur="true" dataFeature="_QG62gHMNEe2wNaja8kBvcQ"/>
         <components xsi:type="ui:DataField" xmi:id="_uZqe8IfXEe2u0fVmwtP5bA" name="closeAt" label="Vote close at" iconName="schedule" col="4" dataFeature="_meSj8H78Ee2kLcMqsIbMgQ"/>
@@ -3804,14 +3832,14 @@
       <inherited xmi:id="_Zo-WgFv3Ee6nEc5rp_Qy4A"/>
     </attributes>
     <mapping xmi:id="_sPu8QFu1Ee6Lb6PYNSnQSA" target="_0n43QG5mEe2wNaja8kBvcQ"/>
-    <form xmi:id="_YoAHuVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Form" label="CloseDebateOutputVoteDefinitionReference Form" iconName="note-check" layout="VERTICAL" dialogSize="MD">
+    <form xmi:id="_YoAHuVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Form" label="CloseDebateOutputVoteDefinitionReference Form" iconName="note-check" layout="VERTICAL" dialogSize="MD" generateVisualPropertiesHook="true" generateActionsHook="true">
       <components xsi:type="ui:Group" xmi:id="_YoAHulu1Ee6Lb6PYNSnQSA" name="debate" label="Close debate" iconName="wechat" frame="true"/>
       <components xsi:type="ui:DataField" xmi:id="_f6jpUFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" col="4" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
     </form>
     <table xmi:id="_YoAHv1u1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_Table" label="CloseDebateOutputVoteDefinitionReference Table">
       <columns xsi:type="ui:DataColumn" xmi:id="_f6n6wFv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
     </table>
-    <view xmi:id="_YoAHwVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_View_Edit" label="CloseDebateOutputVoteDefinitionReference View / Edit" layout="VERTICAL">
+    <view xmi:id="_YoAHwVu1Ee6Lb6PYNSnQSA" name="CloseDebateOutputVoteDefinitionReference_View_Edit" label="CloseDebateOutputVoteDefinitionReference View / Edit" layout="VERTICAL" generateActionsHook="true" generateVisualPropertiesHook="true">
       <components xsi:type="ui:DataField" xmi:id="_f6ew0Fv3Ee6nEc5rp_Qy4A" name="context" label="Context" iconName="format-size" col="4" dataFeature="_Zo0lgFv3Ee6nEc5rp_Qy4A"/>
     </view>
   </elements>
@@ -3842,7 +3870,7 @@
     <attributes xsi:type="structure:DataMember" xmi:id="_s6NaAIe5Ee2kLcMqsIbMgQ" name="comment" dataType="_7D8NwmkNEe25ONJ3V89cVA" required="true" defaultExpression="" getterExpression="" memberType="TRANSIENT">
       <inherited xmi:id="_s6NaAYe5Ee2kLcMqsIbMgQ"/>
     </attributes>
-    <form xmi:id="_kYYi4Ie5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Form" label="CreateCommentInput Form" layout="VERTICAL" dialogSize="MD">
+    <form xmi:id="_kYYi4Ie5Ee2kLcMqsIbMgQ" name="CreateCommentInput_Form" label="CreateCommentInput Form" layout="VERTICAL" dialogSize="MD" generateVisualPropertiesHook="true" generateActionsHook="true">
       <components xsi:type="ui:Group" xmi:id="_QjzvsIe6Ee2kLcMqsIbMgQ" name="comment" label="" iconName="">
         <components xsi:type="ui:DataField" xmi:id="_a5DsQIe6Ee2kLcMqsIbMgQ" name="comment" label="Comment" iconName="text_fields" row="4" dataFeature="_s6NaAIe5Ee2kLcMqsIbMgQ" textMultiLine="true"/>
       </components>

@@ -44,7 +44,7 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
   const { t } = useTranslation();
 
   // Process answers
-  const processedAnswers = answers
+  const processedAnswers = (answers ?? [])
     //    .sort((a, b) => b.count - a.count)
     .slice(0, maxItems)
     .map((answer, index) => ({

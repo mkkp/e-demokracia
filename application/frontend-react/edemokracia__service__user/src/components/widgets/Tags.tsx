@@ -6,8 +6,8 @@
 // Template name: actor/src/components/widgets/Tags.tsx
 // Template file: actor/src/components/widgets/Tags.tsx.hbs
 
-import { Button } from '@mui/material';
 import Autocomplete from '@mui/material/Autocomplete';
+import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Chip from '@mui/material/Chip';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -257,7 +257,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
             return (
               <ButtonGroup key={key} size="small" variant="outlined" sx={{ marginRight: 1 }}>
                 <Button
-                  id={`${id}-download`}
+                  id={`${id}-open-dialog`}
                   startIcon={<MdiIcon path="file-document-outline" mimeType={{ type: '*', subType: '*' }} />}
                   onClick={(event: any) => {
                     event.preventDefault();
@@ -281,7 +281,7 @@ export function Tags<P, T>(props: TagsProps<P, T>) {
                   <MdiIcon path="eye" sx={{ mr: 0.5 }} />
                 </Button>
                 <Button
-                  id={`${id}-view`}
+                  id={`${id}-download`}
                   onClick={(event: any) => {
                     event.preventDefault();
                     event.stopPropagation();

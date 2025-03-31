@@ -23,12 +23,16 @@ import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjec
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueTypeMask;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.pro.ProForCreate;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinition;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.ratingvotedefinition.RatingVoteDefinitionMask;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervotedefinition.SelectAnswerVoteDefinition;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervotedefinition.SelectAnswerVoteDefinitionDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervotedefinition.SelectAnswerVoteDefinitionForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervotedefinition.SelectAnswerVoteDefinitionMask;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervoteselection.SelectAnswerVoteSelection;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.selectanswervoteselection.SelectAnswerVoteSelectionForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.User;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.UserDao;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.votedefinition.*;
@@ -39,14 +43,17 @@ import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjec
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.yesnovotedefinition.YesNoVoteDefinitionForCreate;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.yesnovotedefinition.YesNoVoteDefinitionMask;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.issuestatus.IssueStatus;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.closedebateinputselectanswervoteselection.CloseDebateInputSelectAnswerVoteSelection;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.votestatus.VoteStatus;
 import party.mkkp.edemokracia.edemokracia.api.edemokracia.votetype.VoteType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Component(service = IssueService.class)
 public class IssueService {
@@ -124,28 +131,29 @@ public class IssueService {
                 .withStatus(IssueStatus.CREATED)
                 .withDebateCloseAt(debateCloseAt);
 
+        AtomicReference<IssueForCreateBuilder> builderWrapper = new AtomicReference<>(builder);
 
         if (issueTypeId != null) {
             Optional<IssueType> issueType = issueTypeDao.getById(issueTypeId, IssueTypeMask.issueTypeMask());
-            issueType.ifPresent((it) -> builder.withIssueType(it));
+            issueType.ifPresent((it) -> builderWrapper.set(builderWrapper.get().withIssueType(it)));
         }
 
         if (countyId != null) {
             Optional<County> county = countyDao.getById(countyId, CountyMask.countyMask());
-            county.ifPresent((c) -> builder.withCounty(c));
+            county.ifPresent((c) -> builderWrapper.set(builderWrapper.get().withCounty(c)));
         }
 
         if (cityId != null) {
             Optional<City> city = cityDao.getById(cityId, CityMask.cityMask());
-            city.ifPresent((c) -> builder.withCity(c));
+            city.ifPresent((c) -> builderWrapper.set(builderWrapper.get().withCity(c)));
         }
 
         if (distictId != null) {
             Optional<District> district = districtDao.getById(distictId, DistrictMask.districtMask());
-            district.ifPresent((d) -> builder.withDistrict(d));
+            district.ifPresent((d) -> builderWrapper.set(builderWrapper.get().withDistrict(d)));
         }
 
-        Issue issue = issueDao.create(builder.build(), IssueMask.issueMask());
+        Issue issue = issueDao.create(builderWrapper.get().build(), IssueMask.issueMask());
         return issue.identifier().getIdentifier();
     }
 
@@ -204,7 +212,11 @@ public class IssueService {
                                               VoteType voteType,
                                               String voteTitle,
                                               String description,
-                                              LocalDateTime closeAt) {
+                                              LocalDateTime closeAt,
+                                              Collection<CloseDebateInputSelectAnswerVoteSelection> selectableAnsers,
+                                              Optional<Integer>  rateMinValue,
+                                              Optional<Integer>  rateMaxValue,
+                                              Optional<Integer>  rateStepValue) {
         Issue issue = getIssue(issueId, IssueMask
                 .issueMask()
                 .withStatus());
@@ -243,28 +255,36 @@ public class IssueService {
                     issueId);
 
         } else if (voteType == VoteType.SELECT_ANSWER) {
-            voteDefinitionId = selectAnswerVoteDefinitionDao.create(SelectAnswerVoteDefinitionForCreate.builder()
+            SelectAnswerVoteDefinition selectAnswerVoteDefinition = selectAnswerVoteDefinitionDao.create(SelectAnswerVoteDefinitionForCreate.builder()
                     .withTitle(voteTitle)
                     .withDescription(description)
                     .withCloseAt(closeAt)
                     .withStatus(VoteStatus.CREATED)
                     .withOwner(user)
+                            .withVoteSelections(selectableAnsers.stream().map(a -> SelectAnswerVoteSelectionForCreate
+                                    .builder()
+                                    .withTitle(a.getTitle())
+                                    .withDescription(a.getDescription())
+                                    .build()).toList())
                     .withCreatedBy(user)
-                    .build(), SelectAnswerVoteDefinitionMask.selectAnswerVoteDefinitionMask()).identifier().getIdentifier();
-
+                    .build(), SelectAnswerVoteDefinitionMask.selectAnswerVoteDefinitionMask());
+            voteDefinitionId = selectAnswerVoteDefinition.identifier().getIdentifier();
             setVoteDefinitionContainer(
                     voteDefinitionId,
                     issueId);
         } else if (voteType == VoteType.RATE) {
-            voteDefinitionId = ratingVoteDefinitionDao.create(RatingVoteDefinitionForCreate.builder()
+            RatingVoteDefinition ratingVoteDefinition = ratingVoteDefinitionDao.create(RatingVoteDefinitionForCreate.builder()
                     .withTitle(voteTitle)
                     .withDescription(description)
                     .withCloseAt(closeAt)
                     .withStatus(VoteStatus.CREATED)
                     .withOwner(user)
                     .withCreatedBy(user)
-                    .build(), RatingVoteDefinitionMask.ratingVoteDefinitionMask()).identifier().getIdentifier();
-
+                    .withMinRateValue(rateMinValue.orElse(1))
+                    .withMaxRateValue(rateMaxValue.orElse(10))
+                    .withRateStep(rateStepValue.orElse(1))
+                    .build(), RatingVoteDefinitionMask.ratingVoteDefinitionMask());
+            voteDefinitionId = ratingVoteDefinition.identifier().getIdentifier();
             setVoteDefinitionContainer(
                     voteDefinitionId,
                     issueId);

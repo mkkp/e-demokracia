@@ -107,8 +107,12 @@ public class CloseDebateCustomImplementation implements party.mkkp.edemokracia.e
             return null;
         }
         VoteType voteType = VoteType.valueOf(input.getVoteType().getName());
+        var selectableAnswer = input.getSelectAnswerVoteSelections();
+        var rateMinimum = input.getMinRateValue();
+        var rateMaximum = input.getMaxRateValue();
+        var rateStep = input.getRateStep();
         Optional<Serializable> voteId = issueService.closeDebate(_this.identifier().getIdentifier(),
-                voteType, input.getTitle(), input.getDescription(), input.getCloseAt());
+                voteType, input.getTitle(), input.getDescription(), input.getCloseAt(), selectableAnswer, rateMinimum, rateMaximum, rateStep);
         return closeDebate.getById(voteId.get()).orElse(null);
     }
 
