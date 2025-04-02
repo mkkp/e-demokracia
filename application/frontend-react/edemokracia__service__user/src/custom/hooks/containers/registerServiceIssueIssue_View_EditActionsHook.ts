@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { SERVICE_ISSUE_ISSUE_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY } from '~/containers/Service/Issue/Issue_View_Edit/customization';
 import type { ServiceIssueIssue_View_EditContainerHook } from '~/containers/Service/Issue/Issue_View_Edit/customization';
+import { setIssueScopeForIssue } from '~/custom/services/issueService';
 import { useViewData } from '~/hooks';
 import type { IssueStatus } from '~/services/data-api/model/IssueStatus';
 import type { ServiceCity, ServiceCityStored } from '~/services/data-api/model/ServiceCity';
@@ -47,6 +48,8 @@ const serviceIssueIssue_View_EditActionsHook: ServiceIssueIssue_View_EditContain
   const { getLatestViewData } = useViewData();
 
   return {
-    // implement actions here
+    onIsseScopeBlurAction(data, storeDiff, editMode, submit) {
+      setIssueScopeForIssue(data, storeDiff);
+    },
   };
 };

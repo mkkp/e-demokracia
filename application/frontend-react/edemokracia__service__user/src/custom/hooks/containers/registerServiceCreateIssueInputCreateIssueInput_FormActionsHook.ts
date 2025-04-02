@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 import { useJudoNavigation } from '~/components';
 import { SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/customization';
 import type { ServiceCreateIssueInputCreateIssueInput_FormContainerHook } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/customization';
-import { navigateToIssue, setIssueScope } from '~/custom/services/issueService';
+import { navigateToIssue, setIssueScopeForCreateIssue } from '~/custom/services/issueService';
 import { ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
 import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
 import { UserServiceForIssuesImpl } from '~/services/data-axios/UserServiceForIssuesImpl';
@@ -30,7 +30,7 @@ const serviceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCreateIssu
 
     return {
       onIsseScopeBlurAction(data, storeDiff, editMode, submit) {
-        setIssueScope(data, storeDiff);
+        setIssueScopeForCreateIssue(data, storeDiff);
       },
 
       postCreateIssueForUserIssuesAction: async (

@@ -32,6 +32,7 @@ import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActiveVote
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsComponentConfigurationHook';
 import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './hooks/containers/registerServiceCreateIssueInputCreateIssueInput_FormActionsHook';
 import { registerServiceDashboardDashboard_View_EditActionsHook } from './hooks/containers/registerServiceDashboardDashboard_View_EditActionsHook';
+import { registerServiceIssueIssue_View_EditActionsHook } from './hooks/containers/registerServiceIssueIssue_View_EditActionsHook';
 import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './hooks/containers/registerServiceUserIssuesUserIssues_View_EditActionsHook';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
@@ -81,5 +82,6 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
     registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
+    registerServiceIssueIssue_View_EditActionsHook(context);
   }
 }
