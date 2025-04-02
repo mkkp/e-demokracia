@@ -997,7 +997,7 @@
       <attributes xsi:type="structure:DataMember" xmi:id="_W7QSIHnqEe6IpMjJEx4KXg" name="isIssueNotInVoting" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status != edemokracia::IssueStatus#VOTING or self.currentVoteDefinition!isUndefined()" memberType="DERIVED">
         <inherited xmi:id="_W7QSIXnqEe6IpMjJEx4KXg"/>
       </attributes>
-      <attributes xsi:type="structure:DataMember" xmi:id="_w10JMM65Ee6ddqBfFzCBZg" name="isEditable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.status == edemokracia::IssueStatus#CREATED or edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner&#xA;" memberType="DERIVED">
+      <attributes xsi:type="structure:DataMember" xmi:id="_w10JMM65Ee6ddqBfFzCBZg" name="isEditable" dataType="_7D8Nx2kNEe25ONJ3V89cVA" defaultExpression="" getterExpression="(self.status == edemokracia::IssueStatus#CREATED or self.status == edemokracia::IssueStatus#ACTIVE) and (edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable(&quot;ACTOR&quot;, &quot;userName&quot;))!any() == self.owner)&#xA;" memberType="DERIVED">
         <inherited xmi:id="_w10JMc65Ee6ddqBfFzCBZg"/>
       </attributes>
       <attributes xsi:type="structure:DataMember" xmi:id="_VPyQoP3eEe-p66wHlBPO-A" name="createdByUsername" dataType="_7D8NwmkNEe25ONJ3V89cVA" defaultExpression="" getterExpression="self.createdBy.userName" memberType="DERIVED">
