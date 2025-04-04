@@ -6,8 +6,21 @@
 // Template name: actor/src/custom/application-customizer.tsx
 // Template file: actor/src/custom/application-customizer.tsx.hbs
 
+import { Button, Grid, TextField, Typography, debounce } from '@mui/material';
 import type { BundleContext } from '@pandino/pandino-api';
+import { fi } from 'date-fns/locale';
+import { FC, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Filter, FilterType, Operation } from '~/components-api';
+import { SingleValueFilterComponent } from '~/components/table/SingleValueFilterComponent';
+import { debounceInputs } from '~/config/general';
+import { SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_USERS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY } from '~/containers/Service/UserManager/UserManager_View_Edit/components/ServiceUserManagerUserManager_View_EditUsersComponent';
+import { _StringOperation } from '~/services/data-api/common';
+import { ServiceServiceUserStored } from '~/services/data-api/model/ServiceServiceUser';
+import { buildFilter } from '~/utilities';
+import { SidekickComponentProps } from '~/utilities/table';
 import { registerServiceIssueIssueRichTextEditorConfig } from './components/IssueRichTextEditor';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from './custom-element-types';
 import { registerCloseDebateInputCloseDebateInput_FormActionsHook } from './customCloseDebateInputCloseDebateInput_FormActionsHook';
 import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from './customServiceCreateIssueInputCreateIssueInput_FormActionsHook';
 import { registerServiceDashboardDashboard_View_EditActionsHook } from './customServiceDashboardDashboard_View_EditActionsHook';
@@ -38,19 +51,6 @@ import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteD
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
-import { SidekickComponentProps } from '~/utilities/table';
-import { Filter, FilterType, Operation } from '~/components-api';
-import { buildFilter } from '~/utilities';
-import { _StringOperation } from '~/services/data-api/common';
-import { FC, SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { TextField, Button, Grid, Typography, debounce } from '@mui/material';
-import { ServiceServiceUserStored } from '~/services/data-api/model/ServiceServiceUser';
-import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from './custom-element-types';
-import { SERVICE_USER_MANAGER_USER_MANAGER_VIEW_EDIT_USERS_COMPONENT_SIDEKICK_COMPONENT_INTERFACE_KEY } from '~/containers/Service/UserManager/UserManager_View_Edit/components/ServiceUserManagerUserManager_View_EditUsersComponent';
-import { useTranslation } from 'react-i18next';
-import { debounceInputs } from '~/config/general';
-import { fi } from 'date-fns/locale';
-import { SingleValueFilterComponent } from '~/components/table/SingleValueFilterComponent';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
@@ -117,8 +117,7 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
 //       // const newValues: Record<string, any> = {};
 //       onFiltersChange([]);
 //     }, []);
-  
-  
+
 //   return (
 //     <Grid container sx={{ mb: 2 }}>
 //       <Grid item xs={12}>
@@ -130,9 +129,9 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
 //         </Button>
 //       </Grid>
 //       <Grid item xs={6}>
-//         <SingleValueFilterComponent 
-//             attributeName='userName' 
-//             filterType={FilterType.string} 
+//         <SingleValueFilterComponent
+//             attributeName='userName'
+//             filterType={FilterType.string}
 //             operator={_StringOperation.like}
 //             filters={filters}
 //             onFiltersChange={onFiltersChange}
@@ -142,4 +141,3 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
 //     </Grid>
 //   );
 // };
-

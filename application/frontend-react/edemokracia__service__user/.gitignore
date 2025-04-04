@@ -2300,7 +2300,6 @@ src/utilities/application/operation-utils.tsx
 src/utilities/error-handling.ts
 src/utilities/file-handling.tsx
 src/utilities/filter-helper.test.ts
-src/utilities/filter-helper.ts
 src/utilities/form-utils.ts
 src/utilities/helper.test.ts
 src/utilities/helper.ts

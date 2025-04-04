@@ -14,7 +14,7 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <judo-meta-esm-version>1.2.0.20250318_083305_7edf0287_develop</judo-meta-esm-version>
+        <judo-meta-esm-version>1.2.0.20250404_184508_834d7b09_feature_JNG_6272_ModelableFilter</judo-meta-esm-version>
         <judo-esm-fullstack-project-template-version>1.0.0.20250319_121437_d49b5a0f_develop</judo-esm-fullstack-project-template-version>
         <judo-version-updater-maven-plugin-version>1.0.0.20241127_151701_eca331a9_develop</judo-version-updater-maven-plugin-version>
 

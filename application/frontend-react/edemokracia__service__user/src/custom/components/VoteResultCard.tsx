@@ -44,13 +44,13 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
   const { t } = useTranslation();
 
   // Process answers
-  const processedAnswers = answers
+  const processedAnswers = (answers ?? []) 
     //    .sort((a, b) => b.count - a.count)
     .slice(0, maxItems)
     .map((answer, index) => ({
       ...answer,
       color: answer.color || DEFAULT_COLORS[index % DEFAULT_COLORS.length],
-    }));
+    })) ;
 
   function answerColor(voteValue: string | undefined): string | undefined {
     if (!voteValue) {
