@@ -22,8 +22,8 @@
         <frontend-maven-plugin-version>1.12.1</frontend-maven-plugin-version>
         <ui-model>${basedir}/model/edemokracia-ui.model</ui-model>
 
-        <judo-ui-react-template-version>1.0.0-SNAPSHOT</judo-ui-react-template-version>
-        <judo-ui-typescript-rest-template-version>1.0.0.20250305_085045_1fe46e3a_develop</judo-ui-typescript-rest-template-version>
+        <judo-ui-react-template-version>1.0.0.20250406_231247_71b0bda5_feature_JNG_6281_FixingNullableEnum</judo-ui-react-template-version>
+        <judo-ui-typescript-rest-template-version>1.0.0.20250405_040641_def2fb16_develop</judo-ui-typescript-rest-template-version>
 
         <node-version>22.11.0</node-version>
         <pnpm-version>9.12.3</pnpm-version>
