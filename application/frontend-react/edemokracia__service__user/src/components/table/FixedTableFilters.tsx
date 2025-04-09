@@ -1,11 +1,16 @@
-import {
-  GridValidRowModel,
-} from '@mui/x-data-grid';
+import { Grid, InputAdornment, TextField } from '@mui/material';
+import { GridValidRowModel } from '@mui/x-data-grid';
 import { Filter, FilterOption } from '~/components-api';
 import type { QueryCustomizer } from '~/services/data-api/common/QueryCustomizer';
-import { getOperationFromFilterOperationType, mapCardsFiltersToFilters, mapPersistentTableFiltersToFilters, type DialogResultReason, type FiltersSerializer, type TableRowAction } from '~/utilities';
+import {
+  type DialogResultReason,
+  type FiltersSerializer,
+  type TableRowAction,
+  getOperationFromFilterOperationType,
+  mapCardsFiltersToFilters,
+  mapPersistentTableFiltersToFilters,
+} from '~/utilities';
 import { MdiIcon } from '../MdiIcon';
-import { Grid, InputAdornment, TextField } from '@mui/material';
 import { SingleValueFilterComponent } from './SingleValueFilterComponent';
 
 interface FixedTableFiltersProps<T extends GridValidRowModel, TStored extends GridValidRowModel> {
@@ -19,17 +24,11 @@ interface FixedTableFiltersProps<T extends GridValidRowModel, TStored extends Gr
 export function FixedTableFilters<T extends GridValidRowModel, TStored extends T, S extends QueryCustomizer<T>>(
   props: FixedTableFiltersProps<T, TStored>,
 ) {
-  const {
-    tableFilterOptions,
-    filters,
-    ownerData,
-    filtersSerializer,
-    onFiltersChange
-  } = props;
-  
+  const { tableFilterOptions, filters, ownerData, filtersSerializer, onFiltersChange } = props;
+
   // function mergeFilters(originalFilters: Filter[], newFilters: Filter[]): Filter[] {
-  //   const filteredOut = originalFilters.filter(item1 => 
-  //     !newFilters.some(item2 => 
+  //   const filteredOut = originalFilters.filter(item1 =>
+  //     !newFilters.some(item2 =>
   //       item1.filterOption.attributeName === item2.filterOption.attributeName &&
   //       item1.filterBy.operator === item2.filterBy.operator
   //     )
@@ -44,18 +43,18 @@ export function FixedTableFilters<T extends GridValidRowModel, TStored extends T
       <Grid container sx={{ mb: 2 }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            { tableFilterOptions.map( f => (
+            {tableFilterOptions.map((f) => (
               <SingleValueFilterComponent
                 key={f.id}
                 attributeName={f.attributeName as keyof T}
-                filterType={f.filterType} 
+                filterType={f.filterType}
                 operator={getOperationFromFilterOperationType(f, f.defaultOperationType)}
                 filters={filters}
                 onFiltersChange={onFiltersChange}
                 label={f.label ?? ''}
                 col={f.col ?? 3}
               />
-            )) }
+            ))}
           </Grid>
 
           {/* <TextField
