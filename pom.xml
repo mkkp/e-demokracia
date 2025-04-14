@@ -14,8 +14,8 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <judo-meta-esm-version>1.2.0.20250404_113236_0ef32209_develop</judo-meta-esm-version>
-        <judo-esm-fullstack-project-template-version>1.0.0.20250405_042710_26157cd1_develop</judo-esm-fullstack-project-template-version>
+        <judo-meta-esm-version>1.2.0.20250410_200437_22db8e98_develop</judo-meta-esm-version>
+        <judo-esm-fullstack-project-template-version>1.0.0.20250411_043126_ab72fbfc_develop</judo-esm-fullstack-project-template-version>
         <judo-version-updater-maven-plugin-version>1.0.0.20241127_151701_eca331a9_develop</judo-version-updater-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

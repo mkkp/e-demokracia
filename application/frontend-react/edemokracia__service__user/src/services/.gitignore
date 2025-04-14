@@ -471,6 +471,7 @@ data-axios/ServiceDashboardServiceForFavoriteVoteDefinitionsImpl.ts
 data-axios/ServiceDashboardServiceForOwnedIssuesImpl.ts
 data-axios/ServiceDashboardServiceForOwnedVoteDefinitionsImpl.ts
 data-axios/ServiceDashboardServiceForUserVoteEntriesImpl.ts
+data-axios/ServiceDashboardServiceForVotedVoteDefinitionsImpl.ts
 data-axios/ServiceDashboardServiceImpl.ts
 data-axios/ServiceDistrictServiceImpl.ts
 data-axios/ServiceIssueAttachmentServiceImpl.ts
@@ -753,6 +754,7 @@ data-service/ServiceDashboardServiceForFavoriteVoteDefinitions.ts
 data-service/ServiceDashboardServiceForOwnedIssues.ts
 data-service/ServiceDashboardServiceForOwnedVoteDefinitions.ts
 data-service/ServiceDashboardServiceForUserVoteEntries.ts
+data-service/ServiceDashboardServiceForVotedVoteDefinitions.ts
 data-service/ServiceDistrictService.ts
 data-service/ServiceIssueAttachmentService.ts
 data-service/ServiceIssueCategoryService.ts
