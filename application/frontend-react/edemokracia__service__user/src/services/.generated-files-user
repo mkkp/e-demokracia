@@ -365,7 +365,7 @@ data-api/rest/YesNoVoteInputQueryCustomizerSerializer.ts,b073f389f4d44c952f37375
 data-api/rest/YesNoVoteInputSerializer.ts,844048f07610f94985b6cb290908d0ff
 data-api/rest/headers.ts,f27d529333c88704f62b8984c7b78356
 data-api/rest/requestResponse.ts,cf30583bdc4f0aef4f448a3eadade1ea
-data-api/rest/serialization.ts,b7f5a85a271feb0eb6b684e3101f7749
+data-api/rest/serialization.ts,1970e484c55f155da313b92ae96d1294
 data-axios/AccessServiceImpl.ts,b3f43322122f315273214ea7a47fa6a7
 data-axios/AxiosProvider.ts,80923b4d6b4fbd3c1f172f1d1b4f4fd4
 data-axios/CityServiceForDistrictsImpl.ts,5c8015187dc4bb2f6648d33468445f83
