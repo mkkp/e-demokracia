@@ -32,16 +32,23 @@ export const Header = () => {
   const iconBackColorOpen = theme.palette.mode === ThemeMode.DARK ? 'grey.200' : 'grey.300';
   const iconBackColor = theme.palette.mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
 
-  // const mainHeader: ReactNode = (
-  //   <Toolbar>
-  //     {!isHorizontal ? (
-  //       <IconButton aria-label="open drawer" color="secondary" onClick={() => onChangeMiniDrawer(!miniDrawer)}>
-  //         {!miniDrawer ? <MdiIcon path="menu-open" /> : <MdiIcon path="menu" />}
-  //       </IconButton>
-  //     ) : null}
-  //     {headerContent}
-  //   </Toolbar>
-  // );
+  {
+    /* PATCH: BEGIN */
+  }
+  {
+    /*
+  const mainHeader: ReactNode = (
+    <Toolbar>
+      {!isHorizontal ? (
+        <IconButton aria-label="open drawer" color="secondary" onClick={() => onChangeMiniDrawer(!miniDrawer)}>
+          {!miniDrawer ? <MdiIcon path="menu-open" /> : <MdiIcon path="menu" />}
+        </IconButton>
+      ) : null}
+      {headerContent}
+    </Toolbar>
+  );
+  */
+  }
   const mainHeader: ReactNode = (
     <Toolbar>
       {!isHorizontal ? (
@@ -56,6 +63,9 @@ export const Header = () => {
       {headerContent}
     </Toolbar>
   );
+  {
+    /* PATCH: END */
+  }
 
   const appBar: AppBarProps = {
     position: 'fixed',

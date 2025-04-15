@@ -401,8 +401,6 @@ src/containers/Service/CreateUserInput/CreateUserInput_View_Edit/customization.t
 src/containers/Service/CreateUserInput/CreateUserInput_View_Edit/types.ts
 src/containers/Service/Dashboard/Dashboard_Table/ServiceDashboardDashboard_Table.tsx
 src/containers/Service/Dashboard/Dashboard_Table/ServiceDashboardDashboard_TableDialogContainer.tsx
-src/containers/Service/Dashboard/Dashboard_Table/components/ServiceDashboardDashboard_TableDashboard_TableComponent/index.tsx
-src/containers/Service/Dashboard/Dashboard_Table/components/ServiceDashboardDashboard_TableDashboard_TableComponent/types.ts
 src/containers/Service/Dashboard/Dashboard_Table/customization.ts
 src/containers/Service/Dashboard/Dashboard_Table/types.ts
 src/containers/Service/Dashboard/Dashboard_View_Edit/ServiceDashboardDashboard_View_Edit.tsx
@@ -1025,6 +1023,7 @@ src/custom/hooks/containers/registerServiceIssueAttachmentIssueAttachment_View_E
 src/custom/hooks/containers/registerServiceIssueIssue_View_EditActionsHook.ts.default
 src/custom/hooks/containers/registerServiceUserIssuesUserIssues_View_EditActionsHook.ts.default
 src/custom/hooks/containers/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook.ts.default
+src/custom/hooks/custom-implementations/registerServiceDashboardDashboard_View_EditCustomImplementations.tsx.default
 src/custom/hooks/default-guest-page-hook-registration.tsx.default
 src/custom/hooks/dialogs/registerServiceIssueAttachmentsRelationFormPageActionsHook.ts.default
 src/custom/hooks/dialogs/registerServiceIssueAttachmentsRelationViewPageActionsHook.ts.default

@@ -8,8 +8,6 @@
 
 import type { BundleContext } from '@pandino/pandino-api';
 import { registerServiceIssueIssueRichTextEditorConfig } from './components/IssueRichTextEditor';
-import { registerCloseDebateInputCloseDebateInput_FormActionsHook } from './customCloseDebateInputCloseDebateInput_FormActionsHook';
-import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './customServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
 import { registerServiceIssueCommentsCards } from './hooks/components/cards/ServiceIssueCommentCards';
 import { registerServiceConCon_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditConsComponentConfigurationHook';
 import { registerServiceConCon_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceConCon_View_EditProsComponentConfigurationHook';
@@ -17,6 +15,7 @@ import { registerServiceDashboardDashboard_View_EditFavoriteIssuesComponentCards
 import { registerServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentConfigurationHook';
 import { registerServiceDashboardDashboard_View_EditOwnedIssuesComponentCardsContainerConfig } from './hooks/components/cards/registerServiceDashboardDashboard_View_EditOwnedIssuesComponentConfigurationHook';
 import { registerServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentConfigurationHook';
+import { registerServiceDashboardDashboard_View_EditVotedVoteDefinitionsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceDashboardDashboard_View_EditVotedVoteDefinitionsComponentConfigurationHook';
 import { registerServiceIssueIssue_View_EditCommentsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditCommentsComponentConfigurationHook';
 import { registerServiceIssueIssue_View_EditConsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditConsComponentConfigurationHook';
 import { registerServiceIssueIssue_View_EditProsComponentCardsContainerConfig } from './hooks/components/cards/registerServiceIssueIssue_View_EditProsComponentConfigurationHook';
@@ -34,6 +33,8 @@ import { registerServiceCreateIssueInputCreateIssueInput_FormActionsHook } from 
 import { registerServiceDashboardDashboard_View_EditActionsHook } from './hooks/containers/registerServiceDashboardDashboard_View_EditActionsHook';
 import { registerServiceIssueIssue_View_EditActionsHook } from './hooks/containers/registerServiceIssueIssue_View_EditActionsHook';
 import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './hooks/containers/registerServiceUserIssuesUserIssues_View_EditActionsHook';
+import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './hooks/containers/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
+import { registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook } from './hooks/dialogs/registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
@@ -41,10 +42,6 @@ import { ApplicationCustomizer } from './interfaces';
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
     // register your implementations here
-    //    registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
-    //    registerServiceVoteDefinitionVoteDefinition_TableActionsHook(context);
-    //    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook(context);
-    //    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
     registerServiceConCon_View_EditConsComponentCardsContainerConfig(context);
     registerServiceConCon_View_EditProsComponentCardsContainerConfig(context);
@@ -79,9 +76,9 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceIssueIssueRichTextEditorConfig(context);
     registerServiceCreateIssueInputCreateIssueInput_FormActionsHook(context);
     registerServiceDashboardDashboard_View_EditActionsHook(context);
-    registerServiceUserIssuesUserIssues_View_EditActionsHook(context);
-    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
-    registerCloseDebateInputCloseDebateInput_FormActionsHook(context);
     registerServiceIssueIssue_View_EditActionsHook(context);
+    registerServiceDashboardDashboard_View_EditVotedVoteDefinitionsComponentCardsContainerConfig(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
+    registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook(context);
   }
 }

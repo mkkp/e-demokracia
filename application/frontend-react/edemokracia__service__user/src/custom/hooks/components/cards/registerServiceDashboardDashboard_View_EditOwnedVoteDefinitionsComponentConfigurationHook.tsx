@@ -89,7 +89,7 @@ const ServiceDashboardDashboard_View_EditOwnedVoteDefinitionsComponentCard: FC<
       <VoteDefinitionCard
         row={row}
         onRowClick={onRowClick}
-        revokeVote={undefined}
+        revokeVote={actions.ownedVoteDefinitionsRevokeVoteForVoteDefinitionAction}
         voteRatingAction={actions.ownedVoteDefinitionsVoteRatingAction}
         voteSelectAnswerAction={actions.ownedVoteDefinitionsVoteSelectAnswerAction}
         voteYesNoAction={actions.ownedVoteDefinitionsVoteYesNoAction}

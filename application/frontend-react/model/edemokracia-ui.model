@@ -10,8 +10,8 @@
     <items xmi:id="User/(esm/_mNq6EF5QEe6vsex_cZNQbQ)/AccessMenuNavigationItemView" name="service::User::userVoteDefinitions::NavigationItem" label="Votes" target="User/(esm/_mNnPsF5QEe6vsex_cZNQbQ)/AccessViewPageDefinition">
       <icon xmi:id="User/(esm/_mNq6EF5QEe6vsex_cZNQbQ)/VisualElementIcon" name="UserVoteDefinitionMenu::Icon" iconName="vote"/>
     </items>
-    <items xmi:id="User/(esm/_gYSocFuaEe6T042_LMmSdQ)/MenuItemGroup" name="User::MenuItemGroup/AdministrativeMenuGroup" label="Administrative functions">
-      <items xmi:id="User/(esm/_oIKpIId-Ee2kLcMqsIbMgQ)/MenuItemGroup" name="User::MenuItemGroup/AdminBasicDataMenuGroup" label="Basic data">
+    <items xmi:id="User/(esm/_gYSocFuaEe6T042_LMmSdQ)/MenuItemGroup" name="User::MenuItemGroup/AdministrativeMenuGroup" label="Administrative functions" hiddenBy="isNotAdmin">
+      <items xmi:id="User/(esm/_oIKpIId-Ee2kLcMqsIbMgQ)/MenuItemGroup" name="User::MenuItemGroup/AdminBasicDataMenuGroup" label="Basic data" hiddenBy="isNotAdmin">
         <icon xmi:id="User/(esm/_oIKpIId-Ee2kLcMqsIbMgQ)/MenuItemGroupIcon" name="User::MenuItemGroupIcon/AdminBasicDataMenuGroup" iconName="toy-brick"/>
         <items xmi:id="User/(esm/_vW3EUG4rEe2siJt-xjHAyw)/AccessMenuNavigationItemTable" name="service::User::adminCategories::NavigationItem" label="Categories" target="User/(esm/_vWzZ8G4rEe2siJt-xjHAyw)/AccessTablePageDefinition">
           <icon xmi:id="User/(esm/_vW3EUG4rEe2siJt-xjHAyw)/VisualElementIcon" name="AdminCategories_Menu::Icon" iconName="file-tree"/>
@@ -23,20 +23,20 @@
           <icon xmi:id="User/(esm/_-T8HQNu-Ee2Bgcx6em3jZg)/VisualElementIcon" name="AdminIssueTypeMenu::Icon" iconName="folder-open"/>
         </items>
       </items>
-      <items xmi:id="User/(esm/_mGvk8FvaEe6bTb-1BwQgmA)/AccessMenuNavigationItemView" name="service::User::adminUserManager::NavigationItem" label="Users" target="User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition">
+      <items xmi:id="User/(esm/_mGvk8FvaEe6bTb-1BwQgmA)/AccessMenuNavigationItemView" name="service::User::adminUserManager::NavigationItem" label="Users" target="User/(esm/_mGqscFvaEe6bTb-1BwQgmA)/AccessViewPageDefinition" hiddenBy="isAdmin">
         <icon xmi:id="User/(esm/_mGvk8FvaEe6bTb-1BwQgmA)/VisualElementIcon" name="AdminUserManagerMenu::Icon" iconName="account"/>
       </items>
-      <items xmi:id="User/(esm/_iuDUYId_Ee2kLcMqsIbMgQ)/AccessMenuNavigationItemTable" name="service::User::adminIssues::NavigationItem" label="Issues " target="User/(esm/_iuCGQId_Ee2kLcMqsIbMgQ)/AccessTablePageDefinition">
+      <items xmi:id="User/(esm/_iuDUYId_Ee2kLcMqsIbMgQ)/AccessMenuNavigationItemTable" name="service::User::adminIssues::NavigationItem" label="Issues " target="User/(esm/_iuCGQId_Ee2kLcMqsIbMgQ)/AccessTablePageDefinition" hiddenBy="isNotAdmin">
         <icon xmi:id="User/(esm/_iuDUYId_Ee2kLcMqsIbMgQ)/VisualElementIcon" name="AdminIssuesMenu::Icon" iconName="wechat"/>
       </items>
-      <items xmi:id="User/(esm/_l9dMQJEaEe29qs15q2b6yw)/AccessMenuNavigationItemTable" name="service::User::adminVoteDefinitions::NavigationItem" label="Vote Definitions" target="User/(esm/_l9Zh4JEaEe29qs15q2b6yw)/AccessTablePageDefinition">
+      <items xmi:id="User/(esm/_l9dMQJEaEe29qs15q2b6yw)/AccessMenuNavigationItemTable" name="service::User::adminVoteDefinitions::NavigationItem" label="Vote Definitions" target="User/(esm/_l9Zh4JEaEe29qs15q2b6yw)/AccessTablePageDefinition" hiddenBy="isNotAdmin">
         <icon xmi:id="User/(esm/_l9dMQJEaEe29qs15q2b6yw)/VisualElementIcon" name="AdminVoteDefinitionsMenu::Icon" iconName="vote"/>
       </items>
-      <items xmi:id="User/(esm/_X0Z8AFu_Ee6HqbmdGwnUzw)/AccessMenuNavigationItemTable" name="service::User::adminVoteEntries::NavigationItem" label="Vote Entries" target="User/(esm/_X0RZIFu_Ee6HqbmdGwnUzw)/AccessTablePageDefinition">
+      <items xmi:id="User/(esm/_X0Z8AFu_Ee6HqbmdGwnUzw)/AccessMenuNavigationItemTable" name="service::User::adminVoteEntries::NavigationItem" label="Vote Entries" target="User/(esm/_X0RZIFu_Ee6HqbmdGwnUzw)/AccessTablePageDefinition" hiddenBy="isNotAdmin">
         <icon xmi:id="User/(esm/_X0Z8AFu_Ee6HqbmdGwnUzw)/VisualElementIcon" name="AdminVoteEntriesMenu::Icon" iconName="vote-outline"/>
       </items>
     </items>
-    <items xmi:id="User/(esm/__GjiAFuZEe6T042_LMmSdQ)/MenuItemGroup" name="User::MenuItemGroup/TechicalAccessesMenuGroup" label="Techical Accesses Menu Group"/>
+    <items xmi:id="User/(esm/__GjiAFuZEe6T042_LMmSdQ)/MenuItemGroup" name="User::MenuItemGroup/TechicalAccessesMenuGroup" label="Techical Accesses Menu Group" hiddenBy="alwaysTrue"/>
   </navigationController>
   <pages xmi:id="User/(esm/_2ld5UAN4EfCp66wHlBPO-A)/RelationFeatureForm" name="CloseDebateInput::selectAnswerVoteSelections::RelationFormPage" dataElement="User/(esm/_2ld5UAN4EfCp66wHlBPO-A)/RelationType" container="User/(esm/__QNRWQN3EfCp66wHlBPO-A)/TransferObjectFormPageContainer" openInDialog="true" dialogSize="MD">
     <actions xmi:id="User/(esm/_2ld5UAN4EfCp66wHlBPO-A)/RelationFeatureFormBackAction" name="CloseDebateInput::selectAnswerVoteSelections::Back" actionDefinition="User/(esm/__QNRWQN3EfCp66wHlBPO-A)/TransferObjectFormBackActionDefinition" ownerDataElement="User/(esm/_2ld5UAN4EfCp66wHlBPO-A)/RelationType"/>
@@ -4259,6 +4259,7 @@
     <attributes xmi:id="User/(esm/_Uj-UcAN5EfCp66wHlBPO-A)/AttributeType" name="maxRateValue" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType"/>
     <attributes xmi:id="User/(esm/_Uki8MAN5EfCp66wHlBPO-A)/AttributeType" name="minRateValue" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType"/>
     <attributes xmi:id="User/(esm/_Zh_TUAOJEfCp66wHlBPO-A)/AttributeType" name="rateStep" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType"/>
+    <attributes xmi:id="User/(esm/_N7IysBmHEfC6AsuNlfsw6w)/AttributeType" name="secretVote" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isRequired="true"/>
     <attributes xmi:id="User/(esm/_eJ0MUH78Ee2kLcMqsIbMgQ)/AttributeType" name="title" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isRequired="true"/>
     <attributes xmi:id="User/(esm/_QG62gHMNEe2wNaja8kBvcQ)/AttributeType" name="voteType" memberType="TRANSIENT" isReadOnly="false" dataType="User/(esm/_6eNosHMMEe2wNaja8kBvcQ)/EnumerationType" isRequired="true"/>
     <behaviours>TEMPLATE</behaviours>
@@ -4587,10 +4588,12 @@
     <attributes xmi:id="User/(esm/_rQIv0G6JEe2wNaja8kBvcQ)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="description" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true" originalAttributeType="User/(esm/_rQIv0G6JEe2wNaja8kBvcQ)/AttributeType"/>
     <attributes xmi:id="User/(esm/_Q5N-oF5IEe6vsex_cZNQbQ)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_Q5N-oF5IEe6vsex_cZNQbQ)/AttributeType"/>
     <attributes xmi:id="User/(esm/_Q5SQEF5IEe6vsex_cZNQbQ)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_Q5SQEF5IEe6vsex_cZNQbQ)/AttributeType"/>
+    <attributes xmi:id="User/(esm/_IevhoBlqEfC6AsuNlfsw6w)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isNotSecret" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_IevhoBlqEfC6AsuNlfsw6w)/AttributeType"/>
     <attributes xmi:id="User/(esm/_3Vr-cI4cEe29qs15q2b6yw)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isRatingType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_3Vr-cI4cEe29qs15q2b6yw)/AttributeType"/>
     <attributes xmi:id="User/(esm/_o7zu0I4cEe29qs15q2b6yw)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isSelectAnswerType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_o7zu0I4cEe29qs15q2b6yw)/AttributeType"/>
     <attributes xmi:id="User/(esm/_YyAZsI4cEe29qs15q2b6yw)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isYesNoAbstainType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_YyAZsI4cEe29qs15q2b6yw)/AttributeType"/>
     <attributes xmi:id="User/(esm/_CKyVMI4cEe29qs15q2b6yw)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="isYesNoType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" originalAttributeType="User/(esm/_CKyVMI4cEe29qs15q2b6yw)/AttributeType"/>
+    <attributes xmi:id="User/(esm/_CGfmIBlqEfC6AsuNlfsw6w)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="secret" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true" originalAttributeType="User/(esm/_CGfmIBlqEfC6AsuNlfsw6w)/AttributeType"/>
     <attributes xmi:id="User/(esm/_Uzt7MG6LEe2wNaja8kBvcQ)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="status" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true" originalAttributeType="User/(esm/_Uzt7MG6LEe2wNaja8kBvcQ)/AttributeType"/>
     <attributes xmi:id="User/(esm/_rQEeYG6JEe2wNaja8kBvcQ)/AttributeType/(discriminator/User/(esm/_-PRocG6LEe2wNaja8kBvcQ)/ClassType)" name="title" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true" originalAttributeType="User/(esm/_rQEeYG6JEe2wNaja8kBvcQ)/AttributeType"/>
     <behaviours>REFRESH</behaviours>
@@ -4697,7 +4700,7 @@
       <behaviours>REFRESH</behaviours>
       <behaviours>DELETE</behaviours>
     </relations>
-    <relations xmi:id="User/(esm/_GgaEAIyPEe2VSOmaAz6G9Q)/Access" name="dashboardHome" annotations="User/(esm/_7D81XmkNEe25ONJ3V89cVA)/Annotation" isCollection="false" target="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" isOrderable="true" isFilterable="true" relationKind="STATIC" memberType="ACCESS" isAccess="true">
+    <relations xmi:id="User/(esm/_GgaEAIyPEe2VSOmaAz6G9Q)/Access" name="dashboardHome" annotations="User/(esm/_7D81XmkNEe25ONJ3V89cVA)/Annotation" isCollection="false" target="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" relationKind="STATIC" memberType="ACCESS" isAccess="true">
       <behaviours>LIST</behaviours>
       <behaviours>REFRESH</behaviours>
     </relations>
@@ -5000,10 +5003,12 @@
     <attributes xmi:id="User/(esm/_rQIv0G6JEe2wNaja8kBvcQ)/AttributeType" name="description" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_Q5N-oF5IEe6vsex_cZNQbQ)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_Q5SQEF5IEe6vsex_cZNQbQ)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_IevhoBlqEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_3Vr-cI4cEe29qs15q2b6yw)/AttributeType" name="isRatingType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_o7zu0I4cEe29qs15q2b6yw)/AttributeType" name="isSelectAnswerType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_YyAZsI4cEe29qs15q2b6yw)/AttributeType" name="isYesNoAbstainType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_CKyVMI4cEe29qs15q2b6yw)/AttributeType" name="isYesNoType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_CGfmIBlqEfC6AsuNlfsw6w)/AttributeType" name="secret" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_Uzt7MG6LEe2wNaja8kBvcQ)/AttributeType" name="status" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_rQEeYG6JEe2wNaja8kBvcQ)/AttributeType" name="title" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <behaviours>REFRESH</behaviours>
@@ -5246,7 +5251,6 @@
       <behaviours>LIST</behaviours>
       <behaviours>REFRESH</behaviours>
     </relations>
-    <attributes xmi:id="User/(esm/_OIqfwIyYEe2VSOmaAz6G9Q)/AttributeType" name="welcome" memberType="DERIVED" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true"/>
     <behaviours>REFRESH</behaviours>
     <packageNameTokens>service</packageNameTokens>
   </dataElements>
@@ -5546,6 +5550,7 @@
     <attributes xmi:id="User/(esm/_-enzgH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_lXOIkHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_lZsNwHr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_6UifMBmJEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_lbCRkHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_lX0lgHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteEditable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_laXjMHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteNotDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -5556,6 +5561,7 @@
     <attributes xmi:id="User/(esm/_-d1wYH4XEe2cB7_PsKXsHQ)/AttributeType" name="minRateValue" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_FJZ08Ag8EfC37oc_cfa43g)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_M3mCIAN6EfCp66wHlBPO-A)/AttributeType" name="rateStep" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true" isRequired="true"/>
+    <attributes xmi:id="User/(esm/_6VAZQBmJEfC6AsuNlfsw6w)/AttributeType" name="secret" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-ezZsH4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_U-k94Ag8EfC37oc_cfa43g)/AttributeType" name="sumOfRating" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_-eROMH4XEe2cB7_PsKXsHQ)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
@@ -5625,6 +5631,7 @@
     <attributes xmi:id="User/(esm/_-c0csH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_x0l6IHr9Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_x1FpYHr9Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_D-DXIBmKEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yAjdEHr-Ee6bP4FWw7fjQA)/AttributeType" name="isVoteDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_W4oRsHr3Ee6bP4FWw7fjQA)/AttributeType" name="isVoteEditable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yBFBgHr-Ee6bP4FWw7fjQA)/AttributeType" name="isVoteNotDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -5632,6 +5639,7 @@
     <attributes xmi:id="User/(esm/_ptA9wHr3Ee6bP4FWw7fjQA)/AttributeType" name="isVoteNotOpen" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_jfd2YHr3Ee6bP4FWw7fjQA)/AttributeType" name="isVoteOpen" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_8dXccAg8EfC37oc_cfa43g)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_D-mJsBmKEfC6AsuNlfsw6w)/AttributeType" name="secret" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-dAp8H4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-cdQUH4XEe2cB7_PsKXsHQ)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_jNc7sFtuEe6Mx9dH3yj5gQ)/AttributeType" name="userHasNoVoteEntry" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -5676,6 +5684,8 @@
     <packageNameTokens>service</packageNameTokens>
   </dataElements>
   <dataElements xsi:type="data:ClassType" xmi:id="User/(esm/_ndA8kGkwEe25ONJ3V89cVA)/ClassType" name="service::ServicePrincipalUser" isPrincipal="true" transferObjectTypeName="service::ServicePrincipalUser" isOptional="true" simpleName="ServicePrincipalUser">
+    <attributes xmi:id="User/(esm/_dgOTMBlxEfC6AsuNlfsw6w)/AttributeType" name="alwaysFalse" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_ai2jIBlxEfC6AsuNlfsw6w)/AttributeType" name="alwaysTrue" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_toSMAGkwEe25ONJ3V89cVA)/AttributeType" name="created" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NyWkNEe25ONJ3V89cVA)/TimestampType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_toYSoGkwEe25ONJ3V89cVA)/AttributeType" name="email" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_todLIGkwEe25ONJ3V89cVA)/AttributeType" name="firstName" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
@@ -6030,6 +6040,7 @@
     <attributes xmi:id="User/(esm/_ByHcoF5IEe6vsex_cZNQbQ)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_B0QKoF5IEe6vsex_cZNQbQ)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_maoVEI4oEe29qs15q2b6yw)/AttributeType" name="isNotRatingType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_e9nm0BmIEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_zbgxcI4oEe29qs15q2b6yw)/AttributeType" name="isNotSelectAnswerType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_DT-e8I4pEe29qs15q2b6yw)/AttributeType" name="isNotYesNoAbstainType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_Tt0bMI4pEe29qs15q2b6yw)/AttributeType" name="isNotYesNoType" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -6039,6 +6050,7 @@
     <attributes xmi:id="User/(esm/_nvFY0I4jEe29qs15q2b6yw)/AttributeType" name="isYesNoType" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_MEiQYORyEe2Bgcx6em3jZg)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_hPs6UF5HEe6vsex_cZNQbQ)/AttributeType" name="scope" memberType="DERIVED" dataType="User/(esm/_frL5cFqrEe6_67aMO2jOsw)/EnumerationType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_e-E50BmIEfC6AsuNlfsw6w)/AttributeType" name="secret" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-g9V0H4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_VR5uAAj2EfC_AYKT2-_f7Q)/AttributeType" name="sumOfRating" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_3L2gcAj1EfC_AYKT2-_f7Q)/AttributeType" name="sumOfYesNoAbstainVoteOfAbstain" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
@@ -6111,6 +6123,7 @@
     <attributes xmi:id="User/(esm/_-bdx0H4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_yJ3UoHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yMLo0Hr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_O8ezkBmKEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yNcNEHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yKauQHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteEditable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_yMzT4Hr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteNotDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -6121,6 +6134,7 @@
     <attributes xmi:id="User/(esm/_rmHZMAhBEfC37oc_cfa43g)/AttributeType" name="numberOfNoVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_gAY2wAhCEfC_AYKT2-_f7Q)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_rnSd4AhBEfC37oc_cfa43g)/AttributeType" name="numberOfYesVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_O9HFsBmKEfC6AsuNlfsw6w)/AttributeType" name="secret" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-bow8H4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-bGlcH4XEe2cB7_PsKXsHQ)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_vqb5EFsnEe6Mx9dH3yj5gQ)/AttributeType" name="userHasNoVoteEntry" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -6183,6 +6197,7 @@
     <attributes xmi:id="User/(esm/_-aKKQH4XEe2cB7_PsKXsHQ)/AttributeType" name="description" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NzGkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_r_9-MHr_Ee6bP4FWw7fjQA)/AttributeType" name="isFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_sCH6UHr_Ee6bP4FWw7fjQA)/AttributeType" name="isNotFavorite" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_Jyok4BmKEfC6AsuNlfsw6w)/AttributeType" name="isNotSecret" memberType="MAPPED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_sDS_AHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_sAgJsHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteEditable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_sCtJIHr_Ee6bP4FWw7fjQA)/AttributeType" name="isVoteNotDeletable" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -6192,6 +6207,7 @@
     <attributes xmi:id="User/(esm/_GSZrEAhBEfC37oc_cfa43g)/AttributeType" name="numberOfNoVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_CFSKYAhBEfC37oc_cfa43g)/AttributeType" name="numberOfVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
     <attributes xmi:id="User/(esm/_EiJOYAhBEfC37oc_cfa43g)/AttributeType" name="numberOfYesVotes" memberType="DERIVED" dataType="User/(esm/_7D8NxGkNEe25ONJ3V89cVA)/NumericType" isFilterable="true"/>
+    <attributes xmi:id="User/(esm/_JzOawBmKEfC6AsuNlfsw6w)/AttributeType" name="secret" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-aSGEH4XEe2cB7_PsKXsHQ)/AttributeType" name="status" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_oDqCMG6IEe2wNaja8kBvcQ)/EnumerationType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_-Z65sH4XEe2cB7_PsKXsHQ)/AttributeType" name="title" memberType="MAPPED" isReadOnly="false" dataType="User/(esm/_7D8NwmkNEe25ONJ3V89cVA)/StringType" isFilterable="true" isRequired="true"/>
     <attributes xmi:id="User/(esm/_spEpcFotEe6_67aMO2jOsw)/AttributeType" name="userHasNoVoteEntry" memberType="DERIVED" dataType="User/(esm/_7D8Nx2kNEe25ONJ3V89cVA)/BooleanType" isFilterable="true"/>
@@ -6358,6 +6374,9 @@
         </children>
         <children xsi:type="ui:DateTimeInput" xmi:id="User/(esm/_uZqe8IfXEe2u0fVmwtP5bA)/TimestampTypeDateTimeInput" name="closeAt" sourceId="_uZqe8IfXEe2u0fVmwtP5bA" label="Vote close at" fit="LOOSE" isInCard="true" attributeType="User/(esm/_meSj8H78Ee2kLcMqsIbMgQ)/AttributeType">
           <icon xmi:id="User/(esm/_uZqe8IfXEe2u0fVmwtP5bA)/VisualElementIcon" name="closeAt::Icon" iconName="schedule"/>
+        </children>
+        <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_XjqMIBmHEfC6AsuNlfsw6w)/BooleanTypeCheckbox" name="secretVote" sourceId="_XjqMIBmHEfC6AsuNlfsw6w" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_N7IysBmHEfC6AsuNlfsw6w)/AttributeType">
+          <icon xmi:id="User/(esm/_XjqMIBmHEfC6AsuNlfsw6w)/VisualElementIcon" name="secretVote::Icon" iconName="toggle-switch"/>
         </children>
         <children xsi:type="ui:TextInput" xmi:id="User/(esm/_uZrGAYfXEe2u0fVmwtP5bA)/StringTypeTextInput" name="title" sourceId="_uZrGAYfXEe2u0fVmwtP5bA" label="Vote title" fit="LOOSE" col="12.0" isInCard="true" attributeType="User/(esm/_eJ0MUH78Ee2kLcMqsIbMgQ)/AttributeType">
           <icon xmi:id="User/(esm/_uZrGAYfXEe2u0fVmwtP5bA)/VisualElementIcon" name="title::Icon" iconName="text_fields"/>
@@ -8920,60 +8939,8 @@
       </buttons>
     </actionButtonGroup>
   </pageContainers>
-  <pageContainers xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTablePageContainer" name="service::Dashboard::Dashboard_Table" label="Dashboard Table" dataElement="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" onInit="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableRefreshActionDefinition">
+  <pageContainers xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTablePageContainer" name="service::Dashboard::Dashboard_Table" label="Dashboard Table" dataElement="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType">
     <children xsi:type="ui:Flex" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableVisualElement" name="Dashboard_Table" col="12.0" direction="VERTICAL" mainAxisAlignment="START" crossAxisAlignment="STRETCH">
-      <children xsi:type="ui:Table" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable" name="Dashboard_Table" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" label="Dashboard Table" col="12.0" row="12.0" dataElement="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" crudOperationsDisplayed="1" selectorRowsPerPage="10">
-        <columns xmi:id="User/(esm/_Z48P4IyYEe2VSOmaAz6G9Q)/TableColumn/(discriminator/User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable)" name="welcome" label="Welcome" col="2.0" format="%s" attributeType="User/(esm/_OIqfwIyYEe2VSOmaAz6G9Q)/AttributeType"/>
-        <filters xmi:id="User/(esm/_Z48P4IyYEe2VSOmaAz6G9Q)/TableColumnFilter/(discriminator/User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTable)" name="welcome::Filter" label="Welcome" attributeType="User/(esm/_OIqfwIyYEe2VSOmaAz6G9Q)/AttributeType"/>
-        <tableActionButtonGroup xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableButtonGroup" name="service::Dashboard::Dashboard_Table::TableActions" label="Actions">
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableFilterButton" name="service::Dashboard::Dashboard_Table::Table::Filter" label="Set Filters" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableFilterButtonIcon" name="Dashboard_Table::Icon" iconName="filter"/>
-            <actionDefinition xsi:type="ui:FilterActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableFilterActionDefinition" name="service::Dashboard::Dashboard_Table::Table::Filter" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableRefreshButton" name="service::Dashboard::Dashboard_Table::Table::Refresh" label="Refresh" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableRefreshButtonIcon" name="Dashboard_Table::Icon" iconName="refresh"/>
-            <actionDefinition xsi:type="ui:RefreshActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableTableRefreshActionDefinition" name="service::Dashboard::Dashboard_Table::Table::Refresh" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableExportButton" name="service::Dashboard::Dashboard_Table::Export" label="Export" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableExportButtonIcon" name="Dashboard_Table::Icon" iconName="file-export-outline"/>
-            <actionDefinition xsi:type="ui:ExportActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableExportActionDefinition" name="service::Dashboard::Dashboard_Table::Export" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableAddSelectorButton" name="service::Dashboard::Dashboard_Table::Add" label="Add" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableAddSelectorButtonIcon" name="Dashboard_Table::Icon" iconName="attachment-plus"/>
-            <actionDefinition xsi:type="ui:OpenAddSelectorActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableAddSelectorOpenPageActionDefinition" name="service::Dashboard::Dashboard_Table::Add::Open::Selector" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableSetSelectorButton" name="service::Dashboard::Dashboard_Table::Set" label="Set" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableSetSelectorButtonIcon" name="Dashboard_Table::Icon" iconName="attachment-plus"/>
-            <actionDefinition xsi:type="ui:OpenSetSelectorActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableSetSelectorOpenPageActionDefinition" name="service::Dashboard::Dashboard_Table::Set::Open::Selector" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableClearButton" name="service::Dashboard::Dashboard_Table::Clear" label="Clear" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableClearButtonIcon" name="Dashboard_Table::Icon" iconName="link_off"/>
-            <actionDefinition xsi:type="ui:ClearActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableClearActionDefinition" name="service::Dashboard::Dashboard_Table::Clear" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkRemoveButton" name="service::Dashboard::Dashboard_Table::BulkRemove" label="Remove" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkRemoveButtonIcon" name="Dashboard_Table::Icon" iconName="link_off"/>
-            <actionDefinition xsi:type="ui:BulkRemoveActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkRemoveActionDefinition" name="service::Dashboard::Dashboard_Table::BulkRemove" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" targetType="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" isBulk="true"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkDeleteButton" name="service::Dashboard::Dashboard_Table::BulkDelete" label="Delete" buttonStyle="text">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkDeleteButtonIcon" name="Dashboard_Table::Icon" iconName="delete_forever"/>
-            <actionDefinition xsi:type="ui:BulkDeleteActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableBulkDeleteActionDefinition" name="service::Dashboard::Dashboard_Table::BulkDelete" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" targetType="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" isBulk="true"/>
-          </buttons>
-        </tableActionButtonGroup>
-        <rowActionButtonGroup xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowButtonGroup" name="service::Dashboard::Dashboard_Table::RowActions" label="Actions">
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowViewButton" name="service::Dashboard::Dashboard_Table::View" label="View" buttonStyle="contained">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowViewButtonIcon" name="Dashboard_Table::Icon" iconName="visibility"/>
-            <actionDefinition xsi:type="ui:OpenPageActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowViewActionDefinition" name="service::Dashboard::Dashboard_Table::View" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" targetType="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowRemoveButton" name="service::Dashboard::Dashboard_Table::Remove" label="Remove" buttonStyle="contained">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowRemoveButtonIcon" name="Dashboard_Table::Icon" iconName="link_off"/>
-            <actionDefinition xsi:type="ui:RemoveActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowRemoveActionDefinition" name="service::Dashboard::Dashboard_Table::Remove" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" targetType="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType"/>
-          </buttons>
-          <buttons xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowDeleteButton" name="service::Dashboard::Dashboard_Table::Delete" label="Delete" buttonStyle="contained">
-            <icon xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowViewButtonIcon" name="Dashboard_Table::Icon" iconName="delete_forever"/>
-            <actionDefinition xsi:type="ui:RowDeleteActionDefinition" xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableRowDeleteActionDefinition" name="service::Dashboard::Dashboard_Table::Delete" sourceId="_3NM1IIyNEe2VSOmaAz6G9Q" targetType="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType"/>
-          </buttons>
-        </rowActionButtonGroup>
-      </children>
       <frame xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableFrame"/>
     </children>
     <actionButtonGroup xmi:id="User/(esm/_3NM1IIyNEe2VSOmaAz6G9Q)/TransferObjectTableButtonGroup" name="service::Dashboard::Dashboard_Table::PageActions" label="Actions">
@@ -8993,7 +8960,7 @@
   </pageContainers>
   <pageContainers xmi:id="User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewPageContainer" name="service::Dashboard::Dashboard_View_Edit" label="Dashboard View / Edit" dataElement="User/(esm/_3MbZEIyNEe2VSOmaAz6G9Q)/ClassType" onInit="User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewRefreshActionDefinition" type="VIEW" generateVisualPropertiesHook="true">
     <children xsi:type="ui:Flex" xmi:id="User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/TransferObjectViewVisualElement" name="Dashboard_View_Edit" sourceId="_3M7vYIyNEe2VSOmaAz6G9Q" col="12.0" stretch="BOTH" direction="VERTICAL" mainAxisAlignment="START">
-      <children xsi:type="ui:Formatted" xmi:id="User/(esm/_Z44lgIyYEe2VSOmaAz6G9Q)/StringTypeFormatted" name="welcome" sourceId="_Z44lgIyYEe2VSOmaAz6G9Q" label="" fit="LOOSE" col="12.0" attributeType="User/(esm/_OIqfwIyYEe2VSOmaAz6G9Q)/AttributeType" format="%s"/>
+      <icon xmi:id="User/(esm/_3M7vYIyNEe2VSOmaAz6G9Q)/ContainerVisualElementIcon" name="Dashboard_View_Edit::Icon" iconName="home"/>
       <children xsi:type="ui:TabController" xmi:id="User/(esm/_ekzRUFw5Ee6gN-oVBDDIOQ)/TabBarVisualElement" name="Selector" fit="LOOSE" col="12.0" row="20.0">
         <tabs xmi:id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupTab" name="issues" sourceId="_P5VicFw5Ee6gN-oVBDDIOQ">
           <element xsi:type="ui:Flex" xmi:id="User/(esm/_P5VicFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" name="issues" sourceId="_P5VicFw5Ee6gN-oVBDDIOQ" label="Issues" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
@@ -9418,8 +9385,7 @@
         <tabs xmi:id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupTab" name="votesCast" sourceId="_YSQVMFw5Ee6gN-oVBDDIOQ">
           <element xsi:type="ui:Flex" xmi:id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/GroupVisualElement" name="votesCast" sourceId="_YSQVMFw5Ee6gN-oVBDDIOQ" label="Votes Cast" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
             <icon xmi:id="User/(esm/_YSQVMFw5Ee6gN-oVBDDIOQ)/VisualElementIcon" name="votesCast::Icon" iconName="vote-outline"/>
-            <children xsi:type="ui:Table" xmi:id="User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldRelationDefinedTable" name="votedVoteDefinitions" sourceId="_4zT40BcfEfC6AsuNlfsw6w" label="VotedVoteDefinitions" fit="LOOSE" col="12.0" disabled="true" isInCard="true" dataElement="User/(esm/_b7DUEBcfEfC6AsuNlfsw6w)/RelationType" crudOperationsDisplayed="1" relationName="votedVoteDefinitions" selectorRowsPerPage="20" representationComponent="CARD">
-              <icon xmi:id="User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldTableIcon" name="votedVoteDefinitions::Icon" iconName="table_rows"/>
+            <children xsi:type="ui:Table" xmi:id="User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldRelationDefinedTable" name="votedVoteDefinitions" sourceId="_4zT40BcfEfC6AsuNlfsw6w" label="" fit="LOOSE" col="12.0" disabled="true" isInCard="true" customImplementation="true" dataElement="User/(esm/_b7DUEBcfEfC6AsuNlfsw6w)/RelationType" crudOperationsDisplayed="1" relationName="votedVoteDefinitions" selectorRowsPerPage="20" representationComponent="CARD">
               <columns xmi:id="User/(esm/_4zVG8BcfEfC6AsuNlfsw6w)/TableColumn/(discriminator/User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldRelationDefinedTable)" name="title" label="Title" col="2.0" format="%s" attributeType="User/(esm/_-gbxYH4XEe2cB7_PsKXsHQ)/AttributeType"/>
               <columns xmi:id="User/(esm/_4zYKQBcfEfC6AsuNlfsw6w)/TableColumn/(discriminator/User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_-gmwgH4XEe2cB7_PsKXsHQ)/AttributeType"/>
               <columns xmi:id="User/(esm/_4zZYYBcfEfC6AsuNlfsw6w)/TableColumn/(discriminator/User/(esm/_4zT40BcfEfC6AsuNlfsw6w)/TabularReferenceFieldRelationDefinedTable)" name="description" label="Description" col="2.0" format="%s" attributeType="User/(esm/_-gyWsH4XEe2cB7_PsKXsHQ)/AttributeType"/>
@@ -9763,6 +9729,7 @@
   </pageContainers>
   <pageContainers xmi:id="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewPageContainer" name="service::Issue::Issue_View_Edit" label="Issue" dataElement="User/(esm/_qCREY2ksEe25ONJ3V89cVA)/ClassType" titleAttribute="User/(esm/_eaGVoIewEe2kLcMqsIbMgQ)/AttributeType" titleFrom="ATTRIBUTE" onInit="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewRefreshActionDefinition" type="VIEW" generateVisualPropertiesHook="true">
     <children xsi:type="ui:Flex" xmi:id="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/TransferObjectViewVisualElement" name="Issue_View_Edit" sourceId="_qCa1YGksEe25ONJ3V89cVA" col="12.0" stretch="BOTH" direction="VERTICAL" mainAxisAlignment="START">
+      <icon xmi:id="User/(esm/_qCa1YGksEe25ONJ3V89cVA)/ContainerVisualElementIcon" name="Issue_View_Edit::Icon" iconName="wechat"/>
       <children xsi:type="ui:Flex" xmi:id="User/(esm/_ZAHfwFxEEe6ma86ynyYZNw)/GroupVisualElement" name="page-actions" sourceId="_ZAHfwFxEEe6ma86ynyYZNw" fit="LOOSE" col="12.0" mainAxisAlignment="START">
         <children xsi:type="ui:ButtonGroup" xmi:id="User/(esm/_4rfAUFx7Ee6ma86ynyYZNw)/ButtonGroupVisualElement" name="PageActionButtons" label="" fit="LOOSE" col="12.0" featuredActions="10"/>
       </children>
@@ -11337,6 +11304,9 @@
             <refreshActionDefinition xsi:type="ui:RefreshActionDefinition" xmi:id="User/(esm/_fOODEHz5Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkRefreshActionDefinition" name="service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::Refresh" sourceId="_fOODEHz5Ee6Q9LyUVjs1Qw" isContainedRelationAction="true"/>
             <autocompleteSetActionDefinition xsi:type="ui:AutocompleteSetActionDefinition" xmi:id="User/(esm/_fOODEHz5Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkAutocompleteSetActionDefinition" name="service::RatingVoteDefinition::RatingVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::AutocompleteSet" sourceId="_fOODEHz5Ee6Q9LyUVjs1Qw" targetType="User/(esm/_p1aUIGksEe25ONJ3V89cVA)/ClassType" isContainedRelationAction="true"/>
           </children>
+          <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_UQH3cBmKEfC6AsuNlfsw6w)/BooleanTypeCheckbox" name="secret" sourceId="_UQH3cBmKEfC6AsuNlfsw6w" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_6VAZQBmJEfC6AsuNlfsw6w)/AttributeType">
+            <icon xmi:id="User/(esm/_UQH3cBmKEfC6AsuNlfsw6w)/VisualElementIcon" name="secret::Icon" iconName="toggle-switch"/>
+          </children>
           <children xsi:type="ui:TextArea" xmi:id="User/(esm/_NHnI01soEe6Mx9dH3yj5gQ)/StringTypeTextArea" name="description" sourceId="_NHnI01soEe6Mx9dH3yj5gQ" label="Description" fit="LOOSE" col="12.0" row="4.0" isInCard="true" attributeType="User/(esm/_-enzgH4XEe2cB7_PsKXsHQ)/AttributeType">
             <icon xmi:id="User/(esm/_NHnI01soEe6Mx9dH3yj5gQ)/VisualElementIcon" name="description::Icon" iconName="text_fields"/>
           </children>
@@ -11349,7 +11319,7 @@
         </children>
         <frame xmi:id="User/(esm/_NHnIwFsoEe6Mx9dH3yj5gQ)/GroupFrame"/>
       </children>
-      <children xsi:type="ui:Flex" xmi:id="User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_NHnv2VsoEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
+      <children xsi:type="ui:Flex" xmi:id="User/(esm/_NHnv2VsoEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_NHnv2VsoEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" hiddenBy="User/(esm/_6VAZQBmJEfC6AsuNlfsw6w)/AttributeType" enabledBy="User/(esm/_6UifMBmJEfC6AsuNlfsw6w)/AttributeType" mainAxisAlignment="START">
         <children xsi:type="ui:Table" xmi:id="User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable" name="voteEntries" sourceId="_NHnv2lsoEe6Mx9dH3yj5gQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_tgVq8FslEe6Mx9dH3yj5gQ)/RelationType" crudOperationsDisplayed="1" relationName="voteEntries" selectorRowsPerPage="10">
           <columns xmi:id="User/(esm/_DsAPsFuFEe6T042_LMmSdQ)/TableColumn/(discriminator/User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_ZCtwMFslEe6Mx9dH3yj5gQ)/AttributeType"/>
           <columns xmi:id="User/(esm/_DsAPsVuFEe6T042_LMmSdQ)/TableColumn/(discriminator/User/(esm/_NHnv2lsoEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="createdBy" label="CreatedBy" col="2.0" format="%s" attributeType="User/(esm/_rNZX8FslEe6Mx9dH3yj5gQ)/AttributeType"/>
@@ -11647,6 +11617,9 @@
             <refreshActionDefinition xsi:type="ui:RefreshActionDefinition" xmi:id="User/(esm/_EKuyIHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkRefreshActionDefinition" name="service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::Refresh" sourceId="_EKuyIHz6Ee6Q9LyUVjs1Qw" isContainedRelationAction="true"/>
             <autocompleteSetActionDefinition xsi:type="ui:AutocompleteSetActionDefinition" xmi:id="User/(esm/_EKuyIHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkAutocompleteSetActionDefinition" name="service::SelectAnswerVoteDefinition::SelectAnswerVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::AutocompleteSet" sourceId="_EKuyIHz6Ee6Q9LyUVjs1Qw" targetType="User/(esm/_p1aUIGksEe25ONJ3V89cVA)/ClassType" isContainedRelationAction="true"/>
           </children>
+          <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_vvYo8BmKEfCiCbNmfGbzqA)/BooleanTypeCheckbox" name="secret" sourceId="_vvYo8BmKEfCiCbNmfGbzqA" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_D-mJsBmKEfC6AsuNlfsw6w)/AttributeType">
+            <icon xmi:id="User/(esm/_vvYo8BmKEfCiCbNmfGbzqA)/VisualElementIcon" name="secret::Icon" iconName="toggle-switch"/>
+          </children>
           <children xsi:type="ui:TextArea" xmi:id="User/(esm/_0SJL01tuEe6Mx9dH3yj5gQ)/StringTypeTextArea" name="description" sourceId="_0SJL01tuEe6Mx9dH3yj5gQ" label="Description" fit="LOOSE" col="12.0" row="4.0" isInCard="true" attributeType="User/(esm/_-c0csH4XEe2cB7_PsKXsHQ)/AttributeType">
             <icon xmi:id="User/(esm/_0SJL01tuEe6Mx9dH3yj5gQ)/VisualElementIcon" name="description::Icon" iconName="text_fields"/>
           </children>
@@ -11700,8 +11673,8 @@
         </children>
         <frame xmi:id="User/(esm/_0SJLwFtuEe6Mx9dH3yj5gQ)/GroupFrame"/>
       </children>
-      <children xsi:type="ui:Flex" xmi:id="User/(esm/_0SJy2FtuEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_0SJy2FtuEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
-        <children xsi:type="ui:Table" xmi:id="User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable" name="voteEntries" sourceId="_0SJy2VtuEe6Mx9dH3yj5gQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_AXx6IFtqEe6Mx9dH3yj5gQ)/RelationType" crudOperationsDisplayed="1" relationName="voteEntries" selectorRowsPerPage="10">
+      <children xsi:type="ui:Flex" xmi:id="User/(esm/_0SJy2FtuEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_0SJy2FtuEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" hiddenBy="User/(esm/_D-mJsBmKEfC6AsuNlfsw6w)/AttributeType" enabledBy="User/(esm/_D-DXIBmKEfC6AsuNlfsw6w)/AttributeType" mainAxisAlignment="START">
+        <children xsi:type="ui:Table" xmi:id="User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable" name="voteEntries" sourceId="_0SJy2VtuEe6Mx9dH3yj5gQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" hiddenBy="User/(esm/_D-mJsBmKEfC6AsuNlfsw6w)/AttributeType" enabledBy="User/(esm/_D-DXIBmKEfC6AsuNlfsw6w)/AttributeType" dataElement="User/(esm/_AXx6IFtqEe6Mx9dH3yj5gQ)/RelationType" crudOperationsDisplayed="1" relationName="voteEntries" selectorRowsPerPage="10">
           <columns xmi:id="User/(esm/_0SJy2ltuEe6Mx9dH3yj5gQ)/TableColumn/(discriminator/User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_ZameYFtqEe6Mx9dH3yj5gQ)/AttributeType"/>
           <columns xmi:id="User/(esm/_0SJy21tuEe6Mx9dH3yj5gQ)/TableColumn/(discriminator/User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="createdBy" label="CreatedBy" col="2.0" format="%s" attributeType="User/(esm/_ZaqIwFtqEe6Mx9dH3yj5gQ)/AttributeType"/>
           <columns xmi:id="User/(esm/_iUuHcFtvEe6Mx9dH3yj5gQ)/TableColumn/(discriminator/User/(esm/_0SJy2VtuEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="valueRepresentation" label="ValueRepresentation" col="2.0" format="%s" attributeType="User/(esm/_R5Td4FtvEe6Mx9dH3yj5gQ)/AttributeType"/>
@@ -12502,12 +12475,13 @@
   </pageContainers>
   <pageContainers xmi:id="User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewPageContainer" name="service::UserIssues::UserIssues_View_Edit" label="UserIssues View / Edit" dataElement="User/(esm/_jK5OoFq4Ee6_67aMO2jOsw)/ClassType" onInit="User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewRefreshActionDefinition" type="VIEW" generateVisualPropertiesHook="true">
     <children xsi:type="ui:Flex" xmi:id="User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/TransferObjectViewVisualElement" name="UserIssues_View_Edit" sourceId="_jK51wFq4Ee6_67aMO2jOsw" col="12.0" stretch="BOTH" direction="VERTICAL" mainAxisAlignment="START">
+      <icon xmi:id="User/(esm/_jK51wFq4Ee6_67aMO2jOsw)/ContainerVisualElementIcon" name="UserIssues_View_Edit::Icon" iconName="wechat"/>
       <children xsi:type="ui:Flex" xmi:id="User/(esm/_AMMw8FrVEe6gN-oVBDDIOQ)/GroupVisualElement" name="root" sourceId="_AMMw8FrVEe6gN-oVBDDIOQ" fit="LOOSE" col="12.0" mainAxisAlignment="START">
         <children xsi:type="ui:TabController" xmi:id="User/(esm/_MLBlUFrTEe6_67aMO2jOsw)/TabBarVisualElement" name="tabBar" fit="LOOSE" col="12.0" row="20.0">
           <tabs xmi:id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupTab" name="ownedIssuesGroup" sourceId="_jK51xlq4Ee6_67aMO2jOsw">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/GroupVisualElement" name="ownedIssuesGroup" sourceId="_jK51xlq4Ee6_67aMO2jOsw" label="Owned issues" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_jK51xlq4Ee6_67aMO2jOsw)/VisualElementIcon" name="ownedIssuesGroup::Icon" iconName="account-box"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable" name="ownedIssues" sourceId="_h5rm8FrPEe6_67aMO2jOsw" label="" fit="LOOSE" col="12.0" row="10.0" disabled="true" dataElement="User/(esm/_jK5OoVq4Ee6_67aMO2jOsw)/RelationType" crudOperationsDisplayed="1" rowsPerPage="36" relationName="ownedIssues" selectorRowsPerPage="15" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable" name="ownedIssues" sourceId="_h5rm8FrPEe6_67aMO2jOsw" label="" fit="LOOSE" col="12.0" row="10.0" disabled="true" dataElement="User/(esm/_jK5OoVq4Ee6_67aMO2jOsw)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="ownedIssues" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_JF8G4FrXEe6gN-oVBDDIOQ)/TableColumn/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)" name="scope" label="Scope" col="2.0" format="%s" attributeType="User/(esm/_FZ8vYFqtEe6_67aMO2jOsw)/AttributeType"/>
                 <columns xmi:id="User/(esm/_3_u-sVypEe6iZvXMSZbCNQ)/TableColumn/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_DEaFIFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_3_u-sFypEe6iZvXMSZbCNQ)/TableColumn/(discriminator/User/(esm/_h5rm8FrPEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_Lk5fgFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
@@ -12600,7 +12574,7 @@
           <tabs xmi:id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupTab" name="activeGlobalIssues" sourceId="_QrpoIFrkEe6gN-oVBDDIOQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/GroupVisualElement" name="activeGlobalIssues" sourceId="_QrpoIFrkEe6gN-oVBDDIOQ" label="Active global issues" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_QrpoIFrkEe6gN-oVBDDIOQ)/VisualElementIcon" name="activeGlobalIssues::Icon" iconName="earth"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeGobalIssues" sourceId="_ylgcV1rVEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_NM0voFrKEe6_67aMO2jOsw)/RelationType" crudOperationsDisplayed="1" rowsPerPage="36" relationName="activeIssuesGlobal" selectorRowsPerPage="15" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeGobalIssues" sourceId="_ylgcV1rVEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_NM0voFrKEe6_67aMO2jOsw)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeIssuesGlobal" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_KvK6sAgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_Lk5fgFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_KvK6sQgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_DEaFIFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_KvLhwAgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_ylgcV1rVEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_qC-PAGksEe25ONJ3V89cVA)/AttributeType"/>
@@ -12681,7 +12655,7 @@
           <tabs xmi:id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupTab" name="activeIssuesByActivityArea" sourceId="_ylgcVFrVEe6gN-oVBDDIOQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/GroupVisualElement" name="activeIssuesByActivityArea" sourceId="_ylgcVFrVEe6gN-oVBDDIOQ" label="Active issues by my activity areas" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_ylgcVFrVEe6gN-oVBDDIOQ)/VisualElementIcon" name="activeIssuesByActivityArea::Icon" iconName="map-search"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeIssuesInActivity" sourceId="_7CQ7UFrXEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_t7_fsAgmEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="36" relationName="activeIssuesInActivity" selectorRowsPerPage="15" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeIssuesInActivity" sourceId="_7CQ7UFrXEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_t7_fsAgmEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeIssuesInActivity" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_CidX8AgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_Lk5fgFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_Cid_AAgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_DEaFIFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_Cid_AQgoEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_7CQ7UFrXEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_qC-PAGksEe25ONJ3V89cVA)/AttributeType"/>
@@ -12762,7 +12736,7 @@
           <tabs xmi:id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupTab" name="activeIssuesByResidentArea" sourceId="_RR4bUFrcEe6gN-oVBDDIOQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/GroupVisualElement" name="activeIssuesByResidentArea" sourceId="_RR4bUFrcEe6gN-oVBDDIOQ" label="Active issues by my resident area" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_RR4bUFrcEe6gN-oVBDDIOQ)/VisualElementIcon" name="activeIssuesByResidentArea::Icon" iconName="home-circle"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeIssuesInResident" sourceId="_BZzvYVrcEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/__Ew-gAgmEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="36" relationName="activeIssuesInResident" selectorRowsPerPage="15" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable" name="activeIssuesInResident" sourceId="_BZzvYVrcEe6gN-oVBDDIOQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/__Ew-gAgmEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeIssuesInResident" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_i5y2MAgpEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_Lk5fgFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_i5zdQAgpEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_DEaFIFw-Ee6gN-oVBDDIOQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_i50EUAgpEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_BZzvYVrcEe6gN-oVBDDIOQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_qC-PAGksEe25ONJ3V89cVA)/AttributeType"/>
@@ -13238,12 +13212,13 @@
   </pageContainers>
   <pageContainers xmi:id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewPageContainer" name="service::UserVoteDefinition::UserVoteDefinition_View_Edit" label="UserVoteDefinition View / Edit" dataElement="User/(esm/_gTUgsF4-Ee6vsex_cZNQbQ)/ClassType" onInit="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewRefreshActionDefinition" type="VIEW" generateVisualPropertiesHook="true">
     <children xsi:type="ui:Flex" xmi:id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/TransferObjectViewVisualElement" name="UserVoteDefinition_View_Edit" sourceId="_gTanUF4-Ee6vsex_cZNQbQ" col="12.0" stretch="BOTH" direction="VERTICAL" mainAxisAlignment="START">
+      <icon xmi:id="User/(esm/_gTanUF4-Ee6vsex_cZNQbQ)/ContainerVisualElementIcon" name="UserVoteDefinition_View_Edit::Icon" iconName="vote"/>
       <children xsi:type="ui:Flex" xmi:id="User/(esm/_aZHu8F5FEe6vsex_cZNQbQ)/GroupVisualElement" name="root" sourceId="_aZHu8F5FEe6vsex_cZNQbQ" fit="LOOSE" mainAxisAlignment="START">
         <children xsi:type="ui:TabController" xmi:id="User/(esm/_w3mHIF5FEe6vsex_cZNQbQ)/TabBarVisualElement" name="tabBar" fit="LOOSE" col="12.0" row="20.0">
           <tabs xmi:id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupTab" name="OwnedVoteDefinitionsGroup" sourceId="_0O9rkF5FEe6vsex_cZNQbQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/GroupVisualElement" name="OwnedVoteDefinitionsGroup" sourceId="_0O9rkF5FEe6vsex_cZNQbQ" label="Owned Votes" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_0O9rkF5FEe6vsex_cZNQbQ)/VisualElementIcon" name="OwnedVoteDefinitionsGroup::Icon" iconName="account-box"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="ownedVoteDefinitions" sourceId="_GBBigF5HEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_7OZ8MF5AEe6vsex_cZNQbQ)/RelationType" crudOperationsDisplayed="1" relationName="ownedVoteDefinitions" selectorRowsPerPage="10" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="ownedVoteDefinitions" sourceId="_GBBigF5HEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_7OZ8MF5AEe6vsex_cZNQbQ)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="ownedVoteDefinitions" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_ytoJwF5HEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="scope" label="Scope" col="2.0" format="%s" attributeType="User/(esm/_hPs6UF5HEe6vsex_cZNQbQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_GBCwoF5HEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="title" label="Title" col="2.0" format="%s" attributeType="User/(esm/_-gbxYH4XEe2cB7_PsKXsHQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_GBEl015HEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_GBBigF5HEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="voteType" label="VoteType" col="2.0" format="%s" attributeType="User/(esm/_INwnkOR8Ee20cv3f2msZXg)/AttributeType"/>
@@ -13352,7 +13327,7 @@
           <tabs xmi:id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupTab" name="ActiveGlobalVoteDefinitionsGroup" sourceId="_4APk0F5FEe6vsex_cZNQbQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/GroupVisualElement" name="ActiveGlobalVoteDefinitionsGroup" sourceId="_4APk0F5FEe6vsex_cZNQbQ" label="Active Global Votes" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_4APk0F5FEe6vsex_cZNQbQ)/VisualElementIcon" name="ActiveGlobalVoteDefinitionsGroup::Icon" iconName="earth"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsGlobal" sourceId="_XdUIUF5JEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationType" crudOperationsDisplayed="1" relationName="activeVoteDefinitionsGlobal" selectorRowsPerPage="10" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsGlobal" sourceId="_XdUIUF5JEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_HCMTUF5BEe6vsex_cZNQbQ)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeVoteDefinitionsGlobal" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_XdaO8F5JEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="scope" label="Scope" col="2.0" format="%s" attributeType="User/(esm/_hPs6UF5HEe6vsex_cZNQbQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_XdUvYF5JEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="title" label="Title" col="2.0" format="%s" attributeType="User/(esm/_-gbxYH4XEe2cB7_PsKXsHQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_XdZn4F5JEe6vsex_cZNQbQ)/TableColumn/(discriminator/User/(esm/_XdUIUF5JEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="voteType" label="VoteType" col="2.0" format="%s" attributeType="User/(esm/_INwnkOR8Ee20cv3f2msZXg)/AttributeType"/>
@@ -13449,7 +13424,7 @@
           <tabs xmi:id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupTab" name="ActiveVoteDefinitionsByOwnerActivityArea" sourceId="_8O7y0F5FEe6vsex_cZNQbQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/GroupVisualElement" name="ActiveVoteDefinitionsByOwnerActivityArea" sourceId="_8O7y0F5FEe6vsex_cZNQbQ" label="Active votes bv my activity areas" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/_8O7y0F5FEe6vsex_cZNQbQ)/VisualElementIcon" name="ActiveVoteDefinitionsByOwnerActivityArea::Icon" iconName="map-search"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsInActivity" sourceId="_SV-JIF5LEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_0Jjb4AgrEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" relationName="activeVoteDefinitionsInActivity" selectorRowsPerPage="10" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsInActivity" sourceId="_SV-JIF5LEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_0Jjb4AgrEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeVoteDefinitionsInActivity" selectorRowsPerPage="10" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_QkqxoAgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_BzJ-cF5IEe6vsex_cZNQbQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_QkrYsAgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="closeAt" label="CloseAt" col="2.0" format="%s" attributeType="User/(esm/_-hI8AH4XEe2cB7_PsKXsHQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_QkrYsQgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_SV-JIF5LEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_BxETwF5IEe6vsex_cZNQbQ)/AttributeType"/>
@@ -13546,7 +13521,7 @@
           <tabs xmi:id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupTab" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" sourceId="__3U10F5FEe6vsex_cZNQbQ">
             <element xsi:type="ui:Flex" xmi:id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/GroupVisualElement" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup" sourceId="__3U10F5FEe6vsex_cZNQbQ" label="Active votes by my resident area" fit="LOOSE" col="12.0" row="20.0" mainAxisAlignment="START">
               <icon xmi:id="User/(esm/__3U10F5FEe6vsex_cZNQbQ)/VisualElementIcon" name="ActiveVoteDefinitionsByOwnerResidentAreaGroup::Icon" iconName="castle"/>
-              <children xsi:type="ui:Table" xmi:id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsInResident" sourceId="_fhZzMF5MEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_ooo9cAgrEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" relationName="activeVoteDefinitionsInResident" selectorRowsPerPage="10" representationComponent="CARD">
+              <children xsi:type="ui:Table" xmi:id="User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable" name="activeVoteDefinitionsInResident" sourceId="_fhZzMF5MEe6vsex_cZNQbQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_ooo9cAgrEfC37oc_cfa43g)/RelationType" crudOperationsDisplayed="1" rowsPerPage="30" relationName="activeVoteDefinitionsInResident" selectorRowsPerPage="20" representationComponent="CARD">
                 <columns xmi:id="User/(esm/_V2w9YAgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="cityRepresentation" label="CityRepresentation" col="2.0" format="%s" attributeType="User/(esm/_BzJ-cF5IEe6vsex_cZNQbQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_V2xkcAgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="closeAt" label="CloseAt" col="2.0" format="%s" attributeType="User/(esm/_-hI8AH4XEe2cB7_PsKXsHQ)/AttributeType"/>
                 <columns xmi:id="User/(esm/_V2yLgAgsEfC37oc_cfa43g)/TableColumn/(discriminator/User/(esm/_fhZzMF5MEe6vsex_cZNQbQ)/TabularReferenceFieldRelationDefinedTable)" name="countyRepresentation" label="CountyRepresentation" col="2.0" format="%s" attributeType="User/(esm/_BxETwF5IEe6vsex_cZNQbQ)/AttributeType"/>
@@ -13831,6 +13806,9 @@
         </children>
         <children xsi:type="ui:DateTimeInput" xmi:id="User/(esm/_T5a18I4jEe29qs15q2b6yw)/TimestampTypeDateTimeInput" name="created" sourceId="_T5a18I4jEe29qs15q2b6yw" label="Created" fit="LOOSE" isInCard="true" attributeType="User/(esm/_-gmwgH4XEe2cB7_PsKXsHQ)/AttributeType">
           <icon xmi:id="User/(esm/_T5a18I4jEe29qs15q2b6yw)/VisualElementIcon" name="created::Icon" iconName="schedule"/>
+        </children>
+        <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_wbJNoBmIEfC6AsuNlfsw6w)/BooleanTypeCheckbox" name="secret" sourceId="_wbJNoBmIEfC6AsuNlfsw6w" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_e-E50BmIEfC6AsuNlfsw6w)/AttributeType">
+          <icon xmi:id="User/(esm/_wbJNoBmIEfC6AsuNlfsw6w)/VisualElementIcon" name="secret::Icon" iconName="toggle-switch"/>
         </children>
         <children xsi:type="ui:TextArea" xmi:id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/StringTypeTextArea" name="description" sourceId="_T5jY0I4jEe29qs15q2b6yw" label="Description" fit="LOOSE" col="12.0" row="4.0" isInCard="true" attributeType="User/(esm/_-gyWsH4XEe2cB7_PsKXsHQ)/AttributeType">
           <icon xmi:id="User/(esm/_T5jY0I4jEe29qs15q2b6yw)/VisualElementIcon" name="description::Icon" iconName="text_fields"/>
@@ -14149,13 +14127,16 @@
             <refreshActionDefinition xsi:type="ui:RefreshActionDefinition" xmi:id="User/(esm/_hxteEHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkRefreshActionDefinition" name="service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::Refresh" sourceId="_hxteEHz6Ee6Q9LyUVjs1Qw" isContainedRelationAction="true"/>
             <autocompleteSetActionDefinition xsi:type="ui:AutocompleteSetActionDefinition" xmi:id="User/(esm/_hxteEHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkAutocompleteSetActionDefinition" name="service::YesNoAbstainVoteDefinition::YesNoAbstainVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::AutocompleteSet" sourceId="_hxteEHz6Ee6Q9LyUVjs1Qw" targetType="User/(esm/_p1aUIGksEe25ONJ3V89cVA)/ClassType" isContainedRelationAction="true"/>
           </children>
+          <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_CU4kcBmLEfCiCbNmfGbzqA)/BooleanTypeCheckbox" name="secret" sourceId="_CU4kcBmLEfCiCbNmfGbzqA" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_O9HFsBmKEfC6AsuNlfsw6w)/AttributeType">
+            <icon xmi:id="User/(esm/_CU4kcBmLEfCiCbNmfGbzqA)/VisualElementIcon" name="secret::Icon" iconName="toggle-switch"/>
+          </children>
           <children xsi:type="ui:TextArea" xmi:id="User/(esm/_7M-IM1snEe6Mx9dH3yj5gQ)/StringTypeTextArea" name="description" sourceId="_7M-IM1snEe6Mx9dH3yj5gQ" label="Description" fit="LOOSE" col="12.0" row="4.0" isInCard="true" attributeType="User/(esm/_-bdx0H4XEe2cB7_PsKXsHQ)/AttributeType">
             <icon xmi:id="User/(esm/_7M-IM1snEe6Mx9dH3yj5gQ)/VisualElementIcon" name="description::Icon" iconName="text_fields"/>
           </children>
         </children>
         <frame xmi:id="User/(esm/_7M-IIFsnEe6Mx9dH3yj5gQ)/GroupFrame"/>
       </children>
-      <children xsi:type="ui:Flex" xmi:id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_7M-IPVsnEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
+      <children xsi:type="ui:Flex" xmi:id="User/(esm/_7M-IPVsnEe6Mx9dH3yj5gQ)/GroupVisualElement" name="entries" sourceId="_7M-IPVsnEe6Mx9dH3yj5gQ" label="Entries" fit="LOOSE" col="12.0" row="10.0" hiddenBy="User/(esm/_O9HFsBmKEfC6AsuNlfsw6w)/AttributeType" enabledBy="User/(esm/_O8ezkBmKEfC6AsuNlfsw6w)/AttributeType" mainAxisAlignment="START">
         <children xsi:type="ui:Table" xmi:id="User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable" name="voteEntries" sourceId="_7M-IPlsnEe6Mx9dH3yj5gQ" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_-O5k4FsjEe6Mx9dH3yj5gQ)/RelationType" crudOperationsDisplayed="1" relationName="voteEntries" selectorRowsPerPage="10">
           <columns xmi:id="User/(esm/_7M-IP1snEe6Mx9dH3yj5gQ)/TableColumn/(discriminator/User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="value" label="Value" col="2.0" format="%s" attributeType="User/(esm/_U_YIgFsjEe6Mx9dH3yj5gQ)/AttributeType"/>
           <columns xmi:id="User/(esm/_7M-IQFsnEe6Mx9dH3yj5gQ)/TableColumn/(discriminator/User/(esm/_7M-IPlsnEe6Mx9dH3yj5gQ)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_U_NwcFsjEe6Mx9dH3yj5gQ)/AttributeType"/>
@@ -14455,13 +14436,16 @@
             <refreshActionDefinition xsi:type="ui:RefreshActionDefinition" xmi:id="User/(esm/_UUiHQHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkRefreshActionDefinition" name="service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::Refresh" sourceId="_UUiHQHz6Ee6Q9LyUVjs1Qw" isContainedRelationAction="true"/>
             <autocompleteSetActionDefinition xsi:type="ui:AutocompleteSetActionDefinition" xmi:id="User/(esm/_UUiHQHz6Ee6Q9LyUVjs1Qw)/TabularReferenceFieldLinkAutocompleteSetActionDefinition" name="service::YesNoVoteDefinition::YesNoVoteDefinition_View_Edit::VoteEntryBase::virtual::owner::AutocompleteSet" sourceId="_UUiHQHz6Ee6Q9LyUVjs1Qw" targetType="User/(esm/_p1aUIGksEe25ONJ3V89cVA)/ClassType" isContainedRelationAction="true"/>
           </children>
+          <children xsi:type="ui:Checkbox" xmi:id="User/(esm/_3XwIgBmKEfCiCbNmfGbzqA)/BooleanTypeCheckbox" name="secret" sourceId="_3XwIgBmKEfCiCbNmfGbzqA" label="Secret vote" fit="LOOSE" isInCard="true" attributeType="User/(esm/_JzOawBmKEfC6AsuNlfsw6w)/AttributeType">
+            <icon xmi:id="User/(esm/_3XwIgBmKEfCiCbNmfGbzqA)/VisualElementIcon" name="secret::Icon" iconName="toggle-switch"/>
+          </children>
           <children xsi:type="ui:TextArea" xmi:id="User/(esm/_ULRSGloSEe6_67aMO2jOsw)/StringTypeTextArea" name="description" sourceId="_ULRSGloSEe6_67aMO2jOsw" label="Description" fit="LOOSE" col="12.0" row="4.0" isInCard="true" attributeType="User/(esm/_-aKKQH4XEe2cB7_PsKXsHQ)/AttributeType">
             <icon xmi:id="User/(esm/_ULRSGloSEe6_67aMO2jOsw)/VisualElementIcon" name="description::Icon" iconName="text_fields"/>
           </children>
         </children>
         <frame xmi:id="User/(esm/_ULRSEFoSEe6_67aMO2jOsw)/GroupFrame"/>
       </children>
-      <children xsi:type="ui:Flex" xmi:id="User/(esm/_a8b9sFovEe6_67aMO2jOsw)/GroupVisualElement" name="entries" sourceId="_a8b9sFovEe6_67aMO2jOsw" label="Entries" fit="LOOSE" col="12.0" row="10.0" mainAxisAlignment="START">
+      <children xsi:type="ui:Flex" xmi:id="User/(esm/_a8b9sFovEe6_67aMO2jOsw)/GroupVisualElement" name="entries" sourceId="_a8b9sFovEe6_67aMO2jOsw" label="Entries" fit="LOOSE" col="12.0" row="10.0" hiddenBy="User/(esm/_JzOawBmKEfC6AsuNlfsw6w)/AttributeType" enabledBy="User/(esm/_Jyok4BmKEfC6AsuNlfsw6w)/AttributeType" mainAxisAlignment="START">
         <children xsi:type="ui:Table" xmi:id="User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable" name="voteEntries" sourceId="_jimiQFovEe6_67aMO2jOsw" label="" fit="LOOSE" col="12.0" row="20.0" disabled="true" dataElement="User/(esm/_j_gXIFojEe6_67aMO2jOsw)/RelationType" crudOperationsDisplayed="1" relationName="voteEntries" selectorRowsPerPage="10">
           <columns xmi:id="User/(esm/_jinwYFovEe6_67aMO2jOsw)/TableColumn/(discriminator/User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)" name="value" label="Value" col="2.0" format="%s" attributeType="User/(esm/_TpQW4FoiEe6_67aMO2jOsw)/AttributeType"/>
           <columns xmi:id="User/(esm/_jinJUFovEe6_67aMO2jOsw)/TableColumn/(discriminator/User/(esm/_jimiQFovEe6_67aMO2jOsw)/TabularReferenceFieldRelationDefinedTable)" name="created" label="Created" col="2.0" format="%s" attributeType="User/(esm/_TpDikFoiEe6_67aMO2jOsw)/AttributeType"/>

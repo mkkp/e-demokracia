@@ -1,12 +1,8 @@
 import type { BundleContext } from '@pandino/pandino-api';
-import { useMemo } from 'react';
 import { useJudoNavigation } from '~/components';
 import { SERVICE_CREATE_ISSUE_INPUT_CREATE_ISSUE_INPUT_FORM_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/customization';
 import type { ServiceCreateIssueInputCreateIssueInput_FormContainerHook } from '~/containers/Service/CreateIssueInput/CreateIssueInput_Form/customization';
-import { navigateToIssue, setIssueScopeForCreateIssue } from '~/custom/services/issueService';
-import { ServiceIssueStored } from '~/services/data-api/model/ServiceIssue';
-import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
-import { UserServiceForIssuesImpl } from '~/services/data-axios/UserServiceForIssuesImpl';
+import { setIssueScopeForCreateIssue } from '~/custom/services/issueService';
 
 /**
  * XMIID: User/(esm/_oCqSgIeIEe2kLcMqsIbMgQ)/TransferObjectFormPageContainer
@@ -26,20 +22,10 @@ const serviceCreateIssueInputCreateIssueInput_FormActionsHook: ServiceCreateIssu
   (data, editMode, storeDiff) => {
     // call other hooks here
     const { navigate } = useJudoNavigation();
-    const userServiceForIssuesImpl = useMemo(() => new UserServiceForIssuesImpl(judoAxiosProvider), []);
 
     return {
       onIsseScopeBlurAction(data, storeDiff, editMode, submit) {
         setIssueScopeForCreateIssue(data, storeDiff);
-      },
-
-      postCreateIssueForUserIssuesAction: async (
-        output: ServiceIssueStored,
-        onSubmit: (result?: ServiceIssueStored) => Promise<void>,
-        onClose: () => Promise<void>,
-      ) => {
-        await onClose();
-        navigateToIssue(output, userServiceForIssuesImpl, navigate);
       },
     };
   };

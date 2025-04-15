@@ -89,7 +89,7 @@ const ServiceDashboardDashboard_View_EditFavoriteVoteDefinitionsComponentCard: F
       <VoteDefinitionCard
         row={row}
         onRowClick={onRowClick}
-        revokeVote={undefined}
+        revokeVote={actions.favoriteVoteDefinitionsRevokeVoteForVoteDefinitionAction}
         voteRatingAction={actions.favoriteVoteDefinitionsVoteRatingAction}
         voteSelectAnswerAction={actions.favoriteVoteDefinitionsVoteSelectAnswerAction}
         voteYesNoAction={actions.favoriteVoteDefinitionsVoteYesNoAction}

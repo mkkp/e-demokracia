@@ -213,6 +213,7 @@ public class IssueService {
                                               String voteTitle,
                                               String description,
                                               LocalDateTime closeAt,
+                                              boolean secretVote,
                                               Collection<CloseDebateInputSelectAnswerVoteSelection> selectableAnsers,
                                               Optional<Integer>  rateMinValue,
                                               Optional<Integer>  rateMaxValue,

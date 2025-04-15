@@ -1,6 +1,7 @@
 import type { BundleContext } from '@pandino/pandino-api';
 import { SERVICE_USER_VOTE_DEFINITION_USER_VOTE_DEFINITION_VIEW_EDIT_CONTAINER_ACTIONS_HOOK_INTERFACE_KEY } from '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/customization';
 import type { ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook } from '~/containers/Service/UserVoteDefinition/UserVoteDefinition_View_Edit/customization';
+import { getExtraVoteDefinitionlMask } from '~/custom/services/customUserVoteDefinitionMask';
 import { openVoteDefinitionPage } from '~/custom/services/openVoteDefinitionRowFunction';
 
 /**
@@ -20,6 +21,10 @@ export function registerServiceUserVoteDefinitionUserVoteDefinition_View_EditAct
 const serviceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook: ServiceUserVoteDefinitionUserVoteDefinition_View_EditContainerHook =
   (data, editMode, storeDiff) => {
     return {
+      getOwnedVoteDefinitionsMask: getExtraVoteDefinitionlMask,
+      getActiveVoteDefinitionsGlobalMask: getExtraVoteDefinitionlMask,
+      getActiveVoteDefinitionsInResidentMask: getExtraVoteDefinitionlMask,
+      getActiveVoteDefinitionsInActivityMask: getExtraVoteDefinitionlMask,
       ownedVoteDefinitionsOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsGlobalOpenPageAction: openVoteDefinitionPage(),
       activeVoteDefinitionsInResidentCityOpenPageAction: openVoteDefinitionPage(),
