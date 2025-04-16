@@ -85,7 +85,7 @@ const ServiceUserVoteDefinitionUserVoteDefinition_View_EditOwnedVoteDefinitionsC
   // Every custom Card component MUST be wrapped in a `<Grid item` with the appropriate `sm`, `md`, etc... values so that
   // elements are handled properly on all devices.
   return (
-    <Grid item sm={12} md={6} lg={4} xl={4}>
+    <Grid item sm={12} md={6} lg={4} xl={4} sx={{ width: 1 }}>
       <VoteDefinitionCard
         row={row}
         onRowClick={onRowClick}

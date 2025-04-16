@@ -107,8 +107,9 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           variant="overline"
           component="div"
           sx={{
+            fontSize: '0.6rem',
             letterSpacing: 0,
-            fontWeight: 500,
+            fontWeight: 700,
             color: { ribbonColor },
           }}
         >

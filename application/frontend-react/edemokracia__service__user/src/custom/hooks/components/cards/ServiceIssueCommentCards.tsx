@@ -29,7 +29,7 @@ export const CommentsCardsComponentCardsContainerConfigHook: ServiceIssueIssue_V
   () => {
     return {
       //      ToolbarElement: CustomToolbar,
-      CardElement: conCard,
+      CardElement: comment,
     };
   };
 
@@ -71,7 +71,7 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceComme
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={12} md={6} lg={4} xl={4} sx={{ width: 1 }}>
         <Card>
           <CardContent>
             <CardsFilter filterDefinitions={filterDefs} onFiltersChanged={onFiltersChanged} />
@@ -82,9 +82,9 @@ function CustomToolbar({ handleFiltersChange }: ToolbarElementProps<ServiceComme
   );
 }
 
-function conCard({ row, columns, onRowClick }: CardProps<ServiceCommentStored, any>) {
+function comment({ row, columns, onRowClick }: CardProps<ServiceCommentStored, any>) {
   return (
-    <Grid item sm={12} md={6} lg={4} xl={4}>
+    <Grid item xs={12} sm={12} md={6} lg={4} xl={4} sx={{ width: 1 }}>
       <CommentCard
         row={row}
         onRowClick={onRowClick}

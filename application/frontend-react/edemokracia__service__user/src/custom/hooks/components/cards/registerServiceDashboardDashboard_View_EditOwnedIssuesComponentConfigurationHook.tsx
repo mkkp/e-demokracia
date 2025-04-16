@@ -82,7 +82,7 @@ const ServiceDashboardDashboard_View_EditOwnedIssuesComponentCard: FC<
   // Every custom Card component MUST be wrapped in a `<Grid item` with the appropriate `sm`, `md`, etc... values so that
   // elements are handled properly on all devices.
   return (
-    <Grid item sm={12} md={12} lg={6} xl={6}>
+    <Grid item sm={12} md={12} lg={6} xl={6} sx={{ width: 1 }}>
       <IssueCard row={row} onRowClick={onRowClick}></IssueCard>
     </Grid>
   );

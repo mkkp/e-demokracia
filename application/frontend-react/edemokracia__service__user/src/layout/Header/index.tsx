@@ -17,26 +17,18 @@ import { useMemo } from 'react';
 import { MdiIcon } from '~/components';
 import { DRAWER_WIDTH, MenuOrientation, ThemeMode } from '~/config';
 import { useConfig } from '~/hooks';
-import { AppBarDrwawerIconButtonStyled, AppBarStyled } from './AppBarStyled';
-import { HeaderContent } from './HeaderContent';
+import { AppBarStyled } from '~/layout/Header/AppBarStyled';
+import { HeaderContent } from '~/layout/Header/HeaderContent';
 
 export const Header = () => {
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
 
-  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
+  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL; // && !downLG;
 
   const headerContent = useMemo(() => <HeaderContent />, []);
 
-  const iconBackColorOpen = theme.palette.mode === ThemeMode.DARK ? 'grey.200' : 'grey.300';
-  const iconBackColor = theme.palette.mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
-
-  {
-    /* PATCH: BEGIN */
-  }
-  {
-    /*
   const mainHeader: ReactNode = (
     <Toolbar>
       {!isHorizontal ? (
@@ -47,25 +39,6 @@ export const Header = () => {
       {headerContent}
     </Toolbar>
   );
-  */
-  }
-  const mainHeader: ReactNode = (
-    <Toolbar>
-      {!isHorizontal ? (
-        <AppBarDrwawerIconButtonStyled
-          aria-label="open drawer"
-          color="success"
-          onClick={() => onChangeMiniDrawer(!miniDrawer)}
-        >
-          {!miniDrawer ? <MdiIcon path="menu-open" /> : <MdiIcon path="menu" />}
-        </AppBarDrwawerIconButtonStyled>
-      ) : null}
-      {headerContent}
-    </Toolbar>
-  );
-  {
-    /* PATCH: END */
-  }
 
   const appBar: AppBarProps = {
     position: 'fixed',
@@ -84,6 +57,10 @@ export const Header = () => {
 
   return (
     <>
+      {/* <AppBarStyled open={!miniDrawer} {...appBar}>
+        {mainHeader}
+      </AppBarStyled> */}
+
       {!downLG ? (
         <AppBarStyled open={!miniDrawer} {...appBar}>
           {mainHeader}

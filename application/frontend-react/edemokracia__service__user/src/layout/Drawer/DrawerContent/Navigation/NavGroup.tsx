@@ -23,10 +23,12 @@ import { useTranslation } from 'react-i18next';
 import { MdiIcon, SimpleBar } from '~/components';
 import { MenuOrientation, SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
 import { useConfig } from '~/hooks';
-import { Transitions } from '../../../Transitions';
-import { NavCollapse } from './NavCollapse';
-import { NavItem } from './NavItem';
-import { NavItemType } from './NavItem';
+import { NavCollapse } from '~/layout/Drawer/DrawerContent/Navigation/NavCollapse';
+import { NavItem } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { NavItemType } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { Transitions } from '~/layout/Transitions';
+import { menuBehaviour } from '~/theme/extras';
+import { useLayoutHelper } from '~/utilities/layout-helper';
 
 type VirtualElement = {
   getBoundingClientRect: () => ClientRect | DOMRect;
@@ -58,8 +60,8 @@ export interface NavGroupProps {
 export const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
-  const downLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const { miniDrawer, onChangeMiniDrawer } = useConfig();
+  const { downLG, horizontalMenuPresented } = useLayoutHelper();
   const [anchorEl, setAnchorEl] = useState<VirtualElement | (() => VirtualElement) | null | undefined>(null);
   const openMini = Boolean(anchorEl);
 
@@ -85,7 +87,7 @@ export const NavGroup = ({ item }: NavGroupProps) => {
   const items = item.children?.map((menu) => {
     switch (menu.type) {
       case 'collapse':
-        return <NavCollapse key={menu.id} menu={menu} level={1} parentId={item.id!} />;
+        return <NavCollapse key={menu.id} menu={menu} level={1} render={true} arrow={true} />;
       case 'item':
         return <NavItem key={menu.id} item={menu} level={1} />;
       default:
@@ -101,7 +103,7 @@ export const NavGroup = ({ item }: NavGroupProps) => {
 
   return (
     <>
-      {menuOrientation === MenuOrientation.VERTICAL || downLG ? (
+      {!horizontalMenuPresented ? (
         <List
           subheader={
             item.title &&
@@ -137,22 +139,12 @@ export const NavGroup = ({ item }: NavGroupProps) => {
                 bgcolor: 'transparent',
               },
             }}
-            onMouseEnter={handleClick}
+            onMouseEnter={menuBehaviour.mouseOverOpenClose ? handleClick : undefined}
             onClick={handleClick}
-            onMouseLeave={handleClose}
+            onMouseLeave={menuBehaviour.mouseOverOpenClose ? handleClose : undefined}
             aria-describedby={popperId}
           >
             {itemIcon && <ListItemIcon sx={{ minWidth: 28 }}>{itemIcon}</ListItemIcon>}
-
-            {/* PATCH: BEGIN */}
-            {/* <ListItemText
-              sx={{ mr: 1 }}
-              primary={
-                <Typography variant="body1" color={theme.palette.text.primary}>
-                  {t(`menuTree.${item.title}`, { defaultValue: item.title })}
-                </Typography>
-              }
-            /> */}
 
             <ListItemText
               sx={{ mr: 1 }}
@@ -162,7 +154,6 @@ export const NavGroup = ({ item }: NavGroupProps) => {
                 </Typography>
               }
             />
-            {/* PATCH: END */}
 
             <MdiIcon path={openMini ? 'chevron-down' : 'chevron-right'} sx={{ fontSize: 16, stroke: '1.5' }} />
             {anchorEl && (

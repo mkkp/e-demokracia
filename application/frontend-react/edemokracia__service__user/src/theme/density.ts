@@ -26,4 +26,11 @@ export const density: Density = {
   borderRadius: 5,
   dataGridDensity: 'standard',
   isListDense: false,
+  mainMarginTop: 2.2,
+  mainMarginTopXs: 3.3,
+  mainMarginTopSm: 4,
+  mainMarginTopMd: 4,
+  mainMarginTopLg: 4,
+  mainMarginTopXl: 2.4,
+  cardContentPadding: 4,
 };

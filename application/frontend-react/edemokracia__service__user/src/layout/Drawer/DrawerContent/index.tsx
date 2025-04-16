@@ -7,7 +7,7 @@
 // Template file: actor/src/layout/Drawer/DrawerContent/index.tsx.hbs
 
 import { SimpleBar } from '~/components';
-import { Navigation } from './Navigation';
+import { Navigation } from '~/layout/Drawer/DrawerContent/Navigation';
 
 export const DrawerContent = () => {
   return (

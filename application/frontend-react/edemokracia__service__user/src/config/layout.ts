@@ -39,11 +39,13 @@ export type CustomizationProps = {
   container: boolean;
   menuOrientation: MenuOrientation;
   mode: ThemeMode;
+  header: boolean;
   onChangeContainer: VoidFunction;
   onChangeLocalization: (lang: I18n) => void;
   onChangeMode: (mode: ThemeMode) => void;
   onChangeMiniDrawer: (miniDrawer: boolean) => void;
   onChangeMenuOrientation: (menuOrientation: MenuOrientation) => void;
+  onChangeHeader: (header: boolean) => void;
 };
 
 export type LayoutConfigProps = {
@@ -52,6 +54,15 @@ export type LayoutConfigProps = {
   miniDrawer: boolean;
   container: boolean;
   mode: ThemeMode;
+  header: boolean;
+};
+
+export type ScleProps = {
+  scaleXs: number;
+  scaleSm: number;
+  scaleMd: number;
+  scaleLg: number;
+  scaleXl: number;
 };
 
 export const defaultLayoutConfig: LayoutConfigProps = {
@@ -60,4 +71,13 @@ export const defaultLayoutConfig: LayoutConfigProps = {
   miniDrawer: true,
   container: true,
   mode: ThemeMode.LIGHT,
+  header: true,
+};
+
+export const defaultScales: ScleProps = {
+  scaleXs: 0.75,
+  scaleSm: 0.85,
+  scaleMd: 0.9,
+  scaleLg: 0.95,
+  scaleXl: 1.0,
 };

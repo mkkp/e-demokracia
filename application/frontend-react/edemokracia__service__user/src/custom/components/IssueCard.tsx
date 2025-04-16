@@ -76,6 +76,7 @@ export function IssueCard(props: IssueCardProps) {
     <Card
       sx={{
         height: '100%',
+        width: '100%',
         position: 'relative',
         // borderRadius: 4,
         overflow: 'hidden',
@@ -88,8 +89,9 @@ export function IssueCard(props: IssueCardProps) {
           variant="overline"
           component="div"
           sx={{
+            fontSize: '0.6rem',
             letterSpacing: 0,
-            fontWeight: 500,
+            fontWeight: 700,
             color: { ribbonColor },
           }}
         >
@@ -143,7 +145,6 @@ export function IssueCard(props: IssueCardProps) {
           flexDirection: 'column',
           justifyContent: 'flex-end',
           color: 'common.white',
-          p: 4,
           zIndex: 1,
           opacity: 0.9,
           background: `linear-gradient(180deg, transparent 0%,${theme.palette.primary.light} 90%)`,

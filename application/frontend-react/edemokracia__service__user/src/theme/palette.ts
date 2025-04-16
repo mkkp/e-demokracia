@@ -8,7 +8,6 @@
 
 import { createTheme } from '@mui/material/styles';
 // You can add extra imports by overriding the `actor/src/theme/palette.ts.extra-imports.fragment.hbs` file
-import PlusJakarta from '../custom/assets/fonts/PlusJakartaSans-VariableFont_wght.ttf';
 import './index.css';
 
 export const paletteThemeLight = createTheme({
@@ -55,11 +54,11 @@ export const paletteThemeLight = createTheme({
     },
     // You can add extra palette attributes by overriding the `actor/src/theme/palette.ts.extra-palette-attributes.fragment.hbs` file
   },
-  typography: {
-    fontFamily: 'Plus Jakarta Sans',
-    fontSize: 12,
-  },
   // You can add extra theme attributes by overriding the `actor/src/theme/palette.ts.extra-attributes.fragment.hbs` file
+  // typography: {
+  //   fontFamily: 'Plus Jakarta Sans',
+  //   fontSize: 12,
+  // },
 });
 
 // WIP
@@ -67,20 +66,27 @@ export const paletteThemeDark = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#3c4dcc',
+      //main: '#3c4dcc',
+      main: '#840605',
     },
     secondary: {
-      main: '#E7501DFF',
+      //      main: '#E7501DFF',
+      main: '#ff9100',
     },
     text: {
       primary: '#d9d9d9',
-      secondary: '#646464',
+      secondary: '#848484',
     },
     background: {
-      default: '#2a2a2a',
+      default: '#1a1a1a',
+      paper: '#2a2a2a',
     },
     subtitleColor: {
       main: '#8C8C8C',
     },
   },
+  // typography: {
+  //   fontFamily: 'Plus Jakarta Sans',
+  //   fontSize: 12,
+  // },
 });

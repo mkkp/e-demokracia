@@ -1,3 +1,6 @@
 palette.ts
 density.ts
-index.ts
+index.tsx
+typography.ts
+extras.ts
+types.ts
