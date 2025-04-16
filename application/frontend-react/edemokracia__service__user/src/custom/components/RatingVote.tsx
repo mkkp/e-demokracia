@@ -7,8 +7,8 @@ import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVo
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
 
 import { MdiIcon } from '~/components';
-import VoteResultsCard, { AnswerItem } from './VoteResultCard';
 import { RatingVoteResultCard } from './RatingVoteResultCard';
+import VoteResultsCard, { AnswerItem } from './VoteResultCard';
 
 interface RatingVoteProps {
   voteDefinition: ServiceVoteDefinitionStored;
@@ -43,7 +43,7 @@ export function RatingVote(props: RatingVoteProps) {
           revoke={revoke}
           sumOfRating={voteDefinition.sumOfRating ?? 0}
           userValue={voteDefinition.currentUserRatingVoteValue}
-          numberOfVotes={voteDefinition.numberOfVotes ?? 0}    
+          numberOfVotes={voteDefinition.numberOfVotes ?? 0}
         />
       );
     }

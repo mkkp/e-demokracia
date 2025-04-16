@@ -16,7 +16,7 @@ frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/.gitignore,710eed4f483e5fca9516675feb6984fe
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,ab2c0ac7ec748bf75200885e4ba5436a
+frontend-react/pom.xml,e8df5a10392eec276d3335aa7aa503df
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 interceptors/pom.xml,66afee6d70ef0a58fb1773ce203cd374
 interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default,862486f63ef3d7cea68a3253d9dceb3f

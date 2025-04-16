@@ -63,13 +63,13 @@ const serviceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGrou
   }
 
   return (
-        <RatingVoteResultCard
-          voteDefinition={data}
-          vote={vote}
-          revoke={revoke}
-          sumOfRating={data.sumOfRating ?? 0}
-          userValue={data.currentUserVoteValue}
-          numberOfVotes={data.numberOfVotes ?? 0}    
-        />
+    <RatingVoteResultCard
+      voteDefinition={data}
+      vote={vote}
+      revoke={revoke}
+      sumOfRating={data.sumOfRating ?? 0}
+      userValue={data.currentUserVoteValue}
+      numberOfVotes={data.numberOfVotes ?? 0}
+    />
   );
 };

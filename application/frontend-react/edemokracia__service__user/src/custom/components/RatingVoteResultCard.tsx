@@ -6,12 +6,12 @@ import { _StringOperation } from '~/services/data-api/common';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
 
-import { MdiIcon } from '~/components';
-import VoteResultsCard, { AnswerItem } from './VoteResultCard';
-import { ServiceRatingVoteDefinitionStored } from '~/services/data-api/model/ServiceRatingVoteDefinition';
 import internal from 'stream';
+import { MdiIcon } from '~/components';
+import { ServiceRatingVoteDefinitionStored } from '~/services/data-api/model/ServiceRatingVoteDefinition';
+import VoteResultsCard, { AnswerItem } from './VoteResultCard';
 
-export type RatingVoteActionParameterType = ServiceVoteDefinitionStored | ServiceRatingVoteDefinitionStored
+export type RatingVoteActionParameterType = ServiceVoteDefinitionStored | ServiceRatingVoteDefinitionStored;
 
 interface RatingVoteResultCardProps {
   voteDefinition: ServiceVoteDefinitionStored;
@@ -23,7 +23,7 @@ interface RatingVoteResultCardProps {
 }
 
 export function RatingVoteResultCard(props: RatingVoteResultCardProps) {
-  const { voteDefinition, vote, revoke, numberOfVotes, sumOfRating, userValue} = props;
+  const { voteDefinition, vote, revoke, numberOfVotes, sumOfRating, userValue } = props;
   const { t } = useTranslation();
   const { locale } = useL10N();
   const theme = useTheme();
@@ -43,8 +43,7 @@ export function RatingVoteResultCard(props: RatingVoteResultCardProps) {
               padding: 2,
             }}
           >
-            {t('totalVotes', { defaultValue: 'Összesen: ' })}{' '}
-            {numberOfVotes !== 0 && numberOfVotes}
+            {t('totalVotes', { defaultValue: 'Összesen: ' })} {numberOfVotes !== 0 && numberOfVotes}
             {numberOfVotes === 0 && t('noVotes', { defaultValue: 'Nincsen szavazat' })}
           </Typography>
           <Typography
@@ -57,8 +56,7 @@ export function RatingVoteResultCard(props: RatingVoteResultCardProps) {
             }}
           >
             {t('ratingVoteAvarage', { defaultValue: 'Átlag: ' })}{' '}
-            {numberOfVotes !== 0 &&
-              (sumOfRating ?? 0 / (numberOfVotes ?? 1))}
+            {numberOfVotes !== 0 && (sumOfRating ?? 0 / (numberOfVotes ?? 1))}
           </Typography>
 
           <Box

@@ -1828,13 +1828,13 @@
               </components>
               <components xsi:type="ui:DataField" xmi:id="_vvYo8BmKEfCiCbNmfGbzqA" name="secret" label="Secret vote" iconName="toggle-switch" col="4" dataFeature="_D-mJsBmKEfC6AsuNlfsw6w"/>
               <components xsi:type="ui:DataField" xmi:id="_0SJL01tuEe6Mx9dH3yj5gQ" name="description" label="Description" iconName="text_fields" row="4" dataFeature="_-c0csH4XEe2cB7_PsKXsHQ" textMultiLine="true"/>
-              <components xsi:type="ui:TabularReferenceField" xmi:id="_jwqEgFtwEe6Mx9dH3yj5gQ" name="voteSelections" label="VoteSelections" iconName="table_rows" row="4" relationFeature="_-cKskFtqEe6Mx9dH3yj5gQ" representationComponent="table">
+              <components xsi:type="ui:TabularReferenceField" xmi:id="_jwqEgFtwEe6Mx9dH3yj5gQ" name="voteSelections" label="VoteSelections" iconName="table_rows" additionalMaskFeatures="_EXYb4FttEe6Mx9dH3yj5gQ _KJRy0Ag9EfC37oc_cfa43g" row="4" relationFeature="_-cKskFtqEe6Mx9dH3yj5gQ" representationComponent="table">
                 <columns xsi:type="ui:DataColumn" xmi:id="_jwqrkFtwEe6Mx9dH3yj5gQ" name="description" label="Description" iconName="format-size" dataFeature="_EXIkQFttEe6Mx9dH3yj5gQ"/>
                 <columns xsi:type="ui:DataColumn" xmi:id="_jwrSoFtwEe6Mx9dH3yj5gQ" name="title" label="Title" iconName="format-size" dataFeature="_EXYb4FttEe6Mx9dH3yj5gQ"/>
               </components>
             </components>
           </components>
-          <components xsi:type="ui:Group" xmi:id="_0SJy0FtuEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" iconName="order-bool-descending-variant" customImplementation="true" frame="true" col="3" hiddenBy="_ptA9wHr3Ee6bP4FWw7fjQA">
+          <components xsi:type="ui:Group" xmi:id="_0SJy0FtuEe6Mx9dH3yj5gQ" name="userVoteEntryGroup" label="My vote entry" iconName="order-bool-descending-variant" customImplementation="true" frame="true" col="3">
             <components xsi:type="ui:Group" xmi:id="_0SJy0VtuEe6Mx9dH3yj5gQ" name="userVote" label="" hiddenBy="_jNc7sFtuEe6Mx9dH3yj5gQ">
               <components xsi:type="ui:Group" xmi:id="_0SJy0ltuEe6Mx9dH3yj5gQ" name="VirtualForUserVote">
                 <components xsi:type="ui:OperationForm" xmi:id="_0SJy01tuEe6Mx9dH3yj5gQ" name="takeBackVote" label="TakeBackVote" iconName="delete" col="4" enabledBy="_jM_BoFtuEe6Mx9dH3yj5gQ" operation="takeBackVote"/>

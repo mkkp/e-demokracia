@@ -13,10 +13,11 @@ export interface AnswerItem {
   color?: string;
 }
 
-export type VoteActionParameterType = ServiceVoteDefinitionStored 
-    | ServiceSelectAnswerVoteDefinitionStored
-    | ServiceYesNoVoteDefinitionStored
-    | ServiceYesNoAbstainVoteDefinitionStored
+export type VoteActionParameterType =
+  | ServiceVoteDefinitionStored
+  | ServiceSelectAnswerVoteDefinitionStored
+  | ServiceYesNoVoteDefinitionStored
+  | ServiceYesNoAbstainVoteDefinitionStored;
 
 interface VoteResultsCardProps {
   answers: AnswerItem[];
