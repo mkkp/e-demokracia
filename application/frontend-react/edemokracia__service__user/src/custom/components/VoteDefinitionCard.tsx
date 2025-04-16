@@ -16,6 +16,7 @@ import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { VoteStatus } from '~/services/data-api/model/VoteStatus';
+import { RatingVote } from './RatingVote';
 import { SelectableAnswerVote } from './SelectableAnswerVote';
 import { YesNoAbstainVote } from './YesNoAbstainVote';
 import { YesNoVote } from './YesNoVote';
@@ -242,6 +243,7 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           ></SelectableAnswerVote>
           <YesNoAbstainVote voteDefinition={row} vote={voteYesNoAbstainAction} revoke={revokeVote}></YesNoAbstainVote>
           <YesNoVote voteDefinition={row} vote={voteYesNoAction} revoke={revokeVote}></YesNoVote>
+          <RatingVote voteDefinition={row} vote={voteRatingAction} revoke={revokeVote}></RatingVote>
         </Box>
       </CardContent>
       <CardActions

@@ -34,10 +34,19 @@ import { registerServiceDashboardDashboard_View_EditActionsHook } from './hooks/
 import { registerServiceIssueIssue_View_EditActionsHook } from './hooks/containers/registerServiceIssueIssue_View_EditActionsHook';
 import { registerServiceUserIssuesUserIssues_View_EditActionsHook } from './hooks/containers/registerServiceUserIssuesUserIssues_View_EditActionsHook';
 import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook } from './hooks/containers/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook';
+import { registerRatingVoteInputRatingVoteInput_FormValueComponentCustomImplementation } from './hooks/custom-implementations/registerRatingVoteInputRatingVoteInput_FormCustomImplementations';
+import { registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation } from './hooks/custom-implementations/registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditCustomImplementations';
+import { registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputFormActionsHook } from './hooks/dialogs/registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputFormActionsHook';
 import { registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook } from './hooks/dialogs/registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook';
+import { registerServiceUserVoteDefinitionUserVoteDefinition_View_EditVoteRatingInputFormActionsHook } from './hooks/dialogs/registerServiceUserVoteDefinitionUserVoteDefinition_View_EditVoteRatingInputFormActionsHook';
+import { registerServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormActionsHook } from './hooks/dialogs/registerServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormActionsHook';
 import { registerIssuecardSubThemeHook } from './hooks/sub-themes/registerIssuecardSubThemeHook';
 import { registerIssueheaderSubThemeHook } from './hooks/sub-themes/registerIssueheaderSubThemeHook';
+import { registerVoteheaderSubThemeHook } from './hooks/sub-themes/registerVoteheaderSubThemeHook';
 import { ApplicationCustomizer } from './interfaces';
+import { registerServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation } from './hooks/custom-implementations/registerServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditCustomImplementations';
+import { registerServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation } from './hooks/custom-implementations/registerServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditCustomImplementations';
+import { registerServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation } from './hooks/custom-implementations/registerServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditCustomImplementations';
 
 export class DefaultApplicationCustomizer implements ApplicationCustomizer {
   async customize(context: BundleContext): Promise<void> {
@@ -80,5 +89,18 @@ export class DefaultApplicationCustomizer implements ApplicationCustomizer {
     registerServiceDashboardDashboard_View_EditVotedVoteDefinitionsComponentCardsContainerConfig(context);
     registerServiceUserVoteDefinitionUserVoteDefinition_View_EditActionsHook(context);
     registerServiceUserIssuesUserIssues_View_EditCreateIssueInputFormActionsHook(context);
+    registerVoteheaderSubThemeHook(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditVoteRatingInputFormActionsHook(context);
+    registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditVoteInputFormActionsHook(context);
+    registerServiceUserVoteDefinitionUserVoteDefinition_View_EditVoteRatingInputFormActionsHook(context);
+    registerServiceVoteDefinitionVoteDefinition_View_EditVoteRatingInputFormActionsHook(context);
+    registerRatingVoteInputRatingVoteInput_FormValueComponentCustomImplementation(context);
+    registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation(
+      context,
+    );
+    registerServiceRatingVoteDefinitionRatingVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation(context);
+    registerServiceSelectAnswerVoteDefinitionSelectAnswerVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation(context);
+    registerServiceYesNoAbstainVoteDefinitionYesNoAbstainVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation(context);
+    registerServiceYesNoVoteDefinitionYesNoVoteDefinition_View_EditUserVoteEntryGroupComponentCustomImplementation(context);
   }
 }

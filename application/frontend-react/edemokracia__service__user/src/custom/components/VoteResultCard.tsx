@@ -2,7 +2,10 @@ import { Box, Button, Card, CardContent, CardHeader, Chip, Typography, useTheme 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
+import { ServiceSelectAnswerVoteDefinitionStored } from '~/services/data-api/model/ServiceSelectAnswerVoteDefinition';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
+import { ServiceYesNoAbstainVoteDefinitionStored } from '~/services/data-api/model/ServiceYesNoAbstainVoteDefinition';
+import { ServiceYesNoVoteDefinitionStored } from '~/services/data-api/model/ServiceYesNoVoteDefinition';
 
 export interface AnswerItem {
   label: string;
@@ -10,12 +13,17 @@ export interface AnswerItem {
   color?: string;
 }
 
+export type VoteActionParameterType = ServiceVoteDefinitionStored 
+    | ServiceSelectAnswerVoteDefinitionStored
+    | ServiceYesNoVoteDefinitionStored
+    | ServiceYesNoAbstainVoteDefinitionStored
+
 interface VoteResultsCardProps {
   answers: AnswerItem[];
   maxItems?: number;
   voteDefinition: ServiceVoteDefinitionStored;
-  vote?: (row: ServiceVoteDefinitionStored) => Promise<void>;
-  revoke?: (row: ServiceVoteDefinitionStored) => Promise<void>;
+  vote?: (row: VoteActionParameterType) => Promise<void>;
+  revoke?: (row: VoteActionParameterType) => Promise<void>;
   voteValue?: string;
 }
 
