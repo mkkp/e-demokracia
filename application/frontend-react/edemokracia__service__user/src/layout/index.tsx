@@ -18,7 +18,6 @@ import { BottomMenu } from '~/layout/BottomMenu';
 import { Drawer } from '~/layout/Drawer';
 import { Footer } from '~/layout/Footer';
 import { Header } from '~/layout/Header';
-import { density } from '~/theme';
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 export const Layout = () => {

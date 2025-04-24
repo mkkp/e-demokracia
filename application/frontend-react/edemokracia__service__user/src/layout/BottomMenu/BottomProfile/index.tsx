@@ -6,7 +6,7 @@
 // Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
 // Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
 
-import { Divider, Grid, IconButton, List, Popover, THEME_ID, Tooltip } from '@mui/material';
+import { Grid, Popover } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
@@ -18,7 +18,7 @@ import { useTheme } from '@mui/material/styles';
 import { useCallback, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { MdiIcon, useJudoNavigation } from '~/components';
+import { useJudoNavigation } from '~/components';
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, ThemeMode } from '~/config';
 import { useConfig, useHeroProps } from '~/hooks';
 import { ProfilePopup } from '~/layout/ProfilePopup';
