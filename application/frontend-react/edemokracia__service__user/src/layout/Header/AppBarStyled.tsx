@@ -9,8 +9,8 @@
 import { type AppBarProps, IconButton, type IconButtonPropsColorOverrides } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
-import { fontWeight } from '@mui/system';
 import { DRAWER_WIDTH } from '~/config';
+import { appBarExtraStyles } from '~/layout/Header/AppBarExtraStyles';
 
 export interface AppBarStyledProps extends AppBarProps {
   open?: boolean;
@@ -18,15 +18,7 @@ export interface AppBarStyledProps extends AppBarProps {
 
 export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(
   ({ theme, open }) => ({
-    // PATCH BEGIN
-    textTransform: 'uppercase',
-    backgroundColor: theme.palette.primary.main,
-    color: '#ffffff',
-    fontWeight: 'bold',
-    button: {
-      fontWeight: 'bold',
-    },
-    // PATCH END
+    ...(appBarExtraStyles(theme, open)),
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,

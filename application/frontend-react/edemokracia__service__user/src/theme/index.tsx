@@ -105,11 +105,11 @@ const baseTheme = (
               //   },
               // ],
             },
-            outlined: {
-              borderWidth: '3px',
-              borderColor: paletteTheme.palette.primary.light,
-              color: paletteTheme.palette.primary.light,
-            },
+            // outlined: {
+            //   borderWidth: '3px',
+            //   borderColor: paletteTheme.palette.primary.light,
+            //   color: paletteTheme.palette.primary.light,
+            // },
           },
         },
 
@@ -126,8 +126,39 @@ const baseTheme = (
         MuiChip: {
           styleOverrides: {
             root: {
-              height: '28px',
+              [breakpoints.down('sm')]: {
+                height: `${2 * scaleXs}rem`,
+              },
+              [breakpoints.between('sm', 'md')]: {
+                height: `${2 * scaleXs}rem`,
+              },
+              [breakpoints.between('md', 'lg')]: {
+                height: `${2 * scaleXs}rem`,
+              },
+              [breakpoints.between('lg', 'xl')]: {
+                height: `${2 * scaleXs}rem`,
+              },
+              [breakpoints.up('xl')]: {
+                height: `${2 * scaleXs}rem`,
+              },   
             },
+            label: {
+              [breakpoints.down('sm')]: {
+                fontSize: `${0.9 * density.fontSize * scaleXs}rem`,
+              },
+              [breakpoints.between('sm', 'md')]: {
+                fontSize: `${0.9 * density.fontSize * scaleSm}rem`,
+              },
+              [breakpoints.between('md', 'lg')]: {
+                fontSize: `${0.9 * density.fontSize * scaleMd}rem`,
+              },
+              [breakpoints.between('lg', 'xl')]: {
+                fontSize: `${0.9 * density.fontSize * scaleLg}rem`,
+              },
+              [breakpoints.up('xl')]: {
+                fontSize: `${0.9 * density.fontSize * scaleXl}rem`,
+              },    
+            }
           },
         },
         MuiLoadingButton: {

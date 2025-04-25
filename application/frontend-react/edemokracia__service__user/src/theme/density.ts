@@ -29,8 +29,8 @@ export const density: Density = {
   mainMarginTop: 2.2,
   mainMarginTopXs: 3.3,
   mainMarginTopSm: 4,
-  mainMarginTopMd: 4,
-  mainMarginTopLg: 4,
+  mainMarginTopMd: 4.8,
+  mainMarginTopLg: 4.8,
   mainMarginTopXl: 2.4,
   cardContentPadding: 4,
 };

@@ -1,5 +1,4 @@
-import { Theme, useMediaQuery, useTheme } from '@mui/material';
-import { useMemo } from 'react';
+import { Theme, useMediaQuery } from '@mui/material';
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, MenuOrientation } from '~/config/layout';
 import { useConfig } from '~/hooks/useConfig';
 import { density } from '~/theme';

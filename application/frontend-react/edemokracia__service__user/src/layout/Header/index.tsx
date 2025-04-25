@@ -15,7 +15,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { MdiIcon } from '~/components';
-import { DRAWER_WIDTH, MenuOrientation, ThemeMode } from '~/config';
+import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
 import { AppBarStyled } from '~/layout/Header/AppBarStyled';
 import { HeaderContent } from '~/layout/Header/HeaderContent';
@@ -25,7 +25,7 @@ export const Header = () => {
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
 
-  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL; // && !downLG;
+  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL;
 
   const headerContent = useMemo(() => <HeaderContent />, []);
 
@@ -57,10 +57,6 @@ export const Header = () => {
 
   return (
     <>
-      {/* <AppBarStyled open={!miniDrawer} {...appBar}>
-        {mainHeader}
-      </AppBarStyled> */}
-
       {!downLG ? (
         <AppBarStyled open={!miniDrawer} {...appBar}>
           {mainHeader}
