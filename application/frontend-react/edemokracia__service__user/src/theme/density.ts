@@ -13,7 +13,7 @@ export const density: Density = {
   fontSize: 1,
   buttonSize: 'small',
   inputBaseSize: 'medium',
-  borderRadius: 20,
+  borderRadius: 5,
   dataGridDensity: 'standard',
   isListDense: false,
   mainMarginTop: 2.2,

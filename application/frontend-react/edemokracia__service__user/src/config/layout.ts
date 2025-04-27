@@ -57,7 +57,7 @@ export type LayoutConfigProps = {
   header: boolean;
 };
 
-export type ScaleProps = {
+export type ScleProps = {
   scaleXs: number;
   scaleSm: number;
   scaleMd: number;
@@ -67,14 +67,14 @@ export type ScaleProps = {
 
 export const defaultLayoutConfig: LayoutConfigProps = {
   i18n: 'en',
-  menuOrientation: MenuOrientation.VERTICAL,
-  miniDrawer: false,
+  menuOrientation: MenuOrientation.HORIZONTAL,
+  miniDrawer: true,
   container: true,
   mode: ThemeMode.LIGHT,
   header: true,
 };
 
-export const defaultScales: ScaleProps = {
+export const defaultScales: ScleProps = {
   scaleXs: 0.75,
   scaleSm: 0.85,
   scaleMd: 0.9,
