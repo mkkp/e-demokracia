@@ -9,9 +9,9 @@
 import ButtonBase from '@mui/material/ButtonBase';
 import type { SxProps } from '@mui/system';
 import { Link } from 'react-router-dom';
-import { LogoIcon } from '~/layout/logo/LogoIcon';
-import { LogoMain } from '~/layout/logo/LogoMain';
 import { routeToDashboard } from '~/routes';
+import { LogoIcon } from './LogoIcon';
+import { LogoMain } from './LogoMain';
 
 export interface LogoSectionProps {
   reverse?: boolean;

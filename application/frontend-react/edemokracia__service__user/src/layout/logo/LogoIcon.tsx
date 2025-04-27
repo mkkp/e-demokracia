@@ -8,13 +8,6 @@
 
 import { useLogoProps } from '~/hooks';
 
-// export const LogoIcon = () => {
-//   // const theme = useTheme(); // we an use theme in the future to detect light/dark modes
-//   const logoProps = useLogoProps();
-
-//   return <img src={logoProps.iconSrc} style={{ height: '100%', maxWidth: '100%', borderRadius: '50%' }} />;
-// };
-
 export const LogoIcon = () => {
   // const theme = useTheme(); // we an use theme in the future to detect light/dark modes
   const logoProps = useLogoProps();

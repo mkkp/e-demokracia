@@ -7,8 +7,6 @@
 // Template file: actor/src/layout/Header/HeaderContent/index.tsx.hbs
 
 import Grid from '@mui/material/Grid';
-import type { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { FRAMEWORK_SERVICE_UTILS, OBJECTCLASS, type ServiceUtils } from '@pandino/pandino-api';
 import { useBundleContext } from '@pandino/react-hooks';
 import type { FC } from 'react';
@@ -19,7 +17,6 @@ import { DrawerHeader } from '~/layout/Drawer/DrawerHeader';
 import { HorizontalBar } from '~/layout/Drawer/HorizontalBar';
 import { Customization } from '~/layout/Header/HeaderContent/Customization';
 import { HeaderProfile } from '~/layout/Header/HeaderContent/HeaderProfile';
-import { MobileSection } from '~/layout/Header/HeaderContent/MobileSection';
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 const AppBarExtraComponentsFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=AppBarExtraComponents))`;

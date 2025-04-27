@@ -18,7 +18,7 @@ export interface AppBarStyledProps extends AppBarProps {
 
 export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(
   ({ theme, open }) => ({
-    ...(appBarExtraStyles(theme, open)),
+    ...appBarExtraStyles(theme, open),
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -37,11 +37,3 @@ export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !
     }),
   }),
 );
-
-export const AppBarDrwawerIconButtonStyled = styled(IconButton, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<IconButtonPropsColorOverrides>(({ theme }) => ({
-  backgroundColor: theme.palette.primary.main,
-  color: '#ffffff',
-  fontWeight: 'bold',
-}));

@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'src/utilities/layout-helper.tsx'
+// Template name: actor/src/utilities/layout-helper.tsx
+// Template file: actor/src/utilities/layout-helper.tsx.hbs
+
 import { Theme, useMediaQuery } from '@mui/material';
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, MenuOrientation } from '~/config/layout';
 import { useConfig } from '~/hooks/useConfig';
@@ -64,26 +72,26 @@ export const useLayoutHelper = (): LayoutState => {
     size = 'xl';
   }
 
-  console.log(
-    'size: ' +
-      size +
-      ' downLG: ' +
-      downLG +
-      ' downMD: ' +
-      downMD +
-      ' miniDrawer: ' +
-      miniDrawer +
-      ' horizontalMenuPresented: ' +
-      horizontalMenuPresented +
-      ' headerPresented: ' +
-      headerPresented +
-      ' pageHeaderOffset: ' +
-      pageHeaderOffset +
-      ' marginTop: ' +
-      marginTop +
-      ' container: ' +
-      container,
-  );
+  //  console.log(
+  //    'size: ' +
+  //      size +
+  //     ' downLG: ' +
+  //      downLG +
+  //      ' downMD: ' +
+  //     downMD +
+  //     ' miniDrawer: ' +
+  //     miniDrawer +
+  //     ' horizontalMenuPresented: ' +
+  //     horizontalMenuPresented +
+  //     ' headerPresented: ' +
+  //     headerPresented +
+  //     ' pageHeaderOffset: ' +
+  //     pageHeaderOffset +
+  //     ' marginTop: ' +
+  //     marginTop +
+  //     ' container: ' +
+  //     container,
+  // );
 
   return {
     downLG,

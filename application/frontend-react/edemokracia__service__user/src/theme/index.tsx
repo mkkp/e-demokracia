@@ -8,23 +8,24 @@
 
 import CssBaseline from '@mui/material/CssBaseline';
 import StyledEngineProvider from '@mui/material/StyledEngineProvider';
+import { amber, deepOrange, grey } from '@mui/material/colors';
 import { huHU as huHUForMaterial } from '@mui/material/locale';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import createBreakpoints from '@mui/system/createBreakpoints/createBreakpoints';
+import { createBreakpoints } from '@mui/system';
 import { huHU as huHUForGrids } from '@mui/x-data-grid/locales';
 import type {} from '@mui/x-data-grid/themeAugmentation';
 import { huHU as huHUForDatePickers } from '@mui/x-date-pickers/locales';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { defaultScales } from '~/config';
-import { useConfig } from '../hooks';
-import { density } from './density';
-import { mainContainerPadding } from './extras';
-import { getDefaultFontName } from './fonts';
-import { paletteThemeDark, paletteThemeLight } from './palette';
-import { typography } from './typography';
+import { useConfig } from '~/hooks';
+import { density } from '~/theme/density';
+import { mainContainerPadding } from '~/theme/extras';
+import { getDefaultFontName } from '~/theme/fonts';
+import { paletteThemeDark, paletteThemeLight } from '~/theme/palette';
+import { typography } from '~/theme/typography';
 
 const breakpoints = createBreakpoints({});
 
@@ -39,6 +40,7 @@ const baseTheme = (
   return createTheme(
     paletteTheme,
     {
+      // To override this block, please create the 'actor/src/theme/index.ts.theme-options.fragment.hbs' file
       spacing: (factor: number) => `${density.spacingMultiplier * factor}rem`,
       typography: {
         ...typography(
@@ -79,13 +81,23 @@ const baseTheme = (
           containerBackground: paletteTheme.palette.background.paper,
         },
       },
+      // End of 'actor/src/theme/index.ts.theme-options.fragment.hbs'
       components: {
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-app-bar.fragment.hbs' file
         MuiAppBar: {
           styleOverrides: {
             colorPrimary: {
               backgroundColor: paletteTheme.palette.background.default,
             },
           },
+        },
+        // End of 'actor/src/theme/index.ts.mui-app-bar.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-button.fragment.hbs' file
+        MuiIconButton: {
+          defaultProps: {
+            size: density.buttonSize,
+          },
+          styleOverrides: {},
         },
         MuiButton: {
           defaultProps: {
@@ -95,24 +107,9 @@ const baseTheme = (
           styleOverrides: {
             root: {
               borderRadius: density.borderRadius,
-              // variants: [
-              //   {
-              //     props: { variant: 'outlined' },
-              //     style: {
-              //       borderWidth: '3px',
-              //       borderColor: 'white'
-              //     },
-              //   },
-              // ],
             },
-            // outlined: {
-            //   borderWidth: '3px',
-            //   borderColor: paletteTheme.palette.primary.light,
-            //   color: paletteTheme.palette.primary.light,
-            // },
           },
         },
-
         MuiToggleButtonGroup: {
           styleOverrides: {
             root: {
@@ -122,7 +119,19 @@ const baseTheme = (
             },
           },
         },
-
+        MuiLoadingButton: {
+          defaultProps: {
+            variant: 'contained',
+            size: density.buttonSize,
+          },
+          styleOverrides: {
+            root: {
+              borderRadius: density.borderRadius,
+            },
+          },
+        },
+        // End of 'actor/src/theme/index.ts.mui-button.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-chip.fragment.hbs' file
         MuiChip: {
           styleOverrides: {
             root: {
@@ -140,7 +149,7 @@ const baseTheme = (
               },
               [breakpoints.up('xl')]: {
                 height: `${2 * scaleXs}rem`,
-              },   
+              },
             },
             label: {
               [breakpoints.down('sm')]: {
@@ -157,21 +166,12 @@ const baseTheme = (
               },
               [breakpoints.up('xl')]: {
                 fontSize: `${0.9 * density.fontSize * scaleXl}rem`,
-              },    
-            }
-          },
-        },
-        MuiLoadingButton: {
-          defaultProps: {
-            variant: 'contained',
-            size: density.buttonSize,
-          },
-          styleOverrides: {
-            root: {
-              borderRadius: density.borderRadius,
+              },
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-chip.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-tab.fragment.hbs' file
         MuiTab: {
           styleOverrides: {
             root: {
@@ -181,6 +181,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-tab.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-form-control.fragment.hbs' file
         MuiFormControl: {
           styleOverrides: {
             root: {
@@ -211,6 +213,19 @@ const baseTheme = (
             },
           },
         },
+        MuiFormLabel: {
+          styleOverrides: {
+            asterisk: { color: 'red' },
+            root: {
+              '&.Mui-required': {
+                fontWeight: 900,
+              },
+            },
+          },
+        },
+
+        // End of 'actor/src/theme/index.ts.mui-form-control.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-dialog.fragment.hbs' file
         MuiDialogTitle: {
           styleOverrides: {
             root: {
@@ -241,16 +256,7 @@ const baseTheme = (
             },
           },
         },
-        MuiFormLabel: {
-          styleOverrides: {
-            asterisk: { color: 'red' },
-            root: {
-              '&.Mui-required': {
-                fontWeight: 900,
-              },
-            },
-          },
-        },
+        // End of 'actor/src/theme/index.ts.mui-dialog.fragment.hbs'
         // To override this block, please create the 'actor/src/theme/index.ts.mui-input-base.fragment.hbs' file
         MuiInputBase: {
           defaultProps: {
@@ -289,7 +295,6 @@ const baseTheme = (
             },
           },
         },
-        // End of 'actor/src/theme/index.ts.mui-input-base.fragment.hbs'
         MuiInputLabel: {
           styleOverrides: {
             root: {
@@ -301,6 +306,8 @@ const baseTheme = (
             },
           },
         },
+
+        // End of 'actor/src/theme/index.ts.mui-input-base.fragment.hbs'
         // To override this block, please create the 'actor/src/theme/index.ts.mui-text-field.fragment.hbs' file
         MuiTextField: {
           defaultProps: {
@@ -323,6 +330,7 @@ const baseTheme = (
           },
         },
         // End of 'actor/src/theme/index.ts.mui-text-field.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-autocomplete.fragment.hbs' file
         MuiAutocomplete: {
           defaultProps: {
             fullWidth: true,
@@ -359,11 +367,15 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-autocomplete.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-radio.fragment.hbs' file
         MuiRadio: {
           defaultProps: {
             color: 'secondary',
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-radio.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-select.fragment.hbs' file
         MuiSelect: {
           styleOverrides: {
             filled: {
@@ -373,6 +385,7 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-select.fragment.hbs'
         // To override this block, please create the 'actor/src/theme/index.ts.mui-data-grid.fragment.hbs' file
         MuiDataGrid: {
           styleOverrides: {
@@ -382,6 +395,7 @@ const baseTheme = (
           },
         },
         // End of 'actor/src/theme/index.ts.mui-data-grid.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-paper.fragment.hbs' file
         MuiPaper: {
           styleOverrides: {
             rounded: {
@@ -390,6 +404,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-paper.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-drawer.fragment.hbs' file
         MuiDrawer: {
           styleOverrides: {
             paper: {
@@ -398,22 +414,8 @@ const baseTheme = (
             },
           },
         },
-        MuiButtonGroup: {
-          defaultProps: {
-            size: density.buttonSize,
-          },
-        },
-        MuiIconButton: {
-          defaultProps: {
-            size: density.buttonSize,
-          },
-          styleOverrides: {},
-        },
-        MuiIcon: {
-          styleOverrides: {
-            root: {},
-          },
-        },
+        // End of 'actor/src/theme/index.ts.mui-drawer.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-tooltip.fragment.hbs' file
         MuiTooltip: {
           styleOverrides: {
             tooltip: {
@@ -421,6 +423,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-tooltip.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-divider.fragment.hbs' file
         MuiDivider: {
           styleOverrides: {
             root: {
@@ -432,6 +436,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-divider.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-list.fragment.hbs' file
         MuiList: {
           styleOverrides: {
             root: {
@@ -453,6 +459,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-list.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-avatar.fragment.hbs' file
         MuiAvatar: {
           styleOverrides: {
             root: {
@@ -461,11 +469,13 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-avatar.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-card.fragment.hbs' file
         MuiCard: {
           styleOverrides: {
             root: {
               width: '100%',
-              length: '100%',
+              height: '100%',
             },
           },
         },
@@ -479,6 +489,8 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-card.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.mui-grid.fragment.hbs' file
         MuiGrid: {
           styleOverrides: {
             item: {
@@ -487,6 +499,9 @@ const baseTheme = (
             },
           },
         },
+        // End of 'actor/src/theme/index.ts.mui-grid.fragment.hbs'
+        // To override this block, please create the 'actor/src/theme/index.ts.extra-components.fragment.hbs' file
+        // End of 'actor/src/theme/index.ts.extra-components.fragment.hbs'
       },
     },
     huHUForMaterial,
@@ -494,7 +509,6 @@ const baseTheme = (
     huHUForDatePickers,
   );
 };
-
 declare module '@mui/material/styles' {
   interface Palette {
     subtitleColor: Palette['primary'];

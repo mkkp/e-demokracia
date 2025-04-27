@@ -10,11 +10,12 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { type Theme } from '@mui/material/styles';
 import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { MdiIcon } from '~/components';
+import { CustomBreadcrumb, useJudoNavigation } from '~/components/CustomBreadcrumb';
 import { useLayoutHelper } from '~/utilities/layout-helper';
-import { CustomBreadcrumb, useJudoNavigation } from './CustomBreadcrumb';
 
 interface PageHeaderProps {
   title: string;

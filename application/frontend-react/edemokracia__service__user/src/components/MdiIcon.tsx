@@ -7,7 +7,7 @@
 // Template file: actor/src/components/MdiIcon.tsx.hbs
 
 import Box from '@mui/material/Box';
-import { mapIcon, mapMimeTypeIcon } from '../utilities/icons';
+import { mapIcon, mapMimeTypeIcon } from '~/utilities/icons';
 
 import { useMemo } from 'react';
 import { defaultScales } from '~/config';
@@ -36,7 +36,7 @@ export const MdiIcon = (props: MdiIconProps) => {
 
   const style = useMemo(() => {
     let style = {};
-    if (layoutHelper.isSm) {
+    if (layoutHelper.isXs) {
       style = {
         color,
         width: `${defaultScales.scaleXs}rem`,

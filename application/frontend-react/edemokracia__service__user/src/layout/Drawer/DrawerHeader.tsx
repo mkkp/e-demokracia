@@ -34,7 +34,6 @@ export const DrawerHeader = ({ open }: DrawerHeaderProps) => {
         paddingRight: horizontalMenuPresented ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
       }}
     >
-      {/* CUSTOM START */}
       <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: open ? 35 : 35 }} />
     </Box>
   );

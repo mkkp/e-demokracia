@@ -2,9 +2,9 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/layout/Header/HeaderContent/Profile/index.tsx'
-// Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
-// Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
+// Path expression: 'src/layout/BottomMenu/BottomProfile/index.tsx'
+// Template name: actor/src/layout/BottomMenu/BottomProfile/index.tsx
+// Template file: actor/src/layout/BottomMenu/BottomProfile/index.tsx.hbs
 
 import { Grid, Popover } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -15,30 +15,36 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from 'react-oidc-context';
 import { useJudoNavigation } from '~/components';
 import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, ThemeMode } from '~/config';
 import { useConfig, useHeroProps } from '~/hooks';
 import { ProfilePopup } from '~/layout/ProfilePopup';
-import { routeToServiceUserUserProfileAccessViewPage } from '~/routes';
 import { useLayoutHelper } from '~/utilities/layout-helper';
+
+import { useAuth } from 'react-oidc-context';
+import { routeToServiceUserUserProfileAccessViewPage } from '~/routes';
+import type { JudoIdentifiable } from '~/services/data-api/common/JudoIdentifiable';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
 
 export const BottomProfile = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const heroProps = useHeroProps();
-  const { navigate } = useJudoNavigation();
-  const openProfilePage = async () => {
-    setOpen(false);
-    navigate(routeToServiceUserUserProfileAccessViewPage());
-  };
   const { downLG } = useLayoutHelper();
 
   const anchorRef = useRef<any>(null);
   const [open, setOpen] = useState(false);
   const { miniDrawer, mode, onChangeMode } = useConfig();
+
+  const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
+  const { navigate } = useJudoNavigation();
+  const openProfilePage = async () => {
+    setOpen(false);
+    navigate(routeToServiceUserUserProfileAccessViewPage());
+  };
   const { signoutRedirect, isAuthenticated } = useAuth();
   const doLogout = useCallback(() => {
     const redirectUrl = window.location.href.split('#')[0];

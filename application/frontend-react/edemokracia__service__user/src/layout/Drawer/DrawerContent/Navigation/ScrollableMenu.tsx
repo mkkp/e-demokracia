@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx'
+// Template name: actor/src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx
+// Template file: actor/src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx.hbs
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import type { FC, ReactNode } from 'react';

@@ -181,14 +181,6 @@ export const NavItem = ({ item, level }: NavItemProps) => {
               <MdiIcon path={'circle-small'} sx={{ color: 'secondary' }} />
             </ListItemIcon>
           )}
-          {/* // PATCH: BEGIN */}
-          {/* <ListItemText
-            primary={
-              <Typography variant="h6" color="inherit" noWrap>
-                {t(`menuTree.${item.title}`, { defaultValue: item.title })}
-              </Typography>
-            }
-          /> */}
           <ListItemText
             primary={
               <Typography fontWeight="inherit" variant="inherit" color="inherit" noWrap>
@@ -196,7 +188,6 @@ export const NavItem = ({ item, level }: NavItemProps) => {
               </Typography>
             }
           />
-          {/* // PATCH: END */}
         </ListItemButton>
       )}
     </>

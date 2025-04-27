@@ -1,3 +1,11 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'src/layout/BottomMenu/index.tsx'
+// Template name: actor/src/layout/BottomMenu/index.tsx
+// Template file: actor/src/layout/BottomMenu/index.tsx.hbs
+
 import {
   AppBar,
   BottomNavigation,
@@ -276,7 +284,7 @@ export const BottomMenu = () => {
           sx={{
             backgroundColor: `${theme.palette.primary.main}`,
           }}
-          value="{value}"
+          value={value}
           onChange={(event, newValue) => {
             setValue(newValue);
           }}

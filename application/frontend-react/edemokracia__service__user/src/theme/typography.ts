@@ -1,11 +1,14 @@
-import type { Theme, TypographyVariantsOptions } from '@mui/material/styles';
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'src/theme/typography.ts'
+// Template name: actor/src/theme/typography.ts
+// Template file: actor/src/theme/typography.ts.hbs
+
 import { TypographyOptions } from '@mui/material/styles/createTypography';
 import createBreakpoints from '@mui/system/createBreakpoints/createBreakpoints';
-import PlusJakarta from '../custom/assets/fonts/PlusJakartaSans-VariableFont_wght.ttf';
 import { density } from './density';
-
-// export function typography = () : TypographyVariantsOptions {
-// }
 
 const breakpoints = createBreakpoints({});
 

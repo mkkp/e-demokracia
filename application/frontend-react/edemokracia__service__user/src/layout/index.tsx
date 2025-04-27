@@ -37,7 +37,6 @@ export const Layout = () => {
       defaultValue: 'Processing of your account is still in progress.',
     }),
   };
-
   return principal?.__signedIdentifier ? (
     <AuthProxyComponent filter={`(${OBJECTCLASS}=${ACCESS_FILTER_COMPONENT_INTERFACE_KEY})`} principal={principal}>
       <Box sx={{ display: 'flex', width: '100%' }}>

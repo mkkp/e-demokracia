@@ -2,9 +2,9 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/layout/Header/HeaderContent/Profile/index.tsx'
-// Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
-// Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
+// Path expression: 'src/layout/Drawer/DrawerContent/DrawerProfile/index.tsx'
+// Template name: actor/src/layout/Drawer/DrawerContent/DrawerProfile/index.tsx
+// Template file: actor/src/layout/Drawer/DrawerContent/DrawerProfile/index.tsx.hbs
 
 import { Divider, Grid, IconButton, List, Popover, THEME_ID, Tooltip } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -15,7 +15,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
 import { MdiIcon, useJudoNavigation } from '~/components';
@@ -23,22 +23,27 @@ import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, ThemeMode } from '~/config';
 import { useConfig, useHeroProps } from '~/hooks';
 import { ProfilePopup } from '~/layout/ProfilePopup';
 import { routeToServiceUserUserProfileAccessViewPage } from '~/routes';
+import type { JudoIdentifiable } from '~/services/data-api/common/JudoIdentifiable';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
+
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 export const DrawerProfile = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const heroProps = useHeroProps();
+  const { downLG } = useLayoutHelper();
+  const anchorRef = useRef<any>(null);
+  const [open, setOpen] = useState(false);
+  const { miniDrawer, mode, onChangeMode } = useConfig();
+
+  const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
   const { navigate } = useJudoNavigation();
   const openProfilePage = async () => {
     setOpen(false);
     navigate(routeToServiceUserUserProfileAccessViewPage());
   };
-  const { downLG } = useLayoutHelper();
-
-  const anchorRef = useRef<any>(null);
-  const [open, setOpen] = useState(false);
-  const { miniDrawer, mode, onChangeMode } = useConfig();
   const { signoutRedirect, isAuthenticated } = useAuth();
   const doLogout = useCallback(() => {
     const redirectUrl = window.location.href.split('#')[0];
@@ -71,10 +76,6 @@ export const DrawerProfile = () => {
   return (
     <Box sx={{ flexShrink: 0, p: `${miniDrawer ? 0.75 : 0.75}` }}>
       {!miniDrawer && (
-        // <Stack direction="row" spacing={2} alignItems="center" sx={{ width: '100%', p: 0.5 }}>
-        //   <Avatar alt="profile user" src={heroProps.imgSrc} />
-        //   <Typography variant="subtitle1">{heroProps.preferredUsername}</Typography>
-        // </Stack>
         <Grid container justifyContent="space-between" alignItems="center" sx={{ width: '100%', p: 0.5 }}>
           <Grid item>
             <Stack direction="row" spacing={1.25} alignItems="center">
@@ -140,8 +141,8 @@ export const DrawerProfile = () => {
                   <MdiIcon path="cog-outline" sx={{ fontSize: '1.4rem' }} />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={t('judo.profile.logout', { defaultValue: 'Logout' })} placement="top">
-                <IconButton aria-label={t('judo.profile.logout', { defaultValue: 'Logout' })} onClick={doLogout}>
+              <Tooltip title={t('judo.security.logout', { defaultValue: 'Logout' })} placement="top">
+                <IconButton aria-label={t('judo.security.logout', { defaultValue: 'Logout' })} onClick={doLogout}>
                   <MdiIcon path="logout" sx={{ fontSize: '1.4rem' }} />
                 </IconButton>
               </Tooltip>

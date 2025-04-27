@@ -2,9 +2,9 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/layout/Header/HeaderContent/Profile/index.tsx'
-// Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
-// Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
+// Path expression: 'src/layout/ProfilePopup/index.tsx'
+// Template name: actor/src/layout/ProfilePopup/index.tsx
+// Template file: actor/src/layout/ProfilePopup/index.tsx.hbs
 
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
@@ -20,12 +20,12 @@ import Typography from '@mui/material/Typography';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from 'react-oidc-context';
-import { MdiIcon } from '~/components';
+import { MdiIcon, useJudoNavigation } from '~/components';
 import { ThemeMode } from '~/config/layout';
 import { useConfig, useHeroProps } from '~/hooks';
 
 export type ProfilePopupProps = {
-  openProfilePage: () => void;
+  openProfilePage?: () => void;
 };
 
 export const ProfilePopup = ({ openProfilePage }: ProfilePopupProps) => {
