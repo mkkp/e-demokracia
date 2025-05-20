@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Ribbon } from 'react-ribbons';
 import { MdiIcon } from '~/components';
 
+import { ThemeMode } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
@@ -90,11 +91,14 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
   return (
     <Card
       sx={{
+        minWidth: '100%',
         height: '100%',
         position: 'relative',
+        p: 0,
+        m: 0,
         // borderRadius: 4,
         overflow: 'hidden',
-        bgcolor: theme.palette.grey[600],
+        bgcolor: theme.palette.mode === ThemeMode.DARK ? 'grey.1200' : 'grey.600',
         boxShadow: theme.shadows[6],
         display: 'flex',
         flexDirection: 'column',
@@ -163,14 +167,14 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
           flexDirection: 'column',
           // justifyContent: 'flex-end',
           color: 'common.white',
-          p: 4,
+          p: '1rem',
           zIndex: 1,
           opacity: 0.9,
           background: `linear-gradient(180deg, transparent 0%,${theme.palette.info.light} 90%)`,
         }}
       >
         {/* Weather Icon */}
-        {/* <Box sx={{ 
+        {/* <Box sx={{
           position: 'absolute',
           top: 16,
           right: 16,
@@ -234,7 +238,7 @@ export function VoteDefinitionCard(props: VoteDefinitionCardProps) {
         </Typography>
         <Box
           sx={{
-            m: 2,
+            mt: 2,
           }}
         >
           <SelectableAnswerVote

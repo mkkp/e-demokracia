@@ -6,11 +6,10 @@
 // Template name: actor/src/theme/typography.ts
 // Template file: actor/src/theme/typography.ts.hbs
 
+import { createTheme } from '@mui/material/styles';
 import { TypographyOptions } from '@mui/material/styles/createTypography';
-import createBreakpoints from '@mui/system/createBreakpoints/createBreakpoints';
+const { breakpoints } = createTheme(); // yields the same `breakpoints` helper
 import { density } from './density';
-
-const breakpoints = createBreakpoints({});
 
 export const typography = (
   fontFamily: string,

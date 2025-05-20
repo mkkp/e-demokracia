@@ -79,7 +79,7 @@ const ServiceConCon_View_EditProsComponentCard: FC<
   // Every custom Card component MUST be wrapped in a `<Grid item` with the appropriate `sm`, `md`, etc... values so that
   // elements are handled properly on all devices.
   return (
-    <Grid item sm={12} md={12} lg={12} xl={12}>
+    <Grid item sm={12} md={12} lg={12} xl={12} sx={{ width: 'calc(100% - 1rem)', maxWidth: 'calc(100% - 1rem)' }}>
       <ArgumentCard
         con={false}
         row={row}

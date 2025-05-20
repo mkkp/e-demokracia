@@ -29,6 +29,7 @@ USAGE: judo.sh COMMANDS... [OPTIONS...]
         -p --build-parallel                 Parallel maven build. The log can be chaotic.
         -a --build-app-module               Build app module only.
         -f --build-fronted-module           Build fronted module only.
+        -k --build-karaf                    Karaf building.
         -sc --build-schema-cli              Build schema CLI standalon JAR file.
         -d --docker                         Build docker images.
         -M --skip-model                     Skip model building.
@@ -188,6 +189,7 @@ parse_command_args () {
                 -p | --build-parallel)          buildParallel=1; shift 1;;
                 -a | --build-app-module)        buildAppModule=1; buildFrontend=0; buildModel=0; shift 1;;
                 -f | --build-frontend-module)   buildKaraf=0; buildBackend=0; buildAppModule=0; buildFrontend=1; buildModel=0; shift 1;;
+                -k | --build-karaf)             buildKaraf=1; buildBackend=0; buildAppModule=0; buildFrontend=0; buildModel=0; shift 1;;
                 -sc | --build-schema-cli)       schemaCliBuilding=1; shift 1;;
                 -M | --skip-model)              buildModel=0; shift 1;;
                 -B | --skip-backend)            buildBackend=0; shift 1;;
@@ -876,6 +878,8 @@ build () {
             args="$args -DskipSchemaCli"
         fi
         mvnd $goal -f $MODEL_DIR $args || exit
+    elif [ $buildKaraf -eq 1 ]; then
+        mvnd install -f ${APP_DIR} -pl karaf-features,karaf-offline $args $mavenVersionArg|| exit
     fi
     if [ $reckless -eq 1 ]; then
 	    if [ $schemaUpgrade -eq 1 ]; then

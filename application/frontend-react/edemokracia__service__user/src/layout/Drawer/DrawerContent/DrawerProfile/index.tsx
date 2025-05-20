@@ -6,13 +6,19 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/DrawerProfile/index.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/DrawerProfile/index.tsx.hbs
 
-import { Divider, Grid, IconButton, List, Popover, THEME_ID, Tooltip } from '@mui/material';
+import { THEME_ID } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
 import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 import { useCallback, useMemo, useRef, useState } from 'react';

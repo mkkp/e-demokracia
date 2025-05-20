@@ -33,7 +33,7 @@ public class VoteService {
     UserService userService;
 
     @Reference(target = "(&(judo.model.name=edemokracia)(type=composite))")
-    DAO<Serializable> dao;
+    DAO dao;
 
     @Reference(target = "(name=edemokracia)")
     AsmModel asmModel;

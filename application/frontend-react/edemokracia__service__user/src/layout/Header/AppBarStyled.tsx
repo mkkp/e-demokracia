@@ -6,7 +6,10 @@
 // Template name: actor/src/layout/Header/AppBarStyled.tsx
 // Template file: actor/src/layout/Header/AppBarStyled.tsx.hbs
 
-import { type AppBarProps, IconButton, type IconButtonPropsColorOverrides } from '@mui/material';
+import { type AppBarProps } from '@mui/material';
+import { type IconButtonPropsColorOverrides } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+
 import AppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import { DRAWER_WIDTH } from '~/config';

@@ -2,6 +2,7 @@ import { Box, Button, Card, CardContent, CardHeader, Chip, Typography, useTheme 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
+import { ThemeMode } from '~/config';
 import { ServiceSelectAnswerVoteDefinitionStored } from '~/services/data-api/model/ServiceSelectAnswerVoteDefinition';
 import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
 import { ServiceYesNoAbstainVoteDefinitionStored } from '~/services/data-api/model/ServiceYesNoAbstainVoteDefinition';
@@ -84,7 +85,15 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
   const chipColor = answerColor(voteValue);
 
   return (
-    <Card sx={{ maxWidth: 600, m: 0, backgroundColor: '#FFFFFF80' }}>
+    <Card
+      sx={{
+        maxWidth: 600,
+        minWidth: '100%',
+        p: 0,
+        m: 0,
+        backgroundColor: theme.palette.mode === ThemeMode.DARK ? '#33333380' : '#FFFFFF80',
+      }}
+    >
       {/* <CardHeader title="Voting Results" /> */}
       <CardContent>
         {/* Answers List */}
@@ -106,16 +115,16 @@ const VoteResultsCard: React.FC<VoteResultsCardProps> = ({
         ))}
 
         {/* Legend */}
-        {/* <Box sx={{ 
-          display: 'flex', 
-          flexWrap: 'wrap', 
-          gap: 2, 
+        {/* <Box sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 2,
           mt: 2,
-          mb: 2 
+          mb: 2
         }}>
           {processedAnswers.map((answer) => (
-            <Box 
-              key={answer.label} 
+            <Box
+              key={answer.label}
               sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
             >
               <Box

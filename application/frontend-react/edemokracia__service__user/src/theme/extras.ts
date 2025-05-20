@@ -14,7 +14,3 @@ export const mainContainerPadding = {
   flexDirection: 'column',
   alignItems: 'center',
 };
-
-export const menuBehaviour = {
-  mouseOverOpenClose: false,
-};

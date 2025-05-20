@@ -39,7 +39,7 @@ export const ProfilePopup = ({ openProfilePage }: ProfilePopupProps) => {
     signoutRedirect({
       post_logout_redirect_uri: redirectUrl,
     });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, signoutRedirect]);
 
   const handleToggleThememode = (event: React.MouseEvent<HTMLElement>) => {
     if (mode == ThemeMode.DARK) {

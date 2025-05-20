@@ -57,7 +57,7 @@ export type LayoutConfigProps = {
   header: boolean;
 };
 
-export type ScleProps = {
+export type ScaleProps = {
   scaleXs: number;
   scaleSm: number;
   scaleMd: number;
@@ -74,10 +74,14 @@ export const defaultLayoutConfig: LayoutConfigProps = {
   header: true,
 };
 
-export const defaultScales: ScleProps = {
+export const defaultScales: ScaleProps = {
   scaleXs: 0.75,
   scaleSm: 0.85,
   scaleMd: 0.9,
   scaleLg: 0.95,
   scaleXl: 1.0,
+};
+
+export const menuBehaviour = {
+  mouseOverOpenClose: false,
 };

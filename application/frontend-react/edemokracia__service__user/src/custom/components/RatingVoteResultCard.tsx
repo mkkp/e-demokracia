@@ -8,6 +8,7 @@ import { VoteStatus } from '~/services/data-api/model/VoteStatus';
 
 import internal from 'stream';
 import { MdiIcon } from '~/components';
+import { ThemeMode } from '~/config';
 import { ServiceRatingVoteDefinitionStored } from '~/services/data-api/model/ServiceRatingVoteDefinition';
 import VoteResultsCard, { AnswerItem } from './VoteResultCard';
 
@@ -31,7 +32,15 @@ export function RatingVoteResultCard(props: RatingVoteResultCardProps) {
 
   return (
     <>
-      <Card sx={{ maxWidth: 600, m: 0, backgroundColor: '#FFFFFF80' }}>
+      <Card
+        sx={{
+          maxWidth: 600,
+          minWidth: '100%',
+          p: 0,
+          m: 0,
+          backgroundColor: theme.palette.mode === ThemeMode.DARK ? '#33333380' : '#FFFFFF80',
+        }}
+      >
         {/* <CardHeader title="Voting Results" /> */}
         <CardContent>
           <Typography
@@ -61,6 +70,7 @@ export function RatingVoteResultCard(props: RatingVoteResultCardProps) {
 
           <Box
             sx={{
+              m: 0,
               height: '100%',
               width: '100%',
               display: 'flex',

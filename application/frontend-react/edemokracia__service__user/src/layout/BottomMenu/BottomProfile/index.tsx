@@ -6,12 +6,13 @@
 // Template name: actor/src/layout/BottomMenu/BottomProfile/index.tsx
 // Template file: actor/src/layout/BottomMenu/BottomProfile/index.tsx.hbs
 
-import { Grid, Popover } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
+import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
@@ -41,36 +42,45 @@ export const BottomProfile = () => {
 
   const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
   const { navigate } = useJudoNavigation();
-  const openProfilePage = async () => {
+  const openProfilePage = useCallback(async () => {
     setOpen(false);
     navigate(routeToServiceUserUserProfileAccessViewPage());
-  };
+  }, [navigate, setOpen]);
   const { signoutRedirect, isAuthenticated } = useAuth();
   const doLogout = useCallback(() => {
     const redirectUrl = window.location.href.split('#')[0];
     signoutRedirect({
       post_logout_redirect_uri: redirectUrl,
     });
-  }, [isAuthenticated]);
+  }, [isAuthenticated, signoutRedirect]);
 
-  const handleToggle = (event: React.MouseEvent<HTMLElement>) => {
-    setOpen((prevOpen) => !prevOpen);
-  };
+  const handleToggle = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      setOpen((prevOpen) => !prevOpen);
+    },
+    [setOpen],
+  );
 
-  const handleClose = (event: MouseEvent | TouchEvent) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-    setOpen(false);
-  };
+  const handleClose = useCallback(
+    (event: MouseEvent | TouchEvent) => {
+      if (anchorRef.current && anchorRef.current.contains(event.target)) {
+        return;
+      }
+      setOpen(false);
+    },
+    [anchorRef, setOpen],
+  );
 
-  const handleToggleThememode = (event: React.MouseEvent<HTMLElement>) => {
-    if (mode == ThemeMode.DARK) {
-      onChangeMode(ThemeMode.LIGHT);
-    } else {
-      onChangeMode(ThemeMode.DARK);
-    }
-  };
+  const handleToggleThememode = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      if (mode == ThemeMode.DARK) {
+        onChangeMode(ThemeMode.LIGHT);
+      } else {
+        onChangeMode(ThemeMode.DARK);
+      }
+    },
+    [onChangeMode],
+  );
 
   const iconBackColorOpen = theme.palette.mode === ThemeMode.DARK ? 'grey.200' : 'grey.300';
 

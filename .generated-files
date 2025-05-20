@@ -9,5 +9,5 @@ generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 generator-parameter.properties,764b3de7244c2a8d86491f6ea5fdcabc
 judo-karaf.env,4d9f997e256857904c970006d45fe942
 judo.properties,08e312a0baee5963c889fa1ce4f9b4ee
-judo.sh,94e254ec57b56e22f7716cd2f44c04ef
-pom.xml,70121d749deb4310c54bac5f0711079a
+judo.sh,c6a724a0de439724caee5bce0eaf83ec
+pom.xml,4a84320121a2bea63819000ea2d49a1f

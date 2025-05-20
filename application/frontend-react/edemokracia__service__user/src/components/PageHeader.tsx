@@ -26,7 +26,7 @@ interface PageHeaderProps {
 export const PageHeader = ({ title, icon, children }: PageHeaderProps) => {
   const { setTitle } = useJudoNavigation();
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const { pageHeaderOffset, container, headerPresented, isXs, isSm, isMd, isLg, isXl } = useLayoutHelper();
+  const { pageHeaderOffset, container, isHeaderPresent, isXs, isSm, isMd, isLg, isXl } = useLayoutHelper();
 
   const titleWidth = useMemo(() => {
     if (isXs) {
@@ -63,11 +63,11 @@ export const PageHeader = ({ title, icon, children }: PageHeaderProps) => {
       sx={{
         position: 'fixed',
         zIndex: 1100,
-        top: headerPresented ? { xs: 56, sm: 64 } : { xs: 0, sm: 0 },
+        top: isHeaderPresent ? { xs: 56, sm: 64 } : { xs: 0, sm: 0 },
         left: `calc(${pageHeaderOffset}px)`,
         width: `calc(100% - ${pageHeaderOffset}px)`,
         backgroundColor: (theme) =>
-          headerPresented ? theme.palette.background.default : theme.palette.background.paper,
+          isHeaderPresent ? theme.palette.background.default : theme.palette.background.paper,
       }}
     >
       <Container

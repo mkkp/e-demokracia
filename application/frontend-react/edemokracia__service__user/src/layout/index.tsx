@@ -24,7 +24,7 @@ export const Layout = () => {
   const { t } = useTranslation();
   const { principal, errorCode } = usePrincipal();
 
-  const { container, headerPresented, horizontalMenuPresented, bottomMenu } = useLayoutHelper();
+  const { container, isHeaderPresent, isMenuOrientationHorizontal, bottomMenu } = useLayoutHelper();
 
   const { marginTop } = useLayoutHelper();
   const errorCodeAndTitleMapping: Record<string, string> = {
@@ -40,8 +40,8 @@ export const Layout = () => {
   return principal?.__signedIdentifier ? (
     <AuthProxyComponent filter={`(${OBJECTCLASS}=${ACCESS_FILTER_COMPONENT_INTERFACE_KEY})`} principal={principal}>
       <Box sx={{ display: 'flex', width: '100%' }}>
-        {headerPresented ? <Header /> : null}
-        {!horizontalMenuPresented ? <Drawer /> : null}
+        {isHeaderPresent ? <Header /> : null}
+        {!isMenuOrientationHorizontal ? <Drawer /> : null}
 
         <Box
           component="main"

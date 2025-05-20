@@ -23,11 +23,11 @@ import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { MdiIcon, SimpleBar } from '~/components';
 import { SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
+import { menuBehaviour } from '~/config/layout';
 import { useConfig } from '~/hooks';
 import { NavItem } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
 import { NavItemType } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
 import { Transitions } from '~/layout/Transitions';
-import { menuBehaviour } from '~/theme/extras';
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 type VirtualElement = {
@@ -80,7 +80,7 @@ export const NavCollapse = ({ menu, level, render, placement, arrow, title, mous
   const theme = useTheme();
   const { navigate } = useJudoNavigation();
   const { miniDrawer } = useConfig();
-  const { downLG, horizontalMenuPresented } = useLayoutHelper();
+  const { downLG, isMenuOrientationHorizontal } = useLayoutHelper();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<VirtualElement | (() => VirtualElement) | null | undefined>(null);
   const miniMenuOpened = Boolean(anchorEl);
@@ -144,7 +144,7 @@ export const NavCollapse = ({ menu, level, render, placement, arrow, title, mous
   const borderIcon = level === 1 ? <MdiIcon path="border-all-variant" sx={{ fontSize: '1rem' }} /> : null;
   const menuIcon = menu.icon ? (
     <MdiIcon path={menu.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
-  ) : miniDrawer && !horizontalMenuPresented ? (
+  ) : miniDrawer && !isMenuOrientationHorizontal ? (
     borderIcon
   ) : null;
   const textColor = theme.palette.mode === ThemeMode.DARK ? 'grey.400' : 'text.primary';
@@ -153,7 +153,7 @@ export const NavCollapse = ({ menu, level, render, placement, arrow, title, mous
 
   return (
     <>
-      {!horizontalMenuPresented ? (
+      {!isMenuOrientationHorizontal ? (
         <>
           <ListItemButton
             disableRipple

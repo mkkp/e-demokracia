@@ -6,8 +6,10 @@
 // Template name: actor/src/layout/Drawer/DrawerContent/Navigation/index.tsx
 // Template file: actor/src/layout/Drawer/DrawerContent/Navigation/index.tsx.hbs
 
-import { Box, Typography, useMediaQuery } from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
 import { useEffect, useMemo, useState } from 'react';

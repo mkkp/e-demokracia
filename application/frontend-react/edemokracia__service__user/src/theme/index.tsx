@@ -139,16 +139,16 @@ const baseTheme = (
                 height: `${2 * scaleXs}rem`,
               },
               [breakpoints.between('sm', 'md')]: {
-                height: `${2 * scaleXs}rem`,
+                height: `${2 * scaleSm}rem`,
               },
               [breakpoints.between('md', 'lg')]: {
-                height: `${2 * scaleXs}rem`,
+                height: `${2 * scaleMd}rem`,
               },
               [breakpoints.between('lg', 'xl')]: {
-                height: `${2 * scaleXs}rem`,
+                height: `${2 * scaleLg}rem`,
               },
               [breakpoints.up('xl')]: {
-                height: `${2 * scaleXs}rem`,
+                height: `${2 * scaleXl}rem`,
               },
             },
             label: {
@@ -174,6 +174,46 @@ const baseTheme = (
         // To override this block, please create the 'actor/src/theme/index.ts.mui-tab.fragment.hbs' file
         MuiTab: {
           styleOverrides: {
+            [breakpoints.down('sm')]: {
+              minHeight: `${2 * density.fontSize * scaleXs}rem`,
+              marginTop: `${density.fontSize * scaleXs}rem`,
+              paddingLeft: `${0.3 * density.fontSize * scaleXs}rem`,
+              paddingRight: `${0.3 * density.fontSize * scaleXs}rem`,
+              marginLeft: `${0.3 * density.fontSize * scaleXs}rem`,
+              marginRight: `${0.3 * density.fontSize * scaleXs}rem`,
+            },
+            [breakpoints.between('sm', 'md')]: {
+              minHeight: `${2 * density.fontSize * scaleSm}rem`,
+              marginTop: `${density.fontSize * scaleSm}rem`,
+              paddingLeft: `${0.3 * density.fontSize * scaleSm}rem`,
+              paddingRight: `${0.3 * density.fontSize * scaleSm}rem`,
+              marginLeft: `${0.3 * density.fontSize * scaleSm}rem`,
+              marginRight: `${0.3 * density.fontSize * scaleSm}rem`,
+            },
+            [breakpoints.between('md', 'lg')]: {
+              minHeight: `${2 * density.fontSize * scaleMd}rem`,
+              marginTop: `${density.fontSize * scaleMd}rem`,
+              paddingLeft: `${0.3 * density.fontSize * scaleMd}rem`,
+              paddingRight: `${0.3 * density.fontSize * scaleMd}rem`,
+              marginLeft: `${0.3 * density.fontSize * scaleMd}rem`,
+              marginRight: `${0.3 * density.fontSize * scaleMd}rem`,
+            },
+            [breakpoints.between('lg', 'xl')]: {
+              minHeight: `${2 * density.fontSize * scaleLg}rem`,
+              marginTop: `${density.fontSize * scaleLg}rem`,
+              paddingLeft: `${0.3 * density.fontSize * scaleLg}rem`,
+              paddingRight: `${0.3 * density.fontSize * scaleLg}rem`,
+              marginLeft: `${0.3 * density.fontSize * scaleLg}rem`,
+              marginRight: `${0.3 * density.fontSize * scaleLg}rem`,
+            },
+            [breakpoints.up('xl')]: {
+              minHeight: `${2 * density.fontSize * scaleXl}rem`,
+              marginTop: `${density.fontSize * scaleXl}rem`,
+              paddingLeft: `${0.3 * density.fontSize * scaleXl}rem`,
+              paddingRight: `${0.3 * density.fontSize * scaleXl}rem`,
+              marginLeft: `${0.3 * density.fontSize * scaleXl}rem`,
+              marginRight: `${0.3 * density.fontSize * scaleXl}rem`,
+            },
             root: {
               '&.JUDO-nestedError': {
                 color: paletteTheme.palette.error.main,
@@ -252,7 +292,21 @@ const baseTheme = (
           styleOverrides: {
             root: {
               backgroundColor: paletteTheme.palette.background.default,
-              padding: 4,
+              [breakpoints.down('sm')]: {
+                padding: `${scaleXs}rem`,
+              },
+              [breakpoints.between('sm', 'md')]: {
+                padding: `${scaleSm}rem`,
+              },
+              [breakpoints.between('md', 'lg')]: {
+                padding: `${scaleMd}rem`,
+              },
+              [breakpoints.between('lg', 'xl')]: {
+                padding: `${scaleLg}rem`,
+              },
+              [breakpoints.up('xl')]: {
+                padding: `${scaleXl}rem`,
+              },
             },
           },
         },
@@ -455,7 +509,6 @@ const baseTheme = (
             root: {
               color: 'inherit',
               minWidth: '34px',
-              // marginRight: breakpoints.spacing(2),
             },
           },
         },

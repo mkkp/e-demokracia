@@ -21,12 +21,12 @@ import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon, SimpleBar } from '~/components';
 import { SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
+import { menuBehaviour } from '~/config/layout';
 import { useConfig } from '~/hooks';
 import { NavCollapse } from '~/layout/Drawer/DrawerContent/Navigation/NavCollapse';
 import { NavItem } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
 import { NavItemType } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
 import { Transitions } from '~/layout/Transitions';
-import { menuBehaviour } from '~/theme/extras';
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 type VirtualElement = {
@@ -60,7 +60,7 @@ export const NavGroup = ({ item }: NavGroupProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
   const { miniDrawer, onChangeMiniDrawer } = useConfig();
-  const { downLG, horizontalMenuPresented } = useLayoutHelper();
+  const { downLG, isMenuOrientationHorizontal } = useLayoutHelper();
   const [anchorEl, setAnchorEl] = useState<VirtualElement | (() => VirtualElement) | null | undefined>(null);
   const openMini = Boolean(anchorEl);
 
@@ -102,17 +102,13 @@ export const NavGroup = ({ item }: NavGroupProps) => {
 
   return (
     <>
-      {!horizontalMenuPresented ? (
+      {!isMenuOrientationHorizontal ? (
         <List
           subheader={
             item.title &&
             !miniDrawer && (
               <Box sx={{ pl: 3, mb: 1.5 }}>
-                <Typography
-                  variant="subtitle2"
-                  color={theme.palette.mode === ThemeMode.DARK ? 'textSecondary' : 'text.secondary'}
-                  sx={{ mt: 1 }}
-                >
+                <Typography variant="subtitle2" sx={{ mt: 1 }}>
                   {t(`menuTree.${item.title}`, { defaultValue: item.title })}
                 </Typography>
               </Box>

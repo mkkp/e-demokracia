@@ -7,8 +7,8 @@
 // Template file: actor/src/layout/Header/HeaderContent/index.tsx.hbs
 
 import Grid from '@mui/material/Grid';
-import { FRAMEWORK_SERVICE_UTILS, OBJECTCLASS, type ServiceUtils } from '@pandino/pandino-api';
-import { useBundleContext } from '@pandino/react-hooks';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
 import type { FC } from 'react';
 import { MenuOrientation } from '~/config';
 import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
@@ -25,34 +25,27 @@ export interface AppBarExtraComponentsDefinition {
   spaceRequired?: number; // defaults to 1, takes this much space in addition to the default space claims of default components
   Component: FC<any>;
 }
+
 export type AppBarExtraComponentsHook = () => AppBarExtraComponentsDefinition;
 
 export const HeaderContent = () => {
   const { /*i18n, */ menuOrientation } = useConfig();
-  const { bundleContext } = useBundleContext();
-  const serviceUtilsRef = bundleContext.getServiceReference<ServiceUtils>(FRAMEWORK_SERVICE_UTILS)!;
-  const serviceUtils = bundleContext.getService(serviceUtilsRef)!;
-  const refs = bundleContext.getServiceReferences(undefined, AppBarExtraComponentsFilter);
-  const ref = serviceUtils.getBestServiceReference(refs);
-  let appBarExtraComponentsHook: AppBarExtraComponentsHook | undefined;
 
-  if (ref) {
-    appBarExtraComponentsHook = bundleContext.getService<AppBarExtraComponentsHook>(ref);
-  }
-
+  const { service: appBarExtraComponentsHook } =
+    useTrackService<AppBarExtraComponentsHook>(AppBarExtraComponentsFilter);
   const appBarExtraComponentsDefinition: AppBarExtraComponentsDefinition | undefined = appBarExtraComponentsHook?.();
   const appBarExtraSpaceClaim: number = appBarExtraComponentsDefinition?.spaceRequired ?? 1;
 
-  const { downLG, horizontalMenuPresented } = useLayoutHelper();
+  const { downLG, isMenuOrientationHorizontal } = useLayoutHelper();
 
   return (
     <Grid container alignItems="center">
-      {horizontalMenuPresented && (
+      {isMenuOrientationHorizontal && (
         <Grid item xs={2}>
           <DrawerHeader open={true} />
         </Grid>
       )}
-      {horizontalMenuPresented && (
+      {isMenuOrientationHorizontal && (
         <Grid item xs={8 - appBarExtraSpaceClaim}>
           <HorizontalBar />
         </Grid>

@@ -10,8 +10,8 @@ import { Density } from '~/theme/types';
 
 export const density: Density = {
   spacingMultiplier: 0.5,
-  fontSize: 1,
-  buttonSize: 'small',
+  fontSize: 1.2,
+  buttonSize: 'medium',
   inputBaseSize: 'medium',
   borderRadius: 5,
   dataGridDensity: 'standard',

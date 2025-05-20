@@ -1,15 +1,17 @@
-import { Icon, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MdiIcon } from '~/components';
 
 import { Ribbon, RibbonContainer } from 'react-ribbons';
+import { ThemeMode } from '~/config';
 import { useL10N } from '~/l10n/l10n-context';
 import { _StringOperation } from '~/services/data-api/common';
 import { IssueScope } from '~/services/data-api/model/IssueScope';
@@ -80,7 +82,7 @@ export function IssueCard(props: IssueCardProps) {
         position: 'relative',
         // borderRadius: 4,
         overflow: 'hidden',
-        bgcolor: theme.palette.grey[600],
+        bgcolor: theme.palette.mode === ThemeMode.DARK ? 'grey.1200' : 'grey.600',
         boxShadow: theme.shadows[6],
       }}
     >
@@ -143,7 +145,7 @@ export function IssueCard(props: IssueCardProps) {
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'flex-end',
+          //justifyContent: 'flex-end',
           color: 'common.white',
           zIndex: 1,
           opacity: 0.9,
@@ -151,7 +153,7 @@ export function IssueCard(props: IssueCardProps) {
         }}
       >
         {/* Weather Icon */}
-        {/* <Box sx={{ 
+        {/* <Box sx={{
           position: 'absolute',
           top: 16,
           right: 16,
@@ -213,7 +215,7 @@ export function IssueCard(props: IssueCardProps) {
         >
           {row.description}
         </Typography>
-        <CardActions sx={{ justifyContent: 'end' }}>
+        <CardActions sx={{ justifyContent: 'end', mt: 'auto' }}>
           <Button
             sx={{}}
             variant={'contained'}

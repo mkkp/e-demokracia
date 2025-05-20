@@ -78,7 +78,7 @@ const ServiceConCon_View_EditConsComponentCard: FC<
   // Every custom Card component MUST be wrapped in a `<Grid item` with the appropriate `sm`, `md`, etc... values so that
   // elements are handled properly on all devices.
   return (
-    <Grid item sm={12} md={12} lg={12} xl={12}>
+    <Grid item xs={8} sm={8} md={10} lg={12} xl={12}>
       <ArgumentCard
         con={true}
         row={row}

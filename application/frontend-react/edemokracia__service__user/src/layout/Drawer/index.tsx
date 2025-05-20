@@ -6,27 +6,35 @@
 // Template name: actor/src/layout/Drawer/index.tsx
 // Template file: actor/src/layout/Drawer/index.tsx.hbs
 
-import { Divider, IconButton, styled } from '@mui/material';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
 import { useTheme } from '@mui/material/styles';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { OBJECTCLASS } from '@pandino/pandino-api';
+import { useTrackService } from '@pandino/react-hooks';
+import { useEffect, useMemo, useRef } from 'react';
 import { MdiIcon } from '~/components';
 import { DRAWER_WIDTH, ThemeMode } from '~/config';
+import { CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY } from '~/custom';
 import { useConfig } from '~/hooks';
 import { DrawerContent } from '~/layout/Drawer/DrawerContent';
 import { DrawerProfile } from '~/layout/Drawer/DrawerContent/DrawerProfile';
 import { DrawerHeader } from '~/layout/Drawer/DrawerHeader';
 import { MiniDrawerStyled } from '~/layout/Drawer/MiniDrawerStyled';
 import { useLayoutHelper } from '~/utilities/layout-helper';
+import { AppBarExtraComponentsDefinition, AppBarExtraComponentsHook } from '../Header/HeaderContent';
 
 export interface DrawerProps {
   window?: () => Window;
 }
 
+const AppBarExtraComponentsFilter = `(&(${OBJECTCLASS}=${CUSTOM_VISUAL_ELEMENT_INTERFACE_KEY})(component=AppBarExtraComponents))`;
+
 const BottomSection = styled('div')({
   marginTop: 'auto',
-  paddingBotttom: '16px',
+  //paddingBottom: '16px',
   position: 'relative',
   bottom: 0,
   left: 0,
@@ -53,31 +61,28 @@ const ToggleButton = styled(IconButton)(({ theme }) => ({
 export const Drawer = ({ window }: DrawerProps) => {
   const theme = useTheme();
   const { miniDrawer, onChangeMiniDrawer } = useConfig();
-  const { downSM, downMD, downLG, isXs, isSm, isMd, isLg, isXl } = useLayoutHelper();
 
-  const [size, setSize] = useState<string | undefined>(undefined);
+  const { size, downSM, isXs, isSm, isMd, isLg, isXl } = useLayoutHelper();
   const prevSizeRef = useRef<string | undefined>(undefined);
 
-  const getSize = useCallback(() => {
-    if (isXs) return 'xs';
-    if (isSm) return 'sm';
-    if (isMd) return 'md';
-    if (isLg) return 'lg';
-    if (isXl) return 'xl';
-  }, [isXs, isSm, isMd, isLg, isXl]);
-
   useEffect(() => {
-    setSize(getSize());
-  }, [getSize]);
-
-  useEffect(() => {
-    // console.log("Change: "  + prevSizeRef.current + " => " + size );
-    if (prevSizeRef.current && prevSizeRef.current == 'md' && size == 'sm') {
+    // console.log('Change: ' + prevSizeRef.current + ' => ' + size);
+    if (
+      prevSizeRef.current &&
+      (prevSizeRef.current == 'md' || prevSizeRef.current == 'lg' || prevSizeRef.current == 'xl') &&
+      (size == 'sm' || size == 'xs')
+    ) {
       onChangeMiniDrawer(true);
-    } else if (prevSizeRef.current && prevSizeRef.current == 'lg' && size == 'md') {
+    } else if (prevSizeRef.current && (prevSizeRef.current == 'lg' || prevSizeRef.current == 'xl') && size == 'md') {
       onChangeMiniDrawer(true);
-    } else if (prevSizeRef.current && prevSizeRef.current == 'md' && size == 'lg') {
+    } else if (
+      prevSizeRef.current &&
+      (prevSizeRef.current == 'md' || prevSizeRef.current == 'sm' || prevSizeRef.current == 'xs') &&
+      (size == 'lg' || size == 'xl')
+    ) {
       onChangeMiniDrawer(false);
+    } else if (!prevSizeRef.current && (size == 'sm' || size == 'xs')) {
+      onChangeMiniDrawer(true);
     }
     prevSizeRef.current = size;
   }, [size]);
@@ -87,18 +92,30 @@ export const Drawer = ({ window }: DrawerProps) => {
   const drawerContent = useMemo(() => <DrawerContent />, []);
   const drawerHeader = useMemo(() => <DrawerHeader open={!miniDrawer} />, [!miniDrawer]);
 
+  const { service: appBarExtraComponentsHook } =
+    useTrackService<AppBarExtraComponentsHook>(AppBarExtraComponentsFilter);
+  const appBarExtraComponentsDefinition: AppBarExtraComponentsDefinition | undefined = appBarExtraComponentsHook?.();
+
   return (
     <Box component="nav" sx={{ flexShrink: { md: 0 }, zIndex: 1200 }} aria-label="mailbox folders">
       {!downSM ? (
         <MiniDrawerStyled variant="permanent" open={!miniDrawer}>
-          <ToggleButton onClick={() => onChangeMiniDrawer(!miniDrawer)} size="medium">
-            {miniDrawer ? (
-              <MdiIcon path="chevron-right" sx={{ fontSize: 16 }} />
-            ) : (
-              <MdiIcon path="chevron-left" sx={{ fontSize: 16 }} />
-            )}
-          </ToggleButton>
+          {!isXs && !isSm ? (
+            <ToggleButton onClick={() => onChangeMiniDrawer(!miniDrawer)} size="medium">
+              {miniDrawer ? (
+                <MdiIcon path="chevron-right" sx={{ fontSize: 16 }} />
+              ) : (
+                <MdiIcon path="chevron-left" sx={{ fontSize: 16 }} />
+              )}
+            </ToggleButton>
+          ) : (
+            <></>
+          )}
+
           {drawerHeader}
+
+          {appBarExtraComponentsDefinition && <appBarExtraComponentsDefinition.Component />}
+
           {drawerContent}
 
           <BottomSection>
@@ -126,6 +143,7 @@ export const Drawer = ({ window }: DrawerProps) => {
           }}
         >
           {drawerHeader}
+          {appBarExtraComponentsDefinition && <appBarExtraComponentsDefinition.Component />}
           {drawerContent}
         </MuiDrawer>
       )}

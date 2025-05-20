@@ -14,6 +14,9 @@ importers:
       '@emotion/styled':
         specifier: 11.14.0
         version: 11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@19.0.0))(@types/react@18.3.1)(react@19.0.0)
+      '@fontsource/plus-jakarta-sans':
+        specifier: ^5.2.5
+        version: 5.2.5
       '@fontsource/roboto':
         specifier: 5.0.13
         version: 5.0.13
@@ -789,6 +792,9 @@ packages:
 
   '@floating-ui/utils@0.2.1':
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
+
+  '@fontsource/plus-jakarta-sans@5.2.5':
+    resolution: {integrity: sha512-2QBEymhsrpomwXrDygLwolOPOjRGDLDT+Pezo+SsnapcQ1z0n4qXzhC+EVmTZ0yxrQvqdc0kcb9EUd0eWmj9Jw==}
 
   '@fontsource/roboto@5.0.13':
     resolution: {integrity: sha512-j61DHjsdUCKMXSdNLTOxcG701FWnF0jcqNNQi2iPCDxU8seN/sMxeh62dC++UiagCWq9ghTypX+Pcy7kX+QOeQ==}
@@ -3679,6 +3685,8 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
 
   '@floating-ui/utils@0.2.1': {}
+
+  '@fontsource/plus-jakarta-sans@5.2.5': {}
 
   '@fontsource/roboto@5.0.13': {}
 

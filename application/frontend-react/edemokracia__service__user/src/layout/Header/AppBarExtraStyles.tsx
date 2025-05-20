@@ -10,7 +10,7 @@ import { type AppBarProps } from '@mui/material';
 import { type Theme } from '@mui/material';
 
 export interface AppBarStyledProps extends AppBarProps {
-  open?: boolean;
+  open: false;
 }
 
 export const appBarExtraStyles = (theme: Theme, open: boolean | undefined) =>

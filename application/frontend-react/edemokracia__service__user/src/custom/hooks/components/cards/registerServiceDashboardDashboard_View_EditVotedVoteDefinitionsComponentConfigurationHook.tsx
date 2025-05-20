@@ -90,7 +90,7 @@ const ServiceDashboardDashboard_View_EditVotedVoteDefinitionsComponentCard: FC<
   // Every custom Card component MUST be wrapped in a `<Grid item` with the appropriate `sm`, `md`, etc... values so that
   // elements are handled properly on all devices.
   return (
-    <Grid item sm={12} md={12} lg={6} xl={6}>
+    <Grid item xs={11} sm={12} md={6} lg={4} xl={4}>
       <VoteDefinitionCard
         row={row}
         onRowClick={onRowClick}

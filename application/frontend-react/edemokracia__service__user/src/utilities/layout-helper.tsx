@@ -20,10 +20,11 @@ interface LayoutState {
   isMd: boolean;
   isLg: boolean;
   isXl: boolean;
+  size: string;
 
   miniDrawer: boolean;
-  horizontalMenuPresented: boolean;
-  headerPresented: boolean;
+  isMenuOrientationHorizontal: boolean;
+  isHeaderPresent: boolean;
   pageHeaderOffset: number;
   container: boolean;
   bottomMenu: boolean;
@@ -41,8 +42,8 @@ export const useLayoutHelper = (): LayoutState => {
   const isXl = useMediaQuery((theme: Theme) => theme.breakpoints.up('xl'));
 
   const { menuOrientation, miniDrawer, header, container } = useConfig();
-  const horizontalMenuPresented = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
-  const headerPresented = horizontalMenuPresented && (header ?? true);
+  const isMenuOrientationHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
+  const isHeaderPresent = isMenuOrientationHorizontal && (header ?? true);
   const bottomMenu = downSM;
 
   let pageHeaderOffset = 0;
@@ -65,10 +66,10 @@ export const useLayoutHelper = (): LayoutState => {
     marginTop = density.mainMarginTopMd ?? marginTop;
     size = 'md';
   } else if (isLg) {
-    marginTop = (density.mainMarginTopLg ?? marginTop) + (horizontalMenuPresented ? 3 : 0);
+    marginTop = (density.mainMarginTopLg ?? marginTop) + (isMenuOrientationHorizontal ? 3 : 0);
     size = 'lg';
   } else if (isXl) {
-    marginTop = (density.mainMarginTopXl ?? marginTop) + (horizontalMenuPresented ? 3 : 0);
+    marginTop = (density.mainMarginTopXl ?? marginTop) + (isMenuOrientationHorizontal ? 3 : 0);
     size = 'xl';
   }
 
@@ -81,10 +82,10 @@ export const useLayoutHelper = (): LayoutState => {
   //     downMD +
   //     ' miniDrawer: ' +
   //     miniDrawer +
-  //     ' horizontalMenuPresented: ' +
-  //     horizontalMenuPresented +
-  //     ' headerPresented: ' +
-  //     headerPresented +
+  //     ' isMenuOrientationHorizontal: ' +
+  //     isMenuOrientationHorizontal +
+  //     ' isHeaderPresent: ' +
+  //     isHeaderPresent +
   //     ' pageHeaderOffset: ' +
   //     pageHeaderOffset +
   //     ' marginTop: ' +
@@ -102,9 +103,10 @@ export const useLayoutHelper = (): LayoutState => {
     isMd,
     isLg,
     isXl,
+    size,
     miniDrawer,
-    horizontalMenuPresented,
-    headerPresented,
+    isMenuOrientationHorizontal,
+    isHeaderPresent,
     pageHeaderOffset,
     container,
     bottomMenu,

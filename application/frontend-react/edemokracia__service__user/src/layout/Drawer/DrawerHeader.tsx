@@ -17,7 +17,7 @@ export interface DrawerHeaderProps {
 
 export const DrawerHeader = ({ open }: DrawerHeaderProps) => {
   const theme = useTheme();
-  const { horizontalMenuPresented } = useLayoutHelper();
+  const { isMenuOrientationHorizontal } = useLayoutHelper();
 
   return (
     <Box
@@ -26,15 +26,15 @@ export const DrawerHeader = ({ open }: DrawerHeaderProps) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: open ? 'flex-start' : 'center',
-        minHeight: horizontalMenuPresented ? 'unset' : '60px',
-        width: horizontalMenuPresented ? { xs: '100%', lg: '424px' } : 'inherit',
-        paddingTop: horizontalMenuPresented ? { xs: '10px', lg: '0' } : '8px',
-        paddingBottom: horizontalMenuPresented ? { xs: '18px', lg: '0' } : '8px',
-        paddingLeft: horizontalMenuPresented ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
-        paddingRight: horizontalMenuPresented ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
+        minHeight: isMenuOrientationHorizontal ? 'unset' : '60px',
+        width: isMenuOrientationHorizontal ? { xs: '100%', lg: '424px' } : 'inherit',
+        paddingTop: isMenuOrientationHorizontal ? { xs: '10px', lg: '0' } : '8px',
+        paddingBottom: isMenuOrientationHorizontal ? { xs: '18px', lg: '0' } : '8px',
+        paddingLeft: isMenuOrientationHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
+        paddingRight: isMenuOrientationHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
       }}
     >
-      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: open ? 35 : 35 }} />
+      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: 35 }} />
     </Box>
   );
 };
