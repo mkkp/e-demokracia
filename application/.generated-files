@@ -10,13 +10,13 @@ docker/compose-postgresql-https/docker-compose.yml,83dbbc5a1d52f724a1674152b4bcd
 docker/compose-postgresql-https/tls.yml,3e33ab503071f15d06b03da5e179778f
 docker/compose-postgresql-https/traefik.yml,e2486da30d84fc05074097818d2fca6e
 docker/overrided/bin/setenv,9bce3d5543f2207999dd5e0b06d864e5
-docker/pom.xml,322752de223d5905a38a6c2d9027f1a6
+docker/pom.xml,c9a291eaf406c3d676ecf28a0fe68749
 docker/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 frontend-react/.gitignore,bc016d72289e275fd01f618658001a95
 frontend-react/README.adoc,7becacf8f8103630d5c177fb81e7bf85
 frontend-react/model/.gitignore,710eed4f483e5fca9516675feb6984fe
 frontend-react/model/pom.xml,f68e4575a4399ce92234b6bb862e491f
-frontend-react/pom.xml,8a6cbc06b1e9a5848eae164a8860c83b
+frontend-react/pom.xml,9e6697557fe78835c1e91f10fa0c30dd
 generator-overrides/.gitignore,68b329da9893e34099c7d8ad5cb9c940
 interceptors/pom.xml,66afee6d70ef0a58fb1773ce203cd374
 interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default,862486f63ef3d7cea68a3253d9dceb3f
@@ -25,9 +25,9 @@ interceptors/src/main/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 interceptors/src/test/java/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 interceptors/src/test/resources/gitkeep,68b329da9893e34099c7d8ad5cb9c940
 internal/pom.xml,66848c4ca5e6a235bb214abd9021c4fb
-karaf-features/pom.xml,8ea09ebb6fe52535ea45c100dc78cd7b
+karaf-features/pom.xml,938646162ec90d2efd58229cccf07304
 karaf-features/src/main/feature/feature.xml,87dd5945f134bd5014ff3f98f8a41e29
-karaf-offline/pom.xml,a33a958ccb6b6993e814e439201e2025
+karaf-offline/pom.xml,144a635fbc13398a45d4bc3044fe53b0
 keycloak-theme/.gitignore,9c09107ac4c5d572e471478dd3d6d8c2
 keycloak-theme/README.adoc,6e39c01ddf3be6bbb4e5467bab459a21
 keycloak-theme/docker-compose.yml,316450e74db864e061ca77c6567aae12
@@ -47,7 +47,7 @@ keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/the
 keycloak-theme/test-theme-with-compose.sh,448be1b09af6e06708caa4927c9ae224
 keycloak-theme/test-users-realm.json,c1beaa49d916a47b8fc5ca262c21bb71
 model/pom.xml,63585b6fccdfed35f1c1df2f61cb2c58
-pom.xml,bbdb1f3d11c9a6d1c8adaf7f5748ba7a
+pom.xml,48de825edf45a1c083680215c74b3cf8
 rest/pom.xml,3be1bdc9cdc8fd42493714a747241e6e
 schema/README.adoc,8371838b901d34b8026d10bf3399c83d
 schema/migration/gitkeep,68b329da9893e34099c7d8ad5cb9c940

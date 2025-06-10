@@ -35,7 +35,7 @@ data-api/model/CreateArgumentInputType.ts,76cc6d5b384b35d595308d2caa29b6cb
 data-api/model/CreateCommentInput.ts,b64b17f66ac7776543dadb519c93ec73
 data-api/model/District.ts,b9f65992d00801f4bcd368fc3328a6b7
 data-api/model/EnumerationOperation.ts,6e9d36ab1b3dccf5d7ea9e1b6168d5c2
-data-api/model/Initializer.ts,4d52dd9b066a26c6fbaf9adf8801aed1
+data-api/model/Initializer.ts,a95fa441ff0229a2ac43768612df2320
 data-api/model/Issue.ts,7bcc4595d991d2219d3093ec3bc1e508
 data-api/model/IssueAttachment.ts,43e744f4c56a47671f558115a2cda949
 data-api/model/IssueCategory.ts,6c8a07cd90a2f99a497292f50525d6f0
@@ -54,11 +54,11 @@ data-api/model/ServiceCity.ts,4806c049b52d9ef775f35255725113be
 data-api/model/ServiceCloseDebateInputSelectAnswerVoteSelection.ts,6fe94ff71a24400df934801628d78e74
 data-api/model/ServiceComment.ts,829949cf10f9d67426f6fedb078d0a62
 data-api/model/ServiceCon.ts,120e71fa1d68782b294951bc48263e57
-data-api/model/ServiceConParent.ts,53a89f547aca10b03e6dd85ec50644de
+data-api/model/ServiceConParent.ts,601ae06927ae70e4388fc74c54d83d7e
 data-api/model/ServiceCounty.ts,ba59ab312fc1515bb42aee46da859438
 data-api/model/ServiceCreateIssueInput.ts,5a8e829b49ff53583818b393163f0642
 data-api/model/ServiceCreateUserInput.ts,c2882a5ec4ae0e7eb067b69895e807bc
-data-api/model/ServiceDashboard.ts,4a8ea10d841d322528bb85c27208ec84
+data-api/model/ServiceDashboard.ts,18d4f37080d07d894a492c11d75636bc
 data-api/model/ServiceDistrict.ts,db1cc55564e3c227cc9295ec892d5a81
 data-api/model/ServiceIssue.ts,9889ad48c281f96ab3f64c0f1d9b11f7
 data-api/model/ServiceIssueAttachment.ts,b250457db868a06e77a6089ba66de1b2
@@ -66,7 +66,7 @@ data-api/model/ServiceIssueCategory.ts,d353826e03acddd283400f4b27ee3926
 data-api/model/ServiceIssueLink.ts,bbe9a282df355d906232ecbaf78751b1
 data-api/model/ServiceIssueType.ts,b004cef5978477ca9ab9ec8bfb4e6e30
 data-api/model/ServicePro.ts,e6b1af26b803a40ed16facff1faebc66
-data-api/model/ServiceProParent.ts,58a9c39185c9b1e1c88c0dc9af789c19
+data-api/model/ServiceProParent.ts,1f77832046523e48d6effd85a39f7b64
 data-api/model/ServiceRatingVoteDefinition.ts,e599e5ba8847066ebb2c5a11d561bad6
 data-api/model/ServiceRatingVoteEntry.ts,d68f80db630c4649fc1f40a91b851c72
 data-api/model/ServiceSelectAnswerVoteDefinition.ts,ff2ef6bae7804c0d5cd2706c05f124b1
@@ -78,9 +78,9 @@ data-api/model/ServiceSimpleVote.ts,2a6da5fbc6af374e70347d2e94ec2a57
 data-api/model/ServiceUserIssues.ts,f6fd10d9c4f7f1c5f312d672b0e1b8db
 data-api/model/ServiceUserManager.ts,da3b6dd3daeacd8e9717c0e03f519bb5
 data-api/model/ServiceUserProfile.ts,31f7957c7c1213692a4d779d2f732297
-data-api/model/ServiceUserVoteDefinition.ts,10f279bdc1974e94b02e409f7e719286
+data-api/model/ServiceUserVoteDefinition.ts,4e22130f510989e342556a29a2742c39
 data-api/model/ServiceVoteDefinition.ts,cd94606a6ba577bec016e69f771672e6
-data-api/model/ServiceVoteDefinitionReference.ts,eb50df588c79fd850e61c43fa9400e22
+data-api/model/ServiceVoteDefinitionReference.ts,204b189c12ac978cc61d8dd1a1c3e7fa
 data-api/model/ServiceVoteEntry.ts,f7b8e68dc29c62adea211eeb196d5f16
 data-api/model/ServiceYesNoAbstainVoteDefinition.ts,25fd9c4a990d0e7e53af48d2c5adeeae
 data-api/model/ServiceYesNoAbstainVoteEntry.ts,c90b0b97fef6d6dba1c07d543b10adbc

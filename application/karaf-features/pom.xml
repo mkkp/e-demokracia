@@ -103,7 +103,7 @@
                                         <descriptor>mvn:hu.blackbelt.judo.platform/judo-platform-sdk-karaf-features/${judo-platform-version}/xml/features</descriptor>
                                     </descriptors>
                                     <distribution>org.apache.karaf.features:framework</distribution>
-                                    <javase>17</javase>
+                                    <javase>21</javase>
                                     <framework>
                                         <feature>framework</feature>
                                         <feature>shell-compat</feature>

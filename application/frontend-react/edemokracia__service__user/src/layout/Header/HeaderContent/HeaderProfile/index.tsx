@@ -2,9 +2,9 @@
 // G E N E R A T E D    S O U R C E
 // --------------------------------
 // Factory expression: <actor>
-// Path expression: 'src/layout/Header/HeaderContent/Profile/index.tsx'
-// Template name: actor/src/layout/Header/HeaderContent/Profile/index.tsx
-// Template file: actor/src/layout/Header/HeaderContent/Profile/index.tsx.hbs
+// Path expression: 'src/layout/Header/HeaderContent/HeaderProfile/index.tsx'
+// Template name: actor/src/layout/Header/HeaderContent/HeaderProfile/index.tsx
+// Template file: actor/src/layout/Header/HeaderContent/HeaderProfile/index.tsx.hbs
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -15,25 +15,38 @@ import Popper from '@mui/material/Popper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from 'react-oidc-context';
 import { useJudoNavigation } from '~/components';
 import { ThemeMode } from '~/config';
 import { useHeroProps } from '~/hooks';
 import { ProfilePopup } from '~/layout/ProfilePopup';
 import { Transitions } from '~/layout/Transitions';
 import { routeToServiceUserUserProfileAccessViewPage } from '~/routes';
+import type { JudoIdentifiable } from '~/services/data-api/common/JudoIdentifiable';
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForUserProfileImpl } from '~/services/data-axios/UserServiceForUserProfileImpl';
 import { useLayoutHelper } from '~/utilities/layout-helper';
 
 export const HeaderProfile = () => {
   const { t } = useTranslation();
   const theme = useTheme();
   const heroProps = useHeroProps();
+  const userServiceForUserProfileImpl = useMemo(() => new UserServiceForUserProfileImpl(judoAxiosProvider), []);
   const { navigate } = useJudoNavigation();
   const openProfilePage = async () => {
     setOpen(false);
     navigate(routeToServiceUserUserProfileAccessViewPage());
   };
+  const { signoutRedirect, isAuthenticated } = useAuth();
+  const doLogout = useCallback(() => {
+    const redirectUrl = window.location.href.split('#')[0];
+    signoutRedirect({
+      post_logout_redirect_uri: redirectUrl,
+    });
+  }, [signoutRedirect]);
+
   const { downLG } = useLayoutHelper();
 
   const anchorRef = useRef<any>(null);
@@ -43,7 +56,6 @@ export const HeaderProfile = () => {
   };
 
   const handleClose = (event: MouseEvent | TouchEvent) => {
-    console.log('Handle: ' + event);
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }

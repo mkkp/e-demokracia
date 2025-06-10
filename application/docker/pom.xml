@@ -165,7 +165,7 @@
 
                                 <configuration>
                                     <from>
-                                        <image>azul/zulu-openjdk-debian:17-latest</image> -->
+                                        <image>azul/zulu-openjdk-debian:21-latest</image>
                                         <platforms>
                                             <platform>
                                                 <architecture>amd64</architecture>
@@ -270,7 +270,7 @@
 
                                  <configuration>
                                      <from>
-                                         <image>azul/zulu-openjdk-debian:17-latest</image> -->
+                                         <image>azul/zulu-openjdk-debian:21-latest</image>
                                          <platforms>
                                              <platform>
                                                  <architecture>amd64</architecture>
@@ -375,7 +375,7 @@
 
                                 <configuration>
                                     <from>
-                                        <image>azul/zulu-openjdk-debian:17-latest</image>
+                                        <image>azul/zulu-openjdk-debian:21-latest</image>
                                         <platforms>
                                             <platform>
                                                 <architecture>arm64</architecture>

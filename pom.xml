@@ -14,15 +14,15 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <judo-meta-esm-version>1.2.0.20250425_095241_69f66e3c_develop</judo-meta-esm-version>
-        <judo-esm-fullstack-project-template-version>1.0.0.20250510_041800_70cb29cc_develop</judo-esm-fullstack-project-template-version>
-        <judo-version-updater-maven-plugin-version>1.0.0.20241127_151701_eca331a9_develop</judo-version-updater-maven-plugin-version>
+        <judo-meta-esm-version>1.2.0.20250606_070924_010802cb_develop</judo-meta-esm-version>
+        <judo-esm-fullstack-project-template-version>1.0.0.20250606_073825_43f1e47d_develop</judo-esm-fullstack-project-template-version>
+        <judo-version-updater-maven-plugin-version>1.0.0.20250605_192037_ea4d463c_develop</judo-version-updater-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
         <!-- To redifine create 'pom.xml.model-properties-definition.fragment.hbs' override file -->
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->

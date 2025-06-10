@@ -133,7 +133,6 @@ src/components/widgets/TrinaryLogicCombobox.tsx
 src/components/widgets/index.tsx
 src/config/general.ts
 src/config/index.ts
-src/config/layout.ts
 src/config/table.ts
 src/containers/City/City_Table/CityCity_Table.tsx
 src/containers/City/City_Table/CityCity_TableDialogContainer.tsx
@@ -2029,6 +2028,7 @@ src/layout/Header/HeaderContent/Customization/ThemeMenuLayout.tsx
 src/layout/Header/HeaderContent/Customization/ThemeMode.tsx
 src/layout/Header/HeaderContent/Customization/ThemeWidth.tsx
 src/layout/Header/HeaderContent/Customization/index.tsx
+src/layout/Header/HeaderContent/HeaderProfile/index.tsx
 src/layout/Header/HeaderContent/index.tsx
 src/layout/Header/index.tsx
 src/layout/Header/index.tsx
