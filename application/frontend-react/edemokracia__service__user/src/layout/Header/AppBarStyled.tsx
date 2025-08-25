@@ -6,10 +6,14 @@
 // Template name: actor/src/layout/Header/AppBarStyled.tsx
 // Template file: actor/src/layout/Header/AppBarStyled.tsx.hbs
 
-import type { AppBarProps } from '@mui/material';
+import { type AppBarProps } from '@mui/material';
+import { type IconButtonPropsColorOverrides } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+
 import AppBar from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 import { DRAWER_WIDTH } from '~/config';
+import { appBarExtraStyles } from '~/layout/Header/AppBarExtraStyles';
 
 export interface AppBarStyledProps extends AppBarProps {
   open?: boolean;
@@ -17,6 +21,7 @@ export interface AppBarStyledProps extends AppBarProps {
 
 export const AppBarStyled = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<AppBarStyledProps>(
   ({ theme, open }) => ({
+    ...appBarExtraStyles(theme, open),
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,

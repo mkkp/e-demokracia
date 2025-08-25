@@ -39,3 +39,31 @@ app.*.map.json
 
 # Maven
 .flattened-pom.xml
+# JUDO GENERATOR BLOCK START
+README.adoc
+docker/compose-develop/docker-compose.yml
+docker/compose-postgresql-https/docker-compose.yml
+docker/compose-postgresql-https/tls.yml
+docker/compose-postgresql-https/traefik.yml
+docker/overrided/bin/setenv
+frontend-react/README.adoc
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogAuthenticationInterceptor.java.default
+interceptors/src/main/java/party/mkkp/edemokracia/interceptors/LogOperationCallInterceptor.java.default
+keycloak-theme/README.adoc
+keycloak-theme/docker-compose.yml
+keycloak-theme/src/assembly/assembly.xml
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/error.ftl
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/footer.ftl
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/login.ftl
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/register.ftl
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/resources/css/login.css
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/resources/img/judo-color-logo.svg
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/resources/img/keycloak-bg.png
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/resources/img/keycloak-logo-text.png
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/resources/img/keycloak-logo.png
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/template.ftl
+keycloak-theme/src/main/resources/themes/edemokracia-application-theme/login/theme.properties
+keycloak-theme/test-theme-with-compose.sh
+keycloak-theme/test-users-realm.json
+schema/README.adoc
+# JUDO GENERATOR BLOCK END

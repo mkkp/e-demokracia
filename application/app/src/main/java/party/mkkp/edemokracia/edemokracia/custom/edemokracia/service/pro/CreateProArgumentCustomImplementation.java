@@ -1,0 +1,43 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.pro;
+
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.services.ArgumentService;
+
+/**
+ * 
+ * 
+ * var edemokracia::User user = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any()
+ * var edemokracia::Pro pro = this as edemokracia::Pro;
+ * 
+ * pro.pros += new edemokracia::Pro(createdBy = user, title = input.title, description = input.description);
+ * 
+ * 
+ * Usage:
+ *  1. Rename this file from CreateProArgumentCustomImplementation.java.default to CreateProArgumentCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of CreateProArgumentCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.CreateProArgument.class)
+public class CreateProArgumentCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.pro.CreateProArgument {
+
+    @Reference
+    ArgumentService argumentService;
+
+    @Override
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.pro.Pro _this, party.mkkp.edemokracia.edemokracia.api.edemokracia.createargumentinput.CreateArgumentInput input)  {
+        argumentService.addProForPro(_this.identifier().getIdentifier(), input.getTitle(), input.getDescription());
+    }
+
+}

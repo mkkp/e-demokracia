@@ -1,0 +1,96 @@
+/**
+ * When navigate to selected subtypes view page on userOwedSelected
+ */
+
+import { useMemo } from 'react';
+
+import { useJudoNavigation } from '~/components';
+import { useDialog } from '~/components/dialog';
+import { processQueryCustomizer } from '~/utilities';
+
+import { judoAxiosProvider } from '~/services/data-axios/JudoAxiosProvider';
+import { UserServiceForRatingVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForRatingVoteDefinitionsImpl';
+import { UserServiceForSelectAnswerVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForSelectAnswerVoteDefinitionsImpl';
+import { UserServiceForYesNoAbstainVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoAbstainVoteDefinitionsImpl';
+import { UserServiceForYesNoVoteDefinitionsImpl } from '~/services/data-axios/UserServiceForYesNoVoteDefinitionsImpl';
+
+import {
+  //  routeToServiceUserAdminVoteDefinitionsAccessViewPage,
+  routeToServiceUserRatingVoteDefinitionsAccessViewPage,
+  routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage,
+  routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage,
+  routeToServiceUserYesNoVoteDefinitionsAccessViewPage,
+} from '~/routes';
+import { ServiceVoteDefinitionStored } from '~/services/data-api/model/ServiceVoteDefinition';
+
+//export async function openVoteDefinitionPage(row: ServiceVoteDefinitionStored) {
+export const openVoteDefinitionPage = () => {
+  const [createDialog, closeDialog, closeAllDialogs] = useDialog();
+  const { navigate } = useJudoNavigation();
+  const userServiceForRatingVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForRatingVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
+  const userServiceForSelectAnswerVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForSelectAnswerVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
+  const userServiceForYesNoAbstainVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForYesNoAbstainVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
+  const userServiceForYesNoVoteDefinitionsImpl = useMemo(
+    () => new UserServiceForYesNoVoteDefinitionsImpl(judoAxiosProvider),
+    [],
+  );
+
+  return async function (row: ServiceVoteDefinitionStored, isDraft?: boolean) {
+    closeAllDialogs();
+
+    const id = row!.__identifier;
+    const entityType = row!.__entityType;
+
+    const idAccessFilterCustomizer: any = {
+      _identifier: id,
+    };
+
+    console.log('Entity type ' + entityType);
+
+    if (entityType === 'YesNoVoteDefinition') {
+      // Retrieve signedIdentifier from access
+      const res = await userServiceForYesNoVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToServiceUserYesNoVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
+    } else if (entityType === 'YesNoAbstainVoteDefinition') {
+      // Retrieve signedIdentifier from access
+      const res = await userServiceForYesNoAbstainVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToServiceUserYesNoAbstainVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
+    } else if (entityType === 'RatingVoteDefinition') {
+      // Retrieve signedIdentifier from access
+      const res = await userServiceForRatingVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToServiceUserRatingVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
+    } else if (entityType === 'SelectAnswerVoteDefinition') {
+      // Retrieve signedIdentifier from access
+      const res = await userServiceForSelectAnswerVoteDefinitionsImpl.list(
+        undefined,
+        processQueryCustomizer(idAccessFilterCustomizer),
+      );
+      // Open view page in access
+      navigate(routeToServiceUserSelectAnswerVoteDefinitionsAccessViewPage(res.data[0].__signedIdentifier));
+    }
+    //else {
+    //  navigate(routeToServiceUserAdminVoteDefinitionsAccessViewPage(row.__signedIdentifier));
+    //}
+  };
+};

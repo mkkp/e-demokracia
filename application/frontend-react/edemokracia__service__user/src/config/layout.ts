@@ -39,11 +39,13 @@ export type CustomizationProps = {
   container: boolean;
   menuOrientation: MenuOrientation;
   mode: ThemeMode;
+  header: boolean;
   onChangeContainer: VoidFunction;
   onChangeLocalization: (lang: I18n) => void;
   onChangeMode: (mode: ThemeMode) => void;
   onChangeMiniDrawer: (miniDrawer: boolean) => void;
   onChangeMenuOrientation: (menuOrientation: MenuOrientation) => void;
+  onChangeHeader: (header: boolean) => void;
 };
 
 export type LayoutConfigProps = {
@@ -52,12 +54,34 @@ export type LayoutConfigProps = {
   miniDrawer: boolean;
   container: boolean;
   mode: ThemeMode;
+  header: boolean;
+};
+
+export type ScaleProps = {
+  scaleXs: number;
+  scaleSm: number;
+  scaleMd: number;
+  scaleLg: number;
+  scaleXl: number;
 };
 
 export const defaultLayoutConfig: LayoutConfigProps = {
   i18n: 'en',
-  menuOrientation: MenuOrientation.VERTICAL,
-  miniDrawer: false,
+  menuOrientation: MenuOrientation.HORIZONTAL,
+  miniDrawer: true,
   container: true,
   mode: ThemeMode.LIGHT,
+  header: true,
+};
+
+export const defaultScales: ScaleProps = {
+  scaleXs: 0.75,
+  scaleSm: 0.85,
+  scaleMd: 0.9,
+  scaleLg: 0.95,
+  scaleXl: 1.0,
+};
+
+export const menuBehaviour = {
+  mouseOverOpenClose: false,
 };

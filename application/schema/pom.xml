@@ -19,6 +19,9 @@
         <outputDirectory>${incrementalDirectory}</outputDirectory>
         <updateModelArtifactVersion>${project.version}</updateModelArtifactVersion>
         <updateModel>mvn:party.mkkp.edemokracia:edemokracia:${model-version}!model/${modelName}-rdbms_postgresql.model</updateModel>
+
+        <!-- To define create 'pom.xml.properties-definition.fragment.hbs' file -->
+        <!-- End of 'pom.xml.properties-definition.fragment.hbs' -->
     </properties>
 
     <profiles>
@@ -139,6 +142,9 @@
                 </dependency>
             </dependencies>
 	    </profile>
+
+        <!-- To define create 'pom.xml.extra-profiles.fragment.hbs' file -->
+        <!-- End of 'pom.xml.extra-profiles.fragment.hbs' -->
     </profiles>
 
     <build>

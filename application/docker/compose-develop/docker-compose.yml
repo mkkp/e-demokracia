@@ -13,7 +13,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
   auth:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.1.2
     labels:
       - "traefik.http.routers.auth.rule=Host(`auth.traefik.me`)"
       - "traefik.http.services.auth.loadbalancer.server.port=8080"

@@ -14,4 +14,11 @@ export interface Density {
   borderRadius: number;
   dataGridDensity?: 'compact' | 'standard' | 'comfortable';
   isListDense?: boolean;
+  mainMarginTop?: number;
+  mainMarginTopXs?: number;
+  mainMarginTopSm?: number;
+  mainMarginTopMd?: number;
+  mainMarginTopLg?: number;
+  mainMarginTopXl?: number;
+  cardContentPadding?: number;
 }

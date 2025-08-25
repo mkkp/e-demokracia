@@ -22,11 +22,11 @@
         <frontend-maven-plugin-version>1.12.1</frontend-maven-plugin-version>
         <ui-model>${basedir}/model/edemokracia-ui.model</ui-model>
 
-        <judo-ui-react-template-version>1.0.0.20240312_155713_12dd0fb1_develop</judo-ui-react-template-version>
-        <judo-ui-typescript-rest-template-version>1.0.0.20240308_132421_e4201772_develop</judo-ui-typescript-rest-template-version>
+        <judo-ui-react-template-version>1.0.0.20250606_125234_7130938c_develop</judo-ui-react-template-version>
+        <judo-ui-typescript-rest-template-version>1.0.0.20250606_071511_87a9ea57_develop</judo-ui-typescript-rest-template-version>
 
-        <node-version>18.16.0</node-version>
-        <pnpm-version>8.6.1</pnpm-version>
+        <node-version>22.11.0</node-version>
+        <pnpm-version>9.12.3</pnpm-version>
 
         <node-install-dir>${maven.multiModuleProjectDirectory}/.nodejs</node-install-dir>
 

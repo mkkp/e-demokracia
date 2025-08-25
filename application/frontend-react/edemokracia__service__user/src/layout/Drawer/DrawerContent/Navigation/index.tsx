@@ -12,21 +12,55 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { OBJECTCLASS } from '@pandino/pandino-api';
 import { useTrackService } from '@pandino/react-hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePrincipal } from '~/auth';
 import { MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
-import { ServiceServicePrincipalUserStored } from '~/services/data-api';
-import { NavGroup } from './NavGroup';
-import { NavItem } from './NavItem';
-import { NavItemType } from './NavItem';
-import { ScrollableMenu } from './ScrollableMenu';
-import { menus } from './menu-items';
+import { NavCollapse } from '~/layout/Drawer/DrawerContent/Navigation/NavCollapse';
+import { NavGroup } from '~/layout/Drawer/DrawerContent/Navigation/NavGroup';
+import { NavItem } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { NavItemType } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { ScrollableMenu } from '~/layout/Drawer/DrawerContent/Navigation/ScrollableMenu';
+import { useMenus } from '~/layout/Drawer/DrawerContent/Navigation/menu-items';
+import { ServiceServicePrincipalUserStored } from '~/services/data-api/model/ServiceServicePrincipalUser';
 
 export const MENU_ITEMS_CUSTOMIZER_HOOK_INTERFACE_KEY = 'MenuItemsCustomizerHook';
 export type MenuItemsCustomizerHook = () => (items: NavItemType[]) => NavItemType[];
 
+export enum NavigationDirection {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
+const isHidden = (menuItem: NavItemType, principal: ServiceServicePrincipalUserStored): boolean => {
+  return menuItem.hiddenBy ? !!principal[menuItem.hiddenBy as keyof ServiceServicePrincipalUserStored] : false;
+};
+const handleMenuItems = (
+  source: NavItemType[],
+  target: NavItemType[],
+  principal: ServiceServicePrincipalUserStored,
+) => {
+  for (const item of source) {
+    if (!isHidden(item, principal)) {
+      const clone: NavItemType = {
+        ...item,
+        children: Array.isArray(item.children) && item.children.length ? [] : undefined,
+      };
+      target.push(clone);
+
+      if (Array.isArray(item.children) && item.children.length) {
+        handleMenuItems(item.children, clone.children!, principal);
+      }
+    }
+  }
+};
+const filterMenus = (source: NavItemType[], principal: ServiceServicePrincipalUserStored) => {
+  const target: NavItemType[] = [];
+  handleMenuItems(source, target, principal);
+  return target;
+};
+
 export const Navigation = () => {
+  const { principal } = usePrincipal();
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
   const { menuOrientation, miniDrawer } = useConfig();
@@ -34,53 +68,46 @@ export const Navigation = () => {
     `(${OBJECTCLASS}=${MENU_ITEMS_CUSTOMIZER_HOOK_INTERFACE_KEY})`,
   );
   const menuItemsCustomizer = useMenuItemsCustomizer && useMenuItemsCustomizer();
-  const [menuItems, setMenuItems] = useState<NavItemType[]>(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus);
-
-  const { principal } = usePrincipal();
-
-  const isHidden = (menuItem: NavItemType): boolean => {
-    return menuItem.hiddenBy ? !!principal[menuItem.hiddenBy as keyof ServiceServicePrincipalUserStored] : false;
-  };
-
-  const handlerMenuItems = (source: NavItemType[], target: NavItemType[]) => {
-    for (const item of source) {
-      if (!isHidden(item)) {
-        const clone: NavItemType = {
-          ...item,
-          children: Array.isArray(item.children) && item.children.length ? [] : undefined,
-        };
-        target.push(clone);
-
-        if (Array.isArray(item.children) && item.children.length) {
-          handlerMenuItems(item.children, clone.children!);
-        }
-      }
-    }
-  };
+  const menus = useMenus();
+  const [menuItems, setMenuItems] = useState<NavItemType[]>(
+    filterMenus(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus, principal),
+  );
 
   useEffect(() => {
     const filteredMenus: NavItemType[] = [];
-    handlerMenuItems(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus, filteredMenus);
+    handleMenuItems(menuItemsCustomizer ? menuItemsCustomizer(menus) : menus, filteredMenus, principal);
     setMenuItems(filteredMenus);
   }, [principal]);
 
-  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
-  let lastItemIndex = menuItems.length - 1;
+  const isHorizontal = useMemo(
+    () => menuOrientation === MenuOrientation.HORIZONTAL && !downLG,
+    [menuOrientation, downLG],
+  );
+  let lastItemIndex = useMemo(() => menuItems.length - 1, [menuItems]);
 
-  const navGroups = menuItems.slice(0, lastItemIndex + 1).map((item) => {
-    switch (item.type) {
-      case 'group':
-        return <NavGroup key={item.id} item={item} />;
-      case 'item':
-        return <NavItem key={item.id} item={item} level={1} />;
-      default:
-        return (
-          <Typography key={item.id} variant="h6" color="error" align="center">
-            Invalid item type: {item.type}!
-          </Typography>
-        );
-    }
-  });
+  const navGroups = useMemo(
+    () =>
+      menuItems.slice(0, lastItemIndex + 1).map((item) => {
+        switch (item.type) {
+          case 'group':
+            return miniDrawer ? (
+              <NavCollapse key={item.id} menu={item} level={1} render={true} arrow={true} />
+            ) : (
+              <NavGroup key={item.id} item={item} />
+            );
+          case 'item':
+            return <NavItem key={item.id} item={item} level={1} />;
+          default:
+            return (
+              <Typography key={item.id} variant="h6" color="error" align="center">
+                Invalid item type: {item.type}!
+              </Typography>
+            );
+        }
+      }),
+    [menuItems, miniDrawer],
+  );
+
   return (
     <Box
       sx={{

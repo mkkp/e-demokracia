@@ -10,24 +10,39 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import type { Theme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useEffect, useState } from 'react';
+import { type Theme } from '@mui/material/styles';
+import { useEffect, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import { DRAWER_WIDTH, MINI_DRAWER_WIDTH, MenuOrientation } from '~/config';
-import { useConfig } from '~/hooks';
-import { CustomBreadcrumb, useJudoNavigation } from './CustomBreadcrumb';
+import { MdiIcon } from '~/components';
+import { CustomBreadcrumb, useJudoNavigation } from '~/components/CustomBreadcrumb';
+import { useLayoutHelper } from '~/utilities/layout-helper';
 
 interface PageHeaderProps {
   title: string;
+  icon?: string;
   children: ReactNode;
 }
 
-export const PageHeader = ({ title, children }: PageHeaderProps) => {
+export const PageHeader = ({ title, icon, children }: PageHeaderProps) => {
   const { setTitle } = useJudoNavigation();
-  const { container, miniDrawer, menuOrientation } = useConfig();
   const [scrolled, setScrolled] = useState<boolean>(false);
-  const downLG = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
+  const { pageHeaderOffset, container, isHeaderPresent, isXs, isSm, isMd, isLg, isXl } = useLayoutHelper();
+
+  const titleWidth = useMemo(() => {
+    if (isXs) {
+      return '10rem';
+    } else if (isSm) {
+      return '20rem';
+    } else if (isMd) {
+      return '30rem';
+    } else if (isLg) {
+      return '40rem';
+    } else if (isXl) {
+      return '50rem';
+    } else {
+      return '10rem';
+    }
+  }, [isXs, isSm, isMd, isLg, isXl]);
 
   useEffect(() => {
     setTitle(title);
@@ -48,18 +63,11 @@ export const PageHeader = ({ title, children }: PageHeaderProps) => {
       sx={{
         position: 'fixed',
         zIndex: 1100,
-        top: { xs: 56, sm: 64 },
-        right: 0,
-        width: `calc(100% - ${
-          menuOrientation === MenuOrientation.HORIZONTAL
-            ? 0
-            : !downLG
-              ? miniDrawer
-                ? MINI_DRAWER_WIDTH
-                : DRAWER_WIDTH
-              : 0
-        }px)`,
-        backgroundColor: (theme) => theme.palette.background.default,
+        top: isHeaderPresent ? { xs: 56, sm: 64 } : { xs: 0, sm: 0 },
+        left: `calc(${pageHeaderOffset}px)`,
+        width: `calc(100% - ${pageHeaderOffset}px)`,
+        backgroundColor: (theme) =>
+          isHeaderPresent ? theme.palette.background.default : theme.palette.background.paper,
       }}
     >
       <Container
@@ -85,9 +93,18 @@ export const PageHeader = ({ title, children }: PageHeaderProps) => {
           <Grid item xs={12}>
             <Grid container alignItems="center" justifyContent="space-between" spacing={1}>
               <Grid item>
-                <Typography id="application-page-header-title" component="span" color="text.primary" variant="h3">
-                  {title}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  {icon && <MdiIcon path={icon} />}
+                  <Typography
+                    id="application-page-header-title"
+                    component="span"
+                    color="text.primary"
+                    variant="h3"
+                    sx={{ overflow: 'hidden', width: `${titleWidth}`, whiteSpace: 'noWrap', textOverflow: 'ellipsis' }}
+                  >
+                    {title}
+                  </Typography>
+                </Box>
               </Grid>
               <Grid item>
                 <Grid container direction="row" alignItems="center" spacing={1}>

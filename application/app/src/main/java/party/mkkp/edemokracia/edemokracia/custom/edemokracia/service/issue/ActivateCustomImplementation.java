@@ -1,0 +1,46 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    C L A S S
+// ------------------------------
+// Factory expression: #allCustomizableOperations(#model)
+// Path expression: '/'+#emptyCustomOperationOsgiParentPath(#self)+'/'+#emptyCustomOperationOsgiName(#self)+'.java.default'
+// Template name: empty-custom-operation-implementation-osgi.java
+// Template file: osgi/empty-custom-operation-implementation-osgi.java.hbs
+// Debug: false
+// Payload validator: false
+// Optional types: false
+
+package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.issue;
+
+import org.osgi.service.component.annotations.Reference;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.IssueDao;
+import party.mkkp.edemokracia.edemokracia.services.IssueService;
+
+/**
+ * 
+ * 
+ * var edemokracia::Issue issue = this as edemokracia::Issue;
+ * 
+ * if (issue.status != edemokracia::IssueStatus#CREATED) {
+ * 	return;
+ * }
+ * issue.status = edemokracia::IssueStatus#ACTIVE;
+ *  
+ * 
+ * Usage:
+ *  1. Rename this file from ActivateCustomImplementation.java.default to ActivateCustomImplementation.java
+ *  2. Implement method
+ *  3. To ignore the generation of ActivateCustomImplementation.java.default file, put it to .generator-ignore file
+ *  4. To inject dao, import @org.osgi.service.component.annotations.* package and use @Reference annotation
+ */
+@org.osgi.service.component.annotations.Component(immediate = true, service = party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.Activate.class)
+public class ActivateCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.issue.Activate {
+
+    @Reference
+    IssueService issueService;
+
+    @Override
+    public void accept(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue _this)  {
+        issueService.activate(_this.identifier().getIdentifier());
+    }
+
+}

@@ -15,22 +15,19 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 import { MdiIcon } from '~/components';
-import { DRAWER_WIDTH, MenuOrientation, ThemeMode } from '~/config';
+import { DRAWER_WIDTH, MenuOrientation } from '~/config';
 import { useConfig } from '~/hooks';
-import { AppBarStyled } from './AppBarStyled';
-import { HeaderContent } from './HeaderContent';
+import { AppBarStyled } from '~/layout/Header/AppBarStyled';
+import { HeaderContent } from '~/layout/Header/HeaderContent';
 
 export const Header = () => {
   const theme = useTheme();
   const downLG = useMediaQuery(theme.breakpoints.down('lg'));
   const { menuOrientation, miniDrawer, onChangeMiniDrawer } = useConfig();
 
-  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
+  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL;
 
   const headerContent = useMemo(() => <HeaderContent />, []);
-
-  const iconBackColorOpen = theme.palette.mode === ThemeMode.DARK ? 'grey.200' : 'grey.300';
-  const iconBackColor = theme.palette.mode === ThemeMode.DARK ? 'background.default' : 'grey.100';
 
   const mainHeader: ReactNode = (
     <Toolbar>

@@ -19,7 +19,7 @@ services:
       - edemokracia_certs:/etc/ssl/traefik
 
   auth:
-    image: quay.io/keycloak/keycloak:latest
+    image: quay.io/keycloak/keycloak:26.1.2
     labels:
       - "traefik.http.routers.auth.rule=Host(`auth.traefik.me`)"
       - "traefik.http.services.auth.loadbalancer.server.port=8080"
@@ -67,7 +67,7 @@ services:
       - JUDO_PLATFORM_RDBMS_DB_HOST=postgres
 
   postgres:
-    image: postgres:14.1-alpine
+    image: postgres:16.2
     restart: always
     environment:
       - POSTGRES_USER=edemokracia

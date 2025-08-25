@@ -7,47 +7,34 @@
 // Template file: actor/src/layout/Drawer/DrawerHeader.tsx.hbs
 
 import Box from '@mui/material/Box';
-import type { Theme } from '@mui/material/styles';
-import { styled, useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { MenuOrientation } from '~/config';
-import { useConfig } from '~/hooks';
-import { LogoSection } from '../logo';
+import { useTheme } from '@mui/material/styles';
+import { LogoSection } from '~/layout/logo';
+import { useLayoutHelper } from '~/utilities/layout-helper';
 
 export interface DrawerHeaderProps {
   open: boolean;
 }
 
-export const DrawerHeaderStyled = styled(Box, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }: { theme: Theme; open: boolean }) => ({
-    ...theme.mixins.toolbar,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: open ? 'flex-start' : 'center',
-    paddingLeft: theme.spacing(open ? 3 : 0),
-  }),
-);
-
 export const DrawerHeader = ({ open }: DrawerHeaderProps) => {
   const theme = useTheme();
-  const downLG = useMediaQuery(theme.breakpoints.down('lg'));
-
-  const { menuOrientation } = useConfig();
-  const isHorizontal = menuOrientation === MenuOrientation.HORIZONTAL && !downLG;
+  const { isMenuOrientationHorizontal } = useLayoutHelper();
 
   return (
-    <DrawerHeaderStyled
-      theme={theme}
-      open={open}
+    <Box
       sx={{
-        minHeight: isHorizontal ? 'unset' : '60px',
-        width: isHorizontal ? { xs: '100%', lg: '424px' } : 'inherit',
-        paddingTop: isHorizontal ? { xs: '10px', lg: '0' } : '8px',
-        paddingBottom: isHorizontal ? { xs: '18px', lg: '0' } : '8px',
-        paddingLeft: isHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
+        ...theme.mixins.toolbar,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: open ? 'flex-start' : 'center',
+        minHeight: isMenuOrientationHorizontal ? 'unset' : '60px',
+        width: isMenuOrientationHorizontal ? { xs: '100%', lg: '424px' } : 'inherit',
+        paddingTop: isMenuOrientationHorizontal ? { xs: '10px', lg: '0' } : '8px',
+        paddingBottom: isMenuOrientationHorizontal ? { xs: '18px', lg: '0' } : '8px',
+        paddingLeft: isMenuOrientationHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
+        paddingRight: isMenuOrientationHorizontal ? { xs: '24px', lg: '0' } : open ? '24px' : 0,
       }}
     >
-      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: open ? 135 : 35 }} />
-    </DrawerHeaderStyled>
+      <LogoSection isIcon={!open} sx={{ width: open ? 'auto' : 35, height: 35 }} />
+    </Box>
   );
 };

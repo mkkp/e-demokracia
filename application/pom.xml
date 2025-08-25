@@ -16,13 +16,13 @@
     <packaging>pom</packaging>
 
     <properties>
-        <surefire-version>3.0.0</surefire-version>
+        <surefire-version>3.5.1</surefire-version>
 
         <!--suppress UnresolvedMavenProperty -->
         <logback-test-config>${maven.multiModuleProjectDirectory}/logback-test.xml</logback-test-config>
 
-        <slf4j-version>2.0.7</slf4j-version>
-        <karaf-version>4.4.3</karaf-version>
+        <slf4j-version>2.0.16</slf4j-version>
+        <karaf-version>4.4.7</karaf-version>
 
         <!-- To redifine create 'pom.xml.model-properties-definition.fragment.hbs' override file -->
         <model-groupId>party.mkkp.edemokracia</model-groupId>
@@ -39,24 +39,22 @@
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
 
         <!-- To define create 'pom.xml.judo-properties-definition.fragment.hbs' file -->
-        <structured-map-proxy-version>2.0.0.20240304_134724_72ade506_develop</structured-map-proxy-version>
-        <judo-dao-api-version>1.0.4.20240129_105710_5ca64071_develop</judo-dao-api-version>
-        <judo-dispatcher-api-version>1.0.3.20230826_230134_1ce94d88_develop</judo-dispatcher-api-version>
-        <judo-sdk-common-version>1.0.4.20240313_041226_1c53e514_develop</judo-sdk-common-version>
-        <mapper-version>1.0.4.20230826_230852_5723dcb6_develop</mapper-version>
+        <judo-runtime-core-version>1.0.6.20250606_072804_0754124b_develop</judo-runtime-core-version>
+        <judo-dao-api-version>1.0.4.20250605_192947_c2e81b28_develop</judo-dao-api-version>
+        <judo-dispatcher-api-version>1.0.3.20250605_191812_7164733f_develop</judo-dispatcher-api-version>
+        <judo-sdk-common-version>1.0.4.20250606_071407_0af394c4_develop</judo-sdk-common-version>
+        <mapper-version>1.0.4.20250605_193111_b7bd7398_develop</mapper-version>
         
-        <judo-tatami-version>1.1.0.20240313_041537_ee4e9c9e_develop </judo-tatami-version>
-        <judo-platform-version>2.0.1.20240313_074031_6c144173_develop</judo-platform-version>
-        <judo-services-version>1.1.0.20240313_042231_f5567ca3_develop</judo-services-version>
-        <judo-rdbms-schema-version>1.0.0.20240313_041541_d8940788_develop</judo-rdbms-schema-version>
-        <judo-tatami-client-version>1.1.0.20240312_040638_0e9d6e41_develop</judo-tatami-client-version>
+        <judo-tatami-version>1.1.0.20250606_073127_2952fbb5_develop </judo-tatami-version>
+        <judo-platform-version>2.0.1.20250605_191544_39dc8b66_develop</judo-platform-version>
+        <judo-rdbms-schema-version>1.0.0.20250606_072814_da9f9408_develop</judo-rdbms-schema-version>
+        <judo-tatami-client-version>1.1.0.20250606_071832_a18763cb_develop</judo-tatami-client-version>
         
-        <judo-meta-ui-version>1.1.0.20240301_184656_ee0f3e33_develop</judo-meta-ui-version>
-        <judo-meta-psm-version>1.3.0.20240127_122224_4f1de775_develop</judo-meta-psm-version>
-        <judo-psm-generator-sdk-core-version>1.0.0.20240313_041300_d16cc314_develop</judo-psm-generator-sdk-core-version>
-        <judo-psm-generator-jaxrs-version>1.0.0.20240313_041308_6fb5419b_develop</judo-psm-generator-jaxrs-version>
-        <cxf-jaxrs-application-manager-version>0.7.1.20230914_110111_1c9ad225_develop</cxf-jaxrs-application-manager-version>
-        
+        <judo-meta-ui-version>1.1.0.20250606_071218_e7534068_develop</judo-meta-ui-version>
+        <judo-meta-psm-version>1.3.0.20250606_071332_ac56b042_develop</judo-meta-psm-version>
+        <judo-psm-generator-sdk-core-version>1.0.0.20250606_071744_d5a98b7a_develop</judo-psm-generator-sdk-core-version>
+        <judo-psm-generator-jaxrs-version>1.0.0.20250606_071744_ab6d49c0_develop</judo-psm-generator-jaxrs-version>
+        <cxf-jaxrs-application-manager-version>0.7.1.20250605_192721_8a952c0e_develop</cxf-jaxrs-application-manager-version>
         <osgi-default-import>
             org.osgi.framework;version="[1.8,2.0)",
             !lombok,
@@ -84,6 +82,30 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
+                    <configuration>
+                        <compilerId>eclipse</compilerId>
+                        <source>21</source>
+                        <target>21</target>
+                        <showWarnings>false</showWarnings>
+                        <showDeprecation>false</showDeprecation>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.codehaus.plexus</groupId>
+                            <artifactId>plexus-compiler-eclipse</artifactId>
+                            <version>2.12.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.eclipse.jdt</groupId>
+                            <artifactId>ecj</artifactId>
+                            <version>3.41.0</version>
+                        </dependency>
+                        <dependency>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>1.18.38</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
 
                 <plugin>
@@ -266,6 +288,19 @@
         </profile>
 
         <profile>
+            <id>build-keycloak-theme</id>
+            <activation>
+                <property>
+                    <name>!skipKeycloakTheme</name>
+                </property>
+            </activation>
+
+            <modules>
+                <module>keycloak-theme</module>
+            </modules>
+        </profile>
+
+        <profile>
             <id>build-sdk</id>
             <activation>
                 <property>
@@ -277,6 +312,7 @@
                 <module>sdk</module>
                 <module>internal</module>
                 <module>app</module>
+                <module>interceptors</module>
                 <module>rest</module>
                 <!-- To define create 'pom.xml.extra-modules.fragment.hbs' file -->
                 <!-- End of 'pom.xml.extra-modules.fragment.hbs' -->
@@ -331,7 +367,7 @@
                     <plugin>
                         <groupId>org.simplify4u.plugins</groupId>
                         <artifactId>sign-maven-plugin</artifactId>
-                        <version>1.0.1</version>
+                        <version>1.1.0</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -393,7 +429,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.11</version>
+                <version>1.5.12</version>
             </dependency>
             <!-- To define create 'pom.xml.extra-dependency-management.fragment.hbs' file -->
             <!-- End of 'pom.xml.extra-dependency-management.fragment.hbs' -->

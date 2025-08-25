@@ -22,14 +22,15 @@ import { MenuOrientation, ThemeMode } from '~/config';
 import { useConfig } from '~/hooks';
 
 export type NavItemType = {
-  id?: string;
+  id: string;
+  type: 'group' | 'collapse' | 'item';
   title?: ReactNode | string;
   url?: string;
+  onClick?: () => void;
   icon?: string;
   disabled?: boolean;
   hiddenBy?: string;
   children?: NavItemType[];
-  type?: 'group' | 'collapse' | 'item';
 };
 
 export interface NavItemProps {
@@ -73,7 +74,13 @@ export const NavItem = ({ item, level }: NavItemProps) => {
         // menu item-based navigations should always clear the breadcrumbs
         e.preventDefault();
         e.stopPropagation();
-        if (item.url!.startsWith('http')) {
+        if (typeof item.onClick === 'function') {
+          try {
+            item.onClick();
+          } catch (e) {
+            console.error(e);
+          }
+        } else if (item.url!.startsWith('http')) {
           externalNavigate(item.url!);
         } else {
           clearNavigate(item.url!);
@@ -176,7 +183,7 @@ export const NavItem = ({ item, level }: NavItemProps) => {
           )}
           <ListItemText
             primary={
-              <Typography variant="h6" color="inherit" noWrap>
+              <Typography fontWeight="inherit" variant="inherit" color="inherit" noWrap>
                 {t(`menuTree.${item.title}`, { defaultValue: item.title })}
               </Typography>
             }

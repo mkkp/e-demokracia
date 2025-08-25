@@ -28,10 +28,14 @@ export interface CustomFormVisualElementProps<T> {
   readonly editMode: boolean;
 
   /**
-   * State modifier method which implicitly updates the `data` and adds an entry to the `payloadDiff` as well.
+   * State modifier method which implicitly updates the `data` with additional meta attributes.
    *
    * It is highly recommended to use this method to update the data/state  on pages in order to be consistent with the
    * framework and reduce erroneous behaviour.
    */
   storeDiff: (attributeName: keyof T, value: any) => void;
+}
+
+export interface CustomFormVisualElementPropsWithActions<T, A> extends CustomFormVisualElementProps<T> {
+  actions: A;
 }

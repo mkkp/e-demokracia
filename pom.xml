@@ -14,15 +14,15 @@
 
     <properties>
         <revision>1.0.0-SNAPSHOT</revision>
-        <judo-meta-esm-version>1.2.0.20240312_001129_81373cec_develop</judo-meta-esm-version>
-        <judo-esm-fullstack-project-template-version>1.0.0.20240313_042233_0e77453f_develop</judo-esm-fullstack-project-template-version>
-        <judo-version-updater-maven-plugin-version>1.0.0.20231027_121339_45b7ebd2_develop</judo-version-updater-maven-plugin-version>
+        <judo-meta-esm-version>1.2.0.20250606_070924_010802cb_develop</judo-meta-esm-version>
+        <judo-esm-fullstack-project-template-version>1.0.0.20250606_073825_43f1e47d_develop</judo-esm-fullstack-project-template-version>
+        <judo-version-updater-maven-plugin-version>1.0.0.20250605_192037_ea4d463c_develop</judo-version-updater-maven-plugin-version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <timestamp>${maven.build.timestamp}</timestamp>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
         <!-- To redifine create 'pom.xml.model-properties-definition.fragment.hbs' override file -->
         <!-- End of 'pom.xml.model-properties-definition.fragment.hbs' -->
@@ -209,13 +209,57 @@
                                         <groupId>${project.groupId}</groupId>
                                         <projectPostfix>-application</projectPostfix>
                                         <version>${project.version}</version>
-
                                         <modelGroupId>${project.groupId}</modelGroupId>
                                         <modelArtifactId>${project.artifactId}</modelArtifactId>
                                         <modelVersion>${project.version}</modelVersion>
                                     </templateParameters>
+                                    <validateChecksum>${validateChecksum}</validateChecksum>
                                 </configuration>
                             </execution>
+
+                            <execution>
+                                <id>synchronize-root-gitignore</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>synchronizeGitignore</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}</destination>
+                                    <ignoredFiles>pom.xml,**/pom.xml,judo.sh,.mvn/jvm.config</ignoredFiles>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>reset-root-checksums</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>resetChecksum</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}</destination>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>generate-root-checksum</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>checksum</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}</destination>
+                                </configuration>
+                            </execution>
+
                         </executions>
                     </plugin>
                 </plugins>
@@ -280,11 +324,54 @@
                                         <groupId>${project.groupId}</groupId>
                                         <projectPostfix>-application</projectPostfix>
                                         <version>${project.version}</version>
-
                                         <modelGroupId>${project.groupId}</modelGroupId>
                                         <modelArtifactId>${project.artifactId}</modelArtifactId>
                                         <modelVersion>${project.version}</modelVersion>
                                     </templateParameters>
+                                    <validateChecksum>${validateChecksum}</validateChecksum>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>synchronize-application-gitignore</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>synchronizeGitignore</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}/application</destination>
+                                    <ignoredFiles>pom.xml,**/pom.xml,**/gitkeep,karaf-features/src/main/feature/feature.xml</ignoredFiles>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>reset-application-checksums</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>resetChecksum</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}/application</destination>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>generate-application-checksum</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>checksum</goal>
+                                </goals>
+                                <configuration>
+                                    <esm>
+                                        ${basedir}/model/edemokracia.model
+                                    </esm>
+                                    <destination>${basedir}/application</destination>
                                 </configuration>
                             </execution>
                         </executions>
@@ -292,6 +379,7 @@
                 </plugins>
             </build>
         </profile>
+
         <!-- To define create 'pom.xml.extra-profiles.fragment.hbs' file -->
         <!-- End of 'pom.xml.extra-profiles.fragment.hbs' -->
     </profiles>

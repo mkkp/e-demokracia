@@ -1,0 +1,638 @@
+[
+  {
+    "region": "BU",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapesten bárhol",
+    "mkkp_oevk_full": "Budapesten bárhol"
+  },
+  {
+    "region": "BU1",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest I.",
+    "mkkp_oevk_full": "Budapest I. kerület"
+  },
+  {
+    "region": "BU2",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest II.",
+    "mkkp_oevk_full": "Budapest II. kerület"
+  },
+  {
+    "region": "BU3",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest III.",
+    "mkkp_oevk_full": "Budapest III. kerület"
+  },
+  {
+    "region": "BU4",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest IV.",
+    "mkkp_oevk_full": "Budapest IV. kerület"
+  },
+  {
+    "region": "BU5",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest V.",
+    "mkkp_oevk_full": "Budapest V. kerület"
+  },
+  {
+    "region": "BU6",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest VI.",
+    "mkkp_oevk_full": "Budapest VI. kerület"
+  },
+  {
+    "region": "BU7",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest VII.",
+    "mkkp_oevk_full": "Budapest VII. kerület"
+  },
+  {
+    "region": "BU8",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest VIII.",
+    "mkkp_oevk_full": "Budapest VIII. kerület"
+  },
+  {
+    "region": "BU9",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest IX.",
+    "mkkp_oevk_full": "Budapest IX. kerület"
+  },
+  {
+    "region": "BU10",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest X.",
+    "mkkp_oevk_full": "Budapest X. kerület"
+  },
+  {
+    "region": "BU11",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XI.",
+    "mkkp_oevk_full": "Budapest XI. kerület"
+  },
+  {
+    "region": "BU12",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XII.",
+    "mkkp_oevk_full": "Budapest XII. kerület"
+  },
+  {
+    "region": "BU13",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XIII.",
+    "mkkp_oevk_full": "Budapest XIII. kerület"
+  },
+  {
+    "region": "BU14",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XIV.",
+    "mkkp_oevk_full": "Budapest XIV. kerület"
+  },
+  {
+    "region": "BU15",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XV.",
+    "mkkp_oevk_full": "Budapest XV. kerület"
+  },
+  {
+    "region": "BU16",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XVI.",
+    "mkkp_oevk_full": "Budapest XVI. kerület"
+  },
+  {
+    "region": "BU17",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XVII.",
+    "mkkp_oevk_full": "Budapest XVII. kerület"
+  },
+  {
+    "region": "BU18",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XVIII.",
+    "mkkp_oevk_full": "Budapest XVIII. kerület"
+  },
+  {
+    "region": "BU19",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XIX.",
+    "mkkp_oevk_full": "Budapest XIX. kerület"
+  },
+  {
+    "region": "BU20",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XX.",
+    "mkkp_oevk_full": "Budapest XX. kerület"
+  },
+  {
+    "region": "BU21",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XXI.",
+    "mkkp_oevk_full": "Budapest XXI. kerület"
+  },
+  {
+    "region": "BU22",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XXII.",
+    "mkkp_oevk_full": "Budapest XXII. kerület"
+  },
+  {
+    "region": "BU23",
+    "region_name": "Budapest",
+    "mkkp_oevk": "Budapest XXIII.",
+    "mkkp_oevk_full": "Budapest XXIII. kerület"
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 1",
+    "mkkp_oevk_full": "BÁCS_KISKUN 1: Kecskemét, Tiszakécske és minden, ami majdnem az."
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 2",
+    "mkkp_oevk_full": "BÁCS_KISKUN 2:Kecskemét, Kerekegyháza, Kunszentmiklós, Lajosmizse és ami ott van"
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 3",
+    "mkkp_oevk_full": "BÁCS_KISKUN 3:Kalocsa, Kiskőrös, Solt, Soltvadkert és a környező települések"
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 4",
+    "mkkp_oevk_full": "BÁCS_KISKUN 4: Kiskunfélegyháza, Tiszaalpár, Lakitelek, Izsák és arrafelé."
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 5",
+    "mkkp_oevk_full": "BÁCS_KISKUN 5: Kiskunhalas, Bácsalmás, Jánoshalma, Kecel, Mélykút és a környéke"
+  },
+  {
+    "region": "BK",
+    "region_name": "Bács-Kiskun",
+    "mkkp_oevk": "BÁCS_KISKUN 6",
+    "mkkp_oevk_full": "BÁCS_KISKUN 6: Baja és sok pici falu"
+  },
+  {
+    "region": "BA",
+    "region_name": "Baranya",
+    "mkkp_oevk": "BARANYA 1",
+    "mkkp_oevk_full": "BARANYA 1 Pécs, sajnos Kozármisleny nékül"
+  },
+  {
+    "region": "BA",
+    "region_name": "Baranya",
+    "mkkp_oevk": "BARANYA 2",
+    "mkkp_oevk_full": "BARANYA 2: Pécs, Kivévekomló valamint és mindenek előtt Kozármisleny"
+  },
+  {
+    "region": "BA",
+    "region_name": "Baranya",
+    "mkkp_oevk": "BARANYA 3",
+    "mkkp_oevk_full": "BARANYA 3: Mohács, Boj, Pécsvárad és a gazdag környező birtokok és Maráza"
+  },
+  {
+    "region": "BA",
+    "region_name": "Baranya",
+    "mkkp_oevk": "BARANYA 4",
+    "mkkp_oevk_full": "BARANYA 4: Szigetvár, Siklós, egy ötezres város és a környező 8000 település"
+  },
+  {
+    "region": "BE",
+    "region_name": "Békés",
+    "mkkp_oevk": "BÉKÉS 1",
+    "mkkp_oevk_full": "BÉKÉS 1: Békéscsaba, Csorvás, Kondoros, Úkígyós és ameddig a szem ellát"
+  },
+  {
+    "region": "BE",
+    "region_name": "Békés",
+    "mkkp_oevk": "BÉKÉS 2",
+    "mkkp_oevk_full": "BÉKÉS 2: Sima Békés, Dévaványa, Mezőberény Szarvas, Gyomaendrőd és annak gazdasági befolyási zónái"
+  },
+  {
+    "region": "BE",
+    "region_name": "Békés",
+    "mkkp_oevk": "BÉKÉS 3",
+    "mkkp_oevk_full": "BÉKÉS 3: Gyula, Füzesgyarmat, Sarkad!, Szeghalom!!, Vésztő!!! és ki kell mondjuk, Bélmegyer, plusz territoriális területek"
+  },
+  {
+    "region": "BE",
+    "region_name": "Békés",
+    "mkkp_oevk": "BÉKÉS 4",
+    "mkkp_oevk_full": "BÉKÉS 4: Orosháza, Battonya, Mezőkovácsháza, Tótkomlós plusz bicklivel 20 perc"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 1-2",
+    "mkkp_oevk_full": "BAZ 1-2: Miskolc, Alsózsolca, Felsőzsolca, Középzsolca, Zsolcahegy, Paradicsomzsolca és a környékbeli vlág"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 3",
+    "mkkp_oevk_full": "BAZ 3: Ózd, Az a rész Ózd mellett, ahol füvet termeszt a polgármester, Putnok, Suzi szeretné, ha beleírnánk Hangonyt és Sajókazát is, mert üzenni szeretne ezúton is az ottani diákjainak, hogy érettségizzenek le, sőt!"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 4",
+    "mkkp_oevk_full": "BAZ 4: Kazincbarcika, Edelény, Sajószentpéter, az a nagyon hosszú utca, amin a Csabival átmentünk"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 5",
+    "mkkp_oevk_full": "BAZ 5: Sátoraljaújhely, Encs, Sárospatak, Sátoraljaújhely valamint egy jó kis hegyoldal"
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 6",
+    "mkkp_oevk_full": "BAZ 6: Tiszaújváros, Szikszó, Szerencs, Tudod hogy hányan laknak Szerencsen? 7938-an. És természetesen Tiszalúc."
+  },
+  {
+    "region": "BZ",
+    "region_name": "Borsod-Abaúj-Zemplén",
+    "mkkp_oevk": "BAZ 7",
+    "mkkp_oevk_full": "BAZ 7: Mezőkövesd, Emőd, ott van a tehéntánc, Mezőcsát, Nyékládháza és az ilyen sajó- meg tiszamenti helyek"
+  },
+  {
+    "region": "CS",
+    "region_name": "Csongrád",
+    "mkkp_oevk": "CSONGRÁD 1-2",
+    "mkkp_oevk_full": "CSONGRÁD 1-2: Szeged, Mórahalom és minden más"
+  },
+  {
+    "region": "CS",
+    "region_name": "Csongrád",
+    "mkkp_oevk": "CSONGRÁD 3",
+    "mkkp_oevk_full": "CSONGRÁD 3: Szentes, Csongrád, Sándorfalva, Mindszent, valamint a világ további része"
+  },
+  {
+    "region": "CS",
+    "region_name": "Csongrád",
+    "mkkp_oevk": "CSONGRÁD 4",
+    "mkkp_oevk_full": "CSONGRÁD 4: Hódmezővásárhely, Algyő, Makó és ahonnan látszik mindez"
+  },
+  {
+    "region": "FE",
+    "region_name": "Fejér",
+    "mkkp_oevk": "FEJÉR 1-2",
+    "mkkp_oevk_full": "FEJÉR 1-2: Székesfehérvár, Bodajk, Mór and more"
+  },
+  {
+    "region": "FE",
+    "region_name": "Fejér",
+    "mkkp_oevk": "FEJÉR 3",
+    "mkkp_oevk_full": "FEJÉR 3: Bicske, Gárdony, Martonvásár, Velence és további tópart"
+  },
+  {
+    "region": "FE",
+    "region_name": "Fejér",
+    "mkkp_oevk": "FEJÉR 4",
+    "mkkp_oevk_full": "FEJÉR 4: Dunaújváros, Ercsi, Pusztaszabolcs, Sárbogárd és hasonló területek"
+  },
+  {
+    "region": "FE",
+    "region_name": "Fejér",
+    "mkkp_oevk": "FEJÉR 5",
+    "mkkp_oevk_full": "FEJÉR 5: Sárbogárd, Aba, Enying. És Magyarosrág erre levő része."
+  },
+  {
+    "region": "GS",
+    "region_name": "Győr-Moson-Sopron",
+    "mkkp_oevk": "GYMS 1-2",
+    "mkkp_oevk_full": "GYMS 1-2: Győr, Győrújbarát, Sopronjófej, Mosonkirályarc, Győrrégenfaszvolt"
+  },
+  {
+    "region": "GS",
+    "region_name": "Győr-Moson-Sopron",
+    "mkkp_oevk": "GYMS 3",
+    "mkkp_oevk_full": "GYMS 3: Csorna, Kapuvár és ez a körzet nem Tét nélküli."
+  },
+  {
+    "region": "GS",
+    "region_name": "Győr-Moson-Sopron",
+    "mkkp_oevk": "GYMS 4",
+    "mkkp_oevk_full": "GYMS 4: Sopron, Fertőszentmiklós, és további sopronfelé."
+  },
+  {
+    "region": "GS",
+    "region_name": "Győr-Moson-Sopron",
+    "mkkp_oevk": "GYMS 5",
+    "mkkp_oevk_full": "GYMS 5: Mosonmagyaróvár, Jánossomorja és a dicső kis falvak népe"
+  },
+  {
+    "region": "HB",
+    "region_name": "Hajdú-Bihar",
+    "mkkp_oevk": "HAJDÚ-BIHAR 1-2-3",
+    "mkkp_oevk_full": "HAJDÚ-BIHAR 1-2-3: Debrecen, Hajdúsámson, Létravértes, Vámospércs, Hibridkauzalitás, Téglás, Nyíradony."
+  },
+  {
+    "region": "HB",
+    "region_name": "Hajdú-Bihar",
+    "mkkp_oevk": "HAJDÚ-BIHAR 4",
+    "mkkp_oevk_full": "HAJDÚ-BIHAR 4 Berettyóújfalu és mindenki más arra felé"
+  },
+  {
+    "region": "HB",
+    "region_name": "Hajdú-Bihar",
+    "mkkp_oevk": "HAJDÚ-BIHAR 5",
+    "mkkp_oevk_full": "HAJDÚ-BIHAR 5: Hajdúszoboszló, Ebes, Kutyás, Egyek, Igyak, Földes, Vizes, Nádudvar, Holdudvar, Tiszacsege, ki kell mondjuk: Tetétlen"
+  },
+  {
+    "region": "HB",
+    "region_name": "Hajdú-Bihar",
+    "mkkp_oevk": "HAJDÚ-BIHAR 6",
+    "mkkp_oevk_full": "HAJDÚ-BIHAR 6:Hajdúböszörmény, Balmazújváros, Hajúnánás, Polgár és 21 Nemes"
+  },
+  {
+    "region": "HE",
+    "region_name": "Heves",
+    "mkkp_oevk": "HEVES 1",
+    "mkkp_oevk_full": "HEVES 1: Eger, Füzesabony és környéke"
+  },
+  {
+    "region": "HE",
+    "region_name": "Heves",
+    "mkkp_oevk": "HEVES 2",
+    "mkkp_oevk_full": "HEVES 2: Gyöngyös és a többi városka"
+  },
+  {
+    "region": "HE",
+    "region_name": "Heves",
+    "mkkp_oevk": "HEVES 3",
+    "mkkp_oevk_full": "HEVES 3: 60, 70, 80 Heves, stb."
+  },
+  {
+    "region": "JN",
+    "region_name": "Jász-Nagykun-Szolnok",
+    "mkkp_oevk": "JÁSZ-NAGYKUN 1",
+    "mkkp_oevk_full": "JÁSZ-NAGYKUN 1: Szolnok, Tószeg, Zagyvarékas Besenyszög"
+  },
+  {
+    "region": "JN",
+    "region_name": "Jász-Nagykun-Szolnok",
+    "mkkp_oevk": "JÁSZ-NAGYKUN 2",
+    "mkkp_oevk_full": "JÁSZ-NAGYKUN 2: Jászberény és a jásszal kezdődő falvak"
+  },
+  {
+    "region": "JN",
+    "region_name": "Jász-Nagykun-Szolnok",
+    "mkkp_oevk": "JÁSZ-NAGYKUN 3",
+    "mkkp_oevk_full": "JÁSZ-NAGYKUN 3: Karcag, Kunhegyes, Túrkeve, Kunmadaras és más kával és tével kezdődő települések"
+  },
+  {
+    "region": "JN",
+    "region_name": "Jász-Nagykun-Szolnok",
+    "mkkp_oevk": "JÁSZ-NAGYKUN 4",
+    "mkkp_oevk_full": "JÁSZ-NAGYKUN 4: Törökszentmiklós, Mezőtúr, Tiszaföldvár, Kunszentmárton"
+  },
+  {
+    "region": "KE",
+    "region_name": "Komárom-Esztergom",
+    "mkkp_oevk": "KOMÁROM-ESZTERGOM 1",
+    "mkkp_oevk_full": "KOMÁROM-ESZTERGOM 1:Tatabánya, Tata"
+  },
+  {
+    "region": "KE",
+    "region_name": "Komárom-Esztergom",
+    "mkkp_oevk": "KOMÁROM-ESZTERGOM 2",
+    "mkkp_oevk_full": "KOMÁROM-ESZTERGOM 2: Esztergom, Dorog, Piliscsév és még sokan mások"
+  },
+  {
+    "region": "KE",
+    "region_name": "Komárom-Esztergom",
+    "mkkp_oevk": "KOMÁROM-ESZTERGOM 3",
+    "mkkp_oevk_full": "KOMÁROM-ESZTERGOM: 3 Komárom, Oroszlány, Kisbér, Ács"
+  },
+  {
+    "region": "NO",
+    "region_name": "Nógrád",
+    "mkkp_oevk": "NÓGRÁD 1",
+    "mkkp_oevk_full": "NÓGRÁD 1: Salgótarján, Bátonyterenye"
+  },
+  {
+    "region": "NO",
+    "region_name": "Nógrád",
+    "mkkp_oevk": "NÓGRÁD 2",
+    "mkkp_oevk_full": "NÓGRÁD 2: Balassagyarmat, Szécsény, Rétság, Érsekvadkert és környéke"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 1",
+    "mkkp_oevk_full": "PEST 1: Érd, Törökbálint, Tárnok, Diósd"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 2",
+    "mkkp_oevk_full": "PEST 2: Budakeszi, Budaörs, Solymár, Biatorbágy, nagykovácsi, Zsámbék, Piliscsaba"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 3",
+    "mkkp_oevk_full": "PEST 3: Szentendre, Pomáz, Pilisvörösvár, Budakalász, Üröm"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 4",
+    "mkkp_oevk_full": "PEST 4: Vác, Nagymaros, Nagybörzsöny, Sződliget, Cardiff"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 5",
+    "mkkp_oevk_full": "PEST 5: Dunakeszi, Fót, Göd, Veresegyház, Csömőr"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 6",
+    "mkkp_oevk_full": "PEST 6: Gödöllő, Kistarcs, Kerepes, Isaszeg"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 7",
+    "mkkp_oevk_full": "PEST 7: Vecsés, Gyál, Gyömrő, Pécel, Üllő, Maglód"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 8",
+    "mkkp_oevk_full": "PEST 8: Szigetszentmiklós? Százhalombatta, Szigethalom, Tököl, Halásztelek, Dunavarsány"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 9",
+    "mkkp_oevk_full": "PEST 9: Nagykáta, Sülysáp, Tura"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 10",
+    "mkkp_oevk_full": "PEST 10: Monor, Albertirsa, Pilis"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 11",
+    "mkkp_oevk_full": "PEST 11: Dabas, Dunaharaszti, Kiskunlacháza, Ráckeve, Ócsa"
+  },
+  {
+    "region": "PE",
+    "region_name": "Pest",
+    "mkkp_oevk": "PEST 12",
+    "mkkp_oevk_full": "PEST 12: Cegléd, Abony, Nagykőrös"
+  },
+  {
+    "region": "SO",
+    "region_name": "Somogy",
+    "mkkp_oevk": "SOMOGY 1",
+    "mkkp_oevk_full": "SOMOGY 1: Kaposvár és környéke"
+  },
+  {
+    "region": "SO",
+    "region_name": "Somogy",
+    "mkkp_oevk": "SOMOGY 2",
+    "mkkp_oevk_full": "SOMOGY 2: Barcs, Csurgó, Nagyatád és sokan mások"
+  },
+  {
+    "region": "SO",
+    "region_name": "Somogy",
+    "mkkp_oevk": "SOMOGY 3",
+    "mkkp_oevk_full": "SOMOGY 3: Marcali és Balatonlellétől keletre a déli part Nagybajomig"
+  },
+  {
+    "region": "SO",
+    "region_name": "Somogy",
+    "mkkp_oevk": "SOMOGY 4",
+    "mkkp_oevk_full": "SOMOGY 4: Siófoktól balra Balatonszemesig és délen Taszárig"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg",
+    "mkkp_oevk": "SZSZB 1-2",
+    "mkkp_oevk_full": "SZSZB 1-2: Nyíregyháza és Tiszavasvári, Kótaj, Ibrány, Nyírtelek, Rakamaz és térségük"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg",
+    "mkkp_oevk": "SZSZB 3",
+    "mkkp_oevk_full": "SZSZB 3: Kisvárda, Ajak, Demecser, Dombrád, Kemecse, Nagyhalász és még Napkor is"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg",
+    "mkkp_oevk": "SZSZB 4",
+    "mkkp_oevk_full": "SZSZB 4: Vásárosnamény, Fehérgyarmat, Mándok, egyelőre Záhonyig"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg",
+    "mkkp_oevk": "SZSZB 5",
+    "mkkp_oevk_full": "SZSZB 5: Mátészalka, Nagyecsed és mások"
+  },
+  {
+    "region": "SZ",
+    "region_name": "Szabolcs-Szatmár-Bereg",
+    "mkkp_oevk": "SZSZB 6",
+    "mkkp_oevk_full": "SZSZB 6: Nyírbátor, Kállósemlény, Újfehértó és sokan mások egészen a Balkányig"
+  },
+  {
+    "region": "TO",
+    "region_name": "Tolna",
+    "mkkp_oevk": "TOLNA 1",
+    "mkkp_oevk_full": "TOLNA 1: Szekszárd, Btaszék, Fadd, Decs"
+  },
+  {
+    "region": "TO",
+    "region_name": "Tolna",
+    "mkkp_oevk": "TOLNA 2",
+    "mkkp_oevk_full": "TOLNA 2: Dombóvártól Nagykónyig, Harctól Szakályig és Bonyhád"
+  },
+  {
+    "region": "TO",
+    "region_name": "Tolna",
+    "mkkp_oevk": "TOLNA 3",
+    "mkkp_oevk_full": "TOLNA 3: Paks és a Duna partján Dunaföldvártól Gerjenig, Tamásitól Simonttornyáig, valamint Ozora, Iregszemcse, magyarkeszi és sokan mások"
+  },
+  {
+    "region": "VA",
+    "region_name": "Vas",
+    "mkkp_oevk": "VAS 1",
+    "mkkp_oevk_full": "VAS 1: Szombathely és hozzá nagyon közeli települések"
+  },
+  {
+    "region": "VA",
+    "region_name": "Vas",
+    "mkkp_oevk": "VAS 2",
+    "mkkp_oevk_full": "VAS 2: Sárvár és Celldömölktől Kőszegig és Csánigig"
+  },
+  {
+    "region": "VA",
+    "region_name": "Vas",
+    "mkkp_oevk": "VAS 3",
+    "mkkp_oevk_full": "VAS 3: Körmend, Szentgotthárd, Vasvár, az Őrségi Nemzeti Park és nagyon sok kis településecske"
+  },
+  {
+    "region": "VE",
+    "region_name": "Veszprém",
+    "mkkp_oevk": "VESZPRÉM 1",
+    "mkkp_oevk_full": "VESZPRÉM 1: Veszprém és vidéke Űrkúttal, Csehbányával, Szápárral, stb."
+  },
+  {
+    "region": "VE",
+    "region_name": "Veszprém",
+    "mkkp_oevk": "VESZPRÉM 2",
+    "mkkp_oevk_full": "VESZPRÉM 2: Balatonfüred, Zánkától Balatonakarattyáig minden a Balcsinál, plusz Berhidától Pétfürdőn át Várpalota"
+  },
+  {
+    "region": "VE",
+    "region_name": "Veszprém",
+    "mkkp_oevk": "VESZPRÉM 3",
+    "mkkp_oevk_full": "VESZPRÉM 3:Tapolca, Ajka, Sümeg háromszög"
+  },
+  {
+    "region": "VE",
+    "region_name": "Veszprém",
+    "mkkp_oevk": "VESZPRÉM 4",
+    "mkkp_oevk_full": "VESZPRÉM 4: Pápa, Devecser, Zirc és sok sok kedves pici település"
+  },
+  {
+    "region": "ZA",
+    "region_name": "Zala",
+    "mkkp_oevk": "ZALA 1",
+    "mkkp_oevk_full": "ZALA 1: Zalaegerszeg, Lenti, Lickóvadamos és mások"
+  },
+  {
+    "region": "ZA",
+    "region_name": "Zala",
+    "mkkp_oevk": "ZALA 2",
+    "mkkp_oevk_full": "ZALA 2: Keszthely, Hévíz, Zalaszentgrót, nyugaton Baktüttösig, délen Zalakarosig"
+  },
+  {
+    "region": "ZA",
+    "region_name": "Zala",
+    "mkkp_oevk": "ZALA 3",
+    "mkkp_oevk_full": "ZALA 3: Nagykanizsa, Letenye közti és a Tófej-Belezna tengely települései"
+  },
+  {
+    "region": "KF",
+    "region_name": "Külföld",
+    "mkkp_oevk": "Külföld",
+    "mkkp_oevk_full": "Külföld"
+  }
+]

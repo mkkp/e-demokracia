@@ -1,0 +1,6 @@
+/* Add fonsts here to be able to reference the font name */
+@font-face{
+  font-family: "Plus Jakarta Sans";
+  src:local("PlusJakartaSans-VariableFont-Regular"), url('../custom/assets/fonts/PlusJakartaSans-VariableFont_wght.ttf');
+}
+

@@ -13,6 +13,7 @@ const initialState: CustomizationProps = {
   onChangeMode: (mode: ThemeMode) => {},
   onChangeMiniDrawer: (miniDrawer: boolean) => {},
   onChangeMenuOrientation: (menuOrientation: MenuOrientation) => {},
+  onChangeHeader: (header: boolean) => {},
 };
 
 const ConfigContext = createContext(initialState);
@@ -66,6 +67,13 @@ function ConfigProvider({ children }: ConfigProviderProps) {
     });
   };
 
+  const onChangeHeader = (header: boolean) => {
+    setConfig({
+      ...config,
+      header,
+    });
+  };
+
   return (
     <ConfigContext.Provider
       value={{
@@ -76,6 +84,7 @@ function ConfigProvider({ children }: ConfigProviderProps) {
         onChangeDirection,
         onChangeMiniDrawer,
         onChangeMenuOrientation,
+        onChangeHeader,
       }}
     >
       {children}

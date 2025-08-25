@@ -62,3 +62,10 @@ app.*.map.json
 
 # Profiler
 .profiler
+# JUDO GENERATOR BLOCK START
+.sdkmanrc
+README.adoc
+compose-dev.properties
+compose-full.properties
+judo-karaf.env
+# JUDO GENERATOR BLOCK END

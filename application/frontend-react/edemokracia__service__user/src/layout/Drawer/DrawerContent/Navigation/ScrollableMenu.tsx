@@ -1,7 +1,15 @@
+//////////////////////////////////////////////////////////////////////////////
+// G E N E R A T E D    S O U R C E
+// --------------------------------
+// Factory expression: <actor>
+// Path expression: 'src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx'
+// Template name: actor/src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx
+// Template file: actor/src/layout/Drawer/DrawerContent/Navigation/ScrollableMenu.tsx.hbs
+
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import type { FC, ReactNode } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MdiIcon } from '~/components';
 
 interface ScrollableMenuProps {
@@ -13,67 +21,55 @@ export const ScrollableMenu: FC<ScrollableMenuProps> = ({ children }) => {
   const [showLeftButton, setShowLeftButton] = useState(false);
   const [showRightButton, setShowRightButton] = useState(false);
 
+  const updateScrollButtons = useCallback(() => {
+    const content: any = menuRef.current;
+    setShowLeftButton(content.scrollLeft > 0);
+    setShowRightButton(content.scrollLeft < content.scrollWidth - content.clientWidth);
+  }, []);
+
+  const scrollContent = useCallback((direction: number) => {
+    const content: any = menuRef.current;
+    const scrollAmount = 300;
+    content.scrollLeft += direction * scrollAmount;
+    window.setTimeout(() => {
+      updateScrollButtons();
+    }, 300);
+  }, []);
+
   useEffect(() => {
-    if (menuRef.current) {
-      const container = menuRef.current;
-      setShowLeftButton(container.scrollLeft > 0);
-      setShowRightButton(container.scrollWidth > container.clientWidth + container.scrollLeft);
-    }
-  }, [showLeftButton, showRightButton]);
-
-  const handleScroll = () => {
-    if (menuRef.current) {
-      const container = menuRef.current;
-      setShowLeftButton(container.scrollLeft > 0);
-      setShowRightButton(container.scrollWidth > container.clientWidth + container.scrollLeft);
-    }
-  };
-
-  const handleScrollLeft = () => {
-    if (menuRef.current) {
-      menuRef.current.scrollBy({
-        left: -200,
-        behavior: 'smooth',
-      });
-    }
-  };
-
-  const handleScrollRight = () => {
-    if (menuRef.current) {
-      menuRef.current.scrollBy({
-        left: 200,
-        behavior: 'smooth',
-      });
-    }
-  };
+    updateScrollButtons();
+  }, []);
 
   return (
     <div
       style={{
-        position: 'relative',
-        overflowX: 'hidden',
         display: 'flex',
         alignItems: 'center',
+        width: '100%',
       }}
     >
-      <IconButton sx={{ visibility: !showLeftButton ? 'hidden' : 'visible' }} onClick={handleScrollLeft}>
-        <MdiIcon path="chevron-left" />
-      </IconButton>
-      <Box
-        sx={{
+      <div style={{ flex: '0 0 auto', padding: '10px', marginRight: '5px' }}>
+        <IconButton sx={{ visibility: !showLeftButton ? 'hidden' : 'visible' }} onClick={() => scrollContent(-1)}>
+          <MdiIcon path="chevron-left" />
+        </IconButton>
+      </div>
+      <div
+        ref={menuRef}
+        style={{
           display: 'flex',
-          overflowX: 'hidden',
-          WebkitOverflowScrolling: 'touch',
+          overflow: 'hidden',
+          flex: '1 1 auto',
+          whiteSpace: 'nowrap',
           scrollBehavior: 'smooth',
         }}
-        ref={menuRef}
-        onScroll={handleScroll}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>{children}</Box>
-      </Box>
-      <IconButton sx={{ visibility: !showRightButton ? 'hidden' : 'visible' }} onClick={handleScrollRight}>
-        <MdiIcon path="chevron-right" />
-      </IconButton>
+        <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>{children}</Box>
+      </div>
+      <div style={{ flex: '0 0 auto', padding: '10px', marginLeft: '5px' }}>
+        <IconButton sx={{ visibility: !showRightButton ? 'hidden' : 'visible' }} onClick={() => scrollContent(1)}>
+          <MdiIcon path="chevron-right" />
+        </IconButton>
+      </div>
     </div>
   );
 };

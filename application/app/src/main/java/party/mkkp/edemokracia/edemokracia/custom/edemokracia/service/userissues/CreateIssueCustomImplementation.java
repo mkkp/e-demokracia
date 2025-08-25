@@ -11,34 +11,22 @@
 
 package party.mkkp.edemokracia.edemokracia.custom.edemokracia.service.userissues;
 
-import hu.blackbelt.judo.dispatcher.api.VariableResolver;
-import hu.blackbelt.judo.sdk.query.StringFilter;
 import org.osgi.service.component.annotations.Reference;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.city.City;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.county.County;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.district.District;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.Issue;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueForCreate;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issue.IssueDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.issuetype.IssueType;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.User;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia._default_transferobjecttypes.user.UserDao;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.IssueIdentifier;
-import party.mkkp.edemokracia.edemokracia.api.edemokracia.issuestatus.IssueStatus;
+import party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.IssueDao;
+import party.mkkp.edemokracia.edemokracia.services.IssueService;
 
-import java.time.LocalDateTime;
-
+import java.io.Serializable;
 
 /**
  * 
- *
+ * 
  * var edemokracia::User owner = edemokracia::User!filter(u | u.userName == edemokracia::types::String!getVariable("ACTOR", "userName"))!any();
- *
+ * 
  * var edemokracia::IssueType issueType;
  * var edemokracia::County county;
  * var edemokracia::City city;
  * var edemokracia::District district;
- *
+ * 
  * if (input.issueType!isDefined()) {
  *     issueType = mutable input.issueType;
  * }
@@ -51,7 +39,7 @@ import java.time.LocalDateTime;
  * if (input.district!isDefined()) {
  *     district = mutable input.district;
  * }
- *
+ * 
  * var edemokracia::Issue issue = new edemokracia::Issue(
  * 		title = input.title,
  * 		description = input.description,
@@ -63,21 +51,21 @@ import java.time.LocalDateTime;
  * 		county = county,
  * 		city = city,
  * 		district = district,
- * 		debateCloseAt = input.debateCloseAt
+ * 		debateCloseAt = input.debateCloseAt	
  * 	);
+ * 	
  *
+ * // for (attachment in input.attachments) {
+ * //	issue.attachments += new edemokracia::IssueAttachment(
+ * //		link = attachment.link,
+ * //		file = attachment.file,
+ * //		type = attachment.type
+ * //	)
+ * // }
  *
- * for (attachment in input.attachments) {
- * 	issue.attachments += new edemokracia::IssueAttachment(
- * 		link = attachment.link,
- * 		file = attachment.file,
- * 		type = attachment.type
- * 	)
- * }
- *
- *
- * return issue;
- *
+ * 
+ * return issue; 
+ * 
  * Usage:
  *  1. Rename this file from CreateIssueCustomImplementation.java.default to CreateIssueCustomImplementation.java
  *  2. Implement method
@@ -88,38 +76,22 @@ import java.time.LocalDateTime;
 public class CreateIssueCustomImplementation implements party.mkkp.edemokracia.edemokracia.operation.edemokracia.service.userissues.CreateIssue {
 
     @Reference
-    VariableResolver variableResolver;
-
-    @Reference
-    UserDao userDao;
-
-    @Reference
     IssueDao issueDao;
 
     @Reference
-    party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.IssueDao adminIssueDao;
+    IssueService issueService;
 
+    @Override
     public party.mkkp.edemokracia.edemokracia.api.edemokracia.service.issue.Issue apply(party.mkkp.edemokracia.edemokracia.api.edemokracia.service.createissueinput.CreateIssueInput input)  {
-        String userName = variableResolver.resolve(String.class, "ACTOR", "userName");
-        User user = userDao.query().filterByUserName(StringFilter.equalTo(userName)).selectOne().get();
+        Serializable issueId = issueService.createIssueForCurrentUser(input.getTitle(),
+                input.getDescription(),
+                input.getIssueType() != null && input.getIssueType().isPresent() ? input.getIssueType().get().identifier().getIdentifier() : null,
+                input.getCounty() != null && input.getCounty().isPresent() ? input.getCounty().get().identifier().getIdentifier() : null,
+                input.getCity() != null && input.getCity().isPresent() ? input.getCity().get().identifier().getIdentifier() : null,
+                input.getDistrict() != null && input.getDistrict().isPresent() ? input.getDistrict().get().identifier().getIdentifier() : null,
+                input.getDebateCloseAt());
 
-        IssueForCreate issueCreate = IssueForCreate.builder()
-                .withTitle(input.getTitle())
-                .withDescription(input.getDescription())
-                .withStatus(IssueStatus.CREATED)
-                .withCreated(LocalDateTime.now())
-                .withDebateCloseAt(input.getDebateCloseAt())
-                .withIssueType(input.getIssueType() != null && input.getIssueType().isPresent() ? input.getIssueType().get().adaptTo(IssueType.class) : null)
-                .withCounty(input.getCounty() != null && input.getCounty().isPresent() ? input.getCounty().get().adaptTo(County.class) : null)
-                .withCity(input.getCity() != null && input.getCity().isPresent() ? input.getCity().get().adaptTo(City.class) : null)
-                .withDistrict(input.getDistrict() != null && input.getDistrict().isPresent() ? input.getDistrict().get().adaptTo(District.class) : null)
-                        .withCreatedBy(user)
-                        .withOwner(user)
-                .build();
-
-        Issue issue = issueDao.create(issueCreate);
-
-        return adminIssueDao.getById(issue.identifier().adaptTo(IssueIdentifier.class)).get();
+        return issueDao.getById(issueId).get();
     }
 
 }

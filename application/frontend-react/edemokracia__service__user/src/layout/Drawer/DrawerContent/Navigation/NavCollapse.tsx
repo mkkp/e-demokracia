@@ -14,58 +14,73 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
+import Popper, { PopperPlacementType } from '@mui/material/Popper';
 import Typography from '@mui/material/Typography';
-import { styled, useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Theme, styled, useTheme } from '@mui/material/styles';
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useJudoNavigation } from '~/components';
 import { MdiIcon, SimpleBar } from '~/components';
-import { MenuOrientation, SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
+import { SUBMENU_MIN_WIDTH, ThemeMode } from '~/config';
+import { menuBehaviour } from '~/config/layout';
 import { useConfig } from '~/hooks';
-import { Transitions } from '../../../Transitions';
-import { NavItem } from './NavItem';
-import { NavItemType } from './NavItem';
+import { NavItem } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { NavItemType } from '~/layout/Drawer/DrawerContent/Navigation/NavItem';
+import { Transitions } from '~/layout/Transitions';
+import { useLayoutHelper } from '~/utilities/layout-helper';
 
 type VirtualElement = {
   getBoundingClientRect: () => ClientRect | DOMRect;
   contextElement?: Element;
 };
 
-const PopperStyled = styled(Popper)(({ theme }) => ({
+const popperArrow = (theme: Theme) => {
+  return {
+    '&:before': {
+      content: '""',
+      display: 'block',
+      position: 'absolute',
+      top: 38,
+      left: -5,
+      width: 10,
+      height: 10,
+      backgroundColor: theme.palette.background.paper,
+      transform: 'translateY(-50%) rotate(45deg)',
+      zIndex: 120,
+      borderLeft: `1px solid ${theme.palette.divider}`,
+      borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+  };
+};
+
+const PopperStyled = styled(Popper, {
+  shouldForwardProp: (prop) => {
+    return prop !== 'arrow';
+  },
+})<{ arrow?: boolean }>(({ theme, arrow }) => ({
   overflow: 'visible',
   zIndex: 1202,
   minWidth: SUBMENU_MIN_WIDTH,
-  '&:before': {
-    content: '""',
-    display: 'block',
-    position: 'absolute',
-    top: 38,
-    left: -5,
-    width: 10,
-    height: 10,
-    backgroundColor: theme.palette.background.paper,
-    transform: 'translateY(-50%) rotate(45deg)',
-    zIndex: 120,
-    borderLeft: `1px solid ${theme.palette.divider}`,
-    borderBottom: `1px solid ${theme.palette.divider}`,
-  },
+  ...(arrow ?? true ? popperArrow(theme) : {}),
 }));
 
 export interface NavCollapseProps {
   menu: NavItemType;
   level: number;
-  parentId: string;
+  render: boolean;
+  arrow?: boolean;
+  placement?: PopperPlacementType;
+  title?: boolean;
+  mouseOver?: boolean;
 }
 
-export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
+export const NavCollapse = ({ menu, level, render, placement, arrow, title, mouseOver }: NavCollapseProps) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { navigate } = useJudoNavigation();
-  const { menuOrientation, miniDrawer } = useConfig();
-  const downLG = useMediaQuery(theme.breakpoints.down('lg'));
+  const { miniDrawer } = useConfig();
+  const { downLG, isMenuOrientationHorizontal } = useLayoutHelper();
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<VirtualElement | (() => VirtualElement) | null | undefined>(null);
   const miniMenuOpened = Boolean(anchorEl);
@@ -105,7 +120,17 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
   const navCollapse = menu.children?.map((item) => {
     switch (item.type) {
       case 'collapse':
-        return <NavCollapse key={item.id} menu={item} level={level + 1} parentId={parentId} />;
+        return (
+          <NavCollapse
+            key={item.id}
+            menu={item}
+            level={level + 1}
+            render={true}
+            placement={placement}
+            arrow={arrow}
+            mouseOver={mouseOver}
+          />
+        );
       case 'item':
         return <NavItem key={item.id} item={item} level={level + 1} />;
       default:
@@ -119,7 +144,7 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
   const borderIcon = level === 1 ? <MdiIcon path="border-all-variant" sx={{ fontSize: '1rem' }} /> : null;
   const menuIcon = menu.icon ? (
     <MdiIcon path={menu.icon!} sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
-  ) : miniDrawer && menuOrientation === MenuOrientation.VERTICAL ? (
+  ) : miniDrawer && !isMenuOrientationHorizontal ? (
     borderIcon
   ) : null;
   const textColor = theme.palette.mode === ThemeMode.DARK ? 'grey.400' : 'text.primary';
@@ -128,11 +153,14 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
 
   return (
     <>
-      {menuOrientation === MenuOrientation.VERTICAL || downLG ? (
+      {!isMenuOrientationHorizontal ? (
         <>
           <ListItemButton
             disableRipple
-            {...(miniDrawer && { onMouseEnter: handleClick, onMouseLeave: handleClose })}
+            {...(miniDrawer && {
+              onMouseEnter: mouseOver ?? menuBehaviour.mouseOverOpenClose ? handleClick : undefined,
+              onMouseLeave: mouseOver ?? menuBehaviour.mouseOverOpenClose ? handleClose : undefined,
+            })}
             onClick={handleClick}
             sx={{
               pl: !miniDrawer ? `${level * 1.5}rem` : 1.5,
@@ -166,6 +194,27 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
                 {menuIcon}
               </ListItemIcon>
             )}
+            {!menuIcon && (
+              <ListItemIcon
+                onClick={handlerIconLink}
+                sx={{
+                  minWidth: 24,
+                  ...(miniDrawer && {
+                    borderRadius: 1.5,
+                    width: iconSize,
+                    height: iconSize,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    '&:hover': {
+                      bgcolor: theme.palette.mode === ThemeMode.DARK ? 'secondary.light' : 'secondary.lighter',
+                    },
+                  }),
+                }}
+              >
+                <MdiIcon path="dots-vertical" sx={{ fontSize: !miniDrawer ? '1rem' : '1.25rem' }} />
+              </ListItemIcon>
+            )}
+
             {(!miniDrawer || (miniDrawer && level !== 1)) && (
               <ListItemText
                 primary={
@@ -175,7 +224,7 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
                 }
               />
             )}
-            {(!miniDrawer || (miniDrawer && level !== 1)) && (
+            {(!miniDrawer || (miniDrawer && render)) && (
               <MdiIcon
                 path={miniMenuOpened || open ? 'chevron-up' : 'chevron-down'}
                 sx={{ fontSize: '0.625rem', marginLeft: 1 }}
@@ -184,9 +233,10 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
 
             {miniDrawer && (
               <PopperStyled
+                arrow={arrow ?? true}
                 open={miniMenuOpened}
                 anchorEl={anchorEl}
-                placement="right-start"
+                placement={placement ?? 'right-start'}
                 style={{
                   zIndex: 2001,
                 }}
@@ -212,7 +262,25 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
                       }}
                     >
                       <ClickAwayListener onClickAway={handleClose}>
-                        <SimpleBar sx={simpleBarSx}>{navCollapse}</SimpleBar>
+                        <SimpleBar sx={simpleBarSx}>
+                          <List
+                            subheader={
+                              menu.title && (
+                                <Box sx={{ pl: 3, mb: 1.5 }}>
+                                  <Typography
+                                    variant="subtitle2"
+                                    color={theme.palette.mode === ThemeMode.DARK ? 'textSecondary' : 'text.secondary'}
+                                    sx={{ mt: 1 }}
+                                  >
+                                    {t(`menuTree.${menu.title}`, { defaultValue: menu.title })}
+                                  </Typography>
+                                </Box>
+                              )
+                            }
+                          >
+                            {navCollapse}
+                          </List>
+                        </SimpleBar>
                       </ClickAwayListener>
                     </Paper>
                   </Transitions>
@@ -231,8 +299,8 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
           <ListItemButton
             id={`boundary-${popperId}`}
             disableRipple
-            onMouseEnter={handleHover}
-            onMouseLeave={handleClose}
+            onMouseEnter={mouseOver ?? menuBehaviour.mouseOverOpenClose ? handleHover : undefined}
+            onMouseLeave={mouseOver ?? menuBehaviour.mouseOverOpenClose ? handleClose : undefined}
             onClick={handleHover}
             aria-describedby={popperId}
             sx={{
@@ -261,7 +329,7 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
               )}
               <ListItemText
                 primary={
-                  <Typography variant="body1" color="inherit" sx={{ my: 'auto' }}>
+                  <Typography fontWeight="inherit" variant="inherit" color="inherit" noWrap>
                     {t(`menuTree.${menu.title}`, { defaultValue: menu.title })}
                   </Typography>
                 }
@@ -272,6 +340,7 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
             {anchorEl && (
               <PopperStyled
                 id={popperId}
+                arrow={arrow ?? true}
                 open={miniMenuOpened}
                 anchorEl={anchorEl}
                 placement="right-start"
@@ -299,7 +368,25 @@ export const NavCollapse = ({ menu, level, parentId }: NavCollapseProps) => {
                       }}
                     >
                       <ClickAwayListener onClickAway={handleClose}>
-                        <SimpleBar sx={simpleBarSx}>{navCollapse}</SimpleBar>
+                        <SimpleBar sx={simpleBarSx}>
+                          <List
+                            subheader={
+                              menu.title && (
+                                <Box sx={{ pl: 3, mb: 1.5, width: '100%', alignSelf: 'center' }}>
+                                  <Typography
+                                    variant="subtitle2"
+                                    color={theme.palette.mode === ThemeMode.DARK ? 'textSecondary' : 'text.secondary'}
+                                    sx={{ mt: 1 }}
+                                  >
+                                    {t(`menuTree.${menu.title}`, { defaultValue: menu.title })}
+                                  </Typography>
+                                </Box>
+                              )
+                            }
+                          >
+                            {navCollapse}
+                          </List>
+                        </SimpleBar>
                       </ClickAwayListener>
                     </Paper>
                   </Transitions>

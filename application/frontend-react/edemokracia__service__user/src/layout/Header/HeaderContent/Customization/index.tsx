@@ -17,9 +17,9 @@ import { useMemo, useState } from 'react';
 import { MdiIcon, SimpleBar } from '~/components';
 import { ThemeMode as ThemeModeEnum } from '~/config';
 import { useConfig } from '~/hooks';
-import { ThemeMenuLayout } from './ThemeMenuLayout';
-import { ThemeMode } from './ThemeMode';
-import { ThemeWidth } from './ThemeWidth';
+import { ThemeMenuLayout } from '~/layout/Header/HeaderContent/Customization/ThemeMenuLayout';
+import { ThemeMode } from '~/layout/Header/HeaderContent/Customization/ThemeMode';
+import { ThemeWidth } from '~/layout/Header/HeaderContent/Customization/ThemeWidth';
 
 export const Customization = () => {
   const theme = useTheme();
